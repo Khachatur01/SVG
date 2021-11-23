@@ -57,6 +57,7 @@ export class DrawRectangle extends MoveDraw {
     try{
       xElement?.getAttr("width");
       xElement?.getAttr("height");
+      console.log("is")
       return true;
     } catch (ParserError) {
       xElement?.remove();

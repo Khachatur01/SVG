@@ -23,6 +23,7 @@ export class XDragTool {
   }
 
   private onDragStart(event: MouseEvent) {
+    this.draggableElement = this.container.focused;
     this.mouseStartPos.x = event.clientX;
     this.mouseStartPos.y = event.clientY;
     this.elementStartPos = this.draggableElement?.position as Point;
@@ -35,6 +36,14 @@ export class XDragTool {
     let newX = this.elementStartPos.x + event.clientX - this.mouseStartPos.x;
     let newY = this.elementStartPos.y + event.clientY - this.mouseStartPos.y;
     this.draggableElement.position = {x: newX, y: newY} as Point;
+
+    /* drag bounding box */
+    if(!this.draggableElement.boundingBox) return;
+    let bBoxPosition: Point = this.draggableElement.SVG.getBoundingClientRect();
+    let containerRect: DOMRect = this.container.HTML.getBoundingClientRect();
+    bBoxPosition.x -= containerRect.left;
+    bBoxPosition.y -= containerRect.top;
+    this.draggableElement.boundingBox.position = bBoxPosition;
   }
   private onDragEnd(){
     this.container.HTML.removeEventListener("mousemove", this.drag);
@@ -43,7 +52,6 @@ export class XDragTool {
   public on(): void {
     this.isDrag = true;
     this.container.HTML.addEventListener("mousedown", this.dragStart);
-    this.draggable = this.container.focused;
     document.addEventListener("mouseup", this.dragEnd);
   }
 

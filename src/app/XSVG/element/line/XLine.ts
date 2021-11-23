@@ -1,10 +1,9 @@
 import {Point} from "../../model/Point";
 import {XElement} from "../XElement";
 import {XDraggable} from "../../service/drag/XDraggable";
+import {XBoundingBox} from "../../service/edit/bound/XBoundingBox";
 
 export class XLine extends XElement implements XDraggable {
-  private readonly svgElement: SVGLineElement;
-
   constructor(x1: number, y1: number, x2: number, y2: number) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "line");
@@ -12,12 +11,12 @@ export class XLine extends XElement implements XDraggable {
       x1: x1,
       x2: x2,
       y1: y1,
-      y2: y2,
-      fill: "none",
-      stroke: "black",
-      "stroke-width": 2
+      y2: y2
     });
     this.setOverEvent();
+    this.setDefaultStyle();
+    let bBox:DOMRect =  this.svgElement.getBoundingClientRect();
+    this.xBoundingBox = new XBoundingBox(bBox.x, bBox.y, bBox.width, bBox.height);
   }
 
   get position(): Point {
@@ -36,8 +35,4 @@ export class XLine extends XElement implements XDraggable {
       y2: y2
     });
   }
-  get SVG(): SVGElement {
-    return this.svgElement;
-  }
-
 }

@@ -22,7 +22,7 @@ export class DrawPolyline extends ClickDraw {
     return null;
   }
 
-  onMove(containerRect: DOMRect, event: MouseEvent): void {
+  onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
     if(!this.xPolyline) return;
 
     let x = event.clientX - containerRect.left; //x position within the element.
@@ -35,7 +35,11 @@ export class DrawPolyline extends ClickDraw {
 
   onStop() {
     if(!this.xPolyline) return;
-    this.xPolyline.removePoint(-1);
+    if(this.xPolyline.isSingleLine()) {
+      this.xPolyline.remove();
+    } else {
+      this.xPolyline.removePoint(-1);
+    }
     this.xPolyline = null;
   }
 

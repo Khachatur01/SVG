@@ -5,4 +5,5 @@ export interface Pointed {
   set points(points: Point[]);
   pushPoint(point: Point): void;
   removePoint(index: number): void;
+  isSingleLine(): boolean;
 }

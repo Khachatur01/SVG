@@ -1,27 +1,29 @@
-import {XRectangle} from "../../../element/shape/XRectangle";
-import {Position} from "../../../../test/container/SVG/SVG";
+import {XElement} from "../../../element/XElement";
+import {ParserError} from "@angular/compiler";
+import {Point} from "../../../model/Point";
 
 export class XBoundingBox {
-  private box: XRectangle;
+  private readonly box: SVGRectElement;
 
-  constructor(x: number, y: number, width: number, height: number) {
-    this.box = new XRectangle(x, y, width, height)
-
-    this.box.setAttr({
+  constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+    this.box = document.createElementNS(XElement.svgURI, "rect");
+    this.setAttr({
       x: x,
       y: y,
       width: width,
       height: height,
-      fill: "transparent",
+      fill: "none",
       stroke: "#113CFC",
       strokeWidth: "1",
       "stroke-dasharray": "3 3"
     });
-    this.box.SVG.style.pointerEvents = "none";
+
+    this.box.style.pointerEvents = "none";
   }
-  get position(): Position {
-    let x: string | null = this.box.getAttr("x");
-    let y: string | null = this.box.getAttr("y");
+
+  get position(): Point {
+    let x: string | null = this.box.getAttribute("x");
+    let y: string | null = this.box.getAttribute("y");
     if(!x || !y) {
       x = "0";
       y = "0";
@@ -31,14 +33,26 @@ export class XBoundingBox {
       y: parseInt(y)
     }
   }
-  set position(position: Position) {
-    // let corners: CornerBox[] = this.cornerBoxes.all;
-    // for(let i = 0; i < corners.length; i++) {
-    //   corners[i].position = position;
-    // }
-    this.box.position = position;
+  set position(point: Point) {
+    this.box.setAttribute("x", point.x + "");
+    this.box.setAttribute("y", point.y + "");
   }
-  remove() {
-    this.box.SVG.parentElement?.removeChild(this.box.SVG);
+  get SVG(): SVGElement {
+    return this.box;
+  }
+  remove(): void {
+    this.box.parentElement?.removeChild(this.box);
+  }
+
+  getAttr(attribute: string): string {
+    let value = this.SVG.getAttribute(attribute)
+    if(!value)
+      throw ParserError;
+    return value;
+  }
+  setAttr(attributes: object): void {
+    for(const [key, value] of Object.entries(attributes))
+      if(key && value)
+        this.SVG.setAttribute(key, value as string);
   }
 }

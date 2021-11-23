@@ -1,15 +1,19 @@
 import {MoveDraw} from "../../mode/MoveDraw";
 import {XElement} from "../../../../element/XElement";
-import {XPolyline} from "../../../../element/line/XPolyline";
+import {XFree} from "../../../../element/line/XFree";
 
 export class DrawFree extends MoveDraw {
   onStart(containerRect: DOMRect, event: MouseEvent): XElement {
     let x1 = event.clientX - containerRect.left; //x position within the element.
     let y1 = event.clientY - containerRect.top;  //y position within the element.
 
-    return new XPolyline([
+    let xPolyLine: XFree = new XFree([
       {x: x1, y: y1}
     ]);
+    if(xPolyLine.boundingBox)
+      xPolyLine.boundingBox.SVG.style.display = "none";
+
+    return xPolyLine;
   }
 
   onDraw(containerRect: DOMRect, event: MouseEvent, xElement: XElement, perfectMode: boolean): void {

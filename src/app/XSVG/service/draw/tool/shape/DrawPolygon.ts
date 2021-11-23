@@ -22,7 +22,7 @@ export class DrawPolygon extends ClickDraw {
     return null;
   }
 
-  onMove(containerRect: DOMRect, event: MouseEvent): void {
+  onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
     if(!this.xPolygon) return;
 
     let x = event.clientX - containerRect.left; //x position within the element.
@@ -35,7 +35,11 @@ export class DrawPolygon extends ClickDraw {
 
   onStop() {
     if(!this.xPolygon) return;
-    this.xPolygon.removePoint(-1);
+    if(this.xPolygon.isSingleLine()) {
+      this.xPolygon.remove();
+    } else {
+      this.xPolygon.removePoint(-1);
+    }
     this.xPolygon = null;
   }
 }

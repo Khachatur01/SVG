@@ -2,14 +2,41 @@ import {XDraggable} from "../service/drag/XDraggable";
 import {Point} from "../model/Point";
 import {ParserError} from "@angular/compiler";
 import {XBoundingBox} from "../service/edit/bound/XBoundingBox";
+import {XGroup} from "../service/edit/group/XGroup";
 
 export abstract class XElement implements XDraggable {
-  private xBoundingBox: XBoundingBox | null = null; // grip - resizer
-  protected static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
+  protected style: any = {
+    fill: "none",
+    stroke: "black",
+    highlight: "red",
+    strokeWidth: 2
+  }
+
+  protected xBoundingBox: XBoundingBox = new XBoundingBox(); // grip - resizer
+  protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
+
+  public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
   abstract get position(): Point;
   abstract set position(position: Point);
-  abstract get SVG(): SVGElement;
+
+  get group(): SVGGElement {
+    if(!this.xBoundingBox) throw DOMException;
+
+    let xGroup: XGroup = new XGroup();
+    xGroup.appendChild(this.svgElement);
+    xGroup.appendChild(this.xBoundingBox.SVG);
+    return xGroup.SVG;
+  }
+  get SVG(): SVGElement {
+    return this.svgElement;
+  }
+  get boundingBox(): XBoundingBox {
+    return this.xBoundingBox;
+  }
+  set boundingBox(boundingBox: XBoundingBox) {
+    this.xBoundingBox = boundingBox;
+  }
 
   getAttr(attribute: string): string {
     let value = this.SVG.getAttribute(attribute)
@@ -22,30 +49,46 @@ export abstract class XElement implements XDraggable {
       if(key && value)
         this.SVG.setAttribute(key, value as string);
   }
+  setDefaultStyle(): void {
+    this.setAttr({
+      fill: this.style.fill,
+      stroke: this.style.stroke,
+      "stroke-width": this.style.strokeWidth
+    });
+  }
+
   remove() {
-    this.SVG.parentElement?.removeChild(this.SVG);
+    let group = this.SVG.parentElement;
+    group?.parentElement?.removeChild(group);
   }
 
   focusStyle() {
-    console.log("focus")
+    if(!this.xBoundingBox) throw DOMException;
+    this.xBoundingBox.SVG.style.display = "block";
   }
   blurStyle() {
-    console.log("blur")
+    if(!this.xBoundingBox) throw DOMException;
+    this.xBoundingBox.SVG.style.display = "none";
   }
 
   setOverEvent() {
     this.SVG.addEventListener("mouseover", () => {
-      this.setAttr({
-        stroke: "red",
-        "stroke-width": 3
-      });
+      this.highlight();
     })
     this.SVG.addEventListener("mouseleave", () => {
-      this.setAttr({
-        stroke: "black",
-        "stroke-width": 2
-      });
+      this.lowlight();
     })
+  }
+
+  highlight(): void {
+    this.setAttr({
+      stroke: this.style.highlight
+    });
+  }
+  lowlight(): void {
+    this.setAttr({
+      stroke: this.style.stroke
+    });
   }
 }
 

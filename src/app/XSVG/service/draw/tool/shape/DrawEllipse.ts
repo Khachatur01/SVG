@@ -57,12 +57,14 @@ export class DrawEllipse extends MoveDraw {
       rx: rx,
       ry: ry
     });
+
   }
 
   onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean {
-    try{
+    try {
       xElement?.getAttr("rx");
       xElement?.getAttr("ry");
+
       return true;
     } catch (ParserError) {
       xElement?.remove();

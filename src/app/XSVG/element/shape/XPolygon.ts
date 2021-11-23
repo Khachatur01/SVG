@@ -1,22 +1,19 @@
 import {XElement} from "../XElement";
 import {Pointed} from "../pointed/Pointed";
 import {Point} from "../../model/Point";
+import {XBoundingBox} from "../../service/edit/bound/XBoundingBox";
 
 export class XPolygon extends XElement implements Pointed {
-  private readonly svgElement: SVGPolygonElement;
-
   constructor(points: Point[]) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "polygon");
 
-    this.setAttr({
-      fill: "none",
-      stroke: "black",
-      "stroke-width": 2
-    });
     this.points = points;
 
     this.setOverEvent();
+    this.setDefaultStyle();
+    let bBox:DOMRect =  this.svgElement.getBoundingClientRect();
+    this.xBoundingBox = new XBoundingBox(bBox.x, bBox.y, bBox.width, bBox.height);
   }
   get position(): Point {
     let points: Point[] = this.points;
@@ -37,10 +34,7 @@ export class XPolygon extends XElement implements Pointed {
       point.y += dy;
     }
     this.points = points;
-  }
 
-  get SVG(): SVGElement {
-    return this.svgElement;
   }
 
 
@@ -79,5 +73,10 @@ export class XPolygon extends XElement implements Pointed {
     this.setAttr({
       "points": pointsArr.join(" ")
     });
+  }
+
+  isSingleLine(): boolean {
+    let pointsArr = this.getAttr("points").split(" ", 3);
+    return pointsArr.length < 3;
   }
 }

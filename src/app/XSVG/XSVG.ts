@@ -18,15 +18,16 @@ export class XSVG {
     this.drawTool = new XDrawTool(this);
     this.dragTool = new XDragTool(this);
 
-    this.dragTool.draggable = this._focusedElement;
+    this.container.addEventListener("mousedown", event => {
+      if(event.target == this.container)
+        this.blur();
+    })
   }
 
   add(element: XElement) {
     if(!element) return;
-
-    this.container.appendChild(element.SVG);
+    this.container.appendChild(element.group);
     element.SVG.addEventListener("mousedown", () => {
-      this.blur();
       this.focus(element);
     });
     element.SVG.addEventListener("mousemove", () => {
@@ -48,6 +49,7 @@ export class XSVG {
   }
 
   focus(element: XElement) {
+    this.blur();
     this._focusedElement = element;
     this._focusedElement.focusStyle();
   }
