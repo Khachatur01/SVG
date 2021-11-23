@@ -5,9 +5,9 @@ import {XElement} from "../../../element/XElement";
 export abstract class ClickDraw implements XDrawable {
   private container: XSVG | null = null;
   private perfectMode: boolean = false;
+  private drawableElement: XElement | null = null;
   private click = this._click.bind(this);
   private move = this._move.bind(this);
-  private drawableElement: XElement | null = null;
 
   _click(event: MouseEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
@@ -22,6 +22,7 @@ export abstract class ClickDraw implements XDrawable {
     let bBoxPosition: DOMRect | undefined = this.drawableElement?.SVG.getBoundingClientRect();
     if(!bBoxPosition) return;
 
+    /* calculate and set bounding box position and size */
     this.drawableElement?.blurStyle();
     bBoxPosition.x -= containerRect.left;
     bBoxPosition.y -= containerRect.top;

@@ -25,24 +25,26 @@ export abstract class MoveDraw implements XDrawable {
     if(!this.drawableElement || !containerRect) return;
     this.onDraw(containerRect, event, this.drawableElement, this.perfectMode);
 
+    /* calculate and set bounding box position and size */
     let bBoxPosition: DOMRect = this.drawableElement.SVG.getBoundingClientRect();
     bBoxPosition.x -= containerRect.left;
     bBoxPosition.y -= containerRect.top;
-
     this.drawableElement.boundingBox?.setAttr({
       x: bBoxPosition.x,
       y: bBoxPosition.y,
       width: bBoxPosition.width,
       height: bBoxPosition.height
     });
-    this.container?.focus(this.drawableElement);
   }
   private _onEnd(event: MouseEvent) {
     this.container?.HTML.removeEventListener('mousemove', this.draw);
 
     let containerRect = this.container?.HTML.getBoundingClientRect();
-    if(!this.drawableElement || !containerRect) return;
-    this.onEnd(containerRect, event, this.drawableElement);
+
+    /* return if element isn't drawn */
+    if(!this.drawableElement || !containerRect || !this.onEnd(containerRect, event, this.drawableElement)) return;
+
+    this.container?.focus(this.drawableElement);
   }
 
   abstract onStart(containerRect: DOMRect, event: MouseEvent): XElement;

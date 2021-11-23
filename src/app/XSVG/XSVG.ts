@@ -43,7 +43,6 @@ export class XSVG {
     element.remove();
   }
 
-
   get HTML(): HTMLElement {
     return this.container;
   }
