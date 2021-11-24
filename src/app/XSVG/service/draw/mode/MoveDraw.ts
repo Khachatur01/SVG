@@ -35,6 +35,7 @@ export abstract class MoveDraw implements XDrawable {
       width: bBoxPosition.width,
       height: bBoxPosition.height
     });
+
   }
   private _onEnd(event: MouseEvent) {
     this.container?.HTML.removeEventListener('mousemove', this.draw);

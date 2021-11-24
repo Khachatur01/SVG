@@ -15,28 +15,6 @@ export class XPolygon extends XElement implements Pointed {
     let bBox:DOMRect =  this.svgElement.getBoundingClientRect();
     this.xBoundingBox = new XBoundingBox(bBox.x, bBox.y, bBox.width, bBox.height);
   }
-  get position(): Point {
-    let points: Point[] = this.points;
-
-    return {
-      x: points[0].x,
-      y: points[0].y
-    }
-  }
-  set position(position: Point) {
-    let points: Point[] = this.points;
-
-    let dx: number = position.x - points[0].x;
-    let dy: number = position.y - points[0].y;
-
-    for(let point of points) {
-      point.x += dx;
-      point.y += dy;
-    }
-    this.points = points;
-
-  }
-
 
   // TODO fix coordinate fetching
   get points(): Point[] {

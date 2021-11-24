@@ -18,8 +18,8 @@ export class BoundingBoxSVG {
       height: height,
       fill: "transparent",
       stroke: "#113CFC",
-      strokeWidth: "1",
-      "stroke-dasharray": "3 3"
+      strokeWidth: 1,
+      "stroke-dasharray": "5 5"
     });
     this.borderRect.SVG.style.pointerEvents = "none";
 

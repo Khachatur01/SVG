@@ -1,10 +1,8 @@
-import {XDraggable} from "../service/drag/XDraggable";
-import {Point} from "../model/Point";
 import {ParserError} from "@angular/compiler";
 import {XBoundingBox} from "../service/edit/bound/XBoundingBox";
 import {XGroup} from "../service/edit/group/XGroup";
 
-export abstract class XElement implements XDraggable {
+export abstract class XElement {
   protected style: any = {
     fill: "none",
     stroke: "black",
@@ -14,19 +12,15 @@ export abstract class XElement implements XDraggable {
 
   protected xBoundingBox: XBoundingBox = new XBoundingBox(); // grip - resizer
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
+  private xGroup: XGroup = new XGroup();
 
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
-  abstract get position(): Point;
-  abstract set position(position: Point);
-
-  get group(): SVGGElement {
-    if(!this.xBoundingBox) throw DOMException;
-
-    let xGroup: XGroup = new XGroup();
-    xGroup.appendChild(this.svgElement);
-    xGroup.appendChild(this.xBoundingBox.SVG);
-    return xGroup.SVG;
+  get group(): XGroup {
+    this.xGroup.clear();
+    this.xGroup.appendChild(this.svgElement);
+    this.xGroup.appendChild(this.xBoundingBox.SVG);
+    return this.xGroup;
   }
   get SVG(): SVGElement {
     return this.svgElement;

@@ -65,8 +65,8 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer");
-    document.addEventListener("keydown", this.keyDown.bind(this));
-    document.addEventListener("keyup", this.keyUp.bind(this));
+    window.addEventListener("keydown", this.keyDown.bind(this));
+    window.addEventListener("keyup", this.keyUp.bind(this));
   }
 
 }

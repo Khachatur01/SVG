@@ -1,9 +1,9 @@
-import {XDraggable} from "./XDraggable";
 import {XSVG} from "../../XSVG";
 import {Point} from "../../model/Point";
+import {XGroup} from "../edit/group/XGroup";
 
 export class XDragTool {
-  private draggableElement: XDraggable | null = null;
+  private draggableElement: XGroup | null = null;
   private isDrag: boolean = false;
   private container: XSVG;
 
@@ -18,12 +18,14 @@ export class XDragTool {
     this.container = container;
   }
 
-  set draggable(draggableElement: XDraggable | null) {
+  set draggable(draggableElement: XGroup | null) {
     this.draggableElement = draggableElement;
   }
 
   private onDragStart(event: MouseEvent) {
-    this.draggableElement = this.container.focused;
+    if(!this.container.focused) return;
+
+    this.draggableElement = this.container.focused?.group;
     this.mouseStartPos.x = event.clientX;
     this.mouseStartPos.y = event.clientY;
     this.elementStartPos = this.draggableElement?.position as Point;
@@ -36,17 +38,12 @@ export class XDragTool {
     let newX = this.elementStartPos.x + event.clientX - this.mouseStartPos.x;
     let newY = this.elementStartPos.y + event.clientY - this.mouseStartPos.y;
     this.draggableElement.position = {x: newX, y: newY} as Point;
+    this.container.focused?.highlight();
 
-    /* drag bounding box */
-    if(!this.draggableElement.boundingBox) return;
-    let bBoxPosition: Point = this.draggableElement.SVG.getBoundingClientRect();
-    let containerRect: DOMRect = this.container.HTML.getBoundingClientRect();
-    bBoxPosition.x -= containerRect.left;
-    bBoxPosition.y -= containerRect.top;
-    this.draggableElement.boundingBox.position = bBoxPosition;
   }
   private onDragEnd(){
     this.container.HTML.removeEventListener("mousemove", this.drag);
+    this.container.focused?.lowlight();
   }
 
   public on(): void {

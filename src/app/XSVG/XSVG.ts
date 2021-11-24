@@ -26,7 +26,7 @@ export class XSVG {
 
   add(element: XElement) {
     if(!element) return;
-    this.container.appendChild(element.group);
+    this.container.appendChild(element.group.SVG);
     element.SVG.addEventListener("mousedown", () => {
       this.focus(element);
     });
