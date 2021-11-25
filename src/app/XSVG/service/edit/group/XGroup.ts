@@ -6,6 +6,7 @@ import {Transform} from "../../../model/Transform";
 export class XGroup implements XDraggable {
   private transform: Transform = new Transform();
   private svgGroup: SVGGElement;
+  private _children: XElement[] = [];
 
   constructor() {
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
@@ -18,12 +19,16 @@ export class XGroup implements XDraggable {
     this.svgGroup = svgGElement
   }
 
-  appendChild(svgElement: SVGElement): void {
-    this.svgGroup.appendChild(svgElement);
+  appendChild(xElement: XElement): void {
+    this.svgGroup.appendChild(xElement.SVG);
+    this._children.push(xElement);
   }
 
-  removeChild(svgElement: SVGElement): void {
-    this.svgGroup.removeChild(svgElement);
+  removeChild(xElement: XElement): void {
+    this.SVG.parentElement?.appendChild(xElement.SVG);
+    this.svgGroup.removeChild(xElement.SVG);
+
+    this._children.splice(this._children.lastIndexOf(xElement), 1);
   }
 
   clear() {
@@ -37,6 +42,10 @@ export class XGroup implements XDraggable {
 
   remove() {
     this.SVG.parentElement?.removeChild(this.SVG);
+  }
+
+  get children(): XElement[] {
+    return this._children;
   }
 
   get position(): Point {
