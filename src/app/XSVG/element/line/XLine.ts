@@ -15,5 +15,8 @@ export class XLine extends XElement {
     this.setDefaultStyle();
     let bBox:DOMRect =  this.svgElement.getBoundingClientRect();
     this.xBoundingBox = new XBoundingBox(bBox.x, bBox.y, bBox.width, bBox.height);
+
+    this.svgGroup.appendChild(this.svgElement);
+    this.svgGroup.appendChild(this.xBoundingBox.SVG);
   }
 }

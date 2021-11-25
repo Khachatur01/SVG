@@ -1,9 +1,10 @@
 import {XSVG} from "../../XSVG";
 import {Point} from "../../model/Point";
 import {XGroup} from "../edit/group/XGroup";
+import {XDraggable} from "./XDraggable";
 
 export class XDragTool {
-  private draggableElement: XGroup | null = null;
+  private draggableElement: XDraggable | null = null;
   private isDrag: boolean = false;
   private container: XSVG;
 
@@ -25,7 +26,7 @@ export class XDragTool {
   private onDragStart(event: MouseEvent) {
     if(!this.container.focused) return;
 
-    this.draggableElement = this.container.focused?.group;
+    this.draggableElement = this.container.focused;
     this.mouseStartPos.x = event.clientX;
     this.mouseStartPos.y = event.clientY;
     this.elementStartPos = this.draggableElement?.position as Point;

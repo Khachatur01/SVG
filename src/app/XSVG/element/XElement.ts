@@ -1,8 +1,12 @@
 import {ParserError} from "@angular/compiler";
 import {XBoundingBox} from "../service/edit/bound/XBoundingBox";
 import {XGroup} from "../service/edit/group/XGroup";
+import {XDraggable} from "../service/drag/XDraggable";
+import {Point} from "../model/Point";
+import {Transform} from "../model/Transform";
 
-export abstract class XElement {
+export abstract class XElement implements XDraggable {
+  private transform: Transform = new Transform();
   protected style: any = {
     fill: "none",
     stroke: "black",
@@ -12,24 +16,21 @@ export abstract class XElement {
 
   protected xBoundingBox: XBoundingBox = new XBoundingBox(); // grip - resizer
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
-  private xGroup: XGroup = new XGroup();
+  protected svgGroup: SVGGElement = document.createElementNS(XElement.svgURI, "g");
 
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
   get group(): XGroup {
-    this.xGroup.clear();
-    this.xGroup.appendChild(this.svgElement);
-    this.xGroup.appendChild(this.xBoundingBox.SVG);
-    return this.xGroup;
+    let xGroup: XGroup = new XGroup();
+    xGroup.SVG = this.svgGroup;
+    return xGroup;
   }
+
   get SVG(): SVGElement {
     return this.svgElement;
   }
   get boundingBox(): XBoundingBox {
     return this.xBoundingBox;
-  }
-  set boundingBox(boundingBox: XBoundingBox) {
-    this.xBoundingBox = boundingBox;
   }
 
   getAttr(attribute: string): string {
@@ -83,6 +84,18 @@ export abstract class XElement {
     this.setAttr({
       stroke: this.style.stroke
     });
+  }
+
+  get position(): Point {
+    return {
+      x: this.transform.translateX,
+      y: this.transform.translateY
+    };
+  }
+  set position(position: Point) {
+    this.transform.translateX = position.x;
+    this.transform.translateY = position.y;
+    this.group.SVG.style.transform = this.transform.toString();
   }
 }
 

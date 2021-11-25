@@ -5,29 +5,38 @@ import {Transform} from "../../../model/Transform";
 
 export class XGroup implements XDraggable {
   private transform: Transform = new Transform();
-  private svgElement: SVGGElement;
+  private svgGroup: SVGGElement;
 
   constructor() {
-    this.svgElement = document.createElementNS(XElement.svgURI, "g");
+    this.svgGroup = document.createElementNS(XElement.svgURI, "g");
   }
 
   get SVG(): SVGGElement {
-    return this.svgElement;
+    return this.svgGroup;
   }
   set SVG(svgGElement: SVGGElement) {
-    this.svgElement = svgGElement
+    this.svgGroup = svgGElement
   }
 
   appendChild(svgElement: SVGElement): void {
-    this.svgElement.appendChild(svgElement);
+    this.svgGroup.appendChild(svgElement);
   }
 
   removeChild(svgElement: SVGElement): void {
-    this.svgElement.removeChild(svgElement);
+    this.svgGroup.removeChild(svgElement);
   }
 
   clear() {
-    this.svgElement.innerHTML = "";
+    let parent = this.SVG.parentElement;
+    let children: Element[] = Array.from(this.SVG.children);
+    children.forEach((child: Element) => {
+      parent?.appendChild(child);
+    });
+    this.SVG.innerHTML = "";
+  }
+
+  remove() {
+    this.SVG.parentElement?.removeChild(this.SVG);
   }
 
   get position(): Point {
@@ -39,7 +48,6 @@ export class XGroup implements XDraggable {
   set position(position: Point) {
     this.transform.translateX = position.x;
     this.transform.translateY = position.y;
-    console.log(this.transform.toString())
-    this.svgElement.style.transform = this.transform.toString();
+    this.svgGroup.style.transform = this.transform.toString();
   }
 }

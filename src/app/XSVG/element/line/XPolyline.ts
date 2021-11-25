@@ -18,6 +18,9 @@ export class XPolyline extends XElement implements Pointed {
     this.setOverEvent();
     let bBox:DOMRect =  this.svgElement.getBoundingClientRect();
     this.xBoundingBox = new XBoundingBox(bBox.x, bBox.y, bBox.width, bBox.height);
+
+    this.svgGroup.appendChild(this.svgElement);
+    this.svgGroup.appendChild(this.xBoundingBox.SVG);
   }
 
   // TODO fix coordinate fetching
