@@ -1,10 +1,11 @@
 import {XDrawTool} from "./service/draw/XDrawTool";
 import {XDragTool} from "./service/drag/XDragTool";
 import {XElement} from "./element/XElement";
+import {XGroup} from "./service/edit/group/XGroup";
 
 export class XSVG {
   private readonly container: HTMLElement;
-  private _focusedElement: XElement | null = null;
+  private _focusedElements: XGroup = new XGroup(this);
   public readonly drawTool: XDrawTool;
   public readonly dragTool: XDragTool;
 
@@ -22,11 +23,13 @@ export class XSVG {
       if(event.target == this.container)
         this.blur();
     })
+
+    this.container.appendChild(this._focusedElements.SVG);
   }
 
   add(element: XElement) {
     if(!element) return;
-    this.container.appendChild(element.group.SVG);
+    this.container.appendChild(element.SVG);
     element.SVG.addEventListener("mousedown", () => {
       this.focus(element);
     });
@@ -48,15 +51,14 @@ export class XSVG {
   }
 
   focus(element: XElement) {
-    this.blur();
-    this._focusedElement = element;
-    this._focusedElement.focusStyle();
+    this._focusedElements.appendChild(element);
+    this._focusedElements.focusStyle();
   }
   blur() {
-    this._focusedElement?.blurStyle();
-    this._focusedElement = null;
+    this._focusedElements.blurStyle();
+    this._focusedElements.clear();
   }
-  get focused(): XElement | null {
-    return this._focusedElement;
+  get focused(): XGroup {
+    return this._focusedElements;
   }
 }

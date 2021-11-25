@@ -1,8 +1,10 @@
 import {XElement} from "../../../element/XElement";
 import {ParserError} from "@angular/compiler";
 import {Point} from "../../../model/Point";
+import {Transform} from "../../../model/Transform";
 
 export class XBoundingBox {
+  private transform: Transform = new Transform();
   private readonly box: SVGRectElement;
 
   constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
@@ -18,25 +20,22 @@ export class XBoundingBox {
       "stroke-dasharray": "3 3"
     });
 
+    this.box.style.display = "none";
     this.box.style.pointerEvents = "none";
   }
 
   get position(): Point {
-    let x: string | null = this.box.getAttribute("x");
-    let y: string | null = this.box.getAttribute("y");
-    if(!x || !y) {
-      x = "0";
-      y = "0";
-    }
     return {
-      x: parseInt(x),
-      y: parseInt(y)
-    }
+      x: this.transform.translateX,
+      y: this.transform.translateY
+    };
   }
-  set position(point: Point) {
-    this.box.setAttribute("x", point.x + "");
-    this.box.setAttribute("y", point.y + "");
+  set position(position: Point) {
+    this.transform.translateX = position.x;
+    this.transform.translateY = position.y;
+    this.box.style.transform = this.transform.toString();
   }
+
   get SVG(): SVGElement {
     return this.box;
   }

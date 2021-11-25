@@ -17,21 +17,22 @@ export abstract class ClickDraw implements XDrawable {
     if(element) {
       this.drawableElement = element;
       this.container?.add(this.drawableElement);
+      this.container?.focus(this.drawableElement);
     }
 
     let bBoxPosition: DOMRect | undefined = this.drawableElement?.SVG.getBoundingClientRect();
     if(!bBoxPosition) return;
 
-    /* calculate and set bounding box position and size */
-    this.drawableElement?.blurStyle();
-    bBoxPosition.x -= containerRect.left;
-    bBoxPosition.y -= containerRect.top;
-    this.drawableElement?.boundingBox?.setAttr({
-      x: bBoxPosition.x,
-      y: bBoxPosition.y,
-      width: bBoxPosition.width,
-      height: bBoxPosition.height
-    });
+    // /* calculate and set bounding box position and size */
+    // this.drawableElement?.blurStyle();
+    // bBoxPosition.x -= containerRect.left;
+    // bBoxPosition.y -= containerRect.top;
+    // this.drawableElement?.boundingBox?.setAttr({
+    //   x: bBoxPosition.x,
+    //   y: bBoxPosition.y,
+    //   width: bBoxPosition.width,
+    //   height: bBoxPosition.height
+    // });
 
   }
   _move(event: MouseEvent) {
@@ -57,7 +58,7 @@ export abstract class ClickDraw implements XDrawable {
     this.container?.HTML.removeEventListener('mousedown', this.click);
     document.removeEventListener('mousemove', this.move);
     this.onStop();
-    this.drawableElement?.focusStyle();
+    this.container?.focused?.focusStyle();
   }
 
   set perfect(mode: boolean) {

@@ -7,7 +7,6 @@ export class Transform {
   private _skewX: number = 0;
   private _skewY: number = 0;
 
-
   get translateX(): number {
     return this._translateX;
   }
@@ -72,5 +71,15 @@ export class Transform {
       "scaleY(" + this._scaleY + ") " +
       "skewX(" + this._skewX + "deg) " +
       "skewY(" + this._skewY + "deg) "
+  }
+
+  reset() {
+    this._translateX = 0;
+    this._translateY = 0;
+    this._rotate = 0;
+    this._scaleX= 1;
+    this._scaleY = 1;
+    this._skewX = 0;
+    this._skewY = 0;
   }
 }

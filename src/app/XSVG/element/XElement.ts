@@ -1,11 +1,10 @@
 import {ParserError} from "@angular/compiler";
-import {XBoundingBox} from "../service/edit/bound/XBoundingBox";
-import {XGroup} from "../service/edit/group/XGroup";
-import {XDraggable} from "../service/drag/XDraggable";
 import {Point} from "../model/Point";
 import {Transform} from "../model/Transform";
 
-export abstract class XElement implements XDraggable {
+export abstract class XElement {
+  public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
+
   private transform: Transform = new Transform();
   protected style: any = {
     fill: "none",
@@ -14,23 +13,10 @@ export abstract class XElement implements XDraggable {
     strokeWidth: 2
   }
 
-  protected xBoundingBox: XBoundingBox = new XBoundingBox(); // grip - resizer
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
-  protected svgGroup: SVGGElement = document.createElementNS(XElement.svgURI, "g");
-
-  public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
-
-  get group(): XGroup {
-    let xGroup: XGroup = new XGroup();
-    xGroup.SVG = this.svgGroup;
-    return xGroup;
-  }
 
   get SVG(): SVGElement {
     return this.svgElement;
-  }
-  get boundingBox(): XBoundingBox {
-    return this.xBoundingBox;
   }
 
   getAttr(attribute: string): string {
@@ -53,17 +39,7 @@ export abstract class XElement implements XDraggable {
   }
 
   remove() {
-    let group = this.SVG.parentElement;
-    group?.parentElement?.removeChild(group);
-  }
-
-  focusStyle() {
-    if(!this.xBoundingBox) throw DOMException;
-    this.xBoundingBox.SVG.style.display = "block";
-  }
-  blurStyle() {
-    if(!this.xBoundingBox) throw DOMException;
-    this.xBoundingBox.SVG.style.display = "none";
+    this.svgElement.remove();
   }
 
   setOverEvent() {
@@ -95,7 +71,7 @@ export abstract class XElement implements XDraggable {
   set position(position: Point) {
     this.transform.translateX = position.x;
     this.transform.translateY = position.y;
-    this.group.SVG.style.transform = this.transform.toString();
+    this.svgElement.style.transform = this.transform.toString();
   }
 }
 
