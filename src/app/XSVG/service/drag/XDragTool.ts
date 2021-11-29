@@ -37,7 +37,7 @@ export class XDragTool {
     this.container.focused.position = {x: newX, y: newY} as Point;
     this.container.focused.highlight();
   }
-  private onDragEnd(event: MouseEvent){
+  private onDragEnd(){
     this.container.HTML.removeEventListener("mousemove", this.drag);
     this.container.focused.lowlight();
   }

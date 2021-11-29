@@ -68,10 +68,8 @@ export class XFocus implements XDraggable {
     };
   }
   set position(position: Point) {
-    this.xBoundingBox.position = {
-      x: this.transform.translateX,
-      y: this.transform.translateY
-    };
+    this.transform.translateX = position.x;
+    this.transform.translateY = position.y;
 
     this._children.forEach((child: XElement) => {
       child.position = {
@@ -79,9 +77,7 @@ export class XFocus implements XDraggable {
         y: this.transform.translateY - this._lastDragPos.y
       };
     });
-
-    this.transform.translateX = position.x;
-    this.transform.translateY = position.y;
+    this.fit();
   }
   fixPosition(): void {
     this._lastDragPos = this.position;
