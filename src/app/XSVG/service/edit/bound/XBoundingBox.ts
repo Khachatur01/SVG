@@ -16,7 +16,7 @@ export class XBoundingBox {
       height: height,
       fill: "none",
       stroke: "#113CFC",
-      strokeWidth: "1",
+      "stroke-width": 1,
       "stroke-dasharray": "3 3"
     });
 

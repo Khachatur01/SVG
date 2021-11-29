@@ -51,24 +51,20 @@ export class DrawEllipse extends MoveDraw {
       }
     }
 
-    xElement.setAttr({
-      cx: x + rx,
-      cy: y + ry,
-      rx: rx,
-      ry: ry
-    });
+    xElement.size = {
+      width: rx,
+      height: ry
+    };
+    xElement.position = {x: x + rx, y: y + ry};
 
   }
 
   onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean {
-    try {
-      xElement?.getAttr("rx");
-      xElement?.getAttr("ry");
-
-      return true;
-    } catch (ParserError) {
+    if(!xElement || parseFloat(xElement.getAttr("rx")) == 0 || parseFloat(xElement.getAttr("ry")) == 0) {
       xElement?.remove();
       return false;
+    } else {
+      return true;
     }
   }
 

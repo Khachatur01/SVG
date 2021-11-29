@@ -1,10 +1,10 @@
 import {XSVG} from "../../XSVG";
 import {Point} from "../../model/Point";
-import {XGroup} from "../edit/group/XGroup";
+import {XFocus} from "../edit/group/XFocus";
 import {XDraggable} from "./XDraggable";
+import {XElement} from "../../element/XElement";
 
 export class XDragTool {
-  private draggableElement: XDraggable | null = null;
   private isDrag: boolean = false;
   private container: XSVG;
 
@@ -19,32 +19,27 @@ export class XDragTool {
     this.container = container;
   }
 
-  set draggable(draggableElement: XGroup | null) {
-    this.draggableElement = draggableElement;
-  }
-
   private onDragStart(event: MouseEvent) {
-    if(!this.container.focused) return;
-
-    this.draggableElement = this.container.focused;
     this.mouseStartPos.x = event.clientX;
     this.mouseStartPos.y = event.clientY;
-    this.elementStartPos = this.draggableElement?.position as Point;
+    this.elementStartPos = this.container.focused?.position as Point;
+
+    this.container.focused.fixPosition();
+    this.container.focused?.children.forEach((child: XElement) => {
+      child.fixPosition();
+    });
 
     this.container.HTML.addEventListener("mousemove", this.drag);
   }
   private onDrag(event: MouseEvent) {
-    if(!this.draggableElement) return;
-
     let newX = this.elementStartPos.x + event.clientX - this.mouseStartPos.x;
     let newY = this.elementStartPos.y + event.clientY - this.mouseStartPos.y;
-    this.draggableElement.position = {x: newX, y: newY} as Point;
-    this.container.focused?.highlight();
-
+    this.container.focused.position = {x: newX, y: newY} as Point;
+    this.container.focused.highlight();
   }
-  private onDragEnd(){
+  private onDragEnd(event: MouseEvent){
     this.container.HTML.removeEventListener("mousemove", this.drag);
-    this.container.focused?.lowlight();
+    this.container.focused.lowlight();
   }
 
   public on(): void {

@@ -46,21 +46,27 @@ export class DrawRectangle extends MoveDraw {
       }
     }
 
-    xElement.setAttr({
-      x: x,
-      y: y,
+    xElement.size = {
       width: width,
       height: height
-    });
+    };
+    xElement.position = {x: x, y: y};
   }
   onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean {
-    try{
-      xElement?.getAttr("width");
-      xElement?.getAttr("height");
-      return true;
-    } catch (ParserError) {
+    // try{
+    //   xElement?.getAttr("width");
+    //   xElement?.getAttr("height");
+    //   return true;
+    // } catch (ParserError) {
+    //   xElement?.remove();
+    //   return false;
+    // }
+    if(!xElement || parseFloat(xElement.getAttr("width")) == 0 || parseFloat(xElement.getAttr("height")) == 0) {
       xElement?.remove();
       return false;
+    } else {
+      return true;
     }
+
   }
 }

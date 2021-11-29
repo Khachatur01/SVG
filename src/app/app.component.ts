@@ -34,15 +34,22 @@ export class AppComponent implements AfterViewInit {
 
 
   private keyDown(event: KeyboardEvent) {
-    if (event.shiftKey) {
+    if (event.key == "Shift") {
       if(this.svg?.drawTool)
         this.svg.drawTool.perfect = true;
     }
-    if (event.ctrlKey) {
+    if (event.key == "Alt") {
       this.svg?.drawTool.pause();
       this.svg?.dragTool.on();
     }
+    if (event.key == "Enter") {
+      this.svg?.drawTool.pause();
+    }
     if (event.key == "Escape") {
+      this.svg?.drawTool.pause();
+    }
+    if (event.key == "Control") {
+      this.svg?.multiSelect();
       this.svg?.drawTool.pause();
     }
   }
@@ -51,14 +58,18 @@ export class AppComponent implements AfterViewInit {
       if(this.svg?.drawTool)
         this.svg.drawTool.perfect = false;
     }
-    if (event.key == "Control") {
+    if (event.key == "Alt") {
       this.svg?.dragTool.off();
       this.svg?.drawTool.resume();
     }
     if (event.key == "Delete") {
       this.svg?.focused?.remove();
     }
-    if (event.key == "Escape") {
+    if (event.key == "Enter") {
+      this.svg?.drawTool.resume();
+    }
+    if (event.key == "Control") {
+      this.svg?.singleSelect();
       this.svg?.drawTool.resume();
     }
   }

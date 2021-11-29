@@ -5,14 +5,16 @@ import {Transform} from "../../../model/Transform";
 import {XBoundingBox} from "../bound/XBoundingBox";
 import {XSVG} from "../../../XSVG";
 
-export class XGroup implements XDraggable {
-  private transform: Transform = new Transform();
-  private _children: XElement[] = [];
-  private container: XSVG;
+export class XFocus implements XDraggable {
+  private readonly transform: Transform = new Transform();
+  private readonly _children: Set<XElement> = new Set<XElement>();
+  private readonly container: XSVG;
 
-  protected xBoundingBox: XBoundingBox = new XBoundingBox(); // grip - resizer
-  protected svgGroup: SVGGElement;
-  protected svgElements: SVGGElement;
+  private readonly xBoundingBox: XBoundingBox = new XBoundingBox(); // grip - resizer
+  private readonly svgGroup: SVGGElement;
+  private readonly svgElements: SVGGElement;
+
+  private _lastDragPos: Point = {x: 0, y: 0}
 
   constructor(container: XSVG) {
     this.container = container;
@@ -26,39 +28,36 @@ export class XGroup implements XDraggable {
   get SVG(): SVGGElement {
     return this.svgGroup;
   }
-  set SVG(svgGElement: SVGGElement) {
-    this.svgGroup = svgGElement
-  }
 
   appendChild(xElement: XElement): void {
     this.svgElements.appendChild(xElement.SVG);
-    this._children.push(xElement);
+    this._children.add(xElement);
     this.fit();
+    this.focusStyle();
   }
 
   removeChild(xElement: XElement): void {
     this.svgGroup.parentElement?.appendChild(xElement.SVG);
-    this._children.splice(this._children.lastIndexOf(xElement), 1);
+    this._children.delete(xElement);
     this.fit();
   }
 
-
-
   clear() {
     let parent = this.svgGroup.parentElement;
-    let children: Element[] = Array.from(this.svgElements.children);
-    children.forEach((child: Element) => {
-      parent?.appendChild(child);
+    this._children.forEach((child: XElement) => {
+      parent?.appendChild(child.SVG);
     });
-    this.svgElements.innerHTML = "";
-    this._children = [];
+    this._children.clear();
+    this.blurStyle();
   }
 
   remove() {
-    this.svgGroup.remove();
+    this.svgElements.innerHTML = "";
+    this._children.clear();
+    this.blurStyle();
   }
 
-  get children(): XElement[] {
+  get children(): Set<XElement> {
     return this._children;
   }
 
@@ -69,13 +68,27 @@ export class XGroup implements XDraggable {
     };
   }
   set position(position: Point) {
-    this.transform.translateX = position.x;
-    this.transform.translateY = position.y;
+    this.xBoundingBox.position = {
+      x: this.transform.translateX,
+      y: this.transform.translateY
+    };
+
     this._children.forEach((child: XElement) => {
-      child.position = position;
+      child.position = {
+        x: this.transform.translateX - this._lastDragPos.x,
+        y: this.transform.translateY - this._lastDragPos.y
+      };
     });
 
-    this.xBoundingBox.position = position
+    this.transform.translateX = position.x;
+    this.transform.translateY = position.y;
+  }
+  fixPosition(): void {
+    this._lastDragPos = this.position;
+  }
+
+  hasChild(xElement: XElement): boolean {
+    return this._children.has(xElement);
   }
 
   fit(): void {
@@ -83,15 +96,13 @@ export class XGroup implements XDraggable {
     let contentRect: DOMRect = this.svgElements.getBoundingClientRect();
 
     this.xBoundingBox.setAttr({
-      x: contentRect.x - containerRect.x,
-      y: contentRect.y - containerRect.y,
       width: contentRect.width,
       height: contentRect.height
     });
 
     this.xBoundingBox.position = {
-      x: this.transform.translateX,
-      y: this.transform.translateY
+      x: this.transform.translateX = contentRect.x - containerRect.x,
+      y: this.transform.translateY = contentRect.y - containerRect.y
     };
   }
 
@@ -103,10 +114,14 @@ export class XGroup implements XDraggable {
   }
 
   highlight() {
-
+    this._children.forEach((child: XElement) => {
+      child.highlight();
+    });
   }
 
   lowlight() {
-
+    this._children.forEach((child: XElement) => {
+      child.lowlight();
+    });
   }
 }

@@ -1,13 +1,15 @@
 import {XDrawTool} from "./service/draw/XDrawTool";
 import {XDragTool} from "./service/drag/XDragTool";
 import {XElement} from "./element/XElement";
-import {XGroup} from "./service/edit/group/XGroup";
+import {XFocus} from "./service/edit/group/XFocus";
 
 export class XSVG {
   private readonly container: HTMLElement;
-  private _focusedElements: XGroup = new XGroup(this);
+  private _focusedElements: XFocus = new XFocus(this);
   public readonly drawTool: XDrawTool;
   public readonly dragTool: XDragTool;
+
+  private _multiSelect: boolean = false;
 
   constructor(containerId: string) {
     let container = document.getElementById(containerId);
@@ -20,24 +22,36 @@ export class XSVG {
     this.dragTool = new XDragTool(this);
 
     this.container.addEventListener("mousedown", event => {
-      if(event.target == this.container)
+      if(event.target == this.container) {
         this.blur();
+      }
     })
 
     this.container.appendChild(this._focusedElements.SVG);
   }
 
-  add(element: XElement) {
-    if(!element) return;
-    this.container.appendChild(element.SVG);
-    element.SVG.addEventListener("mousedown", () => {
-      this.focus(element);
-    });
-    element.SVG.addEventListener("mousemove", () => {
-      if(this.dragTool.isOn()) {
-        element.SVG.style.cursor = "move";
+  add(xElement: XElement) {
+    if(!xElement) return;
+    this.container.appendChild(xElement.SVG);
+    xElement.SVG.addEventListener("mousedown", () => {
+      if(this.drawTool.isDrawing() || this.dragTool.isOn()) return;
+
+      if(!this._multiSelect) {
+        this.blur();
+        this.focus(xElement);
+      } else if(this._focusedElements.hasChild(xElement)) {
+        this.blur(xElement);
       } else {
-        element.SVG.style.cursor = "pointer";
+        this.focus(xElement);
+      }
+
+    });
+
+    xElement.SVG.addEventListener("mousemove", () => {
+      if(this.dragTool.isOn()) {
+        xElement.SVG.style.cursor = "move";
+      } else {
+        xElement.SVG.style.cursor = "pointer";
       }
     });
   }
@@ -50,15 +64,24 @@ export class XSVG {
     return this.container;
   }
 
-  focus(element: XElement) {
-    this._focusedElements.appendChild(element);
-    this._focusedElements.focusStyle();
+  focus(xElement: XElement) {
+    this._focusedElements.appendChild(xElement);
   }
-  blur() {
-    this._focusedElements.blurStyle();
-    this._focusedElements.clear();
+  blur(xElement: XElement | null = null) {
+    if(xElement)
+      this._focusedElements.removeChild(xElement);
+    else
+      this._focusedElements.clear();
   }
-  get focused(): XGroup {
+
+  get focused(): XFocus {
     return this._focusedElements;
+  }
+
+  multiSelect(): void {
+    this._multiSelect = true;
+  }
+  singleSelect(): void {
+    this._multiSelect = false;
   }
 }

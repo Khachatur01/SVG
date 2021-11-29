@@ -10,29 +10,18 @@ export abstract class ClickDraw implements XDrawable {
   private move = this._move.bind(this);
 
   _click(event: MouseEvent) {
+    if(!this.container) return;
+
     let containerRect = this.container?.HTML.getBoundingClientRect();
     if(!containerRect) return;
 
     let element = this.onClick(containerRect, event);
     if(element) {
       this.drawableElement = element;
+      // this.container?.blur();
       this.container?.add(this.drawableElement);
-      this.container?.focus(this.drawableElement);
     }
-
-    let bBoxPosition: DOMRect | undefined = this.drawableElement?.SVG.getBoundingClientRect();
-    if(!bBoxPosition) return;
-
-    // /* calculate and set bounding box position and size */
-    // this.drawableElement?.blurStyle();
-    // bBoxPosition.x -= containerRect.left;
-    // bBoxPosition.y -= containerRect.top;
-    // this.drawableElement?.boundingBox?.setAttr({
-    //   x: bBoxPosition.x,
-    //   y: bBoxPosition.y,
-    //   width: bBoxPosition.width,
-    //   height: bBoxPosition.height
-    // });
+    this.container.drawTool.drawing();
 
   }
   _move(event: MouseEvent) {
@@ -41,7 +30,6 @@ export abstract class ClickDraw implements XDrawable {
 
     this.onMove(containerRect, event, this.perfectMode);
 
-    if(!this.drawableElement) return;
   }
 
   abstract onClick(containerRect: DOMRect, event: MouseEvent): XElement | null;
@@ -58,7 +46,10 @@ export abstract class ClickDraw implements XDrawable {
     this.container?.HTML.removeEventListener('mousedown', this.click);
     document.removeEventListener('mousemove', this.move);
     this.onStop();
-    this.container?.focused?.focusStyle();
+    if(this.drawableElement && this.container) {
+      this.container.drawTool.drawingEnd();
+      this.container?.focus(this.drawableElement);
+    }
   }
 
   set perfect(mode: boolean) {

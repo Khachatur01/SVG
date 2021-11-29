@@ -2,6 +2,7 @@ import {XElement} from "../XElement";
 import {Pointed} from "../pointed/Pointed";
 import {Point} from "../../model/Point";
 import {XBoundingBox} from "../../service/edit/bound/XBoundingBox";
+import {Size} from "../../model/Size";
 
 export class XPolyline extends XElement implements Pointed {
   constructor(points: Point[]) {
@@ -59,5 +60,12 @@ export class XPolyline extends XElement implements Pointed {
   isSingleLine(): boolean {
     let pointsArr = this.getAttr("points").split(" ", 6);
     return  pointsArr.length < 6;
+  }
+
+
+  get size(): Size {
+    return {width: 0, height: 0};
+  }
+  set size(size: Size) {
   }
 }

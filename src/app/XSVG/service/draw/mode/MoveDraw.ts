@@ -12,17 +12,20 @@ export abstract class MoveDraw implements XDrawable {
   private drawableElement: XElement | null = null;
 
   private _onStart(event: MouseEvent) {
-    let containerRect = this.container?.HTML.getBoundingClientRect();
+    if(!this.container) return;
+
+    let containerRect = this.container.HTML.getBoundingClientRect();
     if(!containerRect) return;
 
     this.drawableElement = this.onStart(containerRect, event);
-
-    this.container?.add(this.drawableElement);
-    this.container?.focus(this.drawableElement);
-    this.container?.HTML.addEventListener('mousemove', this.draw);
+    this.container.add(this.drawableElement);
+    this.container.HTML.addEventListener('mousemove', this.draw);
+    this.container.drawTool.drawing();
   }
   private _onDraw(event: MouseEvent) {
-    let containerRect = this.container?.HTML.getBoundingClientRect();
+    if(!this.container) return;
+
+    let containerRect = this.container.HTML.getBoundingClientRect();
     if(!this.drawableElement || !containerRect) return;
     this.onDraw(containerRect, event, this.drawableElement, this.perfectMode);
 
@@ -31,14 +34,18 @@ export abstract class MoveDraw implements XDrawable {
 
   }
   private _onEnd(event: MouseEvent) {
-    this.container?.HTML.removeEventListener('mousemove', this.draw);
+    if(!this.container) return;
 
-    let containerRect = this.container?.HTML.getBoundingClientRect();
+    this.container.HTML.removeEventListener('mousemove', this.draw);
+
+    let containerRect = this.container.HTML.getBoundingClientRect();
 
     /* return if element isn't drawn */
-    this.drawableElement && containerRect && this.onEnd(containerRect, event, this.drawableElement);
-
-    // this.container?.focus(this.drawableElement);
+    if(this.drawableElement && containerRect && this.onEnd(containerRect, event, this.drawableElement)) {
+      this.container.blur();
+      this.container.focus(this.drawableElement);
+    }
+    this.container.drawTool.drawingEnd();
   }
 
   abstract onStart(containerRect: DOMRect, event: MouseEvent): XElement;
