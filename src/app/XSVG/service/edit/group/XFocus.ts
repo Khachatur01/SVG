@@ -40,6 +40,9 @@ export class XFocus implements XDraggable {
     this.svgGroup.parentElement?.appendChild(xElement.SVG);
     this._children.delete(xElement);
     this.fit();
+
+    if(this._children.size == 0)
+      this.blurStyle();
   }
 
   clear() {

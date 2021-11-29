@@ -1,7 +1,6 @@
 import {XElement} from "../XElement";
 import {Pointed} from "../pointed/Pointed";
 import {Point} from "../../model/Point";
-import {XBoundingBox} from "../../service/edit/bound/XBoundingBox";
 import {Size} from "../../model/Size";
 
 export class XPolyline extends XElement implements Pointed {
@@ -9,12 +8,8 @@ export class XPolyline extends XElement implements Pointed {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "polyline");
 
-    this.setAttr({
-      fill: "none",
-      stroke: "black",
-      "stroke-width": 2
-    });
     this.points = points;
+    this.setDefaultStyle();
 
     this.setOverEvent();
   }

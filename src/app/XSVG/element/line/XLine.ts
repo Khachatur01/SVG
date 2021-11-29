@@ -1,5 +1,4 @@
 import {XElement} from "../XElement";
-import {XBoundingBox} from "../../service/edit/bound/XBoundingBox";
 import {Size} from "../../model/Size";
 
 export class XLine extends XElement {

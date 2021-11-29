@@ -12,24 +12,22 @@ export abstract class ClickDraw implements XDrawable {
   _click(event: MouseEvent) {
     if(!this.container) return;
 
+    this.container.drawTool.drawing();
+
     let containerRect = this.container?.HTML.getBoundingClientRect();
     if(!containerRect) return;
 
     let element = this.onClick(containerRect, event);
     if(element) {
       this.drawableElement = element;
-      // this.container?.blur();
       this.container?.add(this.drawableElement);
     }
-    this.container.drawTool.drawing();
-
   }
   _move(event: MouseEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
     if(!containerRect) return;
 
     this.onMove(containerRect, event, this.perfectMode);
-
   }
 
   abstract onClick(containerRect: DOMRect, event: MouseEvent): XElement | null;

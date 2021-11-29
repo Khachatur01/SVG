@@ -2,12 +2,14 @@ import {XDrawTool} from "./service/draw/XDrawTool";
 import {XDragTool} from "./service/drag/XDragTool";
 import {XElement} from "./element/XElement";
 import {XFocus} from "./service/edit/group/XFocus";
+import {XResizeTool} from "./service/edit/resize/XResizeTool";
 
 export class XSVG {
   private readonly container: HTMLElement;
   private _focusedElements: XFocus = new XFocus(this);
   public readonly drawTool: XDrawTool;
   public readonly dragTool: XDragTool;
+  public readonly resizeTool: XResizeTool;
 
   private _multiSelect: boolean = false;
 
@@ -20,6 +22,7 @@ export class XSVG {
 
     this.drawTool = new XDrawTool(this);
     this.dragTool = new XDragTool(this);
+    this.resizeTool = new XResizeTool(this);
 
     this.container.addEventListener("mousedown", event => {
       if(event.target == this.container) {
@@ -48,7 +51,7 @@ export class XSVG {
     });
 
     xElement.SVG.addEventListener("mousemove", () => {
-      if(this.dragTool.isOn()) {
+      if(this.dragTool.isOn() && this._focusedElements.hasChild(xElement)) {
         xElement.SVG.style.cursor = "move";
       } else {
         xElement.SVG.style.cursor = "pointer";

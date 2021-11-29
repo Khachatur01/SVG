@@ -1,12 +1,15 @@
 import {Point} from "../model/Point";
 import {Transform} from "../model/Transform";
 import {Size} from "../model/Size";
+import {Rect} from "../model/Rect";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 
 export abstract class XElement implements XResizeable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
-  protected transform: Transform = new Transform();
+  protected readonly transform: Transform = new Transform();
+  protected boundingBox: Rect = {x: 0, y: 0, width: 0, height: 0}
+
   protected style: any = {
     fill: "none",
     stroke: "#24ff24",
@@ -84,6 +87,9 @@ export abstract class XElement implements XResizeable {
 
   fixPosition(): void {
     this._lastDragPos = this.position;
+  }
+  fixRect(): void {
+
   }
 }
 
