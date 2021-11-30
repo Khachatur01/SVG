@@ -58,4 +58,5 @@ export class XDragTool {
   public isOn(): boolean {
     return this.isDrag;
   }
+
 }

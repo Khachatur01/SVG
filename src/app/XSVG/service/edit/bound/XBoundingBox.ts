@@ -21,7 +21,6 @@ export class XBoundingBox {
     });
 
     this.box.style.display = "none";
-    this.box.style.pointerEvents = "none";
   }
 
   get position(): Point {
@@ -54,4 +53,5 @@ export class XBoundingBox {
       if(key && value)
         this.SVG.setAttribute(key, value as string);
   }
+
 }

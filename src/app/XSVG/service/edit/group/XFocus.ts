@@ -28,6 +28,9 @@ export class XFocus implements XDraggable {
   get SVG(): SVGGElement {
     return this.svgGroup;
   }
+  get boundingSVG(): SVGElement {
+    return this.xBoundingBox.SVG;
+  }
 
   appendChild(xElement: XElement): void {
     this.svgElements.appendChild(xElement.SVG);
@@ -123,4 +126,5 @@ export class XFocus implements XDraggable {
       child.lowlight();
     });
   }
+
 }
