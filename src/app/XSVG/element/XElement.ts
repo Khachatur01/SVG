@@ -1,12 +1,9 @@
 import {Point} from "../model/Point";
-import {Transform} from "../model/Transform";
 import {Size} from "../model/Size";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 
 export abstract class XElement implements XResizeable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
-
-  protected readonly transform: Transform = new Transform();
 
   protected style: any = {
     fill: "none",
@@ -23,17 +20,6 @@ export abstract class XElement implements XResizeable {
   abstract isComplete(): boolean;
   abstract get position(): Point;
   abstract set position(position: Point);
-  // get position(): Point {
-  //   return {
-  //     x: this.transform.translateX,
-  //     y: this.transform.translateY
-  //   };
-  // }
-  // set position(position: Point) {
-  //   this.transform.translateX = position.x + this._lastDragPos.x;
-  //   this.transform.translateY = position.y + this._lastDragPos.y;
-  //   this.svgElement.style.transform = this.transform.toString();
-  // }
 
   get SVG(): SVGElement {
     return this.svgElement;
@@ -60,17 +46,17 @@ export abstract class XElement implements XResizeable {
     });
   }
 
-  remove() {
-    this.svgElement.remove();
+  setOverEvent() {
+    this.SVG.addEventListener("mouseover", this.highlight);
+    this.SVG.addEventListener("mouseout", this.lowlight);
+  }
+  removeOverEvent() {
+    this.SVG.removeEventListener("mouseover", this.highlight);
+    this.SVG.removeEventListener("mouseout", this.lowlight);
   }
 
-  setOverEvent() {
-    this.SVG.addEventListener("mouseover", () => {
-      this.highlight();
-    })
-    this.SVG.addEventListener("mouseout", () => {
-      this.lowlight();
-    })
+  remove() {
+    this.svgElement.remove();
   }
 
   highlight(): void {

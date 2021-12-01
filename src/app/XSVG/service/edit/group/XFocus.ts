@@ -1,13 +1,11 @@
 import {XElement} from "../../../element/XElement";
 import {XDraggable} from "../../drag/XDraggable";
 import {Point} from "../../../model/Point";
-import {Transform} from "../../../model/Transform";
 import {XBoundingBox} from "../bound/XBoundingBox";
 import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
 
 export class XFocus implements XDraggable {
-  private readonly transform: Transform = new Transform();
   private readonly _children: Set<XElement> = new Set<XElement>();
   private readonly container: XSVG;
 
@@ -69,23 +67,20 @@ export class XFocus implements XDraggable {
   }
 
   get position(): Point {
-    return {
-      x: this.transform.translateX,
-      y: this.transform.translateY
-    };
+    return this.xBoundingBox.position;
   }
   set position(position: Point) {
-    this.transform.translateX = position.x;
-    this.transform.translateY = position.y;
+    this.xBoundingBox.position = position;
 
     this._children.forEach((child: XElement) => {
       child.position = {
-        x: this.transform.translateX - this._lastDragPos.x,
-        y: this.transform.translateY - this._lastDragPos.y
+        x: position.x - this._lastDragPos.x,
+        y: position.y - this._lastDragPos.y
       };
     });
     this.fit();
   }
+
   fixPosition(): void {
     this._lastDragPos = this.position;
   }
@@ -97,15 +92,8 @@ export class XFocus implements XDraggable {
   fit(): void {
     let contentRect: Rect = this.boundingRect;
 
-    this.xBoundingBox.setAttr({
-      width: contentRect.width,
-      height: contentRect.height
-    });
-
-    this.xBoundingBox.position = {
-      x: this.transform.translateX = contentRect.x,
-      y: this.transform.translateY = contentRect.y
-    };
+    this.xBoundingBox.size = contentRect;
+    this.xBoundingBox.position = contentRect;
   }
 
   focusStyle() {

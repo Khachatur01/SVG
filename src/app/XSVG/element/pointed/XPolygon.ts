@@ -1,6 +1,5 @@
 import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
-import {Size} from "../../model/Size";
 import {XPointed} from "../type/XPointed";
 
 export class XPolygon extends XPointed {

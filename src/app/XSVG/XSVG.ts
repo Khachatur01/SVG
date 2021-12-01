@@ -53,10 +53,8 @@ export class XSVG {
     xElement.SVG.addEventListener("mousemove", () => {
       if(this.dragTool.isOn() && this._focusedElements.hasChild(xElement)) {
         xElement.SVG.style.cursor = "move";
-        this._focusedElements.boundingSVG.style.cursor = "move";
       } else {
         xElement.SVG.style.cursor = "pointer";
-        this._focusedElements.boundingSVG.style.cursor = "default";
       }
     });
   }
