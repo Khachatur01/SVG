@@ -1,11 +1,11 @@
 import {ClickDraw} from "../../mode/ClickDraw";
-import {XElement} from "../../../../element/XElement";
-import {XPolygon} from "../../../../element/shape/XPolygon";
+import {XPolygon} from "../../../../element/pointed/XPolygon";
+import {XPointed} from "../../../../element/type/XPointed";
 
 export class DrawPolygon extends ClickDraw {
   private xPolygon: XPolygon | null = null;
 
-  onClick(containerRect: DOMRect, event: MouseEvent): XElement | null {
+  onClick(containerRect: DOMRect, event: MouseEvent): XPointed | null {
     let x1 = event.clientX - containerRect.left; //x position within the element.
     let y1 = event.clientY - containerRect.top;  //y position within the element.
 
@@ -28,14 +28,13 @@ export class DrawPolygon extends ClickDraw {
     let x = event.clientX - containerRect.left; //x position within the element.
     let y = event.clientY - containerRect.top;  //y position within the element.
 
-    this.xPolygon.removePoint(-1);
-    this.xPolygon.pushPoint({x: x, y: y});
+    this.xPolygon.replacePoint(-1, {x: x, y: y});
   }
 
 
   onStop() {
     if(!this.xPolygon) return;
-    if(this.xPolygon.isSingleLine()) {
+    if(!this.xPolygon.isComplete()) {
       this.xPolygon.remove();
     } else {
       this.xPolygon.removePoint(-1);

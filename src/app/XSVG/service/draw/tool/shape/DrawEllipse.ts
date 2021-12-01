@@ -55,12 +55,12 @@ export class DrawEllipse extends MoveDraw {
       width: rx,
       height: ry
     };
-    xElement.position = {x: x + rx, y: y + ry};
+    xElement.position = {x: x, y: y};
 
   }
 
   onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean {
-    if(!xElement || parseFloat(xElement.getAttr("rx")) == 0 || parseFloat(xElement.getAttr("ry")) == 0) {
+    if(!xElement?.isComplete()) {
       xElement?.remove();
       return false;
     } else {

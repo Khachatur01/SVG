@@ -4,6 +4,7 @@ import {Point} from "../../../model/Point";
 import {Transform} from "../../../model/Transform";
 import {XBoundingBox} from "../bound/XBoundingBox";
 import {XSVG} from "../../../XSVG";
+import {Rect} from "../../../model/Rect";
 
 export class XFocus implements XDraggable {
   private readonly transform: Transform = new Transform();
@@ -21,8 +22,8 @@ export class XFocus implements XDraggable {
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
     this.svgElements = document.createElementNS(XElement.svgURI, "g");
 
-    this.svgGroup.appendChild(this.xBoundingBox.SVG);
     this.svgGroup.appendChild(this.svgElements);
+    this.svgGroup.appendChild(this.xBoundingBox.SVG);
   }
 
   get SVG(): SVGGElement {
@@ -94,8 +95,7 @@ export class XFocus implements XDraggable {
   }
 
   fit(): void {
-    let containerRect: DOMRect = this.container.HTML.getBoundingClientRect();
-    let contentRect: DOMRect = this.svgElements.getBoundingClientRect();
+    let contentRect: Rect = this.boundingRect;
 
     this.xBoundingBox.setAttr({
       width: contentRect.width,
@@ -103,8 +103,8 @@ export class XFocus implements XDraggable {
     });
 
     this.xBoundingBox.position = {
-      x: this.transform.translateX = contentRect.x - containerRect.x,
-      y: this.transform.translateY = contentRect.y - containerRect.y
+      x: this.transform.translateX = contentRect.x,
+      y: this.transform.translateY = contentRect.y
     };
   }
 
@@ -125,6 +125,47 @@ export class XFocus implements XDraggable {
     this._children.forEach((child: XElement) => {
       child.lowlight();
     });
+  }
+  get boundingRect(): Rect {
+    let minX, minY;
+    let maxX, maxY;
+
+    let children = Array.from(this._children);
+    if(children.length < 1)
+      return {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      };
+
+    let firstChild = children[0];
+    let firstChildPos = firstChild.position;
+    let firstChildSize = firstChild.size;
+    minX = firstChildPos.x;
+    minY = firstChildPos.y;
+    maxX = firstChildSize.width + minX;
+    maxY = firstChildSize.height + minY;
+
+    for(let i = 1; i < children.length; i++) {
+      let childPos = children[i].position;
+      let childSize = children[i].size;
+      if(childPos.x < minX)
+        minX = childPos.x;
+      if(childPos.y < minY)
+        minY = childPos.y;
+      if(childSize.width + childPos.x > maxX)
+        maxX = childSize.width + childPos.x;
+      if(childSize.height + childPos.y > maxY)
+        maxY = childSize.height + childPos.y;
+    }
+
+    return {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    }
   }
 
 }

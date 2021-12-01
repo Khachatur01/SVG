@@ -1,7 +1,5 @@
 import {XSVG} from "../../XSVG";
 import {Point} from "../../model/Point";
-import {XFocus} from "../edit/group/XFocus";
-import {XDraggable} from "./XDraggable";
 import {XElement} from "../../element/XElement";
 
 export class XDragTool {

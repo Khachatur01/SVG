@@ -1,5 +1,5 @@
 import {XDrawable} from "../../XDrawable";
-import {XFree} from "../../../../element/line/XFree";
+import {XFree} from "../../../../element/pointed/XFree";
 import {XSVG} from "../../../../XSVG";
 
 export class DrawFree implements XDrawable {
@@ -19,9 +19,6 @@ export class DrawFree implements XDrawable {
     this.drawableElement = new XFree([
       {x: x1, y: y1}
     ]);
-    // if(this.drawableElement.boundingBox)
-    //   this.drawableElement.boundingBox.SVG.style.display = "none";
-
 
     this.container?.add(this.drawableElement);
     this.container?.HTML.addEventListener('mousemove', this._onDraw);
@@ -43,26 +40,16 @@ export class DrawFree implements XDrawable {
   onEnd() {
     if(!this.drawableElement) return;
 
-    if(this.drawableElement.getAttr("points").split(" ").length == 2)
-      this.drawableElement.remove();
-
     this.container?.HTML.removeEventListener('mousemove', this._onDraw);
 
-    // /* calculate and set bounding box position and size */
-    // let containerRect = this.container?.HTML.getBoundingClientRect();
-    // if(!containerRect) return;
-    // let bBoxPosition: DOMRect = this.drawableElement.SVG.getBoundingClientRect();
-    // bBoxPosition.x -= containerRect.left;
-    // bBoxPosition.y -= containerRect.top;
-    // this.drawableElement.boundingBox?.setAttr({
-    //   x: bBoxPosition.x,
-    //   y: bBoxPosition.y,
-    //   width: bBoxPosition.width,
-    //   height: bBoxPosition.height
-    // });
+    if(this.drawableElement.getAttr("points").split(" ").length == 2) {
+      this.drawableElement.remove();
+      return;
+    }
 
     /* selects drawing on draw end */
     this.container?.focus(this.drawableElement);
+
   }
 
   set perfect(mode: boolean) {

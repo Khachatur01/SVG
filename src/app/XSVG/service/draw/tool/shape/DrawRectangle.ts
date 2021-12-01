@@ -53,15 +53,7 @@ export class DrawRectangle extends MoveDraw {
     xElement.position = {x: x, y: y};
   }
   onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean {
-    // try{
-    //   xElement?.getAttr("width");
-    //   xElement?.getAttr("height");
-    //   return true;
-    // } catch (ParserError) {
-    //   xElement?.remove();
-    //   return false;
-    // }
-    if(!xElement || parseFloat(xElement.getAttr("width")) == 0 || parseFloat(xElement.getAttr("height")) == 0) {
+    if(!xElement?.isComplete()) {
       xElement?.remove();
       return false;
     } else {

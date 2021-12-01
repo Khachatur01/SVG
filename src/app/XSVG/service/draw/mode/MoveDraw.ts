@@ -3,7 +3,7 @@ import {XElement} from "../../../element/XElement";
 import {XSVG} from "../../../XSVG";
 
 export abstract class MoveDraw implements XDrawable {
-  private container: XSVG | null = null;
+  protected container: XSVG | null = null;
   private perfectMode: boolean = false;
   private drawStart = this._onStart.bind(this);
   private draw = this._onDraw.bind(this);
@@ -40,12 +40,13 @@ export abstract class MoveDraw implements XDrawable {
 
     let containerRect = this.container.HTML.getBoundingClientRect();
 
-    /* return if element isn't drawn */
+    /* if element isn't drawn */
     if(this.drawableElement && containerRect && this.onEnd(containerRect, event, this.drawableElement)) {
       this.container.blur();
       this.container.focus(this.drawableElement);
     }
     this.container.drawTool.drawingEnd();
+    this.drawableElement = null;
   }
 
   abstract onStart(containerRect: DOMRect, event: MouseEvent): XElement;

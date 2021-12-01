@@ -1,27 +1,39 @@
 import {Point} from "../model/Point";
 import {Transform} from "../model/Transform";
 import {Size} from "../model/Size";
-import {Rect} from "../model/Rect";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 
 export abstract class XElement implements XResizeable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
   protected readonly transform: Transform = new Transform();
-  protected boundingBox: Rect = {x: 0, y: 0, width: 0, height: 0}
 
   protected style: any = {
     fill: "none",
     stroke: "#24ff24",
     highlight: "red",
-    strokeWidth: 5
+    strokeWidth: 10
   }
-  private _lastDragPos: Point = {x: 0, y: 0}
+  protected _lastDragPos: Point = {x: 0, y: 0}
 
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
 
   abstract get size(): Size;
   abstract set size(size: Size);
+  abstract isComplete(): boolean;
+  abstract get position(): Point;
+  abstract set position(position: Point);
+  // get position(): Point {
+  //   return {
+  //     x: this.transform.translateX,
+  //     y: this.transform.translateY
+  //   };
+  // }
+  // set position(position: Point) {
+  //   this.transform.translateX = position.x + this._lastDragPos.x;
+  //   this.transform.translateY = position.y + this._lastDragPos.y;
+  //   this.svgElement.style.transform = this.transform.toString();
+  // }
 
   get SVG(): SVGElement {
     return this.svgElement;
@@ -37,7 +49,7 @@ export abstract class XElement implements XResizeable {
   setAttr(attributes: object): void {
     for (const [key, value] of Object.entries(attributes))
       if (key && value)
-        this.SVG.setAttribute(key, value as string);
+        this.SVG.setAttribute(key, value + "");
   }
 
   setDefaultStyle(): void {
@@ -73,23 +85,8 @@ export abstract class XElement implements XResizeable {
     });
   }
 
-  get position(): Point {
-    return {
-      x: this.transform.translateX,
-      y: this.transform.translateY
-    };
-  }
-  set position(position: Point) {
-    this.transform.translateX = position.x + this._lastDragPos.x;
-    this.transform.translateY = position.y + this._lastDragPos.y;
-    this.svgElement.style.transform = this.transform.toString();
-  }
-
   fixPosition(): void {
     this._lastDragPos = this.position;
-  }
-  fixRect(): void {
-
   }
 }
 

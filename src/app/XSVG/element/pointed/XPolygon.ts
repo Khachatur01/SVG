@@ -1,10 +1,9 @@
 import {XElement} from "../XElement";
-import {Pointed} from "../pointed/Pointed";
 import {Point} from "../../model/Point";
-import {XBoundingBox} from "../../service/edit/bound/XBoundingBox";
 import {Size} from "../../model/Size";
+import {XPointed} from "../type/XPointed";
 
-export class XPolygon extends XElement implements Pointed {
+export class XPolygon extends XPointed {
   constructor(points: Point[]) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "polygon");
@@ -13,11 +12,10 @@ export class XPolygon extends XElement implements Pointed {
 
     this.setOverEvent();
     this.setDefaultStyle();
-    let bBox:DOMRect =  this.svgElement.getBoundingClientRect();
   }
 
   // TODO fix coordinate fetching
-  get points(): Point[] {
+  override get points(): Point[] {
     let points: string[] = this.getAttr("points").split(" ");
     let pointsArray: Point[] = [];
     for(let point of points) {
@@ -29,7 +27,7 @@ export class XPolygon extends XElement implements Pointed {
     }
     return pointsArray;
   }
-  set points(points: Point[]) {
+  override set points(points: Point[]) {
     let pointsString = "";
     for(let point of points) {
       pointsString += point.x + "," + point.y + " "
@@ -37,12 +35,12 @@ export class XPolygon extends XElement implements Pointed {
     pointsString = pointsString.trimEnd();
     this.setAttr({points: pointsString})
   }
-  pushPoint(point: Point) {
+  override pushPoint(point: Point) {
     this.setAttr({
         "points": this.getAttr("points") + " " + point.x + "," + point.y
     });
   }
-  removePoint(index: number): void {
+  override removePoint(index: number): void {
     let pointsArr = this.getAttr("points").split(" ");
     if(index < 0)
       index = pointsArr.length + index;
@@ -52,15 +50,17 @@ export class XPolygon extends XElement implements Pointed {
       "points": pointsArr.join(" ")
     });
   }
+  override replacePoint(index: number, point: Point) {
+    let points = this.points;
+    if(index < 0)
+      index = points.length + index;
+    points[index] = point;
 
-  isSingleLine(): boolean {
+    this.points = points;
+  }
+  override isComplete(): boolean {
     let pointsArr = this.getAttr("points").split(" ", 3);
-    return pointsArr.length < 3;
+    return pointsArr.length >= 3;
   }
 
-  get size(): Size {
-    return {width: 0, height: 0};
-  }
-  set size(size: Size) {
-  }
 }

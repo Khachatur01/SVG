@@ -1,9 +1,8 @@
 import {XElement} from "../XElement";
-import {Pointed} from "../pointed/Pointed";
 import {Point} from "../../model/Point";
-import {Size} from "../../model/Size";
+import {XPointed} from "../type/XPointed";
 
-export class XPolyline extends XElement implements Pointed {
+export class XPolyline extends XPointed {
   constructor(points: Point[]) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "polyline");
@@ -15,7 +14,7 @@ export class XPolyline extends XElement implements Pointed {
   }
 
   // TODO fix coordinate fetching
-  get points(): Point[] {
+  override get points(): Point[] {
     let points: string[] = this.getAttr("points").split(" ");
     let pointsArray: Point[] = [];
 
@@ -28,7 +27,7 @@ export class XPolyline extends XElement implements Pointed {
 
     return pointsArray;
   }
-  set points(points: Point[]) {
+  override set points(points: Point[]) {
     let pointsString: string = "";
     for(let point of points) {
       pointsString += point.x + " " + point.y + " "
@@ -36,12 +35,12 @@ export class XPolyline extends XElement implements Pointed {
     pointsString = pointsString.trimEnd();
     this.setAttr({points: pointsString})
   }
-  pushPoint(point: Point) {
+  override pushPoint(point: Point) {
     this.setAttr({
       "points": this.getAttr("points") + " " + point.x + " " + point.y
     });
   }
-  removePoint(index: number): void {
+  override removePoint(index: number): void {
     let pointsArr = this.getAttr("points").split(" ");
     if(index < 0)
       index = pointsArr.length / 2 + index;
@@ -52,15 +51,17 @@ export class XPolyline extends XElement implements Pointed {
       "points": pointsArr.join(" ")
     });
   }
-  isSingleLine(): boolean {
+  override replacePoint(index: number, point: Point) {
+    let points = this.points;
+    if(index < 0)
+      index = points.length + index;
+    points[index] = point;
+
+    this.points = points;
+  }
+  override isComplete(): boolean {
     let pointsArr = this.getAttr("points").split(" ", 6);
-    return  pointsArr.length < 6;
+    return pointsArr.length >= 6;
   }
 
-
-  get size(): Size {
-    return {width: 0, height: 0};
-  }
-  set size(size: Size) {
-  }
 }

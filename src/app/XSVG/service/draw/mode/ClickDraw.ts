@@ -1,11 +1,11 @@
 import {XDrawable} from "../XDrawable";
 import {XSVG} from "../../../XSVG";
-import {XElement} from "../../../element/XElement";
+import {XPointed} from "../../../element/type/XPointed";
 
 export abstract class ClickDraw implements XDrawable {
   private container: XSVG | null = null;
   private perfectMode: boolean = false;
-  private drawableElement: XElement | null = null;
+  private drawableElement: XPointed | null = null;
   private click = this._click.bind(this);
   private move = this._move.bind(this);
 
@@ -30,7 +30,7 @@ export abstract class ClickDraw implements XDrawable {
     this.onMove(containerRect, event, this.perfectMode);
   }
 
-  abstract onClick(containerRect: DOMRect, event: MouseEvent): XElement | null;
+  abstract onClick(containerRect: DOMRect, event: MouseEvent): XPointed | null;
   abstract onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void;
   abstract onStop(): void;
 
