@@ -3,7 +3,7 @@ import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 
 export abstract class XPointed extends XElement {
-  private _size: Size = {width: 0, height: 0};
+  protected _size: Size = {width: 0, height: 0};
   abstract get points(): Point[]
   abstract set points(points: Point[]);
   abstract pushPoint(point: Point): void;

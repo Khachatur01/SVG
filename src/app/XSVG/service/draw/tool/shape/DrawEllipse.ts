@@ -13,47 +13,43 @@ export class DrawEllipse extends MoveDraw {
     return new XEllipse(this.startPos.x, this.startPos.y, 0, 0);
   }
 
-  onDraw(containerRect: DOMRect, event: MouseEvent, xElement: XElement, perfectMode: boolean): void {
+  onDraw(containerRect: DOMRect, event: MouseEvent, xElement: XEllipse, perfectMode: boolean): void {
     let dx = event.clientX - containerRect.left - this.startPos.x;
     let dy = event.clientY - containerRect.top - this.startPos.y;
-    let x, y, rx, ry;
+    let x, y, width, height;
 
     if (dx > 0) {
       x = this.startPos.x;
-      rx = dx;
+      width = dx;
     } else {
       x = this.startPos.x + dx;
-      rx = -dx;
+      width = -dx;
     }
 
     if (dy > 0) {
       y = this.startPos.y;
-      ry = dy;
+      height = dy;
     } else {
       y = this.startPos.y + dy;
-      ry = -dy;
+      height = -dy;
     }
 
-    /* to draw on the top left */
-    rx /= 2;
-    ry /= 2;
-
     if(perfectMode) {
-      rx = ry = (rx + ry) / 2;
+      width = height = (width + height) / 2;
       let delta = (dx + dy) / 2
       if(dx < 0 && dy < 0) {
         x = this.startPos.x + delta;
         y = this.startPos.y + delta;
       } else if (dx < 0) {
-        x = this.startPos.x - rx * 2;
+        x = this.startPos.x - width;
       } else if (dy < 0) {
-        y = this.startPos.y - ry * 2;
+        y = this.startPos.y - height;
       }
     }
 
     xElement.size = {
-      width: rx,
-      height: ry
+      width: width,
+      height: height
     };
     xElement.position = {x: x, y: y};
 
