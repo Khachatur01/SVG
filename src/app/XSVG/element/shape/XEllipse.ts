@@ -86,7 +86,6 @@ export class XEllipse extends XPath {
     return super.size;
   }
   override set size(size: Size) {
-    super.size = size;
     let position = this.position;
 
     this.makeEllipse(position.x, position.y, size.width / 2, size.height / 2);

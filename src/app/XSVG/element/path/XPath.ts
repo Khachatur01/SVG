@@ -24,7 +24,7 @@ export class XPath extends XElement {
 
   get position(): Point {
     let commands = this.path.getAll();
-    let leftTop: Point = commands[0].point;
+    let leftTop: Point = Object.assign({}, commands[0].point);
 
     for(let i = 1; i < commands.length; i++) {
       if (commands[i].point.x < leftTop.x)
