@@ -12,8 +12,10 @@ export abstract class XElement implements XResizeable {
     strokeWidth: 10
   }
   protected _lastDragPos: Point = {x: 0, y: 0}
-
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
+
+  private _highlight = this.highlight.bind(this);
+  private _lowlight = this.lowlight.bind(this);
 
   abstract get size(): Size;
   abstract set size(size: Size);
@@ -46,13 +48,13 @@ export abstract class XElement implements XResizeable {
     });
   }
 
-  setOverEvent() {
-    this.SVG.addEventListener("mouseover", this.highlight);
-    this.SVG.addEventListener("mouseout", this.lowlight);
+  setOverEvent(): void {
+    this.SVG.addEventListener("mouseover", this._highlight);
+    this.SVG.addEventListener("mouseout", this._lowlight);
   }
-  removeOverEvent() {
-    this.SVG.removeEventListener("mouseover", this.highlight);
-    this.SVG.removeEventListener("mouseout", this.lowlight);
+  removeOverEvent(): void {
+    this.SVG.removeEventListener("mouseover", this._highlight);
+    this.SVG.removeEventListener("mouseout", this._lowlight);
   }
 
   remove() {
