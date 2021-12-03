@@ -46,9 +46,16 @@ export class XBoundingBox extends XRectangle {
 
     this.grips.push(
       new Grip(x, y, 10, 10),
+      new Grip(x + width / 2, y, 10, 10),
+
       new Grip(x + width, y, 10, 10),
+      new Grip(x + width, y + height / 2, 10, 10),
+
       new Grip(x + width, y + height, 10, 10),
-      new Grip(x, y + height, 10, 10)
+      new Grip(x + width / 2, y + height, 10, 10),
+
+      new Grip(x, y + height, 10, 10),
+      new Grip(x, y + height / 2, 10, 10)
     );
   }
 
@@ -60,8 +67,11 @@ export class XBoundingBox extends XRectangle {
   }
   multipleFocus() {
     this.svgElement.style.display = "block";
-    for(let grip of this.grips) {
-      grip.show();
+    for(let i = 0; i < this.grips.length; i+=2) {
+      this.grips[i].show();
+    }
+    for(let i = 1; i < this.grips.length; i+=2) {
+      this.grips[i].hide();
     }
   }
   blur() {
@@ -73,28 +83,52 @@ export class XBoundingBox extends XRectangle {
 
   override set size(size: Size) {
     super.size = size;
-    let position = this._boundingRect;
-    if(this.grips) {
-      this.grips[0].position = {
-        x: position.x - 10,
-        y: position.y - 10
-      }
+    let rect: Rect = this._boundingRect;
+    if(!rect || !this.grips) return;
 
-      this.grips[1].position = {
-        x: size.width + position.x,
-        y: position.y - 10
-      }
+    if(rect.width < 0)
+      rect.width = -rect.width;
 
-      this.grips[2].position = {
-        x: position.x - 10,
-        y: size.height + position.y
-      }
+    if(rect.height < 0)
+      rect.height = -rect.height;
 
-      this.grips[3].position = {
-        x: size.width + position.x,
-        y: size.height + position.y
-      }
+
+    this.grips[0].position = {
+      x: rect.x - 10,
+      y: rect.y - 10
     }
+    this.grips[1].position = {
+      x: rect.x + rect.width / 2 - 5,
+      y: rect.y - 10
+    }
+
+    this.grips[2].position = {
+      x: rect.width + rect.x,
+      y: rect.y - 10
+    }
+    this.grips[3].position = {
+      x: rect.width + rect.x,
+      y: rect.y + rect.height / 2 - 5
+    }
+
+    this.grips[4].position = {
+      x: rect.width + rect.x,
+      y: rect.height + rect.y
+    }
+    this.grips[5].position = {
+      x: rect.x + size.width / 2 - 5,
+      y: rect.height + rect.y
+    }
+
+    this.grips[6].position = {
+      x: rect.x - 10,
+      y: rect.height + rect.y
+    }
+    this.grips[7].position = {
+      x: rect.x - 10,
+      y: rect.height / 2 + rect.y - 5
+    }
+
   }
 
   get boundingRect(): Rect {
