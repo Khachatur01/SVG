@@ -5,7 +5,7 @@ import {XPointed} from "../../../element/type/XPointed";
 export abstract class ClickDraw implements XDrawable {
   private container: XSVG | null = null;
   private perfectMode: boolean = false;
-  private drawableElement: XPointed | null = null;
+  protected drawableElement: XPointed | null = null;
   private click = this._click.bind(this);
   private move = this._move.bind(this);
 
@@ -31,8 +31,24 @@ export abstract class ClickDraw implements XDrawable {
   }
 
   abstract onClick(containerRect: DOMRect, event: MouseEvent): XPointed | null;
-  abstract onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void;
-  abstract onStop(): void;
+  onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
+    if(!this.drawableElement) return;
+
+    let x = event.clientX - containerRect.left; //x position within the element.
+    let y = event.clientY - containerRect.top;  //y position within the element.
+
+    this.drawableElement.replacePoint(-1,{x: x, y: y});
+  };
+  onStop(): void {
+    if(!this.drawableElement) return;
+
+    if(!this.drawableElement.isComplete())
+      this.drawableElement.remove();
+    else
+      this.drawableElement.removePoint(-1);
+
+    this.drawableElement = null;
+  };
 
   start(container: XSVG): void {
     this.container = container;

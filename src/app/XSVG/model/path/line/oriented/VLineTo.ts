@@ -6,7 +6,7 @@ export class VLineTo extends LineTo {
     return "V " + this._point.y;
   }
 
-  override set position(delta: Point) {
-    this._point.y += delta.y;
+  override set position(position: Point) {
+    this._point.y = position.y;
   }
 }

@@ -4,7 +4,7 @@ import {XPointed} from "../type/XPointed";
 import {Point} from "../../model/Point";
 
 export class XLine extends XPointed {
-  constructor(x1: number, y1: number, x2: number, y2: number) {
+  constructor(x1: number = 0, y1: number = 0, x2: number = 0, y2: number = 0) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "line");
     this.setAttr({

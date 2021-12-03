@@ -6,8 +6,8 @@ export class SQBezier extends Command {
     return "T " +
       this._point.x + " " + this._point.y;
   }
-  set position(delta: Point) {
-    this._point.x += delta.x;
-    this._point.y += delta.y;
+  set position(position: Point) {
+    this._point.x = position.x;
+    this._point.y = position.y;
   }
 }

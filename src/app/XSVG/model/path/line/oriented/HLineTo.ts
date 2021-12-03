@@ -6,7 +6,7 @@ export class HLineTo extends LineTo {
     return "H " + this._point.x;
   }
 
-  override set position(delta: Point) {
-    this._point.y += delta.y;
+  override set position(position: Point) {
+    this._point.y = position.y;
   }
 }

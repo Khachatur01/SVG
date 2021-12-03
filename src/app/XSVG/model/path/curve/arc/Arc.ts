@@ -66,8 +66,8 @@ export class Arc extends Command {
     this._sweep_flag = sweepFlag;
   }
 
-  set position(delta: Point) {
-    this._point.x += delta.x;
-    this._point.y += delta.y;
+  set position(position: Point) {
+    this._point.x = position.x;
+    this._point.y = position.y;
   }
 }

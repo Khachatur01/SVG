@@ -42,13 +42,10 @@ export class DrawFree implements XDrawable {
 
     this.container?.HTML.removeEventListener('mousemove', this._onDraw);
 
-    if(this.drawableElement.getAttr("points").split(" ").length == 2) {
+    if(this.drawableElement.getAttr("points").split(" ").length == 2)
       this.drawableElement.remove();
-      return;
-    }
-
-    /* selects drawing on draw end */
-    this.container?.focus(this.drawableElement);
+    else
+      this.container?.focus(this.drawableElement);
 
   }
 

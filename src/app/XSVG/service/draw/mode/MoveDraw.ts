@@ -1,10 +1,13 @@
 import {XDrawable} from "../XDrawable";
 import {XElement} from "../../../element/XElement";
 import {XSVG} from "../../../XSVG";
+import {Point} from "../../../model/Point";
 
 export abstract class MoveDraw implements XDrawable {
   protected container: XSVG | null = null;
   private perfectMode: boolean = false;
+  protected startPos: Point = {x: 0, y: 0}
+
   private drawStart = this._onStart.bind(this);
   private draw = this._onDraw.bind(this);
   private drawEnd = this._onEnd.bind(this);
@@ -50,8 +53,35 @@ export abstract class MoveDraw implements XDrawable {
   }
 
   abstract onStart(containerRect: DOMRect, event: MouseEvent): XElement;
-  abstract onDraw(containerRect: DOMRect, event: MouseEvent, xElement: XElement, perfectMode: boolean): void;
-  abstract onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean;
+  onDraw(containerRect: DOMRect, event: MouseEvent, xElement: XElement, perfectMode: boolean): void {
+    let width = event.clientX - containerRect.left - this.startPos.x;
+    let height = event.clientY - containerRect.top - this.startPos.y;
+
+    if(perfectMode) {
+      let averageSize = (Math.abs(width) + Math.abs(height)) / 2
+      if(width < 0)
+        width = -averageSize;
+      else
+        width = averageSize;
+      if(height < 0)
+        height = -averageSize;
+      else
+        height = averageSize;
+    }
+
+    xElement.size = {
+      width: width,
+      height: height
+    };
+  };
+  onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean {
+    if(!xElement?.isComplete()) {
+      xElement?.remove();
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   start(container: XSVG): void {
     this.container = container;

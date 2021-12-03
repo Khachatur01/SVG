@@ -36,6 +36,7 @@ export abstract class XPointed extends XElement {
     return this._size;
   }
   set size(size: Size) {
+    //FIXME
     let dx = 1;
     let dy = 1;
 

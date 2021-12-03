@@ -3,10 +3,10 @@ import {Path} from "../../model/path/Path";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 
-export class XPath extends XElement {
+export abstract class XPath extends XElement {
   protected _size: Size = {width: 0, height: 0};
   public path: Path;
-  constructor(path: Path = new Path()) {
+  protected constructor(path: Path = new Path()) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "path");
     this.path = path;
@@ -34,9 +34,7 @@ export class XPath extends XElement {
     }
     return leftTop;
   }
-  set position(delta: Point) {
-
-  }
+  set position(delta: Point) {}
 
   get size(): Size {
     let commands = this.path.getAll();
@@ -63,7 +61,5 @@ export class XPath extends XElement {
 
     return this._size;
   }
-  set size(size: Size) {
-
-  }
+  set size(size: Size) {}
 }

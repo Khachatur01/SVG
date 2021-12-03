@@ -20,11 +20,11 @@ export class QBezier extends Command {
     this._cPoint = point;
   }
 
-  set position(delta: Point) {
-    this._point.x += delta.x;
-    this._point.y += delta.y;
+  set position(position: Point) {
+    this._point.x = position.x;
+    this._point.y = position.y;
 
-    this._cPoint.x += delta.x;
-    this._cPoint.y += delta.y;
+    this._cPoint.x = position.x;
+    this._cPoint.y = position.y;
   }
 }

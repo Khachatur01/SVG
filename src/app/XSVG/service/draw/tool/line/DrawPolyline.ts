@@ -9,37 +9,17 @@ export class DrawPolyline extends ClickDraw {
     let x1 = event.clientX - containerRect.left; //x position within the element.
     let y1 = event.clientY - containerRect.top;  //y position within the element.
 
-    if(!this.xPolyline) {
-      this.xPolyline = new XPolyline([
+    if(!this.drawableElement) {
+      this.drawableElement = new XPolyline([
         {x: x1, y: y1},
         {x: x1, y: y1}
       ]);
-      return this.xPolyline;
+      return this.drawableElement;
     }
 
-    this.xPolyline.pushPoint({x: x1, y: y1});
+    this.drawableElement?.pushPoint({x: x1, y: y1});
 
     return null;
-  }
-
-  onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
-    if(!this.xPolyline) return;
-
-    let x = event.clientX - containerRect.left; //x position within the element.
-    let y = event.clientY - containerRect.top;  //y position within the element.
-
-    this.xPolyline.replacePoint(-1,{x: x, y: y});
-  }
-
-
-  onStop() {
-    if(!this.xPolyline) return;
-    if(!this.xPolyline.isComplete()) {
-      this.xPolyline.remove();
-    } else {
-      this.xPolyline.removePoint(-1);
-    }
-    this.xPolyline = null;
   }
 
 }

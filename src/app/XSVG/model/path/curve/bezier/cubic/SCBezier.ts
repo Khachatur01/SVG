@@ -20,11 +20,11 @@ export class SCBezier extends Command {
     this._cPoint1 = point;
   }
 
-  set position(delta: Point) {
-    this._point.x += delta.x;
-    this._point.y += delta.y;
+  set position(position: Point) {
+    this._point.x = position.x;
+    this._point.y = position.y;
 
-    this._cPoint1.x += delta.x;
-    this._cPoint1.y += delta.y;
+    this._cPoint1.x = position.x;
+    this._cPoint1.y = position.y;
   }
 }
