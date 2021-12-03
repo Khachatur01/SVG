@@ -5,12 +5,13 @@ import {Geometry} from "../../../math/Geometry";
 import {XPointed} from "../../../../element/type/XPointed";
 
 export class DrawLine extends MoveDraw {
-
   onStart(containerRect: DOMRect, event: MouseEvent): XPointed {
     this.startPos.x = event.clientX - containerRect.left; //x position within the element.
     this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
 
-    return new XLine(this.startPos.x, this.startPos.y, this.startPos.x, this.startPos.y);
+    let element = new XLine(this.startPos.x, this.startPos.y, this.startPos.x, this.startPos.y);
+    element.fixPosition();
+    return element;
   }
 
   override onDraw(containerRect: DOMRect, event: MouseEvent, xPointed: XPointed, perfectMode: boolean): void {

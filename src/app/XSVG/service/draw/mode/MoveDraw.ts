@@ -18,7 +18,6 @@ export abstract class MoveDraw implements XDrawable {
     if(!this.container) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
-    if(!containerRect) return;
 
     this.drawableElement = this.onStart(containerRect, event);
     this.container.add(this.drawableElement);
@@ -26,10 +25,9 @@ export abstract class MoveDraw implements XDrawable {
     this.container.drawTool.drawing();
   }
   private _onDraw(event: MouseEvent) {
-    if(!this.container) return;
+    if(!this.container || !this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
-    if(!this.drawableElement || !containerRect) return;
     this.onDraw(containerRect, event, this.drawableElement, this.perfectMode);
 
     /* calculate and set bounding box position and size */
@@ -41,13 +39,15 @@ export abstract class MoveDraw implements XDrawable {
 
     this.container.HTML.removeEventListener('mousemove', this.draw);
 
-    let containerRect = this.container.HTML.getBoundingClientRect();
-
     /* if element isn't drawn */
-    if(this.drawableElement && containerRect && this.onEnd(containerRect, event, this.drawableElement)) {
+    if (this.drawableElement?.isComplete()) {
       this.container.blur();
       this.container.focus(this.drawableElement);
+      this.drawableElement.fixRect();
+    } else {
+      this.drawableElement?.remove();
     }
+
     this.container.drawTool.drawingEnd();
     this.drawableElement = null;
   }
@@ -73,14 +73,6 @@ export abstract class MoveDraw implements XDrawable {
       width: width,
       height: height
     };
-  };
-  onEnd(containerRect?: DOMRect, event?: MouseEvent, xElement?: XElement): boolean {
-    if(!xElement?.isComplete()) {
-      xElement?.remove();
-      return false;
-    } else {
-      return true;
-    }
   };
 
   start(container: XSVG): void {

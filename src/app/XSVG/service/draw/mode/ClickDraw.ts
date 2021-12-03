@@ -39,16 +39,6 @@ export abstract class ClickDraw implements XDrawable {
 
     this.drawableElement.replacePoint(-1,{x: x, y: y});
   };
-  onStop(): void {
-    if(!this.drawableElement) return;
-
-    if(!this.drawableElement.isComplete())
-      this.drawableElement.remove();
-    else
-      this.drawableElement.removePoint(-1);
-
-    this.drawableElement = null;
-  };
 
   start(container: XSVG): void {
     this.container = container;
@@ -59,11 +49,17 @@ export abstract class ClickDraw implements XDrawable {
   stop(): void {
     this.container?.HTML.removeEventListener('mousedown', this.click);
     document.removeEventListener('mousemove', this.move);
-    this.onStop();
-    if(this.drawableElement && this.container) {
+    if(!this.drawableElement || !this.container) return;
+
+    if (this.drawableElement.isComplete()) {
+      this.drawableElement.removePoint(-1);
       this.container.drawTool.drawingEnd();
       this.container?.focus(this.drawableElement);
+      this.drawableElement.fixRect();
+    } else {
+      this.drawableElement.remove();
     }
+    this.drawableElement = null;
   }
 
   set perfect(mode: boolean) {

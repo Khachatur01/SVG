@@ -47,7 +47,6 @@ export class XSVG {
       } else {
         this.focus(xElement);
       }
-
     });
 
     xElement.SVG.addEventListener("mousemove", () => {

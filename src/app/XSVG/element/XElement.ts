@@ -1,6 +1,7 @@
 import {Point} from "../model/Point";
 import {Size} from "../model/Size";
 import {XResizeable} from "../service/edit/resize/XResizeable";
+import {Rect} from "../model/Rect";
 
 export abstract class XElement implements XResizeable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
@@ -11,7 +12,9 @@ export abstract class XElement implements XResizeable {
     highlight: "red",
     strokeWidth: 10
   }
-  protected _lastDragPos: Point = {x: 0, y: 0}
+  protected _lastPosition: Point = {x: 0, y: 0};
+  protected _lastSize: Size = {width: 0, height: 0};
+
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
 
   private _highlight = this.highlight.bind(this);
@@ -73,8 +76,24 @@ export abstract class XElement implements XResizeable {
     });
   }
 
+  fixRect(): void {
+    this._lastPosition = this.position;
+    this._lastSize = this.size;
+  }
   fixPosition(): void {
-    this._lastDragPos = this.position;
+    this._lastPosition = this.position;
+  }
+  fixSize(): void {
+    this._lastSize = this.size;
+  }
+
+  get lastRect(): Rect {
+    return {
+      x: this._lastPosition.x,
+      y: this._lastPosition.y,
+      width: this._lastSize.width,
+      height: this._lastSize.height
+    }
   }
 }
 

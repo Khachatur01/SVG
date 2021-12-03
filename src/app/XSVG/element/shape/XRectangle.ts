@@ -12,10 +12,11 @@ export class XRectangle extends XPolygon {
     super([
       /* 0 */                                             /* 1 */
       {x: x, y: y},                          {x: width + x, y: y},
-      {x: x, y: height + y},        {x: width + x, y: height + y}
-      /* 3 */                                             /* 2 */
+      {x: width + x, y: height + y},        {x: x, y: height + y}
+      /* 2 */                                             /* 3 */
 
     ]);
+
     this.position = {x: x, y: y};
     this.size = {width: width, height: height};
 

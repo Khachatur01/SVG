@@ -10,6 +10,30 @@ export abstract class XPointed extends XElement {
   abstract removePoint(index: number): void;
   abstract replacePoint(index: number, point: Point): void;
 
+  get position(): Point {
+    let points = this.points;
+    let leftTop: Point = points[0];
+
+    for(let i = 1; i < points.length; i++) {
+      if (points[i].x < leftTop.x)
+        leftTop.x = points[i].x;
+      if (points[i].y < leftTop.y)
+        leftTop.y = points[i].y;
+    }
+    return leftTop;
+  }
+  set position(delta: Point) {
+    let points = this.points;
+    let position = this.position;
+
+    for(let point of points) {
+      point.x += (delta.x - position.x + this._lastPosition.x);
+      point.y += (delta.y - position.y + this._lastPosition.y);
+    }
+
+    this.points = points;
+  }
+
   get size(): Size {
     let points = this.points
     let maxX = points[0].x;
@@ -36,7 +60,6 @@ export abstract class XPointed extends XElement {
     return this._size;
   }
   set size(size: Size) {
-    //FIXME
     let dx = 1;
     let dy = 1;
 
@@ -47,35 +70,12 @@ export abstract class XPointed extends XElement {
 
     let points = this.points;
     for(let point of points){
-      point.x *= dx;
-      point.y *= dy;
+      point.x = this._lastPosition.x + (point.x - this._lastPosition.x) * dx;
+      point.y = this._lastPosition.y + (point.y - this._lastPosition.y) * dy;
     }
 
     this.points = points;
 
     this._size = size;
-  }
-  get position(): Point {
-    let points = this.points;
-    let leftTop: Point = points[0];
-
-    for(let i = 1; i < points.length; i++) {
-      if (points[i].x < leftTop.x)
-        leftTop.x = points[i].x;
-      if (points[i].y < leftTop.y)
-        leftTop.y = points[i].y;
-    }
-    return leftTop;
-  }
-  set position(delta: Point) {
-    let points = this.points;
-    let position = this.position;
-
-    for(let point of points) {
-      point.x += (delta.x - position.x + this._lastDragPos.x);
-      point.y += (delta.y - position.y + this._lastDragPos.y);
-    }
-
-    this.points = points;
   }
 }

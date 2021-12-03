@@ -24,7 +24,7 @@ export class XDragTool {
 
     this.container.focused.fixPosition();
     this.container.focused?.children.forEach((child: XElement) => {
-      child.fixPosition();
+      child.fixRect();
     });
 
     this.container.HTML.addEventListener("mousemove", this.drag);

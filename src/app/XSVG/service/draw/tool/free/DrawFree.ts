@@ -38,15 +38,16 @@ export class DrawFree implements XDrawable {
   }
 
   onEnd() {
-    if(!this.drawableElement) return;
+    if (!this.drawableElement || !this.container) return;
 
-    this.container?.HTML.removeEventListener('mousemove', this._onDraw);
+    this.container.HTML.removeEventListener('mousemove', this._onDraw);
 
-    if(this.drawableElement.getAttr("points").split(" ").length == 2)
+    if (this.drawableElement.getAttr("points").split(" ").length == 2) {
       this.drawableElement.remove();
-    else
-      this.container?.focus(this.drawableElement);
-
+    } else {
+      this.container.focus(this.drawableElement);
+      this.drawableElement.fixRect();
+    }
   }
 
   set perfect(mode: boolean) {
