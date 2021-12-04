@@ -17,7 +17,7 @@ export abstract class XPath extends XElement {
     this.setDefaultStyle();
   }
 
-  override isComplete(): boolean {
+  isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;
   }

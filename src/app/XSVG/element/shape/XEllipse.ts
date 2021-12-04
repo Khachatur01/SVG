@@ -15,6 +15,10 @@ export class XEllipse extends XPath {
     this.setDefaultStyle();
   }
 
+  override get position(): Point {
+    return super.position;
+  }
+
   override set position(position: Point) {
     position.x += this._lastPosition.x;
     position.y += this._lastPosition.y;
@@ -23,6 +27,9 @@ export class XEllipse extends XPath {
     this.makeEllipse(position.x, position.y, size.width / 2, size.height / 2);
   }
 
+  override get size(): Size {
+    return super.size;
+  }
   override set size(size: Size) {
     let position = this._lastPosition;
 

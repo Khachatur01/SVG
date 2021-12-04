@@ -88,7 +88,6 @@ export class XBoundingBox extends XRectangle {
 
     if(rect.width < 0)
       rect.width = -rect.width;
-
     if(rect.height < 0)
       rect.height = -rect.height;
 
@@ -128,7 +127,6 @@ export class XBoundingBox extends XRectangle {
       x: rect.x - 10,
       y: rect.height / 2 + rect.y - 5
     }
-
   }
 
   get boundingRect(): Rect {
