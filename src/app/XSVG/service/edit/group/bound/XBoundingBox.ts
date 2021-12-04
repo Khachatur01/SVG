@@ -3,16 +3,30 @@ import {Size} from "../../../../model/Size";
 import {Rect} from "../../../../model/Rect";
 
 export class Grip extends XRectangle {
-  constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
-    super(x, y, width, height);
+  constructor(rect: Rect, cursor: string) {
+    super(rect.x, rect.y, rect.width, rect.height);
+    this.svgElement.style.cursor = cursor;
     this.setAttr({
       fill: "white",
       "stroke-width": 1,
+      stroke: "#002fff"
     });
 
     this.svgElement.style.display = "none";
-    // this.removeOverEvent();
   }
+
+  override highlight() {
+    this.setAttr({
+      stroke: "#00ff00"
+    });
+  }
+
+  override lowlight() {
+    this.setAttr({
+      stroke: "#002fff"
+    });
+  }
+
   show() {
     this.svgElement.style.display = "block";
   }
@@ -45,17 +59,17 @@ export class XBoundingBox extends XRectangle {
     this.removeOverEvent();
 
     this.grips.push(
-      new Grip(x, y, 10, 10),
-      new Grip(x + width / 2, y, 10, 10),
+      new Grip({x: x, y: y, width: 10, height: 10}, "nw-resize"),
+      new Grip({x: x + width / 2, y: y, width: 10, height: 10}, "n-resize"),
 
-      new Grip(x + width, y, 10, 10),
-      new Grip(x + width, y + height / 2, 10, 10),
+      new Grip({x: x + width, y: y, width: 10, height: 10}, "ne-resize"),
+      new Grip({x: x + width, y: y + height / 2, width: 10, height: 10}, "e-resize"),
 
-      new Grip(x + width, y + height, 10, 10),
-      new Grip(x + width / 2, y + height, 10, 10),
+      new Grip({x: x + width, y: y + height, width: 10, height: 10}, "se-resize"),
+      new Grip({x: x + width / 2, y: y + height, width: 10, height: 10}, "s-resize"),
 
-      new Grip(x, y + height, 10, 10),
-      new Grip(x, y + height / 2, 10, 10)
+      new Grip({x: x, y: y + height, width: 10, height: 10}, "sw-resize"),
+      new Grip({x: x, y: y + height / 2, width: 10, height: 10}, "w-resize")
     );
   }
 
@@ -67,6 +81,8 @@ export class XBoundingBox extends XRectangle {
   }
   multipleFocus() {
     this.svgElement.style.display = "block";
+
+    /* more effective than with one for loop */
     for(let i = 0; i < this.grips.length; i+=2) {
       this.grips[i].show();
     }
@@ -84,6 +100,7 @@ export class XBoundingBox extends XRectangle {
   override set size(size: Size) {
     super.size = size;
     let rect: Rect = this._boundingRect;
+
     if(!rect || !this.grips) return;
 
     if(rect.width < 0)

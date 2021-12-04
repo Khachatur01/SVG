@@ -52,12 +52,12 @@ export abstract class XElement implements XResizeable {
   }
 
   setOverEvent(): void {
-    this.SVG.addEventListener("mouseover", this._highlight);
-    this.SVG.addEventListener("mouseout", this._lowlight);
+    this.svgElement.addEventListener("mouseover", this._highlight);
+    this.svgElement.addEventListener("mouseout", this._lowlight);
   }
   removeOverEvent(): void {
-    this.SVG.removeEventListener("mouseover", this._highlight);
-    this.SVG.removeEventListener("mouseout", this._lowlight);
+    this.svgElement.removeEventListener("mouseover", this._highlight);
+    this.svgElement.removeEventListener("mouseout", this._lowlight);
   }
 
   remove() {
