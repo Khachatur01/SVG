@@ -1,7 +1,7 @@
 import {XElement} from "../../../element/XElement";
 import {XDraggable} from "../../drag/XDraggable";
 import {Point} from "../../../model/Point";
-import {Grip, XBoundingBox} from "./bound/XBoundingBox";
+import {XBoundingBox} from "./bound/XBoundingBox";
 import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
 
@@ -42,6 +42,7 @@ export class XFocus implements XDraggable {
     this.fit();
     this.focus();
     this.fixPosition();
+
   }
 
   removeChild(xElement: XElement): void {
@@ -103,6 +104,7 @@ export class XFocus implements XDraggable {
 
     this.xBoundingBox.size = contentRect;
     this.xBoundingBox.position = contentRect;
+    this.xBoundingBox.gripsPosition();
   }
 
   focus() {

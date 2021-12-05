@@ -4,7 +4,6 @@ import {Path} from "../../model/path/Path";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {Point} from "../../model/Point";
-import {LineTo} from "../../model/path/line/LineTo";
 
 export class XEllipse extends XPath {
   constructor(x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {

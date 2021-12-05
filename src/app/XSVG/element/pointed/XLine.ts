@@ -1,5 +1,4 @@
 import {XElement} from "../XElement";
-import {Size} from "../../model/Size";
 import {XPointed} from "../type/XPointed";
 import {Point} from "../../model/Point";
 
