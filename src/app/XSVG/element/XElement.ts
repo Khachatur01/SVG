@@ -2,8 +2,9 @@ import {Point} from "../model/Point";
 import {Size} from "../model/Size";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 import {Rect} from "../model/Rect";
+import {XDraggable} from "../service/drag/XDraggable";
 
-export abstract class XElement implements XResizeable {
+export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
   protected style: any = {
@@ -21,7 +22,7 @@ export abstract class XElement implements XResizeable {
   private _lowlight = this.lowlight.bind(this);
 
   abstract get size(): Size;
-  abstract set size(size: Size);
+  abstract setSize(rect: Rect): void;
   abstract isComplete(): boolean;
   abstract get position(): Point;
   abstract set position(position: Point);

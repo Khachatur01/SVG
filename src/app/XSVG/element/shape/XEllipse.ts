@@ -4,6 +4,7 @@ import {Path} from "../../model/path/Path";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {Point} from "../../model/Point";
+import {Rect} from "../../model/Rect";
 
 export class XEllipse extends XPath {
   constructor(x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
@@ -29,10 +30,8 @@ export class XEllipse extends XPath {
   override get size(): Size {
     return super.size;
   }
-  override set size(size: Size) {
-    let position = this._lastPosition;
-
-    this.makeEllipse(position.x, position.y, size.width / 2, size.height / 2);
+  override setSize(rect: Rect) {
+    this.makeEllipse(rect.x, rect.y, rect.width / 2, rect.height / 2);
   }
 
   makeEllipse(x: number, y: number, rx: number, ry: number): void {

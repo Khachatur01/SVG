@@ -1,18 +1,20 @@
 import {XRectangle} from "../../../../element/shape/XRectangle";
 import {Rect} from "../../../../model/Rect";
-import {Grip} from "./grip/Grip";
-import {NWGrip} from "./grip/NWGrip";
-import {NGrip} from "./grip/NGrip";
-import {NEGrip} from "./grip/NEGrip";
-import {EGrip} from "./grip/EGrip";
-import {SEGrip} from "./grip/SEGrip";
-import {SGrip} from "./grip/SGrip";
-import {SWGrip} from "./grip/SWGrip";
-import {WGrip} from "./grip/WGrip";
+import {XGrip} from "./grip/XGrip";
+import {NWGrip} from "./grip/corner/NWGrip";
+import {NGrip} from "./grip/side/NGrip";
+import {NEGrip} from "./grip/corner/NEGrip";
+import {EGrip} from "./grip/side/EGrip";
+import {SEGrip} from "./grip/corner/SEGrip";
+import {SGrip} from "./grip/side/SGrip";
+import {SWGrip} from "./grip/corner/SWGrip";
+import {WGrip} from "./grip/side/WGrip";
 import {Point} from "../../../../model/Point";
+import {XSVG} from "../../../../XSVG";
 
 export class XBoundingBox extends XRectangle {
-  public grips: Grip[] = [];
+  private container: XSVG;
+  private _grips: XGrip[] = [];
   private _boundingRect: Rect = {
     x: 0,
     y: 0,
@@ -20,7 +22,7 @@ export class XBoundingBox extends XRectangle {
     height: 0
   };
 
-  constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+  constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(x, y, width, height);
     this.setAttr({
       fill: "none",
@@ -32,41 +34,47 @@ export class XBoundingBox extends XRectangle {
     this.svgElement.style.display = "none";
     this.removeOverEvent();
 
+    this.container = container;
 
-    this.grips.push(
-      new NWGrip(),
-      new  NGrip(),
+    this._grips.push(
+      new NWGrip(container),
+      new  NGrip(container),
 
-      new NEGrip(),
-      new  EGrip(),
+      new NEGrip(container),
+      new  EGrip(container),
 
-      new SEGrip(),
-      new  SGrip(),
+      new SEGrip(container),
+      new  SGrip(container),
 
-      new SWGrip(),
-      new  WGrip()
+      new SWGrip(container),
+      new  WGrip(container)
     );
+  }
+
+
+  get grips(): XGrip[] {
+    return this._grips;
   }
 
   singleFocus() {
     this.svgElement.style.display = "block";
-    for(let grip of this.grips) {
+    for(let grip of this._grips) {
       grip.show();
     }
   }
   multipleFocus() {
     this.svgElement.style.display = "block";
-    /* more effective than with one for loop */
-    for(let i = 0; i < this.grips.length; i+=2) {
-      this.grips[i].show();
+    /* more effective than with one for loop and condition */
+    for(let i = 0; i < this._grips.length; i+=2) {
+      this._grips[i].show();
     }
-    for(let i = 1; i < this.grips.length; i+=2) {
-      this.grips[i].hide();
+    for(let i = 1; i < this._grips.length; i+=2) {
+      this._grips[i].hide();
     }
   }
   blur() {
     this.svgElement.style.display = "none";
-    for(let grip of this.grips) {
+    for(let grip of this._grips) {
       grip.hide();
     }
   }
@@ -98,9 +106,8 @@ export class XBoundingBox extends XRectangle {
     points[3].x = rect.x;
     points[3].y = rect.y + rect.height;
 
-
-    if(!points || !this.grips) return;
-    for(let grip of this.grips)
+    if(!points || !this._grips) return;
+    for(let grip of this._grips)
       grip.setPosition(points);
   }
 }

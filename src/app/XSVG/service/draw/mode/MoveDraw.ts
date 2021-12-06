@@ -31,7 +31,6 @@ export abstract class MoveDraw implements XDrawable {
     this.onDraw(containerRect, event, this.drawableElement, this.perfectMode);
 
     /* calculate and set bounding box position and size */
-    this.container?.focused.fit();
 
   }
   private _onEnd(event: MouseEvent) {
@@ -68,11 +67,12 @@ export abstract class MoveDraw implements XDrawable {
       else
         height = averageSize;
     }
-
-    xElement.size = {
+    xElement.setSize({
+      x: this.startPos.x,
+      y: this.startPos.y,
       width: width,
       height: height
-    };
+    });
   };
 
   start(container: XSVG): void {

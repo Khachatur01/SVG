@@ -4,19 +4,24 @@ import {Point} from "../../../model/Point";
 import {XBoundingBox} from "./bound/XBoundingBox";
 import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
+import {XResizeable} from "../resize/XResizeable";
+import {Size} from "../../../model/Size";
 
-export class XFocus implements XDraggable {
+export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
   private readonly container: XSVG;
 
-  private readonly xBoundingBox: XBoundingBox = new XBoundingBox();
+  private readonly xBoundingBox: XBoundingBox;
   private readonly svgGroup: SVGGElement;
   private readonly svgElements: SVGGElement;
 
   private _lastPosition: Point = {x: 0, y: 0};
+  private _lastSize: Size = {width: 0, height: 0};
 
   constructor(container: XSVG) {
     this.container = container;
+
+    this.xBoundingBox = new XBoundingBox(this.container)
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
     this.svgElements = document.createElementNS(XElement.svgURI, "g");
 
@@ -42,7 +47,6 @@ export class XFocus implements XDraggable {
     this.fit();
     this.focus();
     this.fixPosition();
-
   }
 
   removeChild(xElement: XElement): void {
@@ -91,8 +95,25 @@ export class XFocus implements XDraggable {
     this.fit();
   }
 
+  get size(): Size {
+    return this.boundingRect;
+  }
+  setSize(rect: Rect): void {
+    // FIXME
+    for(let child of this._children)
+      child.setSize(rect);
+    this.fit()
+  }
+
+  fixRect(): void {
+    this._lastPosition = this.position;
+    this._lastSize = this.size;
+  }
   fixPosition(): void {
     this._lastPosition = this.position;
+  }
+  fixSize(): void {
+    this._lastSize = this.size;
   }
 
   hasChild(xElement: XElement): boolean {
@@ -102,8 +123,8 @@ export class XFocus implements XDraggable {
   fit(): void {
     let contentRect: Rect = this.boundingRect;
 
-    this.xBoundingBox.size = contentRect;
     this.xBoundingBox.position = contentRect;
+    this.xBoundingBox.setSize(contentRect);
     this.xBoundingBox.gripsPosition();
   }
 
@@ -171,4 +192,14 @@ export class XFocus implements XDraggable {
 
     return this.xBoundingBox.boundingRect;
   }
+
+  get lastRect(): Rect {
+    return {
+      x: this._lastPosition.x,
+      y: this._lastPosition.y,
+      width: this._lastSize.width,
+      height: this._lastSize.height,
+    };
+  }
+
 }

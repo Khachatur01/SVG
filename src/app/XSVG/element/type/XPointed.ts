@@ -1,6 +1,7 @@
 import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
+import {Rect} from "../../model/Rect";
 
 export abstract class XPointed extends XElement {
   protected _size: Size = {width: 0, height: 0};
@@ -59,23 +60,23 @@ export abstract class XPointed extends XElement {
 
     return this._size;
   }
-  set size(size: Size) {
+  setSize(rect: Rect): void {
     let dx = 1;
     let dy = 1;
 
     if(this._size.width != 0)
-      dx = size.width / this._size.width;
+      dx = rect.width / this._size.width;
     if(this._size.height != 0)
-      dy = size.height / this._size.height;
+      dy = rect.height / this._size.height;
 
     let points = this.points;
     for(let point of points){
-      point.x = this._lastPosition.x + (point.x - this._lastPosition.x) * dx;
-      point.y = this._lastPosition.y + (point.y - this._lastPosition.y) * dy;
+      point.x = rect.x + (point.x - rect.x) * dx;
+      point.y = rect.y + (point.y - rect.y) * dy;
     }
 
     this.points = points;
 
-    this._size = size;
+    this._size = rect;
   }
 }
