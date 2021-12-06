@@ -1,6 +1,7 @@
 import {Size} from "../../model/Size";
 import {XPolygon} from "../pointed/XPolygon";
 import {Rect} from "../../model/Rect";
+import {Point} from "../../model/Point";
 
 /*
 *  0_____1
@@ -32,10 +33,23 @@ export class XRectangle extends XPolygon {
     return super.size;
   }
   override setSize(rect: Rect) {
-    let points = this.points;
-
-    points[1].x = points[2].x = rect.x + rect.width;
-    points[3].y = points[2].y = rect.y + rect.height;
+    let points: Point[] = [];
+    points.push({ /* 0 */
+      x: rect.x,
+      y: rect.y
+    });
+    points.push({ /* 1 */
+      x: rect.x + rect.width,
+      y: rect.y
+    });
+    points.push({ /* 2 */
+      x: rect.x + rect.width,
+      y: rect.y + rect.height
+    });
+    points.push({ /* 3 */
+      x: rect.x,
+      y: rect.y + rect.height
+    });
 
     this.points = points;
     this._size = rect;
