@@ -81,6 +81,23 @@ export class XBoundingBox extends XRectangle {
 
   gripsPosition() {
     let points: Point[] = this.points;
+    let rect = this._boundingRect;
+
+    rect.width = Math.abs(rect.width);
+    rect.height = Math.abs(rect.height);
+
+    points[0].x = rect.x;
+    points[0].y = rect.y;
+
+    points[1].x = rect.x + rect.width;
+    points[1].y = rect.y;
+
+    points[2].x = rect.x + rect.width;
+    points[2].y = rect.y + rect.height;
+
+    points[3].x = rect.x;
+    points[3].y = rect.y + rect.height;
+
 
     if(!points || !this.grips) return;
     for(let grip of this.grips)

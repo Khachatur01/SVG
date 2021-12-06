@@ -1,5 +1,6 @@
 import {Size} from "../../model/Size";
 import {XPolygon} from "../pointed/XPolygon";
+import {Point} from "../../model/Point";
 
 /*
 *  0_____1
@@ -35,7 +36,7 @@ export class XRectangle extends XPolygon {
     let points = this.points;
 
     points[1].x = points[2].x = points[3].x + size.width;
-    points[3].y = points[2].y = points[1].y + size.height;
+    points[3].y = points[2].y = points[0].y + size.height;
 
     this.points = points;
   }
@@ -44,4 +45,5 @@ export class XRectangle extends XPolygon {
     let size = this.size;
     return size.width != 0 && size.height != 0;
   }
+
 }
