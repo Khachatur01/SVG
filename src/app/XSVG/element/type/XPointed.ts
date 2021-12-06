@@ -5,11 +5,20 @@ import {Rect} from "../../model/Rect";
 
 export abstract class XPointed extends XElement {
   protected _size: Size = {width: 0, height: 0};
+  protected _lastPoints: Point[] = [];
   abstract get points(): Point[]
   abstract set points(points: Point[]);
   abstract pushPoint(point: Point): void;
   abstract removePoint(index: number): void;
   abstract replacePoint(index: number, point: Point): void;
+
+  override fixRect() {
+    super.fixRect();
+    this.fixPoints();
+  }
+  fixPoints() {
+    this._lastPoints = this.points.slice();
+  }
 
   get position(): Point {
     let points = this.points;
@@ -61,22 +70,20 @@ export abstract class XPointed extends XElement {
     return this._size;
   }
   setSize(rect: Rect): void {
-    let dx = 1;
-    let dy = 1;
+    let dw = 1;
+    let dh = 1;
 
-    if(this._size.width != 0)
-      dx = rect.width / this._size.width;
-    if(this._size.height != 0)
-      dy = rect.height / this._size.height;
+    if(this._lastSize.width != 0)
+      dw = rect.width / this._lastSize.width;
+    if(this._lastSize.height != 0)
+      dh = rect.height / this._lastSize.height;
 
     let points = this.points;
-    for(let point of points){
-      point.x = rect.x + (point.x - rect.x) * dx;
-      point.y = rect.y + (point.y - rect.y) * dy;
+    for(let i = 0; i < points.length; i++){
+      points[i].x = rect.x + (this._lastPoints[i].x - rect.x) * dw;
+      points[i].y = rect.y + (this._lastPoints[i].y - rect.y) * dh;
     }
 
     this.points = points;
-
-    this._size = rect;
   }
 }
