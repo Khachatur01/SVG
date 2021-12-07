@@ -23,7 +23,6 @@ export class NEGrip extends XGrip {
     let width = (event.clientX - containerRect.x) - (elementRect.x);
     let height = event.clientY - containerRect.y - (elementRect.y + elementRect.height);
 
-
     this.container.focused.setSize({
       x: elementRect.x,
       y: elementRect.y + elementRect.height,

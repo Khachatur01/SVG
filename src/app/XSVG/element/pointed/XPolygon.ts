@@ -13,7 +13,7 @@ export class XPolygon extends XPointed {
     this.setDefaultStyle();
   }
 
-  // TODO fix coordinate fetching
+  /* TODO fix coordinate fetching */
   override get points(): Point[] {
     let points: string[] = this.getAttr("points").split(" ");
     let pointsArray: Point[] = [];

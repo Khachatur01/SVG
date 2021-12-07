@@ -11,7 +11,7 @@ export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
   private readonly container: XSVG;
 
-  private readonly xBoundingBox: XBoundingBox;
+  public readonly xBoundingBox: XBoundingBox;
   private readonly svgGroup: SVGGElement;
   private readonly svgElements: SVGGElement;
 
@@ -99,7 +99,7 @@ export class XFocus implements XDraggable, XResizeable {
     return this.boundingRect;
   }
   setSize(rect: Rect): void {
-    // FIXME
+    /* FIXME */
     for(let child of this._children)
       child.setSize(rect);
     this.fit()
@@ -108,6 +108,9 @@ export class XFocus implements XDraggable, XResizeable {
   fixRect(): void {
     this._lastPosition = this.position;
     this._lastSize = this.size;
+    for(let child of this._children)
+      child.fixRect();
+
   }
   fixPosition(): void {
     this._lastPosition = this.position;

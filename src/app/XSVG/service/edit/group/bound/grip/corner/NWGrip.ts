@@ -14,15 +14,13 @@ export class NWGrip extends XGrip {
       y: points[0].y - this.side
     }
   }
-
-  protected onEnd(): void {
+  protected onStart(): void {
   }
 
   protected onMove(containerRect: Rect, event: MouseEvent): void {
     let elementRect = this.container.focused.lastRect;
     let width = (event.clientX - containerRect.x) - (elementRect.x + elementRect.width);
     let height = (event.clientY - containerRect.y) - (elementRect.y + elementRect.height);
-
 
     this.container.focused.setSize({
       x: elementRect.x + elementRect.width,
@@ -32,6 +30,6 @@ export class NWGrip extends XGrip {
     });
   }
 
-  protected onStart(): void {
+  protected onEnd(): void {
   }
 }

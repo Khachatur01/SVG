@@ -5,7 +5,7 @@ import {Rect} from "../../model/Rect";
 
 export abstract class XPointed extends XElement {
   protected _size: Size = {width: 0, height: 0};
-  protected _lastPoints: Point[] = [];
+  public _lastPoints: Point[] = [];
   abstract get points(): Point[]
   abstract set points(points: Point[]);
   abstract pushPoint(point: Point): void;
@@ -80,8 +80,8 @@ export abstract class XPointed extends XElement {
 
     let points = this.points;
     for(let i = 0; i < points.length; i++){
-      points[i].x = rect.x + (this._lastPoints[i].x - rect.x) * dw;
-      points[i].y = rect.y + (this._lastPoints[i].y - rect.y) * dh;
+      points[i].x = rect.x + Math.abs(this._lastPoints[i].x - rect.x) * dw;
+      points[i].y = rect.y + Math.abs(this._lastPoints[i].y - rect.y) * dh;
     }
 
     this.points = points;
