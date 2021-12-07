@@ -2,6 +2,7 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
+import {Matrix} from "../../service/math/Matrix";
 
 export abstract class XPointed extends XElement {
   protected _size: Size = {width: 0, height: 0};
@@ -85,5 +86,9 @@ export abstract class XPointed extends XElement {
     }
 
     this.points = points;
+  }
+
+  override rotate(refPoint: Point, angle: number) {
+    this.points = Matrix.rotate(this.points, refPoint, angle);
   }
 }

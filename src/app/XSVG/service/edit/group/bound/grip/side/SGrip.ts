@@ -9,8 +9,8 @@ export class SGrip extends XGrip {
   }
 
   setPosition(points: Point[]): void {
-    let x = Math.abs(points[3].x + points[2].x) / 2;
-    let y = Math.abs(points[3].y + points[2].y) / 2;
+    let x = (points[3].x + points[2].x) / 2;
+    let y = (points[3].y + points[2].y) / 2;
     this.position = {
       x: x - this.side / 2,
       y: y

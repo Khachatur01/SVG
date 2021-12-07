@@ -26,6 +26,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract isComplete(): boolean;
   abstract get position(): Point;
   abstract set position(position: Point);
+  abstract rotate(refPoint: Point, angle: number): void;
 
   get SVG(): SVGElement {
     return this.svgElement;

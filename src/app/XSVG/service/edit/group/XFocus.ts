@@ -99,9 +99,12 @@ export class XFocus implements XDraggable, XResizeable {
     return this.boundingRect;
   }
   setSize(rect: Rect): void {
-    /* FIXME */
-    for(let child of this._children)
-      child.setSize(rect);
+    if(this._children.size == 1)
+      this._children.forEach(child => {child.setSize(rect)});
+    else
+      /* FIXME */
+      for(let child of this._children)
+        child.setSize(rect);
     this.fit()
   }
 
@@ -121,6 +124,12 @@ export class XFocus implements XDraggable, XResizeable {
 
   hasChild(xElement: XElement): boolean {
     return this._children.has(xElement);
+  }
+
+  rotate(refPoint: Point, angle: number) {
+    for(let child of this._children) {
+      child.rotate(refPoint, angle);
+    }
   }
 
   fit(): void {

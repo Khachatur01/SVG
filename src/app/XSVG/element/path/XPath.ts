@@ -62,4 +62,7 @@ export abstract class XPath extends XElement {
     return this._size;
   }
   set size(size: Size) {}
+
+  override rotate(refPoint: Point, angle: number) {
+  }
 }
