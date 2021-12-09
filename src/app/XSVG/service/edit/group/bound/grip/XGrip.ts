@@ -5,6 +5,7 @@ import {Rect} from "../../../../../model/Rect";
 
 export abstract class XGrip extends XRectangle {
   protected container: XSVG;
+  private resizing: boolean = false;
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
@@ -49,6 +50,7 @@ export abstract class XGrip extends XRectangle {
   protected abstract onEnd(): void;
 
   private start() {
+    this.resizing = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
     this.container.HTML.addEventListener("mousemove", this._move);
@@ -58,7 +60,11 @@ export abstract class XGrip extends XRectangle {
     this.onMove(containerRect, event);
   }
   private end() {
+    if(!this.resizing) return;
+
     this.container.HTML.removeEventListener("mousemove", this._move);
+    this.container.activeTool.on();
+    this.resizing = false;
   }
 
   on() {

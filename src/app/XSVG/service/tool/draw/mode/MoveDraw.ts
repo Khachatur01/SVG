@@ -29,9 +29,6 @@ export abstract class MoveDraw implements XDrawable {
 
     let containerRect = this.container.HTML.getBoundingClientRect();
     this.onDraw(containerRect, event, this.drawableElement, this.perfectMode);
-
-    /* calculate and set bounding box position and size */
-
   }
   private _onEnd() {
     if(!this.container || !this.drawableElement) return;
