@@ -9,6 +9,7 @@ export class XSVG {
   private readonly container: HTMLElement;
   private _focusedElements: XFocus = new XFocus(this);
   private _elements: Set<XElement> = new Set<XElement>();
+  public elementsGroup: SVGGElement;
   public readonly drawTool: XDrawTool;
   public readonly dragTool: XDragTool;
   public readonly selectTool: XSelectTool;
@@ -34,12 +35,15 @@ export class XSVG {
       }
     })
 
+    this.elementsGroup = document.createElementNS(XElement.svgURI, "g");
+
+    this.container.appendChild(this.elementsGroup);
     this.container.appendChild(this._focusedElements.SVG);
   }
 
   add(xElement: XElement) {
     if(!xElement) return;
-    this.container.appendChild(xElement.SVG);
+    this.elementsGroup.appendChild(xElement.SVG);
     this._elements.add(xElement);
 
     xElement.SVG.addEventListener("mousedown", () => {

@@ -50,7 +50,7 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   removeChild(xElement: XElement): void {
-    this.svgGroup.parentElement?.appendChild(xElement.SVG);
+    this.container.elementsGroup.appendChild(xElement.SVG);
     this._children.delete(xElement);
     this.fit();
 
@@ -62,7 +62,7 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   clear() {
-    let parent = this.svgGroup.parentElement;
+    let parent = this.container.elementsGroup;
     this._children.forEach((child: XElement) => {
       parent?.appendChild(child.SVG);
     });
