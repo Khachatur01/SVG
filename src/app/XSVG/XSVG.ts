@@ -1,13 +1,18 @@
-import {XDrawTool} from "./service/draw/XDrawTool";
-import {XDragTool} from "./service/drag/XDragTool";
+import {XDrawTool} from "./service/tool/draw/XDrawTool";
+import {XDragTool} from "./service/tool/drag/XDragTool";
 import {XElement} from "./element/XElement";
 import {XFocus} from "./service/edit/group/XFocus";
+import {XSelectTool} from "./service/tool/select/XSelectTool";
+import {XTool} from "./service/tool/XTool";
 
 export class XSVG {
   private readonly container: HTMLElement;
   private _focusedElements: XFocus = new XFocus(this);
+  private _elements: Set<XElement> = new Set<XElement>();
   public readonly drawTool: XDrawTool;
   public readonly dragTool: XDragTool;
+  public readonly selectTool: XSelectTool;
+  public activeTool: XTool;
 
   private _multiSelect: boolean = false;
 
@@ -20,6 +25,8 @@ export class XSVG {
 
     this.drawTool = new XDrawTool(this);
     this.dragTool = new XDragTool(this);
+    this.selectTool = new XSelectTool(this);
+    this.activeTool = this.selectTool;
 
     this.container.addEventListener("mousedown", event => {
       if(event.target == this.container) {
@@ -33,8 +40,12 @@ export class XSVG {
   add(xElement: XElement) {
     if(!xElement) return;
     this.container.appendChild(xElement.SVG);
+    this._elements.add(xElement);
+
     xElement.SVG.addEventListener("mousedown", () => {
       if(this.drawTool.isDrawing() || this.dragTool.isOn()) return;
+
+      this.selectTool.on();
 
       if(!this._multiSelect) {
         this.blur();
@@ -55,8 +66,9 @@ export class XSVG {
     });
   }
 
-  remove(element: XElement) {
-    element.remove();
+  remove(xElement: XElement) {
+    this._elements.delete(xElement);
+    xElement.remove();
   }
 
   get HTML(): HTMLElement {
@@ -82,5 +94,9 @@ export class XSVG {
   }
   singleSelect(): void {
     this._multiSelect = false;
+  }
+
+  get elements(): Set<XElement> {
+    return this._elements;
   }
 }

@@ -1,6 +1,6 @@
 import {MoveDraw} from "../../mode/MoveDraw";
-import {XElement} from "../../../../element/XElement";
-import {XEllipse} from "../../../../element/shape/XEllipse";
+import {XElement} from "../../../../../element/XElement";
+import {XEllipse} from "../../../../../element/shape/XEllipse";
 
 export class DrawEllipse extends MoveDraw {
   onStart(containerRect: DOMRect, event: MouseEvent): XElement {

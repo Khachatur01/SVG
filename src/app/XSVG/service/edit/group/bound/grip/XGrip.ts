@@ -49,7 +49,7 @@ export abstract class XGrip extends XRectangle {
   protected abstract onEnd(): void;
 
   private start() {
-    this.container.drawTool.pause();
+    this.container.activeTool.off();
     this.container.focused.fixRect();
     this.container.HTML.addEventListener("mousemove", this._move);
   }
@@ -59,7 +59,6 @@ export abstract class XGrip extends XRectangle {
   }
   private end() {
     this.container.HTML.removeEventListener("mousemove", this._move);
-    this.container.drawTool.resume();
   }
 
   on() {

@@ -1,8 +1,8 @@
 import {MoveDraw} from "../../mode/MoveDraw";
-import {XLine} from "../../../../element/pointed/XLine";
-import {Point} from "../../../../model/Point";
-import {Geometry} from "../../../math/Geometry";
-import {XPointed} from "../../../../element/type/XPointed";
+import {XLine} from "../../../../../element/pointed/XLine";
+import {Point} from "../../../../../model/Point";
+import {Geometry} from "../../../../math/Geometry";
+import {XPointed} from "../../../../../element/type/XPointed";
 
 export class DrawLine extends MoveDraw {
   onStart(containerRect: DOMRect, event: MouseEvent): XPointed {

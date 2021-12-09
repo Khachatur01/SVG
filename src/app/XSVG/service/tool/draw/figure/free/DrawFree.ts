@@ -1,6 +1,6 @@
 import {XDrawable} from "../../XDrawable";
-import {XFree} from "../../../../element/pointed/XFree";
-import {XSVG} from "../../../../XSVG";
+import {XFree} from "../../../../../element/pointed/XFree";
+import {XSVG} from "../../../../../XSVG";
 
 export class DrawFree implements XDrawable {
   private container: XSVG | null = null;
@@ -43,7 +43,7 @@ export class DrawFree implements XDrawable {
     this.container.HTML.removeEventListener('mousemove', this._onDraw);
 
     if (this.drawableElement.getAttr("points").split(" ").length == 2) {
-      this.drawableElement.remove();
+      this.container.remove(this.drawableElement);
     } else {
       this.container.focus(this.drawableElement);
       this.drawableElement.fixRect();

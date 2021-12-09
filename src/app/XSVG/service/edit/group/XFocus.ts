@@ -1,5 +1,5 @@
 import {XElement} from "../../../element/XElement";
-import {XDraggable} from "../../drag/XDraggable";
+import {XDraggable} from "../../tool/drag/XDraggable";
 import {Point} from "../../../model/Point";
 import {XBoundingBox} from "./bound/XBoundingBox";
 import {XSVG} from "../../../XSVG";
@@ -11,7 +11,7 @@ export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
   private readonly container: XSVG;
 
-  public readonly xBoundingBox: XBoundingBox;
+  public readonly boundingBox: XBoundingBox;
   private readonly svgGroup: SVGGElement;
   private readonly svgElements: SVGGElement;
 
@@ -21,14 +21,14 @@ export class XFocus implements XDraggable, XResizeable {
   constructor(container: XSVG) {
     this.container = container;
 
-    this.xBoundingBox = new XBoundingBox(this.container)
+    this.boundingBox = new XBoundingBox(this.container)
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
     this.svgElements = document.createElementNS(XElement.svgURI, "g");
 
     this.svgGroup.appendChild(this.svgElements);
-    this.svgGroup.appendChild(this.xBoundingBox.SVG);
+    this.svgGroup.appendChild(this.boundingBox.SVG);
 
-    for(let grip of this.xBoundingBox.grips) {
+    for(let grip of this.boundingBox.grips) {
       this.svgGroup.appendChild(grip.SVG);
     }
 
@@ -38,7 +38,7 @@ export class XFocus implements XDraggable, XResizeable {
     return this.svgGroup;
   }
   get boundingSVG(): SVGElement {
-    return this.xBoundingBox.SVG;
+    return this.boundingBox.SVG;
   }
 
   appendChild(xElement: XElement): void {
@@ -72,6 +72,9 @@ export class XFocus implements XDraggable, XResizeable {
 
   remove() {
     this.svgElements.innerHTML = "";
+    for(let child of this._children)
+      this.container.remove(child);
+
     this._children.clear();
     this.blur();
   }
@@ -81,10 +84,10 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   get position(): Point {
-    return this.xBoundingBox.position;
+    return this.boundingBox.position;
   }
   set position(position: Point) {
-    this.xBoundingBox.position = position;
+    this.boundingBox.position = position;
 
     this._children.forEach((child: XElement) => {
       child.position = {
@@ -135,19 +138,19 @@ export class XFocus implements XDraggable, XResizeable {
   fit(): void {
     let contentRect: Rect = this.boundingRect;
 
-    this.xBoundingBox.position = contentRect;
-    this.xBoundingBox.setSize(contentRect);
-    this.xBoundingBox.gripsPosition();
+    this.boundingBox.position = contentRect;
+    this.boundingBox.setSize(contentRect);
+    this.boundingBox.gripsPosition();
   }
 
   focus() {
     if(this._children.size > 1)
-      this.xBoundingBox.multipleFocus();
+      this.boundingBox.multipleFocus();
     else
-      this.xBoundingBox.singleFocus();
+      this.boundingBox.singleFocus();
   }
   blur() {
-    this.xBoundingBox.blur();
+    this.boundingBox.blur();
   }
 
   highlight() {
@@ -195,14 +198,14 @@ export class XFocus implements XDraggable, XResizeable {
         maxY = childSize.height + childPos.y;
     }
 
-    this.xBoundingBox.boundingRect = {
+    this.boundingBox.boundingRect = {
       x: minX,
       y: minY,
       width: maxX - minX,
       height: maxY - minY
     };
 
-    return this.xBoundingBox.boundingRect;
+    return this.boundingBox.boundingRect;
   }
 
   get lastRect(): Rect {

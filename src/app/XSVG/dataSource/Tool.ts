@@ -1,9 +1,9 @@
-import {DrawRectangle} from "../service/draw/tool/shape/DrawRectangle";
-import {DrawLine} from "../service/draw/tool/line/DrawLine";
-import {DrawPolyline} from "../service/draw/tool/line/DrawPolyline";
-import {DrawEllipse} from "../service/draw/tool/shape/DrawEllipse";
-import {DrawPolygon} from "../service/draw/tool/shape/DrawPolygon";
-import {DrawFree} from "../service/draw/tool/free/DrawFree";
+import {DrawRectangle} from "../service/tool/draw/figure/shape/DrawRectangle";
+import {DrawLine} from "../service/tool/draw/figure/line/DrawLine";
+import {DrawPolyline} from "../service/tool/draw/figure/line/DrawPolyline";
+import {DrawEllipse} from "../service/tool/draw/figure/shape/DrawEllipse";
+import {DrawPolygon} from "../service/tool/draw/figure/shape/DrawPolygon";
+import {DrawFree} from "../service/tool/draw/figure/free/DrawFree";
 
 export class Tool {
   public static readonly free: DrawFree = new DrawFree();

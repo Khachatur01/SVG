@@ -1,6 +1,6 @@
 import {XDrawable} from "../XDrawable";
-import {XSVG} from "../../../XSVG";
-import {XPointed} from "../../../element/type/XPointed";
+import {XSVG} from "../../../../XSVG";
+import {XPointed} from "../../../../element/type/XPointed";
 
 export abstract class ClickDraw implements XDrawable {
   private container: XSVG | null = null;
@@ -57,7 +57,7 @@ export abstract class ClickDraw implements XDrawable {
       this.container?.focus(this.drawableElement);
       this.drawableElement.fixRect();
     } else {
-      this.drawableElement.remove();
+      this.container.remove(this.drawableElement);
     }
     this.drawableElement = null;
   }

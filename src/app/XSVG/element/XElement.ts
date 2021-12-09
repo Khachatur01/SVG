@@ -2,7 +2,7 @@ import {Point} from "../model/Point";
 import {Size} from "../model/Size";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 import {Rect} from "../model/Rect";
-import {XDraggable} from "../service/drag/XDraggable";
+import {XDraggable} from "../service/tool/drag/XDraggable";
 
 export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
@@ -43,6 +43,10 @@ export abstract class XElement implements XResizeable, XDraggable {
     for (const [key, value] of Object.entries(attributes))
       if (key && value)
         this.SVG.setAttribute(key, value + "");
+  }
+
+  setStyle(attributes: object): void {
+    this.setAttr(attributes);
   }
 
   setDefaultStyle(): void {

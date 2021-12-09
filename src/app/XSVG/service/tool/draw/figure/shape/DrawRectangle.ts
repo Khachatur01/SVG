@@ -1,6 +1,6 @@
 import {MoveDraw} from "../../mode/MoveDraw";
-import {XElement} from "../../../../element/XElement";
-import {XRectangle} from "../../../../element/shape/XRectangle";
+import {XElement} from "../../../../../element/XElement";
+import {XRectangle} from "../../../../../element/shape/XRectangle";
 
 export class DrawRectangle extends MoveDraw {
   onStart(containerRect: DOMRect, event: MouseEvent): XElement {

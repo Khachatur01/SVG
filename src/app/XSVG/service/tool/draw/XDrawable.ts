@@ -1,4 +1,4 @@
-import {XSVG} from "../../XSVG";
+import {XSVG} from "../../../XSVG";
 
 export interface XDrawable {
   start(container: XSVG): void;

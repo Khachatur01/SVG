@@ -1,10 +1,10 @@
-import {XSVG} from "../../XSVG";
-import {Point} from "../../model/Point";
-import {XElement} from "../../element/XElement";
+import {XSVG} from "../../../XSVG";
+import {Point} from "../../../model/Point";
+import {XElement} from "../../../element/XElement";
+import {XTool} from "../XTool";
 
-export class XDragTool {
+export class XDragTool extends XTool {
   private isDrag: boolean = false;
-  private container: XSVG;
 
   private mouseStartPos: Point = {x: 0, y: 0};
   private elementStartPos: Point = {x: 0, y: 0};
@@ -14,7 +14,7 @@ export class XDragTool {
   private dragEnd = this.onDragEnd.bind(this);
 
   constructor(container: XSVG) {
-    this.container = container;
+    super(container);
   }
 
   private onDragStart(event: MouseEvent) {
@@ -40,7 +40,7 @@ export class XDragTool {
     this.container.focused.lowlight();
   }
 
-  public on(): void {
+  public _on(): void {
     this.isDrag = true;
     this.container.HTML.addEventListener("mousedown", this.dragStart);
     document.addEventListener("mouseup", this.dragEnd);

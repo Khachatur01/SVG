@@ -1,7 +1,7 @@
 import {XDrawable} from "../XDrawable";
-import {XElement} from "../../../element/XElement";
-import {XSVG} from "../../../XSVG";
-import {Point} from "../../../model/Point";
+import {XElement} from "../../../../element/XElement";
+import {XSVG} from "../../../../XSVG";
+import {Point} from "../../../../model/Point";
 
 export abstract class MoveDraw implements XDrawable {
   protected container: XSVG | null = null;
@@ -33,18 +33,18 @@ export abstract class MoveDraw implements XDrawable {
     /* calculate and set bounding box position and size */
 
   }
-  private _onEnd(event: MouseEvent) {
-    if(!this.container) return;
+  private _onEnd() {
+    if(!this.container || !this.drawableElement) return;
 
     this.container.HTML.removeEventListener('mousemove', this.draw);
 
     /* if element isn't drawn */
-    if (this.drawableElement?.isComplete()) {
+    if (this.drawableElement.isComplete()) {
       this.container.blur();
       this.container.focus(this.drawableElement);
       this.drawableElement.fixRect();
     } else {
-      this.drawableElement?.remove();
+      this.container.remove(this.drawableElement);
     }
 
     this.container.drawTool.drawingEnd();
