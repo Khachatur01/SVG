@@ -49,14 +49,18 @@ export class XSelectTool extends XTool {
       height: height
     });
   }
-  private onEnd(): void {
+  private onEnd(event: MouseEvent): void {
+    let containerRect = this.container.HTML.getBoundingClientRect();
+    let width = event.clientX - containerRect.left - this.position.x;
+
     this.container.HTML.removeChild(this.boundingBox.SVG);
+    let boxPos = this.boundingBox.position;
     let boxSize = this.boundingBox.size;
     let boxPoints: any = {
-      topLeft: this.boundingBox.position,
+      topLeft: boxPos,
       bottomRight: {
-        x: this.position.x + boxSize.width,
-        y: this.position.y + boxSize.height
+        x: boxPos.x + boxSize.width,
+        y: boxPos.y + boxSize.height
       }
     };
 
@@ -72,11 +76,34 @@ export class XSelectTool extends XTool {
         }
       }
 
-      if( /* full match */
-        elementPoints.topLeft.x >= boxPoints.topLeft.x && elementPoints.bottomRight.x <= boxPoints.bottomRight.x &&
-        elementPoints.topLeft.y >= boxPoints.topLeft.y && elementPoints.bottomRight.y <= boxPoints.bottomRight.y
-      ) {
-        this.container.focus(element);
+      if(width > 0) {/* if select box drawn from left to right */
+        if ( /* full match */
+          elementPoints.topLeft.x >= boxPoints.topLeft.x && elementPoints.bottomRight.x <= boxPoints.bottomRight.x &&
+          elementPoints.topLeft.y >= boxPoints.topLeft.y && elementPoints.bottomRight.y <= boxPoints.bottomRight.y
+        ) {
+          this.container.focus(element);
+        }
+      } else {/* if select box drawn from right to left */
+        if ( /* one point match */
+          /* top left point match */
+          (elementPoints.topLeft.x > boxPoints.topLeft.x && elementPoints.topLeft.x < boxPoints.bottomRight.x &&
+            elementPoints.topLeft.y > boxPoints.topLeft.y && elementPoints.topLeft.y < boxPoints.bottomRight.y) ||
+
+          /* top right point match */
+          (elementPoints.bottomRight.x >= boxPoints.topLeft.x && elementPoints.bottomRight.x <= boxPoints.bottomRight.x &&
+            elementPoints.topLeft.y >= boxPoints.topLeft.y && elementPoints.topLeft.y <= boxPoints.bottomRight.y) ||
+
+          /* bottom left point match */
+          (elementPoints.topLeft.x >= boxPoints.topLeft.x && elementPoints.topLeft.x <= boxPoints.bottomRight.x &&
+            elementPoints.bottomRight.y >= boxPoints.topLeft.y && elementPoints.bottomRight.y <= boxPoints.bottomRight.y) ||
+
+          /* bottom right point match */
+          (elementPoints.bottomRight.x >= boxPoints.topLeft.x && elementPoints.bottomRight.x <= boxPoints.bottomRight.x &&
+            elementPoints.bottomRight.y >= boxPoints.topLeft.y && elementPoints.bottomRight.y <= boxPoints.bottomRight.y)
+
+        ) {
+          this.container.focus(element);
+        }
       }
     }
     this.container.singleSelect();
