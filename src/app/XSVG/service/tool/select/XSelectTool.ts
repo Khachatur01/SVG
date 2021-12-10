@@ -65,45 +65,32 @@ export class XSelectTool extends XTool {
     };
 
     this.container.multiSelect();
+    elementsLoop:
     for(let element of this.container.elements) {
-      let elementPos = element.position;
-      let elementSize = element.size;
-      let elementPoints: any = {
-        topLeft: elementPos,
-        bottomRight: {
-          x: elementPos.x + elementSize.width,
-          y: elementPos.y + elementSize.height
-        }
-      }
+      let elementPoints = element.points;
 
       if(width > 0) {/* if select box drawn from left to right */
-        if ( /* full match */
-          elementPoints.topLeft.x >= boxPoints.topLeft.x && elementPoints.bottomRight.x <= boxPoints.bottomRight.x &&
-          elementPoints.topLeft.y >= boxPoints.topLeft.y && elementPoints.bottomRight.y <= boxPoints.bottomRight.y
-        ) {
-          this.container.focus(element);
+
+        for(let point of elementPoints) {
+          if(/* full match */
+            point.x < boxPoints.topLeft.x || point.x > boxPoints.bottomRight.x ||
+            point.y < boxPoints.topLeft.y || point.y > boxPoints.bottomRight.y
+          ) continue elementsLoop;
         }
+        this.container.focus(element);
+
       } else {/* if select box drawn from right to left */
-        if ( /* one point match */
-          /* top left point match */
-          (elementPoints.topLeft.x > boxPoints.topLeft.x && elementPoints.topLeft.x < boxPoints.bottomRight.x &&
-            elementPoints.topLeft.y > boxPoints.topLeft.y && elementPoints.topLeft.y < boxPoints.bottomRight.y) ||
 
-          /* top right point match */
-          (elementPoints.bottomRight.x >= boxPoints.topLeft.x && elementPoints.bottomRight.x <= boxPoints.bottomRight.x &&
-            elementPoints.topLeft.y >= boxPoints.topLeft.y && elementPoints.topLeft.y <= boxPoints.bottomRight.y) ||
-
-          /* bottom left point match */
-          (elementPoints.topLeft.x >= boxPoints.topLeft.x && elementPoints.topLeft.x <= boxPoints.bottomRight.x &&
-            elementPoints.bottomRight.y >= boxPoints.topLeft.y && elementPoints.bottomRight.y <= boxPoints.bottomRight.y) ||
-
-          /* bottom right point match */
-          (elementPoints.bottomRight.x >= boxPoints.topLeft.x && elementPoints.bottomRight.x <= boxPoints.bottomRight.x &&
-            elementPoints.bottomRight.y >= boxPoints.topLeft.y && elementPoints.bottomRight.y <= boxPoints.bottomRight.y)
-
-        ) {
-          this.container.focus(element);
+        for(let point of elementPoints) {
+          if(/* full match */
+            point.x > boxPoints.topLeft.x && point.x < boxPoints.bottomRight.x &&
+            point.y > boxPoints.topLeft.y && point.y < boxPoints.bottomRight.y
+          ) {
+            this.container.focus(element);
+            break;
+          }
         }
+
       }
     }
     this.container.singleSelect();

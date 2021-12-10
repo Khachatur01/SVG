@@ -7,8 +7,7 @@ import {Matrix} from "../../service/math/Matrix";
 export abstract class XPointed extends XElement {
   protected _size: Size = {width: 0, height: 0};
   public _lastPoints: Point[] = [];
-  abstract get points(): Point[]
-  abstract set points(points: Point[]);
+  override set points(points: Point[]) {};
   abstract pushPoint(point: Point): void;
   abstract removePoint(index: number): void;
   abstract replacePoint(index: number, point: Point): void;

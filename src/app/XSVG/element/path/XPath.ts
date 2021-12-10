@@ -5,7 +5,7 @@ import {Size} from "../../model/Size";
 
 export abstract class XPath extends XElement {
   protected _size: Size = {width: 0, height: 0};
-  public path: Path;
+  protected path: Path;
   protected constructor(path: Path = new Path()) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "path");
@@ -20,6 +20,10 @@ export abstract class XPath extends XElement {
   isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;
+  }
+
+  get points(): Point[] {
+    return this.path.points;
   }
 
   get position(): Point {

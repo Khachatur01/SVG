@@ -3,8 +3,9 @@ import {Size} from "../model/Size";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
+import {XSelectable} from "../service/tool/select/XSelectable";
 
-export abstract class XElement implements XResizeable, XDraggable {
+export abstract class XElement implements XResizeable, XDraggable, XSelectable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
   protected style: any = {
@@ -27,7 +28,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract get position(): Point;
   abstract set position(position: Point);
   abstract rotate(refPoint: Point, angle: number): void;
-  // abstract get rectPoints(): Point[];
+  abstract get points(): Point[];
 
   get SVG(): SVGElement {
     return this.svgElement;

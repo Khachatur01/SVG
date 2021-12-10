@@ -1,8 +1,15 @@
 import {Command} from "./Command";
+import {Point} from "../Point";
 
 export class Path {
   private commands:Command[] = [];
 
+  get points(): Point[] {
+    let points: Point[] = [];
+    for(let command of this.commands)
+      points.push(command.point);
+    return points;
+  }
   getAll(): Command[] {
     return this.commands;
   }
