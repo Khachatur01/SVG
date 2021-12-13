@@ -1,6 +1,6 @@
-import {XDrawable} from "../../XDrawable";
-import {XFree} from "../../../../../element/pointed/XFree";
-import {XSVG} from "../../../../../XSVG";
+import {XDrawable} from "../XDrawable";
+import {XFree} from "../../../../element/pointed/XFree";
+import {XSVG} from "../../../../XSVG";
 
 export class DrawFree implements XDrawable {
   private container: XSVG | null = null;
@@ -47,6 +47,9 @@ export class DrawFree implements XDrawable {
     } else {
       this.container.focus(this.drawableElement);
       this.drawableElement.fixRect();
+      this.container.focused.fixRect();
+      this.drawableElement.centerRefPoint();
+      this.container.focused.centerRefPoint();
     }
   }
 

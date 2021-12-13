@@ -1,17 +1,19 @@
+import {Point} from "../../../../../../../model/Point";
 import {XGrip} from "../XGrip";
-import {Point} from "../../../../../../model/Point";
-import {XSVG} from "../../../../../../XSVG";
-import {Rect} from "../../../../../../model/Rect";
+import {XSVG} from "../../../../../../../XSVG";
+import {Rect} from "../../../../../../../model/Rect";
 
-export class SWGrip extends XGrip {
+export class SGrip extends XGrip {
   constructor(container: XSVG) {
-    super(container, "nesw-resize");
+    super(container, "ns-resize");
   }
 
   setPosition(points: Point[]): void {
+    let x = (points[3].x + points[2].x) / 2;
+    let y = (points[3].y + points[2].y) / 2;
     this.position = {
-      x: points[3].x - this.side,
-      y: points[3].y
+      x: x - this.side / 2,
+      y: y
     }
   }
 
@@ -20,13 +22,12 @@ export class SWGrip extends XGrip {
 
   protected onMove(containerRect: Rect, event: MouseEvent): void {
     let elementRect = this.container.focused.lastRect;
-    let width = (event.clientX - containerRect.x) - (elementRect.x + elementRect.width);
     let height = event.clientY - containerRect.y - (elementRect.y);
 
     this.container.focused.setSize({
-      x: elementRect.x + elementRect.width,
+      x: elementRect.x,
       y: elementRect.y,
-      width: width,
+      width: elementRect.width,
       height: height
     });
   }

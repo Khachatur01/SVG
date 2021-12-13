@@ -1,7 +1,7 @@
 import {MoveDraw} from "../../mode/MoveDraw";
 import {XLine} from "../../../../../element/pointed/XLine";
 import {Point} from "../../../../../model/Point";
-import {Geometry} from "../../../../math/Geometry";
+import {Angle} from "../../../../math/Angle";
 import {XPointed} from "../../../../../element/type/XPointed";
 
 export class DrawLine extends MoveDraw {
@@ -19,7 +19,7 @@ export class DrawLine extends MoveDraw {
     let y2 = event.clientY - containerRect.top;
 
     if(perfectMode) {
-      let position: Point = Geometry.snapLineEnd(this.startPos.x, x2, this.startPos.y, y2) as Point;
+      let position: Point = Angle.snapLineEnd(this.startPos.x, x2, this.startPos.y, y2) as Point;
       x2 = position.x;
       y2 = position.y;
     }

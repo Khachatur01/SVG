@@ -3,7 +3,7 @@ import {DrawLine} from "../service/tool/draw/figure/line/DrawLine";
 import {DrawPolyline} from "../service/tool/draw/figure/line/DrawPolyline";
 import {DrawEllipse} from "../service/tool/draw/figure/shape/DrawEllipse";
 import {DrawPolygon} from "../service/tool/draw/figure/shape/DrawPolygon";
-import {DrawFree} from "../service/tool/draw/figure/free/DrawFree";
+import {DrawFree} from "../service/tool/draw/mode/DrawFree";
 
 export class Tool {
   public static readonly free: DrawFree = new DrawFree();

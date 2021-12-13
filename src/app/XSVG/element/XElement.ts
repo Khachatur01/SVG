@@ -3,9 +3,8 @@ import {Size} from "../model/Size";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
-import {XSelectable} from "../service/tool/select/XSelectable";
 
-export abstract class XElement implements XResizeable, XDraggable, XSelectable {
+export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
   protected style: any = {
@@ -16,6 +15,8 @@ export abstract class XElement implements XResizeable, XDraggable, XSelectable {
   }
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
+
+  private _refPoint: Point = {x: 0, y: 0};
 
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
 
@@ -94,13 +95,28 @@ export abstract class XElement implements XResizeable, XDraggable, XSelectable {
   fixSize(): void {
     this._lastSize = this.size;
   }
-
   get lastRect(): Rect {
     return {
       x: this._lastPosition.x,
       y: this._lastPosition.y,
       width: this._lastSize.width,
       height: this._lastSize.height
+    }
+  }
+
+
+  get refPoint(): Point {
+    return this._refPoint;
+  }
+
+  set refPoint(value: Point) {
+    this._refPoint = value;
+  }
+
+  centerRefPoint() {
+    this._refPoint = {
+      x: this._lastPosition.x + this._lastSize.width / 2,
+      y: this._lastPosition.y + this._lastSize.height / 2
     }
   }
 }

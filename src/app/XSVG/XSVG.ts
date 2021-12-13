@@ -33,7 +33,7 @@ export class XSVG {
       if(event.target == this.container) {
         this.blur();
       }
-    })
+    });
 
     this.elementsGroup = document.createElementNS(XElement.svgURI, "g");
 
@@ -47,9 +47,17 @@ export class XSVG {
     this._elements.add(xElement);
 
     xElement.SVG.addEventListener("mousedown", () => {
-      if(this.drawTool.isDrawing() || this.dragTool.isOn()) return;
+      if(this.drawTool.isDrawing()) return;
+      this.drawTool.off();
 
-      this.selectTool.on();
+      /* when tries to drag not selected element, all elements will blur, and that element will select */
+      if(this.dragTool.isOn()) {
+        if(!this._focusedElements.hasChild(xElement)) {
+          this.blur();
+          this.focus(xElement);
+        }
+        return;
+      }
 
       if(!this._multiSelect) {
         this.blur();

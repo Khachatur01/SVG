@@ -5,7 +5,6 @@ import {Rect} from "../../model/Rect";
 import {Matrix} from "../../service/math/Matrix";
 
 export abstract class XPointed extends XElement {
-  protected _size: Size = {width: 0, height: 0};
   public _lastPoints: Point[] = [];
   override set points(points: Point[]) {};
   abstract pushPoint(point: Point): void;
@@ -62,12 +61,10 @@ export abstract class XPointed extends XElement {
         minY = points[i].y
     }
 
-    this._size = {
+    return  {
       width: maxX - minX,
       height: maxY - minY
     };
-
-    return this._size;
   }
   setSize(rect: Rect): void {
     let dw = 1;

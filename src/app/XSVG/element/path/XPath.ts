@@ -2,6 +2,7 @@ import {XElement} from "../XElement";
 import {Path} from "../../model/path/Path";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
+import {Matrix} from "../../service/math/Matrix";
 
 export abstract class XPath extends XElement {
   protected _size: Size = {width: 0, height: 0};
@@ -68,5 +69,9 @@ export abstract class XPath extends XElement {
   set size(size: Size) {}
 
   override rotate(refPoint: Point, angle: number) {
+    this.path.points = Matrix.rotate(this.points, refPoint, angle);
+    this.setAttr({
+      d: this.path.toString()
+    })
   }
 }

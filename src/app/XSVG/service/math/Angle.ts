@@ -1,6 +1,14 @@
-export class Geometry {
+import {Point} from "../../model/Point";
+
+export class Angle {
   static snapLineEnd(x1: number, x2: number, y1: number, y2: number): object {
     return snapLineEnd(x1, x2, y1, y2);
+  }
+  static fromPoints(A: Point, B: Point, C: Point) {
+    let AB = Math.sqrt(Math.pow(B.x - A.x,2) + Math.pow(B.y - A.y,2));
+    let BC = Math.sqrt(Math.pow(B.x - C.x,2) + Math.pow(B.y - C.y,2));
+    let AC = Math.sqrt(Math.pow(C.x - A.x,2) + Math.pow(C.y - A.y,2));
+    return Math.acos((BC * BC + AB * AB - AC * AC) / (2 * BC * AB));
   }
 }
 const ANGULAR_SNAP = 15;

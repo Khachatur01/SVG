@@ -10,6 +10,9 @@ export abstract class Command {
   get point(): Point {
     return this._point;
   }
+  set point(point: Point) {
+    this._point = point;
+  }
   abstract set position(position: Point);
 
   abstract get command(): string;

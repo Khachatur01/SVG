@@ -40,6 +40,17 @@ export abstract class MoveDraw implements XDrawable {
       this.container.blur();
       this.container.focus(this.drawableElement);
       this.drawableElement.fixRect();
+      this.container.focused.fixRect();
+      this.drawableElement.centerRefPoint();
+      this.container.focused.centerRefPoint();
+
+      // /* rotate by center */
+      // let size = this.drawableElement.size;
+      // this.drawableElement.rotate({
+      //   x: this.startPos.x + size.width / 2,
+      //   y: this.startPos.y + size.height / 2
+      // }, 10);
+
     } else {
       this.container.remove(this.drawableElement);
     }

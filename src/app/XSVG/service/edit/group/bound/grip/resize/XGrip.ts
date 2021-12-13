@@ -1,7 +1,7 @@
-import {Point} from "../../../../../model/Point";
-import {XRectangle} from "../../../../../element/shape/XRectangle";
-import {XSVG} from "../../../../../XSVG";
-import {Rect} from "../../../../../model/Rect";
+import {Point} from "../../../../../../model/Point";
+import {XRectangle} from "../../../../../../element/shape/XRectangle";
+import {XSVG} from "../../../../../../XSVG";
+import {Rect} from "../../../../../../model/Rect";
 
 export abstract class XGrip extends XRectangle {
   protected container: XSVG;

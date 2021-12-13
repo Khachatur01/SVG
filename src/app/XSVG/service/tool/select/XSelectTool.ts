@@ -65,31 +65,32 @@ export class XSelectTool extends XTool {
     };
 
     this.container.multiSelect();
+
     elementsLoop:
     for(let element of this.container.elements) {
       let elementPoints = element.points;
 
-      if(width > 0) {/* if select box drawn from left to right */
+      if(width < 0) {/* if select box drawn from left to right */
 
-        for(let point of elementPoints) {
+        for(let point of elementPoints)
           if(/* full match */
             point.x < boxPoints.topLeft.x || point.x > boxPoints.bottomRight.x ||
             point.y < boxPoints.topLeft.y || point.y > boxPoints.bottomRight.y
-          ) continue elementsLoop;
-        }
+          )
+            continue elementsLoop;
+
         this.container.focus(element);
 
       } else {/* if select box drawn from right to left */
 
-        for(let point of elementPoints) {
-          if(/* full match */
+        for(let point of elementPoints)
+          if(/* one point match */
             point.x > boxPoints.topLeft.x && point.x < boxPoints.bottomRight.x &&
             point.y > boxPoints.topLeft.y && point.y < boxPoints.bottomRight.y
           ) {
             this.container.focus(element);
             break;
           }
-        }
 
       }
     }

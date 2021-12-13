@@ -1,7 +1,7 @@
 import {XGrip} from "../XGrip";
-import {Point} from "../../../../../../model/Point";
-import {XSVG} from "../../../../../../XSVG";
-import {Rect} from "../../../../../../model/Rect";
+import {Point} from "../../../../../../../model/Point";
+import {XSVG} from "../../../../../../../XSVG";
+import {Rect} from "../../../../../../../model/Rect";
 
 export class NWGrip extends XGrip {
   constructor(container: XSVG) {

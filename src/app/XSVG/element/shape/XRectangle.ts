@@ -52,7 +52,6 @@ export class XRectangle extends XPolygon {
     });
 
     this.points = points;
-    this._size = rect;
   }
 
   override isComplete(): boolean {

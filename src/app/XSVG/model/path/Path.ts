@@ -10,6 +10,11 @@ export class Path {
       points.push(command.point);
     return points;
   }
+  set points(points: Point[]) {
+    for(let i = 0; i < this.commands.length; i++)
+      this.commands[i].point = points[i];
+  }
+
   getAll(): Command[] {
     return this.commands;
   }
