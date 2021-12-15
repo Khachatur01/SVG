@@ -2,7 +2,15 @@ import {Command} from "./Command";
 import {Point} from "../Point";
 
 export class Path {
-  private commands:Command[] = [];
+  private commands: Command[] = [];
+
+  get copy(): Path {
+    let path: Path = new Path();
+    this.commands.forEach(
+      (command: Command) => path.add(command.copy)
+    );
+    return path
+  }
 
   get points(): Point[] {
     let points: Point[] = [];

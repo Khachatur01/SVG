@@ -70,7 +70,7 @@ export class XSelectTool extends XTool {
     for(let element of this.container.elements) {
       let elementPoints = element.points;
 
-      if(width < 0) {/* if select box drawn from left to right */
+      if(width > 0) {/* if select box drawn from right to left */
 
         for(let point of elementPoints)
           if(/* full match */
@@ -81,7 +81,7 @@ export class XSelectTool extends XTool {
 
         this.container.focus(element);
 
-      } else {/* if select box drawn from right to left */
+      } else {/* if select box drawn from left to right */
 
         for(let point of elementPoints)
           if(/* one point match */

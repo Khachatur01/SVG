@@ -27,4 +27,7 @@ export class QBezier extends Command {
     this._cPoint.x = position.x;
     this._cPoint.y = position.y;
   }
+  get copy(): QBezier {
+    return new QBezier(this._cPoint, this._point);
+  }
 }

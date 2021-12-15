@@ -52,13 +52,13 @@ export abstract class XPointed extends XElement {
 
     for(let i = 1; i < points.length; i++) {
       if(points[i].x > maxX)
-        maxX = points[i].x
+        maxX = points[i].x;
       if(points[i].y > maxY)
-        maxY = points[i].y
+        maxY = points[i].y;
       if(points[i].x < minX)
-        minX = points[i].x
+        minX = points[i].x;
       if(points[i].y < minY)
-        minY = points[i].y
+        minY = points[i].y;
     }
 
     return  {
@@ -85,6 +85,6 @@ export abstract class XPointed extends XElement {
   }
 
   override rotate(refPoint: Point, angle: number) {
-    this.points = Matrix.rotate(this.points, refPoint, angle);
+    this.points = Matrix.rotate(this._lastPoints, refPoint, angle);
   }
 }

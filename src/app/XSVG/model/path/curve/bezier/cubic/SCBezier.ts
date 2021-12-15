@@ -27,4 +27,7 @@ export class SCBezier extends Command {
     this._cPoint1.x = position.x;
     this._cPoint1.y = position.y;
   }
+  get copy(): SCBezier {
+    return new SCBezier(this._cPoint1, this._point);
+  }
 }

@@ -1,11 +1,12 @@
 import {XEllipse} from "../../../../../../element/shape/XEllipse";
 import {Point} from "../../../../../../model/Point";
 import {XSVG} from "../../../../../../XSVG";
+import {Angle} from "../../../../../math/Angle";
 
 export class XRotatePoint extends XEllipse {
   private container: XSVG;
 
-  private moving: boolean = false;
+  private rotating: boolean = false;
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
@@ -48,15 +49,29 @@ export class XRotatePoint extends XEllipse {
   }
 
   private start() {
+    this.rotating = true;
+    this.container.activeTool.off();
     this.container.HTML.addEventListener("mousemove", this._move);
   }
   private move(event: MouseEvent) {
+    let containerRect = this.container.HTML.getBoundingClientRect();
 
+    let x = event.clientX - containerRect.left;
+    let y = event.clientY - containerRect.top;
+
+    this.container.focused.rotate(this.container.focused.refPoint,
+      Angle.fromPoints(
+        {x: this.container.focused.refPoint.x, y: 0},
+        this.container.focused.refPoint,
+        {x: x, y: y}
+      )
+    );
   }
   private end() {
-    if(!this.moving) return;
+    if(!this.rotating) return;
 
-    this.moving = false;
+    this.container.HTML.removeEventListener("mousemove", this._move);
+    this.rotating = false;
   }
 
   on() {

@@ -38,4 +38,7 @@ export class CBezier extends Command {
     this._cPoint1.x = position.x;
     this._cPoint1.y = position.y;
   }
+  get copy(): CBezier {
+    return new CBezier(this._cPoint0, this._cPoint1, this._point);
+  }
 }

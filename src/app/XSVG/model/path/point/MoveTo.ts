@@ -10,5 +10,10 @@ export class MoveTo extends Command {
     this._point.x = position.x;
     this._point.y = position.y;
   }
+
+  get copy(): MoveTo {
+    let command: MoveTo = new MoveTo(this._point);
+    return command;
+  }
 }
 

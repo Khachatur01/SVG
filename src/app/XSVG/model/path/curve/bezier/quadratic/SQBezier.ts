@@ -10,4 +10,7 @@ export class SQBezier extends Command {
     this._point.x = position.x;
     this._point.y = position.y;
   }
+  get copy(): SQBezier {
+    return new SQBezier(this._point);
+  }
 }

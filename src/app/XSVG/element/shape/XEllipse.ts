@@ -48,11 +48,11 @@ export class XEllipse extends XPath {
     }
 
     let points: Point[] = [
-      {x:        x,  y: ry +   y},
-      {x: rx +   x,  y:        y},
-      {x: rx*2 + x,  y: ry +   y},
-      {x: rx +   x,  y: ry*2 + y},
-      {x: x,         y: ry +   y}
+      {x:        x,  y: ry   + y},
+      {x: rx   + x,  y:        y},
+      {x: rx*2 + x,  y: ry   + y},
+      {x: rx   + x,  y: ry*2 + y},
+      {x: x,         y: ry   + y}
     ];
 
     path.add(new MoveTo(points[0]));

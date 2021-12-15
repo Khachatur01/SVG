@@ -102,6 +102,9 @@ export class XFocus implements XDraggable, XResizeable {
     this.fit();
   }
 
+  get refPoint(): Point {
+    return this.boundingBox.refPoint;
+  }
   set refPoint(point: Point) {
     this.boundingBox.refPoint = point;
     this._children.forEach((child: XElement) => child.refPoint = point);
@@ -214,6 +217,7 @@ export class XFocus implements XDraggable, XResizeable {
 
   rotate(refPoint: Point, angle: number) {
     this._children.forEach(child => child.rotate(refPoint, angle));
+    this.boundingBox.rotate(refPoint, angle);
   }
 
   fit(): void {

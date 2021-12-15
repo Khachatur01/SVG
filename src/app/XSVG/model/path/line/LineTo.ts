@@ -9,4 +9,8 @@ export class LineTo extends Command {
     this._point.x = position.x;
     this._point.y = position.y;
   }
+  get copy(): LineTo {
+    let command: LineTo = new LineTo(this._point);
+    return command;
+  }
 }

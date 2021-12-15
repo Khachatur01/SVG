@@ -7,15 +7,25 @@ import {Matrix} from "../../service/math/Matrix";
 export abstract class XPath extends XElement {
   protected _size: Size = {width: 0, height: 0};
   protected path: Path;
+  protected _lastPath: Path;
   protected constructor(path: Path = new Path()) {
     super();
     this.svgElement = document.createElementNS(XElement.svgURI, "path");
     this.path = path;
+    this._lastPath = path;
     this.setAttr({
       d: this.path.toString()
     })
     this.setOverEvent();
     this.setDefaultStyle();
+  }
+
+  override fixRect() {
+    super.fixRect();
+    this.fixPath();
+  }
+  fixPath() {
+    this._lastPath = this.path.copy;
   }
 
   isComplete(): boolean {
@@ -69,7 +79,7 @@ export abstract class XPath extends XElement {
   set size(size: Size) {}
 
   override rotate(refPoint: Point, angle: number) {
-    this.path.points = Matrix.rotate(this.points, refPoint, angle);
+    this.path.points = Matrix.rotate(this._lastPath.points, refPoint, angle);
     this.setAttr({
       d: this.path.toString()
     })

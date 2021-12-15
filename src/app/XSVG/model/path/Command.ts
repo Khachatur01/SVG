@@ -16,4 +16,5 @@ export abstract class Command {
   abstract set position(position: Point);
 
   abstract get command(): string;
+  abstract get copy(): Command;
 }
