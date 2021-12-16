@@ -8,7 +8,7 @@ import {Point} from "../../../../../../model/Point";
 export class XRefPoint extends XPath {
   private container: XSVG;
   private readonly _r: number = 5; /* radius */
-  private readonly _center: Point = {x: 0, y: 0};
+  private _center: Point = {x: 0, y: 0};
 
   private moving: boolean = false;
   private _start = this.start.bind(this);
@@ -37,15 +37,12 @@ export class XRefPoint extends XPath {
     return this._center;
   }
   override set position(position: Point) {
+    this._center = position;
     this.drawPoint(position);
   }
 
   get r(): number {
     return this._r;
-  }
-
-  override fixPosition() {
-    this._lastPosition = this._center;
   }
 
   private drawPoint(point: Point): void {
@@ -78,7 +75,6 @@ export class XRefPoint extends XPath {
     this.moving = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
-    this.fixPosition();
     this.container.HTML.addEventListener("mousemove", this._move);
   }
   private move(event: MouseEvent) {

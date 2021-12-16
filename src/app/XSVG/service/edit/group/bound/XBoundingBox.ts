@@ -19,7 +19,6 @@ export class XBoundingBox extends XRectangle {
   private _grips: XGrip[] = [];
   private xRefPoint: XRefPoint;
   private xRotatePoint: XRotatePoint;
-  private _lastRefPoint: Point = {x: 0, y: 0};
   private _boundingRect: Rect = {
     x: 0,
     y: 0,
@@ -67,10 +66,10 @@ export class XBoundingBox extends XRectangle {
   }
 
   fixRefPoint() {
-    this.xRefPoint.fixPath();
+    this.xRefPoint.fixPosition();
   }
   get lastRefPoint(): Point {
-    return this._lastRefPoint;
+    return this.xRefPoint.lastRect;
   }
 
   get rotPointSVG(): SVGElement {
@@ -153,10 +152,7 @@ export class XBoundingBox extends XRectangle {
     this.xRotatePoint.refPoint = refPoint;
     this.xRefPoint.refPoint = refPoint;
 
-    this.xRefPoint.position = {
-      x: refPoint.x - this.xRefPoint.lastRect.x,
-      y: refPoint.y - this.xRefPoint.lastRect.y
-    };
+    this.xRefPoint.position = refPoint
   }
 
   override rotate(angle: number) {
