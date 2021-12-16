@@ -9,18 +9,18 @@ export class Path {
     this.commands.forEach(
       (command: Command) => path.add(command.copy)
     );
-    return path
+    return path;
   }
 
   get points(): Point[] {
     let points: Point[] = [];
     for(let command of this.commands)
-      points.push(command.point);
+      points.push(command.position);
     return points;
   }
   set points(points: Point[]) {
     for(let i = 0; i < this.commands.length; i++)
-      this.commands[i].point = points[i];
+      this.commands[i].position = points[i];
   }
 
   getAll(): Command[] {

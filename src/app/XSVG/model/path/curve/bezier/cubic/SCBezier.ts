@@ -20,7 +20,10 @@ export class SCBezier extends Command {
     this._cPoint1 = point;
   }
 
-  set position(position: Point) {
+  override get position(): Point {
+    return super.position;
+  }
+  override set position(position: Point) {
     this._point.x = position.x;
     this._point.y = position.y;
 
@@ -28,6 +31,12 @@ export class SCBezier extends Command {
     this._cPoint1.y = position.y;
   }
   get copy(): SCBezier {
-    return new SCBezier(this._cPoint1, this._point);
+    return new SCBezier({
+      x: this._cPoint1.x,
+      y: this._cPoint1.y
+    }, {
+      x: this._point.x,
+      y: this._point.y
+    });
   }
 }

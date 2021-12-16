@@ -6,14 +6,19 @@ export class MoveTo extends Command {
     return "M " + this._point.x + " " + this._point.y;
   }
 
-  set position(position: Point) {
+  override get position(): Point {
+    return super.position;
+  }
+  override set position(position: Point) {
     this._point.x = position.x;
     this._point.y = position.y;
   }
 
   get copy(): MoveTo {
-    let command: MoveTo = new MoveTo(this._point);
-    return command;
+    return new MoveTo({
+      x: this._point.x,
+      y: this._point.y
+    });
   }
 }
 

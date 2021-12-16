@@ -65,15 +65,9 @@ export class XBoundingBox extends XRectangle {
   get refPointSVG(): SVGElement {
     return this.xRefPoint.SVG;
   }
-  override get refPoint(): Point {
-    return this.xRefPoint.position;
-  }
-  override set refPoint(point: Point) {
-    this.xRefPoint.position = point;
-  }
 
   fixRefPoint() {
-    this._lastRefPoint = this.xRefPoint.position;
+    this.xRefPoint.fixPath();
   }
   get lastRefPoint(): Point {
     return this._lastRefPoint;
@@ -100,8 +94,8 @@ export class XBoundingBox extends XRectangle {
     for(let i = 1; i < this._grips.length; i += 2) {
       this._grips[i].hide();
     }
-    this.xRefPoint.hide();
-    this.xRotatePoint.hide();
+    this.xRefPoint.show();
+    this.xRotatePoint.show();
   }
   blur() {
     this.svgElement.style.display = "none";
@@ -149,8 +143,26 @@ export class XBoundingBox extends XRectangle {
     }
   }
 
-  override rotate(refPoint: Point, angle: number) {
-    super.rotate(refPoint, angle);
-    this._grips.forEach((grip: XRectangle) => grip.rotate(refPoint, angle));
+  override get refPoint(): Point {
+    return super.refPoint;
+  }
+
+  override set refPoint(refPoint: Point) {
+    super.refPoint = refPoint;
+    this._grips.forEach((grip: XRectangle) => grip.refPoint = refPoint);
+    this.xRotatePoint.refPoint = refPoint;
+    this.xRefPoint.refPoint = refPoint;
+
+    this.xRefPoint.position = {
+      x: refPoint.x - this.xRefPoint.lastRect.x,
+      y: refPoint.y - this.xRefPoint.lastRect.y
+    };
+  }
+
+  override rotate(angle: number) {
+    super.rotate(angle);
+    this._grips.forEach((grip: XRectangle) => grip.rotate(angle));
+    this.xRotatePoint.rotate(angle);
+    this.xRefPoint.rotate(angle);
   }
 }

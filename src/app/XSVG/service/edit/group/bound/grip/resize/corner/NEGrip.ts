@@ -2,6 +2,7 @@ import {XGrip} from "../XGrip";
 import {Point} from "../../../../../../../model/Point";
 import {XSVG} from "../../../../../../../XSVG";
 import {Rect} from "../../../../../../../model/Rect";
+import {Matrix} from "../../../../../../math/Matrix";
 
 export class NEGrip extends XGrip {
   constructor(container: XSVG) {
@@ -15,13 +16,26 @@ export class NEGrip extends XGrip {
     }
   }
 
-  protected onEnd(): void {
+  protected onStart(): void {
   }
 
   protected onMove(containerRect: Rect, event: MouseEvent): void {
     let elementRect = this.container.focused.lastRect;
-    let width = (event.clientX - containerRect.x) - (elementRect.x);
-    let height = event.clientY - containerRect.y - (elementRect.y + elementRect.height);
+
+    console.log(-(360 + this.container.focused.angle))
+    let rotated = Matrix.rotate([
+        {x: event.clientX, y: event.clientY}
+      ],
+      this.container.focused.refPoint,
+      -(360 + this.container.focused.angle)
+    );
+    let clientX = rotated[0].x;
+    let clientY = rotated[0].y;
+
+    console.log(event.x, event.y, clientX, clientY)
+
+    let width = (clientX - containerRect.x) - (elementRect.x);
+    let height = clientY - containerRect.y - (elementRect.y + elementRect.height);
 
     this.container.focused.setSize({
       x: elementRect.x,
@@ -31,6 +45,6 @@ export class NEGrip extends XGrip {
     });
   }
 
-  protected onStart(): void {
+  protected onEnd(): void {
   }
 }

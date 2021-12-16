@@ -66,16 +66,4 @@ export class XEllipse extends XPath {
       d: path.toString()
     })
   }
-  override rotate(refPoint: Point, angle: number) {
-    for(let command of this.path.getAll()) {
-      if(command instanceof Arc) {
-        command.xAxisRotation = -angle;
-      }
-    }
-    this.setAttr({
-      d: this.path.toString()
-    })
-
-    super.rotate(refPoint, angle);
-  }
 }

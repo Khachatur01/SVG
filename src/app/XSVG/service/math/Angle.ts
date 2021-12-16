@@ -10,7 +10,7 @@ export class Angle {
     let AC = Math.sqrt(Math.pow(C.x - A.x,2) + Math.pow(C.y - A.y,2));
 
     let degree = radToDeg(Math.acos((BC * BC + AB * AB - AC * AC) / (2 * BC * AB)));
-    if(C.x > A.x)
+    if(C.y > A.y)
       degree = 360 - degree;
 
     return degree;

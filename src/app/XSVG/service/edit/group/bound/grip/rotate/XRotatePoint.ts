@@ -11,8 +11,10 @@ export class XRotatePoint extends XEllipse {
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
 
+  private dAngle: number = 0;
+
   constructor(container: XSVG, x: number = 0, y: number = 0) {
-    super(x - 5, y - 5, 5, 5);
+    super(x - 8, y - 8, 8, 8);
     this.container = container;
     this.removeOverEvent();
     this.setStyle({
@@ -29,15 +31,15 @@ export class XRotatePoint extends XEllipse {
   override get position(): Point {
     let position = super.position;
     return {
-      x: position.x + 5,
-      y: position.y + 5
+      x: position.x + 8,
+      y: position.y + 8
     };
   }
 
   override set position(position: Point) {
     super.position = {
-      x: position.x - 5,
-      y: position.y - 5
+      x: position.x - 8,
+      y: position.y - 8
     };
   }
 
@@ -48,10 +50,20 @@ export class XRotatePoint extends XEllipse {
     this.svgElement.style.display = "none";
   }
 
-  private start() {
+  private start(event: MouseEvent) {
     this.rotating = true;
     this.container.activeTool.off();
     this.container.HTML.addEventListener("mousemove", this._move);
+
+    let containerRect = this.container.HTML.getBoundingClientRect();
+    let x = event.clientX - containerRect.left;
+    let y = event.clientY - containerRect.top;
+    this.dAngle = Angle.fromPoints(
+      {x: 0, y: this.container.focused.refPoint.y},
+      this.container.focused.refPoint,
+      {x: x, y: y}
+    ) - this.container.focused.angle;
+
   }
   private move(event: MouseEvent) {
     let containerRect = this.container.HTML.getBoundingClientRect();
@@ -59,12 +71,12 @@ export class XRotatePoint extends XEllipse {
     let x = event.clientX - containerRect.left;
     let y = event.clientY - containerRect.top;
 
-    this.container.focused.rotate(this.container.focused.refPoint,
+    this.container.focused.rotate(
       Angle.fromPoints(
-        {x: this.container.focused.refPoint.x, y: 0},
+        {x: 0, y: this.container.focused.refPoint.y},
         this.container.focused.refPoint,
         {x: x, y: y}
-      )
+      ) - this.dAngle
     );
   }
   private end() {

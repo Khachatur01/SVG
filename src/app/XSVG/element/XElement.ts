@@ -16,6 +16,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
 
+  private _angle: number = 0;
   private _refPoint: Point = {x: 0, y: 0};
 
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
@@ -28,13 +29,27 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract isComplete(): boolean;
   abstract get position(): Point;
   abstract set position(position: Point);
-  abstract rotate(refPoint: Point, angle: number): void;
   abstract get points(): Point[];
+
+  get refPoint(): Point {
+    return this._refPoint;
+  }
+  set refPoint(refPoint: Point) {
+    this.svgElement.style.transformOrigin = refPoint.x + "px " + refPoint.y + "px";
+    this._refPoint = refPoint;
+  }
+
+  get angle(): number {
+    return this._angle;
+  }
+  rotate(angle: number): void {
+    this.svgElement.style.transform = "rotate(" + angle + "deg)";
+    this._angle = angle;
+  }
 
   get SVG(): SVGElement {
     return this.svgElement;
   }
-
   getAttr(attribute: string): string {
     let value = this.SVG.getAttribute(attribute);
     if (!value)
@@ -104,20 +119,11 @@ export abstract class XElement implements XResizeable, XDraggable {
     }
   }
 
-
-  get refPoint(): Point {
-    return this._refPoint;
-  }
-
-  set refPoint(value: Point) {
-    this._refPoint = value;
-  }
-
   centerRefPoint() {
-    this._refPoint = {
+    this.refPoint = {
       x: this._lastPosition.x + this._lastSize.width / 2,
       y: this._lastPosition.y + this._lastSize.height / 2
-    }
+    };
   }
 }
 

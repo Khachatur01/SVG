@@ -1,22 +1,6 @@
 import {Point} from "../../model/Point";
 
 export class Matrix {
-  static multiply(a: number[][], b: number[][]) {
-    let aNumRows = a.length, aNumCols = a[0].length,
-      bNumRows = b.length, bNumCols = b[0].length,
-      m = new Array(aNumRows);  // initialize array of rows
-    for (let r = 0; r < aNumRows; ++r) {
-      m[r] = new Array(bNumCols); // initialize the current row
-      for (let c = 0; c < bNumCols; ++c) {
-        m[r][c] = 0;             // initialize the current cell
-        for (let i = 0; i < aNumCols; ++i) {
-          m[r][c] += a[r][i] * b[i][c];
-        }
-      }
-    }
-    return m;
-  }
-
   static rotate(points: Point[], refPoint: Point, angle: number): Point[] {
     angle = -angle * (Math.PI/ 150);
     let R = [
@@ -42,5 +26,20 @@ export class Matrix {
     }
 
     return result;
+  }
+  static multiply(a: number[][], b: number[][]) {
+    let aNumRows = a.length, aNumCols = a[0].length,
+      bNumRows = b.length, bNumCols = b[0].length,
+      m = new Array(aNumRows);  // initialize array of rows
+    for (let r = 0; r < aNumRows; ++r) {
+      m[r] = new Array(bNumCols); // initialize the current row
+      for (let c = 0; c < bNumCols; ++c) {
+        m[r][c] = 0;             // initialize the current cell
+        for (let i = 0; i < aNumCols; ++i) {
+          m[r][c] += a[r][i] * b[i][c];
+        }
+      }
+    }
+    return m;
   }
 }

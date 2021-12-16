@@ -20,7 +20,10 @@ export class QBezier extends Command {
     this._cPoint = point;
   }
 
-  set position(position: Point) {
+  override get position(): Point {
+    return super.position;
+  }
+  override set position(position: Point) {
     this._point.x = position.x;
     this._point.y = position.y;
 
@@ -28,6 +31,12 @@ export class QBezier extends Command {
     this._cPoint.y = position.y;
   }
   get copy(): QBezier {
-    return new QBezier(this._cPoint, this._point);
+    return new QBezier({
+      x: this._cPoint.x,
+      y: this._cPoint.y
+    }, {
+      x: this._point.x,
+      y: this._point.y
+    });
   }
 }

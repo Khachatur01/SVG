@@ -43,12 +43,14 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   appendChild(xElement: XElement): void {
+    this.refPoint = xElement.refPoint;
+    this.rotate(xElement.angle);
+
     this.svgElements.appendChild(xElement.SVG);
     this._children.add(xElement);
     this.fit();
     this.focus();
     this.fixPosition();
-    this.refPoint = xElement.refPoint;
   }
 
   removeChild(xElement: XElement): void {
@@ -69,6 +71,7 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.forEach((child: XElement) => parent?.appendChild(child.SVG));
     this._children.clear();
     this.blur();
+    this.rotate(0);
   }
 
   remove() {
@@ -102,13 +105,6 @@ export class XFocus implements XDraggable, XResizeable {
     this.fit();
   }
 
-  get refPoint(): Point {
-    return this.boundingBox.refPoint;
-  }
-  set refPoint(point: Point) {
-    this.boundingBox.refPoint = point;
-    this._children.forEach((child: XElement) => child.refPoint = point);
-  }
   private set refPointByRect(rect: Rect) {
     let dw = 1;
     let dh = 1;
@@ -136,11 +132,13 @@ export class XFocus implements XDraggable, XResizeable {
   }
   setSize(rect: Rect): void {
     if (this._children.size == 1) {
-      this._children.forEach(child => child.setSize(rect));
       this.refPointByRect = rect;
+      this._children.forEach(child => {
+        child.setSize(rect);
+        child.refPoint = this.refPoint;
+      });
     } else {
-      /* FIXME */
-      this._children.forEach(child => child.setSize(rect));
+      /* TODO */
     }
     this.fit()
   }
@@ -215,9 +213,20 @@ export class XFocus implements XDraggable, XResizeable {
     return this._children.has(xElement);
   }
 
-  rotate(refPoint: Point, angle: number) {
-    this._children.forEach(child => child.rotate(refPoint, angle));
-    this.boundingBox.rotate(refPoint, angle);
+  get refPoint(): Point {
+    return this.boundingBox.refPoint;
+  }
+  set refPoint(point: Point) {
+    this._children.forEach(child => child.refPoint = point);
+    this.boundingBox.refPoint = point;
+  }
+
+  get angle(): number {
+    return this.boundingBox.angle;
+  }
+  rotate(angle: number) {
+    this._children.forEach(child => child.rotate(angle));
+    this.boundingBox.rotate(angle);
   }
 
   fit(): void {

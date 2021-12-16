@@ -5,12 +5,17 @@ export class LineTo extends Command {
   get command(): string {
     return "L " + this._point.x + " " + this._point.y;
   }
-  set position(position: Point) {
+  override get position(): Point {
+    return super.position;
+  }
+  override set position(position: Point) {
     this._point.x = position.x;
     this._point.y = position.y;
   }
   get copy(): LineTo {
-    let command: LineTo = new LineTo(this._point);
-    return command;
+    return new LineTo({
+      x: this._point.x,
+      y: this._point.y
+    });
   }
 }

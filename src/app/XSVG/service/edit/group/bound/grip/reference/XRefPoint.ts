@@ -1,9 +1,14 @@
-import {XEllipse} from "../../../../../../element/shape/XEllipse";
-import {Point} from "../../../../../../model/Point";
 import {XSVG} from "../../../../../../XSVG";
+import {MoveTo} from "../../../../../../model/path/point/MoveTo";
+import {Arc} from "../../../../../../model/path/curve/arc/Arc";
+import {LineTo} from "../../../../../../model/path/line/LineTo";
+import {XPath} from "../../../../../../element/path/XPath";
+import {Point} from "../../../../../../model/Point";
 
-export class XRefPoint extends XEllipse {
+export class XRefPoint extends XPath {
   private container: XSVG;
+  private readonly _r: number = 5; /* radius */
+  private readonly _center: Point = {x: 0, y: 0};
 
   private moving: boolean = false;
   private _start = this.start.bind(this);
@@ -11,14 +16,17 @@ export class XRefPoint extends XEllipse {
   private _end = this.end.bind(this);
 
   constructor(container: XSVG, x: number = 0, y: number = 0) {
-    super(x - 5, y - 5, 5, 5);
+    super();
     this.container = container;
     this.removeOverEvent();
     this.setStyle({
       fill: "transparent",
       stroke: "#002fff",
-      "stroke-width": 1,
+      "stroke-width": 0.7,
     });
+
+    this._center = {x: x, y: y};
+    this.drawPoint(this._center);
 
     this.svgElement.style.display = "none";
     this.svgElement.style.cursor = "move";
@@ -26,18 +34,37 @@ export class XRefPoint extends XEllipse {
   }
 
   override get position(): Point {
-    let position = super.position;
-    return {
-      x: position.x + 5,
-      y: position.y + 5
-    };
+    return this._center;
+  }
+  override set position(position: Point) {
+    this.drawPoint(position);
   }
 
-  override set position(position: Point) {
-    super.position = {
-      x: position.x - 5,
-      y: position.y - 5
-    };
+  get r(): number {
+    return this._r;
+  }
+
+  override fixPosition() {
+    this._lastPosition = this._center;
+  }
+
+  private drawPoint(point: Point): void {
+    let x = point.x;
+    let y = point.y;
+    this.path.setAll([
+      new MoveTo({x: x - this._r, y: y}),
+      new Arc(this._r, this._r, 0, 0, 1, {x: x, y: y - this._r}),
+      new Arc(this._r, this._r, 0, 0, 1, {x: x + this._r, y: y}),
+      new Arc(this._r, this._r, 0, 0, 1, {x: x, y: y + this._r}),
+      new Arc(this._r, this._r, 0, 0, 1, {x: x - this._r, y: y}),
+      new MoveTo({x: x - this._r - 2, y: y}),
+      new LineTo({x: x + this._r + 2, y: y}),
+      new MoveTo({x: x, y: y - this._r - 2}),
+      new LineTo({x: x, y: y + this._r + 2})
+    ]);
+    this.setAttr({
+      d: this.path.toString()
+    });
   }
 
   show() {
@@ -51,6 +78,7 @@ export class XRefPoint extends XEllipse {
     this.moving = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
+    this.fixPosition();
     this.container.HTML.addEventListener("mousemove", this._move);
   }
   private move(event: MouseEvent) {
@@ -59,7 +87,6 @@ export class XRefPoint extends XEllipse {
     let x = event.clientX - containerRect.left;
     let y = event.clientY - containerRect.top;
 
-    this.position = {x: x, y: y};
     this.container.focused.refPoint = {x: x, y: y};
   }
   private end() {
