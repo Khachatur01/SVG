@@ -50,9 +50,7 @@ export class XRefPoint extends XPath {
     let y = point.y;
     this.path.setAll([
       new MoveTo({x: x - this._r, y: y}),
-      new Arc(this._r, this._r, 0, 0, 1, {x: x, y: y - this._r}),
       new Arc(this._r, this._r, 0, 0, 1, {x: x + this._r, y: y}),
-      new Arc(this._r, this._r, 0, 0, 1, {x: x, y: y + this._r}),
       new Arc(this._r, this._r, 0, 0, 1, {x: x - this._r, y: y}),
       new MoveTo({x: x - this._r - 2, y: y}),
       new LineTo({x: x + this._r + 2, y: y}),

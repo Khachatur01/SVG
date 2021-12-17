@@ -57,7 +57,6 @@ export class XBoundingBox extends XRectangle {
     );
   }
 
-
   get grips(): XGrip[] {
     return this._grips;
   }

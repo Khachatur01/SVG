@@ -114,7 +114,7 @@ export class XFocus implements XDraggable, XResizeable {
     if(this._lastSize.height != 0)
       dh = rect.height / this._lastSize.height;
 
-    this.boundingBox.refPoint = {
+    this.refPoint = {
       x: rect.x + Math.abs(this.boundingBox.lastRefPoint.x - rect.x) * dw,
       y: rect.y + Math.abs(this.boundingBox.lastRefPoint.y - rect.y) * dh
     };

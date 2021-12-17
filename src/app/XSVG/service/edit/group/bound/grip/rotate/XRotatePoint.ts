@@ -58,6 +58,7 @@ export class XRotatePoint extends XEllipse {
     let containerRect = this.container.HTML.getBoundingClientRect();
     let x = event.clientX - containerRect.left;
     let y = event.clientY - containerRect.top;
+
     this.dAngle = Angle.fromPoints(
       {x: 0, y: this.container.focused.refPoint.y},
       this.container.focused.refPoint,
@@ -71,13 +72,18 @@ export class XRotatePoint extends XEllipse {
     let x = event.clientX - containerRect.left;
     let y = event.clientY - containerRect.top;
 
-    this.container.focused.rotate(
-      Angle.fromPoints(
-        {x: 0, y: this.container.focused.refPoint.y},
-        this.container.focused.refPoint,
-        {x: x, y: y}
-      ) - this.dAngle
+    let angle = Angle.fromPoints(
+      {x: 0, y: this.container.focused.refPoint.y},
+      this.container.focused.refPoint,
+      {x: x, y: y}
     );
+
+    angle -= this.dAngle;
+
+    if(angle < 0)
+      angle += 360;
+
+    this.container.focused.rotate(angle);
   }
   private end() {
     if(!this.rotating) return;
