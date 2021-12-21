@@ -44,22 +44,23 @@ export class XBoundingBox extends XRectangle {
     this.xRotatePoint = new XRotatePoint(container);
     this._grips.push(
       new NWGrip(container),
-      new  NGrip(container),
+      new NGrip(container),
 
       new NEGrip(container),
-      new  EGrip(container),
+      new EGrip(container),
 
       new SEGrip(container),
-      new  SGrip(container),
+      new SGrip(container),
 
       new SWGrip(container),
-      new  WGrip(container)
+      new WGrip(container)
     );
   }
 
   get grips(): XGrip[] {
     return this._grips;
   }
+
   get refPointSVG(): SVGElement {
     return this.xRefPoint.SVG;
   }
@@ -67,6 +68,7 @@ export class XBoundingBox extends XRectangle {
   fixRefPoint() {
     this.xRefPoint.fixPosition();
   }
+
   get lastRefPoint(): Point {
     return this.xRefPoint.lastRect;
   }
@@ -77,27 +79,29 @@ export class XBoundingBox extends XRectangle {
 
   singleFocus() {
     this.svgElement.style.display = "block";
-    for(let grip of this._grips) {
+    for (let grip of this._grips) {
       grip.show();
     }
     this.xRefPoint.show();
     this.xRotatePoint.show();
   }
+
   multipleFocus() {
     this.svgElement.style.display = "block";
     /* more effective than with one loop and condition */
-    for(let i = 0; i < this._grips.length; i += 2) {
+    for (let i = 0; i < this._grips.length; i += 2) {
       this._grips[i].show();
     }
-    for(let i = 1; i < this._grips.length; i += 2) {
+    for (let i = 1; i < this._grips.length; i += 2) {
       this._grips[i].hide();
     }
     this.xRefPoint.show();
     this.xRotatePoint.show();
   }
+
   blur() {
     this.svgElement.style.display = "none";
-    for(let grip of this._grips) {
+    for (let grip of this._grips) {
       grip.hide();
     }
     this.xRefPoint.hide();
@@ -131,8 +135,8 @@ export class XBoundingBox extends XRectangle {
     points[3].x = rect.x;
     points[3].y = rect.y + rect.height;
 
-    if(!points || !this._grips) return;
-    for(let grip of this._grips)
+    if (!points || !this._grips) return;
+    for (let grip of this._grips)
       grip.setPosition(points);
 
     this.xRotatePoint.position = {

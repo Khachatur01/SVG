@@ -32,7 +32,7 @@ export class XDragTool extends XTool {
   private onDrag(event: MouseEvent) {
     let newX = this.elementStartPos.x + event.clientX - this.mouseStartPos.x;
     let newY = this.elementStartPos.y + event.clientY - this.mouseStartPos.y;
-    this.container.focused.position = {x: newX, y: newY} as Point;
+    this.container.focused.position = {x: newX, y: newY};
     this.container.focused.highlight();
   }
   private onDragEnd(){
