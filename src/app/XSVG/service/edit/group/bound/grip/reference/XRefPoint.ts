@@ -10,6 +10,8 @@ export class XRefPoint extends XPath {
   private readonly _r: number = 5; /* radius */
   private _center: Point = {x: 0, y: 0};
 
+  private lastPoint: Point = {x: 0, y: 0};
+
   private moving: boolean = false;
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
@@ -78,13 +80,15 @@ export class XRefPoint extends XPath {
   private move(event: MouseEvent) {
     let containerRect = this.container.HTML.getBoundingClientRect();
 
-    let x = event.clientX - containerRect.left;
-    let y = event.clientY - containerRect.top;
+    this.lastPoint.x = event.clientX - containerRect.left;
+    this.lastPoint.y = event.clientY - containerRect.top;
 
-    this.container.focused.refPoint = {x: x, y: y};
+    this.container.focused.refPointView = {x: this.lastPoint.x, y: this.lastPoint.y};
   }
   private end() {
     if(!this.moving) return;
+
+    this.container.focused.refPoint = {x: this.lastPoint.x, y: this.lastPoint.y};
 
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.container.activeTool.on();

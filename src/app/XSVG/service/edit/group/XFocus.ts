@@ -89,6 +89,19 @@ export class XFocus implements XDraggable, XResizeable {
   get position(): Point {
     return this.boundingBox.position;
   }
+
+  correct(delta: Point): void {
+    let bboxPosition = this.boundingBox.position;
+    this.boundingBox.position = {
+      x: bboxPosition.x + delta.x,
+      y: bboxPosition.y + delta.y
+    };
+
+    this._children.forEach((child: XElement) => {
+      child.position = delta;
+    });
+  }
+
   set position(position: Point) {
     this.boundingBox.position = position;
 
@@ -98,10 +111,13 @@ export class XFocus implements XDraggable, XResizeable {
         y: position.y - this._lastPosition.y
       };
     });
-    this.refPoint = {
+
+    let refPoint = {
       x: this.boundingBox.lastRefPoint.x + position.x - this._lastPosition.x,
       y: this.boundingBox.lastRefPoint.y + position.y - this._lastPosition.y
-    }
+    };
+    this.refPoint = refPoint;
+    this.refPointView = refPoint;
     this.fit();
   }
 
@@ -114,17 +130,21 @@ export class XFocus implements XDraggable, XResizeable {
     if(this._lastSize.height != 0)
       dh = rect.height / this._lastSize.height;
 
-    this.refPoint = {
+    let refPoint = {
       x: rect.x + Math.abs(this.boundingBox.lastRefPoint.x - rect.x) * dw,
       y: rect.y + Math.abs(this.boundingBox.lastRefPoint.y - rect.y) * dh
     };
+    this.refPoint = refPoint;
+    this.refPointView = refPoint;
   }
 
   centerRefPoint() {
-    this.boundingBox.refPoint = {
+    let refPoint = {
       x: this._lastPosition.x + this._lastSize.width / 2,
       y: this._lastPosition.y + this._lastSize.height / 2
-    }
+    };
+    this.boundingBox.refPoint = refPoint;
+    this.boundingBox.refPointView = refPoint;
   }
 
   get size(): Size {
@@ -219,6 +239,11 @@ export class XFocus implements XDraggable, XResizeable {
   set refPoint(point: Point) {
     this._children.forEach(child => child.refPoint = point);
     this.boundingBox.refPoint = point;
+
+
+  }
+  set refPointView(point: Point) {
+    this.boundingBox.refPointView = point;
   }
 
   get angle(): number {

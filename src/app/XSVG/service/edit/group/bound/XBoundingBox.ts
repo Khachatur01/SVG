@@ -149,9 +149,11 @@ export class XBoundingBox extends XRectangle {
     super.refPoint = refPoint;
     this._grips.forEach((grip: XRectangle) => grip.refPoint = refPoint);
     this.xRotatePoint.refPoint = refPoint;
-    this.xRefPoint.refPoint = refPoint;
+  }
 
-    this.xRefPoint.position = refPoint
+  set refPointView(refPoint: Point) {
+    this.xRefPoint.refPoint = refPoint;
+    this.xRefPoint.position = refPoint;
   }
 
   override rotate(angle: number) {
