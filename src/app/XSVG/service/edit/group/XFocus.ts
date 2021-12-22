@@ -129,6 +129,7 @@ export class XFocus implements XDraggable, XResizeable {
     };
     this.refPoint = refPoint;
     this.refPointView = refPoint;
+    this.refPointRefPoint = refPoint
     this.fit();
   }
 

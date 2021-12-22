@@ -68,6 +68,7 @@ export abstract class XGrip extends XRectangle {
     if(!this.resizing) return;
 
     this.container.focused.refPoint = this._lastRefPoint;
+    this.container.focused.refPointRefPoint = this._lastRefPoint;
 
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.container.activeTool.on();
