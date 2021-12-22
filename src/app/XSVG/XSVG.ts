@@ -4,6 +4,7 @@ import {XElement} from "./element/XElement";
 import {XFocus} from "./service/edit/group/XFocus";
 import {XSelectTool} from "./service/tool/select/XSelectTool";
 import {XTool} from "./service/tool/XTool";
+import {Rect} from "./model/Rect";
 
 export class XSVG {
   private readonly container: HTMLElement;

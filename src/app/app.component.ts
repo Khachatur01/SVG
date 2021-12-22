@@ -1,6 +1,7 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {XSVG} from "./XSVG/XSVG";
 import {Tool} from "./XSVG/dataSource/Tool";
+import {Rect} from "./XSVG/model/Rect";
 
 @Component({
   selector: 'app-root',
@@ -80,10 +81,29 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
+  showCoordinates(containerId: string, labelId: string, mask: string) { /* x: {x} y: {y} ... replace {x} to x coordinate and {y} to y*/
+    let container = document.getElementById(containerId);
+    let label = document.getElementById(labelId);
+    if(!container) return;
+
+    let containerRect: Rect = container.getBoundingClientRect();
+
+    container.addEventListener("mousemove", (event) => {
+      let text = mask
+          .replace("{x}", (event.clientX - containerRect.x + window.scrollX) + "")
+          .replace("{y}", (event.clientY - containerRect.y + window.scrollY) + "");
+
+      if(label)
+        label.innerHTML = text;
+    });
+  }
+
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer");
     window.addEventListener("keydown", this.keyDown.bind(this));
     window.addEventListener("keyup", this.keyUp.bind(this));
+
+    this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
   }
 
 }

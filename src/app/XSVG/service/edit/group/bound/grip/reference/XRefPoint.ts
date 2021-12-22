@@ -35,6 +35,10 @@ export class XRefPoint extends XPath {
     this.on();
   }
 
+  set lastRefPoint(refPoint: Point) {
+    this._lastPosition = refPoint;
+  }
+
   override get position(): Point {
     return this._center;
   }

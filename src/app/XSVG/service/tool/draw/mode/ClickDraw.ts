@@ -1,6 +1,7 @@
 import {XDrawable} from "../XDrawable";
 import {XSVG} from "../../../../XSVG";
 import {XPointed} from "../../../../element/type/XPointed";
+import {Point} from "../../../../model/Point";
 
 export abstract class ClickDraw implements XDrawable {
   private container: XSVG | null = null;
@@ -54,11 +55,13 @@ export abstract class ClickDraw implements XDrawable {
     if (this.drawableElement.isComplete()) {
       this.drawableElement.removePoint(-1);
       this.container.drawTool.drawingEnd();
-      this.container?.focus(this.drawableElement);
-      this.drawableElement.fixRect();
+
+      let center: Point = this.drawableElement.center;
+      this.drawableElement.refPoint = center;
+      this.container.focused.lastRefPoint = center;
+
+      this.container.focus(this.drawableElement);
       this.container.focused.fixRect();
-      this.drawableElement.centerRefPoint();
-      this.container.focused.centerRefPoint();
     } else {
       this.container.remove(this.drawableElement);
     }

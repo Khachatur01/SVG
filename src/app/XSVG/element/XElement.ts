@@ -31,6 +31,16 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract set position(position: Point);
   abstract get points(): Point[];
 
+  get center(): Point {
+    let position = this.position;
+    let size = this.size;
+
+    return {
+      x: position.x + size.width / 2,
+      y: position.y + size.height / 2
+    }
+  }
+
   get refPoint(): Point {
     return this._refPoint;
   }

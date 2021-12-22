@@ -69,6 +69,9 @@ export class XBoundingBox extends XRectangle {
     this.xRefPoint.fixPosition();
   }
 
+  set lastRefPoint(refPoint: Point) {
+    this.xRefPoint.lastRefPoint = refPoint;
+  }
   get lastRefPoint(): Point {
     return this.xRefPoint.lastRect;
   }

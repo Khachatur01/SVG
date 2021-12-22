@@ -6,6 +6,7 @@ import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
 import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
+import {Matrix} from "../../math/Matrix";
 
 export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
@@ -43,14 +44,20 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   appendChild(xElement: XElement): void {
-    this.refPoint = xElement.refPoint;
-    this.rotate(xElement.angle);
-
     this.svgElements.appendChild(xElement.SVG);
     this._children.add(xElement);
     this.fit();
     this.focus();
-    this.fixPosition();
+
+    if(this._children.size == 1) {
+      this.refPoint = xElement.refPoint;
+      this.refPointView = xElement.refPoint;
+      this.rotate(xElement.angle);
+    } else {
+      this.fixRect();
+      this.refPoint = this.center;
+      this.refPointView = this.center;
+    }
   }
 
   removeChild(xElement: XElement): void {
@@ -58,12 +65,15 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.delete(xElement);
     this.fit();
 
-    if(this._children.size == 0)
+    if (this._children.size == 0) {
       this.blur();
-    else
+    } else {
+      this.fixRect();
       this.focus();
+      this.refPoint = this.center;
+      this.refPointView = this.center;
+    }
     this.fixPosition();
-    this.centerRefPoint();
   }
 
   clear() {
@@ -139,13 +149,11 @@ export class XFocus implements XDraggable, XResizeable {
     this.refPointView = refPoint;
   }
 
-  centerRefPoint() {
-    let refPoint = {
+  get center(): Point {
+    return {
       x: this._lastPosition.x + this._lastSize.width / 2,
       y: this._lastPosition.y + this._lastSize.height / 2
     };
-    this.boundingBox.refPoint = refPoint;
-    this.boundingBox.refPointView = refPoint;
   }
 
   get size(): Size {
@@ -207,6 +215,13 @@ export class XFocus implements XDraggable, XResizeable {
 
     return this.boundingBox.boundingRect;
   }
+
+  set lastRefPoint(refPoint: Point) {
+    this.boundingBox.lastRefPoint = refPoint;
+  }
+  get lastRefPoint(): Point {
+    return this.boundingBox.lastRefPoint;
+  }
   get lastRect(): Rect {
     return {
       x: this._lastPosition.x,
@@ -240,6 +255,12 @@ export class XFocus implements XDraggable, XResizeable {
   set refPoint(point: Point) {
     this._children.forEach(child => child.refPoint = point);
     this.boundingBox.refPoint = point;
+
+    let rotatedRefPoint = Matrix.rotate(
+      [point],
+      this.lastRefPoint,
+      -this.angle
+    )[0];
 
 
   }
