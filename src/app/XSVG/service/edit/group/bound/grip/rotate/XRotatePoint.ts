@@ -64,7 +64,6 @@ export class XRotatePoint extends XEllipse {
       this.container.focused.refPoint,
       {x: x, y: y}
     ) - this.container.focused.angle;
-
   }
   private move(event: MouseEvent) {
     let containerRect = this.container.HTML.getBoundingClientRect();

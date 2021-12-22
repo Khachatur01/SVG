@@ -23,12 +23,13 @@ export class SEGrip extends XGrip {
     let width = event.clientX - containerRect.x - this.container.focused.lastRect.x;
     let height = event.clientY - containerRect.y - this.container.focused.lastRect.y;
 
-    this.container.focused.setSize({
+    this._lastResize = {
       x: this.container.focused.lastRect.x,
       y: this.container.focused.lastRect.y,
       width: width,
       height: height
-    });
+    };
+    this.container.focused.setSize(this._lastResize);
   }
 
   protected onEnd(): void {

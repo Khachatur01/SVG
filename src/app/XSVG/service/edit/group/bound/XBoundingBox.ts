@@ -159,8 +159,11 @@ export class XBoundingBox extends XRectangle {
   }
 
   set refPointView(refPoint: Point) {
-    this.xRefPoint.refPoint = refPoint;
     this.xRefPoint.position = refPoint;
+  }
+
+  set refPointRefPoint(refPoint: Point) {
+    this.xRefPoint.refPoint = refPoint;
   }
 
   override rotate(angle: number) {

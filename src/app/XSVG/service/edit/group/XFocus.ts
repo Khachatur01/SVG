@@ -132,7 +132,7 @@ export class XFocus implements XDraggable, XResizeable {
     this.fit();
   }
 
-  private set refPointByRect(rect: Rect) {
+  getRefPointByRect(rect: Rect): Point {
     let dw = 1;
     let dh = 1;
 
@@ -141,12 +141,10 @@ export class XFocus implements XDraggable, XResizeable {
     if(this._lastSize.height != 0)
       dh = rect.height / this._lastSize.height;
 
-    let refPoint = {
+    return  {
       x: rect.x + Math.abs(this.boundingBox.lastRefPoint.x - rect.x) * dw,
       y: rect.y + Math.abs(this.boundingBox.lastRefPoint.y - rect.y) * dh
     };
-    this.refPoint = refPoint;
-    this.refPointView = refPoint;
   }
 
   get center(): Point {
@@ -161,7 +159,6 @@ export class XFocus implements XDraggable, XResizeable {
   }
   setSize(rect: Rect): void {
     if (this._children.size == 1) {
-      this.refPointByRect = rect;
       this._children.forEach(child => {
         child.setSize(rect);
         child.refPoint = this.refPoint;
@@ -266,6 +263,10 @@ export class XFocus implements XDraggable, XResizeable {
   }
   set refPointView(point: Point) {
     this.boundingBox.refPointView = point;
+  }
+
+  set refPointRefPoint(point: Point) {
+    this.boundingBox.refPointRefPoint = point;
   }
 
   get angle(): number {

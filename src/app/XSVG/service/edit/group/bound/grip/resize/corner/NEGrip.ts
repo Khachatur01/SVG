@@ -2,7 +2,6 @@ import {XGrip} from "../XGrip";
 import {Point} from "../../../../../../../model/Point";
 import {XSVG} from "../../../../../../../XSVG";
 import {Rect} from "../../../../../../../model/Rect";
-import {Matrix} from "../../../../../../math/Matrix";
 
 export class NEGrip extends XGrip {
   constructor(container: XSVG) {
@@ -25,12 +24,13 @@ export class NEGrip extends XGrip {
     let width = (event.clientX - containerRect.x) - (elementRect.x);
     let height = event.clientY - containerRect.y - (elementRect.y + elementRect.height);
 
-    this.container.focused.setSize({
+    this._lastResize = {
       x: elementRect.x,
       y: elementRect.y + elementRect.height,
       width: width,
       height: height
-    });
+    };
+    this.container.focused.setSize(this._lastResize);
   }
 
   protected onEnd(): void {

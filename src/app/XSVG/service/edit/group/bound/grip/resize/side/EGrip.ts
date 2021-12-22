@@ -23,12 +23,13 @@ export class EGrip extends XGrip {
   protected onMove(containerRect: Rect, event: MouseEvent): void {
     let elementRect = this.container.focused.lastRect;
 
-    this.container.focused.setSize({
+    this._lastResize = {
       x: elementRect.x,
       y: elementRect.y,
       width: (event.clientX - containerRect.x) - (elementRect.x),
       height: elementRect.height
-    });
+    };
+    this.container.focused.setSize(this._lastResize);
   }
 
   protected onStart(): void {

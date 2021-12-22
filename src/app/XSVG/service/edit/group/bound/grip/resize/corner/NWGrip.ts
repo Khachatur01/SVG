@@ -22,12 +22,13 @@ export class NWGrip extends XGrip {
     let width = (event.clientX - containerRect.x) - (elementRect.x + elementRect.width);
     let height = (event.clientY - containerRect.y) - (elementRect.y + elementRect.height);
 
-    this.container.focused.setSize({
+    this._lastResize = {
       x: elementRect.x + elementRect.width,
       y: elementRect.y + elementRect.height,
       width: width,
       height: height
-    });
+    };
+    this.container.focused.setSize(this._lastResize);
   }
 
   protected onEnd(): void {

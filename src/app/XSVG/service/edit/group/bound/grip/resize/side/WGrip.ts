@@ -24,12 +24,13 @@ export class WGrip extends XGrip {
     let elementRect = this.container.focused.lastRect;
     let width = (event.clientX - containerRect.x) - (elementRect.x + elementRect.width);
 
-    this.container.focused.setSize({
+    this._lastResize = {
       x: elementRect.x + elementRect.width,
       y: elementRect.y,
       width: width,
       height: elementRect.height
-    });
+    };
+    this.container.focused.setSize(this._lastResize);
   }
 
   protected onStart(): void {
