@@ -2,7 +2,6 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
-import {Matrix} from "../../service/math/Matrix";
 
 export abstract class XPointed extends XElement {
   public _lastPoints: Point[] = [];
@@ -69,7 +68,7 @@ export abstract class XPointed extends XElement {
   setSize(rect: Rect): void {
     let dw = 1;
     let dh = 1;
-    
+
     if(this._lastSize.width != 0)
       dw = rect.width / this._lastSize.width;
     if(this._lastSize.height != 0)

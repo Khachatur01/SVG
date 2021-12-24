@@ -73,7 +73,10 @@ export class XBoundingBox extends XRectangle {
     this.xRefPoint.lastRefPoint = refPoint;
   }
   get lastRefPoint(): Point {
-    return this.xRefPoint.lastRect;
+    return {
+      x: this.xRefPoint.lastRect.x,
+      y: this.xRefPoint.lastRect.y
+    };
   }
 
   get rotPointSVG(): SVGElement {

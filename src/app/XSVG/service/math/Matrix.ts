@@ -2,7 +2,7 @@ import {Point} from "../../model/Point";
 
 export class Matrix {
   static rotate(points: Point[], refPoint: Point, angle: number): Point[] {
-    angle = -angle * (Math.PI/ 150);
+    angle = -angle * (Math.PI / 180);
     let R = [
       [Math.cos(angle), -Math.sin(angle)],
       [Math.sin(angle), Math.cos(angle)]

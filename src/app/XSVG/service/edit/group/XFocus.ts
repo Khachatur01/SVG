@@ -111,11 +111,11 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   correct(delta: Point): void {
-    let bboxPosition = this.boundingBox.position;
-    this.boundingBox.position = {
-      x: bboxPosition.x + delta.x,
-      y: bboxPosition.y + delta.y
-    };
+    // let bboxPosition = this.boundingBox.position;
+    // this.boundingBox.position = {
+    //   x: bboxPosition.x + delta.x,
+    //   y: bboxPosition.y + delta.y
+    // };
 
     this._children.forEach((child: XElement) => {
       child.position = delta;
@@ -124,8 +124,6 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   set position(position: Point) {
-    this.boundingBox.position = position;
-
     this._children.forEach((child: XElement) => {
       child.position = {
         x: position.x - this._lastPosition.x,
@@ -265,11 +263,27 @@ export class XFocus implements XDraggable, XResizeable {
     this.boundingBox.refPoint = point;
 
     let rotatedRefPoint = Matrix.rotate(
-      [point],
-      this.lastRefPoint,
-      -this.angle
+      [this.lastRefPoint],
+      point,
+      this.angle
     )[0];
 
+    let delta = {
+        x: rotatedRefPoint.x - this.lastRefPoint.x,
+        y: rotatedRefPoint.y - this.lastRefPoint.y
+      };
+
+
+    console.log(
+      " lastRefPoint: \t\t",  this.lastRefPoint, "\n",
+      "new refPoint: \t\t",   point, "\n",
+      "rotatedRefPoint: \t",  rotatedRefPoint, "\n",
+      "delta: \t\t",          delta, "\n",
+      "angle: \t\t",          this.angle, "\n"
+    );
+
+    if(this.angle != 0)
+      this.correct(delta);
 
   }
   set refPointView(point: Point) {
