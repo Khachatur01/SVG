@@ -16,8 +16,8 @@ export abstract class XElement implements XResizeable, XDraggable {
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
 
-  private _angle: number = 0;
-  private _refPoint: Point = {x: 0, y: 0};
+  protected _angle: number = 0;
+  protected _refPoint: Point = {x: 0, y: 0};
 
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
 

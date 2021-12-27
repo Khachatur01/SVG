@@ -15,6 +15,7 @@ export class XFocus implements XDraggable, XResizeable {
   public readonly boundingBox: XBoundingBox;
   private readonly svgGroup: SVGGElement;
   private readonly svgElements: SVGGElement;
+  private readonly svgBounding: SVGGElement;
 
   private _lastPosition: Point = {x: 0, y: 0};
   private _lastSize: Size = {width: 0, height: 0};
@@ -24,16 +25,13 @@ export class XFocus implements XDraggable, XResizeable {
 
     this.boundingBox = new XBoundingBox(this.container)
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
+    this.svgGroup.id = "focus";
     this.svgElements = document.createElementNS(XElement.svgURI, "g");
+    this.svgElements.id = "elements";
+    this.svgBounding = this.boundingBox.group;
 
     this.svgGroup.appendChild(this.svgElements);
-    this.svgGroup.appendChild(this.boundingBox.SVG);
-
-    for(let grip of this.boundingBox.grips) {
-      this.svgGroup.appendChild(grip.SVG);
-    }
-    this.svgGroup.appendChild(this.boundingBox.refPointSVG);
-    this.svgGroup.appendChild(this.boundingBox.rotPointSVG);
+    this.svgGroup.appendChild(this.svgBounding);
   }
 
   get SVG(): SVGGElement {
@@ -52,13 +50,11 @@ export class XFocus implements XDraggable, XResizeable {
     if(this._children.size == 1) {
       this.refPoint = xElement.refPoint;
       this.refPointView = xElement.refPoint;
-      this.refPointRefPoint = xElement.refPoint;
       this.rotate(xElement.angle);
     } else {
       this.fixRect();
       this.refPoint = this.center;
       this.refPointView = this.center;
-      this.refPointRefPoint = this.center;
     }
   }
 
@@ -73,7 +69,6 @@ export class XFocus implements XDraggable, XResizeable {
       this._children.forEach((child: XElement) => {
         this.refPoint = child.refPoint;
         this.refPointView = child.refPoint;
-        this.refPointRefPoint = child.refPoint;
         this.rotate(child.angle);
       });
     } else {
@@ -81,7 +76,6 @@ export class XFocus implements XDraggable, XResizeable {
       this.focus();
       this.refPoint = this.center;
       this.refPointView = this.center;
-      this.refPointRefPoint = this.center;
     }
     this.fixPosition();
   }
@@ -111,12 +105,6 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   correct(delta: Point): void {
-    // let bboxPosition = this.boundingBox.position;
-    // this.boundingBox.position = {
-    //   x: bboxPosition.x + delta.x,
-    //   y: bboxPosition.y + delta.y
-    // };
-
     this._children.forEach((child: XElement) => {
       child.position = delta;
     });
@@ -137,7 +125,6 @@ export class XFocus implements XDraggable, XResizeable {
     };
     this.refPoint = refPoint;
     this.refPointView = refPoint;
-    this.refPointRefPoint = refPoint
     this.fit();
   }
 
@@ -244,11 +231,9 @@ export class XFocus implements XDraggable, XResizeable {
   }
   fixPosition(): void {
     this._lastPosition = this.position;
-    this.boundingBox.fixRefPoint();
   }
   fixSize(): void {
     this._lastSize = this.size;
-    this.boundingBox.fixRefPoint();
   }
 
   hasChild(xElement: XElement): boolean {
@@ -262,36 +247,23 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.forEach(child => child.refPoint = point);
     this.boundingBox.refPoint = point;
 
-    let rotatedRefPoint = Matrix.rotate(
-      [this.lastRefPoint],
-      point,
-      this.angle
-    )[0];
-
-    let delta = {
-        x: rotatedRefPoint.x - this.lastRefPoint.x,
-        y: rotatedRefPoint.y - this.lastRefPoint.y
-      };
-
-
-    console.log(
-      " lastRefPoint: \t\t",  this.lastRefPoint, "\n",
-      "new refPoint: \t\t",   point, "\n",
-      "rotatedRefPoint: \t",  rotatedRefPoint, "\n",
-      "delta: \t\t",          delta, "\n",
-      "angle: \t\t",          this.angle, "\n"
-    );
-
-    if(this.angle != 0)
-      this.correct(delta);
+    // let rotatedRefPoint = Matrix.rotate(
+    //   [this.lastRefPoint],
+    //   point,
+    //   this.angle
+    // )[0];
+    //
+    // let delta = {
+    //     x: rotatedRefPoint.x - this.lastRefPoint.x,
+    //     y: rotatedRefPoint.y - this.lastRefPoint.y
+    //   };
+    //
+    // if(this.angle != 0)
+    //   this.correct(delta);
 
   }
   set refPointView(point: Point) {
     this.boundingBox.refPointView = point;
-  }
-
-  set refPointRefPoint(point: Point) {
-    this.boundingBox.refPointRefPoint = point;
   }
 
   get angle(): number {

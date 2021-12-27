@@ -42,7 +42,6 @@ export abstract class MoveDraw implements XDrawable {
       let center: Point = this.drawableElement.center;
       this.drawableElement.refPoint = center;
       this.container.focused.lastRefPoint = center;
-      this.container.focused.refPointRefPoint = center;
 
       this.container.focus(this.drawableElement);
       this.container.focused.fixRect();
