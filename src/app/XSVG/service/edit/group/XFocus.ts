@@ -121,9 +121,7 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   set position(delta: Point) {
-    this._children.forEach((child: XElement) => {
-      child.position = delta;
-    });
+    this._children.forEach((child: XElement) => child.position = delta);
 
     let refPoint = {
       x: this.lastRefPoint.x + delta.x,

@@ -1,4 +1,3 @@
-import {XRectangle} from "../../../../element/shape/XRectangle";
 import {Rect} from "../../../../model/Rect";
 import {XGrip} from "./grip/resize/XGrip";
 import {NWGrip} from "./grip/resize/corner/NWGrip";
@@ -14,8 +13,9 @@ import {XSVG} from "../../../../XSVG";
 import {XRefPoint} from "./grip/reference/XRefPoint";
 import {XRotatePoint} from "./grip/rotate/XRotatePoint";
 import {XElement} from "../../../../element/XElement";
+import {XBox} from "../../../../element/shape/XBox";
 
-export class XBoundingBox extends XRectangle {
+export class XBoundingBox extends XBox {
   private container: XSVG;
   private _grips: XGrip[] = [];
   private xRefPoint: XRefPoint;

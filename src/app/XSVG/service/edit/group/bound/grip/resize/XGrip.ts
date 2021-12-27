@@ -2,8 +2,9 @@ import {Point} from "../../../../../../model/Point";
 import {XRectangle} from "../../../../../../element/shape/XRectangle";
 import {XSVG} from "../../../../../../XSVG";
 import {Rect} from "../../../../../../model/Rect";
+import {XBox} from "../../../../../../element/shape/XBox";
 
-export abstract class XGrip extends XRectangle {
+export abstract class XGrip extends XBox {
   protected container: XSVG;
   private resizing: boolean = false;
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};

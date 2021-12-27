@@ -4,7 +4,7 @@ import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
 
 export abstract class XPointed extends XElement {
-  public _lastPoints: Point[] = [];
+  protected _lastPoints: Point[] = [];
   override set points(points: Point[]) {};
   abstract pushPoint(point: Point): void;
   abstract removePoint(index: number): void;
@@ -32,11 +32,12 @@ export abstract class XPointed extends XElement {
   }
   set position(delta: Point) {
     let points = this.points;
-    let position = this.position;
 
-    for(let point of points) {
-      point.x += (delta.x - position.x + this._lastPosition.x);
-      point.y += (delta.y - position.y + this._lastPosition.y);
+    for(let i = 0; i < points.length; i++) {
+      if(!this._lastPoints[i])
+        this._lastPoints[i] = {x: 0, y: 0};
+      points[i].x = (delta.x + this._lastPoints[i].x);
+      points[i].y = (delta.y + this._lastPoints[i].y);
     }
 
     this.points = points;

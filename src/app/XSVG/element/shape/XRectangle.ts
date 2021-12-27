@@ -2,6 +2,7 @@ import {Size} from "../../model/Size";
 import {XPolygon} from "../pointed/XPolygon";
 import {Rect} from "../../model/Rect";
 import {Point} from "../../model/Point";
+import {XElement} from "../XElement";
 
 /*
 *  0_____1
