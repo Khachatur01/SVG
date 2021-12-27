@@ -19,12 +19,12 @@ export class XEllipse extends XPath {
     return super.position;
   }
 
-  override set position(position: Point) {
-    position.x += this._lastPosition.x;
-    position.y += this._lastPosition.y;
+  override set position(delta: Point) {
+    delta.x += this._lastPosition.x;
+    delta.y += this._lastPosition.y;
     let size = this.size;
 
-    this.makeEllipse(position.x, position.y, size.width / 2, size.height / 2);
+    this.makeEllipse(delta.x, delta.y, size.width / 2, size.height / 2);
   }
 
   override get size(): Size {

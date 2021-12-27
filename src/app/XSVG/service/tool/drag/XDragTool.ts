@@ -23,6 +23,7 @@ export class XDragTool extends XTool {
     this.elementStartPos = this.container.focused?.position as Point;
 
     this.container.focused.fixPosition();
+    this.container.focused.fixRefPoint();
     this.container.focused?.children.forEach((child: XElement) => {
       child.fixRect();
     });
@@ -30,8 +31,8 @@ export class XDragTool extends XTool {
     this.container.HTML.addEventListener("mousemove", this.drag);
   }
   private onDrag(event: MouseEvent) {
-    let newX = this.elementStartPos.x + event.clientX - this.mouseStartPos.x;
-    let newY = this.elementStartPos.y + event.clientY - this.mouseStartPos.y;
+    let newX = event.clientX - this.mouseStartPos.x;
+    let newY = event.clientY - this.mouseStartPos.y;
     this.container.focused.position = {x: newX, y: newY};
     this.container.focused.highlight();
   }

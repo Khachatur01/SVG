@@ -104,24 +104,32 @@ export class XFocus implements XDraggable, XResizeable {
     return this.boundingBox.position;
   }
 
-  correct(delta: Point): void {
+  correct(point: Point): void {
+    let rotatedRefPoint = Matrix.rotate(
+      [this.lastRefPoint],
+      point,
+      this.angle
+    )[0];
+
+    let delta = {
+        x: rotatedRefPoint.x - this.lastRefPoint.x,
+        y: rotatedRefPoint.y - this.lastRefPoint.y
+      };
+
     this._children.forEach((child: XElement) => {
       child.position = delta;
     });
     this.fit();
   }
 
-  set position(position: Point) {
+  set position(delta: Point) {
     this._children.forEach((child: XElement) => {
-      child.position = {
-        x: position.x - this._lastPosition.x,
-        y: position.y - this._lastPosition.y
-      };
+      child.position = delta;
     });
 
     let refPoint = {
-      x: this.boundingBox.lastRefPoint.x + position.x - this._lastPosition.x,
-      y: this.boundingBox.lastRefPoint.y + position.y - this._lastPosition.y
+      x: this.lastRefPoint.x + delta.x,
+      y: this.lastRefPoint.y + delta.y
     };
     this.refPoint = refPoint;
     this.refPointView = refPoint;
@@ -138,8 +146,8 @@ export class XFocus implements XDraggable, XResizeable {
       dh = rect.height / this._lastSize.height;
 
     return  {
-      x: rect.x + Math.abs(this.boundingBox.lastRefPoint.x - rect.x) * dw,
-      y: rect.y + Math.abs(this.boundingBox.lastRefPoint.y - rect.y) * dh
+      x: rect.x + Math.abs(this.lastRefPoint.x - rect.x) * dw,
+      y: rect.y + Math.abs(this.lastRefPoint.y - rect.y) * dh
     };
   }
 
@@ -229,6 +237,9 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.forEach(child => child.fixRect());
     this.boundingBox.fixRefPoint();
   }
+  fixRefPoint(): void {
+    this.boundingBox.fixRefPoint();
+  }
   fixPosition(): void {
     this._lastPosition = this.position;
   }
@@ -246,21 +257,6 @@ export class XFocus implements XDraggable, XResizeable {
   set refPoint(point: Point) {
     this._children.forEach(child => child.refPoint = point);
     this.boundingBox.refPoint = point;
-
-    // let rotatedRefPoint = Matrix.rotate(
-    //   [this.lastRefPoint],
-    //   point,
-    //   this.angle
-    // )[0];
-    //
-    // let delta = {
-    //     x: rotatedRefPoint.x - this.lastRefPoint.x,
-    //     y: rotatedRefPoint.y - this.lastRefPoint.y
-    //   };
-    //
-    // if(this.angle != 0)
-    //   this.correct(delta);
-
   }
   set refPointView(point: Point) {
     this.boundingBox.refPointView = point;

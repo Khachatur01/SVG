@@ -28,7 +28,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract setSize(rect: Rect): void;
   abstract isComplete(): boolean;
   abstract get position(): Point;
-  abstract set position(position: Point);
+  abstract set position(delta: Point);
   abstract get points(): Point[];
 
   get center(): Point {
