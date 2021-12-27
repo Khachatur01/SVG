@@ -24,7 +24,7 @@ export class XRefPoint extends XPath {
     this.setStyle({
       fill: "transparent",
       stroke: "#002fff",
-      "stroke-width": 0.7,
+      "stroke-width": 0.5,
     });
 
     this._center = {x: x, y: y};

@@ -38,18 +38,16 @@ export class XRotatePoint extends XPath {
   }
 
   override get position(): Point {
-    let position = super.position;
-    return {
-      x: position.x,
-      y: position.y
-    };
+    return this._center;
   }
 
   override set position(position: Point) {
+    position.y -= this._lineLength;
     super.position = {
-      x: position.x,
-      y: position.y - this._lineLength
+      x: position.x - this._center.x,
+      y: position.y - this._center.y
     };
+    this._center = position;
   }
 
   private drawPoint(point: Point): void {
