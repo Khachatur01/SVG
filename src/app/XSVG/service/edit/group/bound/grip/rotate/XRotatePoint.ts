@@ -2,8 +2,12 @@ import {XEllipse} from "../../../../../../element/shape/XEllipse";
 import {Point} from "../../../../../../model/Point";
 import {XSVG} from "../../../../../../XSVG";
 import {Angle} from "../../../../../math/Angle";
+import {XPath} from "../../../../../../element/path/XPath";
+import {MoveTo} from "../../../../../../model/path/point/MoveTo";
+import {Arc} from "../../../../../../model/path/curve/arc/Arc";
+import {LineTo} from "../../../../../../model/path/line/LineTo";
 
-export class XRotatePoint extends XEllipse {
+export class XRotatePoint extends XPath {
   private container: XSVG;
 
   private rotating: boolean = false;
@@ -11,18 +15,23 @@ export class XRotatePoint extends XEllipse {
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
 
+  private _r: number = 8;
+  private _lineLength: number = 25;
+  private _center: Point = {x: 0, y: 0};
+
   private dAngle: number = 0;
 
   constructor(container: XSVG, x: number = 0, y: number = 0) {
-    super(x - 8, y - 8, 8, 8);
+    super();
     this.container = container;
     this.removeOverEvent();
     this.setStyle({
       fill: "transparent",
       stroke: "#002fff",
-      "stroke-width": 1,
+      "stroke-width": 0.7,
     });
 
+    this.drawPoint(this._center);
     this.svgElement.style.display = "none";
     this.svgElement.style.cursor = "move";
     this.on();
@@ -31,16 +40,31 @@ export class XRotatePoint extends XEllipse {
   override get position(): Point {
     let position = super.position;
     return {
-      x: position.x + 8,
-      y: position.y + 8
+      x: position.x,
+      y: position.y
     };
   }
 
   override set position(position: Point) {
     super.position = {
-      x: position.x - 8,
-      y: position.y - 8
+      x: position.x,
+      y: position.y - this._lineLength
     };
+  }
+
+  private drawPoint(point: Point): void {
+    let x = point.x;
+    let y = point.y;
+    this.path.setAll([
+      new MoveTo({x: x - this._r, y: y}),
+      new Arc(this._r, this._r, 0, 0, 1, {x: x + this._r, y: y}),
+      new Arc(this._r, this._r, 0, 0, 1, {x: x - this._r, y: y}),
+      new MoveTo({x: x, y: y + this._r}),
+      new LineTo({x: x, y: y + this._lineLength}),
+    ]);
+    this.setAttr({
+      d: this.path.toString()
+    });
   }
 
   show() {

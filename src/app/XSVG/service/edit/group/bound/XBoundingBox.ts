@@ -62,10 +62,10 @@ export class XBoundingBox extends XRectangle {
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
     this.svgGroup.id = "bounding-box";
     this.svgGroup.appendChild(this.svgElement);
+    this.svgGroup.appendChild(this.xRotatePoint.SVG);
     for(let grip of this._grips) {
       this.svgGroup.appendChild(grip.SVG);
     }
-    this.svgGroup.appendChild(this.xRotatePoint.SVG);
     this.svgGroup.appendChild(this.xRefPoint.SVG);
   }
 
@@ -151,7 +151,7 @@ export class XBoundingBox extends XRectangle {
 
     this.xRotatePoint.position = {
       x: (points[0].x + points[1].x) / 2,
-      y: (points[0].y + points[1].y) / 2 - 20,
+      y: (points[0].y + points[1].y) / 2,
     }
   }
 
