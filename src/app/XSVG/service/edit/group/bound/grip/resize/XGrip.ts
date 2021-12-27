@@ -13,13 +13,15 @@ export abstract class XGrip extends XRectangle {
   private _end = this.end.bind(this);
 
   protected side: number = 8;
+  protected halfSide: number = 4;
+
   protected constructor(container: XSVG, cursor: string) {
     super(0, 0, 8, 8);
     this.container = container;
     this.svgElement.style.cursor = cursor;
     this.setAttr({
       fill: "white",
-      "stroke-width": 1,
+      "stroke-width": 0.8,
       stroke: "#002fff"
     });
 

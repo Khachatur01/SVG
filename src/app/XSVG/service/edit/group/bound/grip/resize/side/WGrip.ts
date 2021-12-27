@@ -12,8 +12,8 @@ export class WGrip extends XGrip {
     let x = (points[3].x + points[0].x) / 2;
     let y = (points[3].y + points[0].y) / 2;
     this.position = {
-      x: x - this.side,
-      y: y - this.side / 2
+      x: x - this.halfSide,
+      y: y - this.halfSide
     }
   }
 

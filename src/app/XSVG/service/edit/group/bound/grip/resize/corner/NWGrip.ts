@@ -10,8 +10,8 @@ export class NWGrip extends XGrip {
 
   setPosition(points: Point[]) {
     this.position = {
-      x: points[0].x - this.side,
-      y: points[0].y - this.side
+      x: points[0].x - this.halfSide,
+      y: points[0].y - this.halfSide
     }
   }
   protected onStart(): void {

@@ -20,7 +20,7 @@ export class XBoundingBox extends XRectangle {
   private _grips: XGrip[] = [];
   private xRefPoint: XRefPoint;
   private xRotatePoint: XRotatePoint;
-  private svgGroup: SVGGElement;
+  private readonly svgGroup: SVGGElement;
   private _boundingRect: Rect = {
     x: 0,
     y: 0,
@@ -34,7 +34,7 @@ export class XBoundingBox extends XRectangle {
       fill: "none",
       stroke: "#002fff",
       "stroke-width": 1,
-      "stroke-dasharray": "3 3"
+      "stroke-dasharray": "2 2"
     });
 
     this.svgElement.style.display = "none";

@@ -12,8 +12,8 @@ export class EGrip extends XGrip {
     let x = (points[2].x + points[1].x) / 2;
     let y = (points[2].y + points[1].y) / 2;
     this.position = {
-      x: x,
-      y: y - this.side / 2
+      x: x - this.halfSide,
+      y: y - this.halfSide
     }
   }
 
