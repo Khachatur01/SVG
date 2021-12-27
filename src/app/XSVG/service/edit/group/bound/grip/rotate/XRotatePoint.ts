@@ -1,4 +1,3 @@
-import {XEllipse} from "../../../../../../element/shape/XEllipse";
 import {Point} from "../../../../../../model/Point";
 import {XSVG} from "../../../../../../XSVG";
 import {Angle} from "../../../../../math/Angle";
@@ -30,6 +29,8 @@ export class XRotatePoint extends XPath {
       stroke: "#002fff",
       "stroke-width": 0.7,
     });
+
+    this._center = {x: x, y: y};
 
     this.drawPoint(this._center);
     this.svgElement.style.display = "none";
