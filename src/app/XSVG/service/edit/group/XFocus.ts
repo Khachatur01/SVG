@@ -141,7 +141,7 @@ export class XFocus implements XDraggable, XResizeable {
     if(this._lastSize.height != 0)
       dh = rect.height / this._lastSize.height;
 
-    return  {
+    return { /* FIXME */
       x: rect.x + Math.abs(this.lastRefPoint.x - rect.x) * dw,
       y: rect.y + Math.abs(this.lastRefPoint.y - rect.y) * dh
     };
@@ -159,14 +159,11 @@ export class XFocus implements XDraggable, XResizeable {
   }
   setSize(rect: Rect): void {
     if (this._children.size == 1) {
-      this._children.forEach(child => {
-        child.setSize(rect);
-        child.refPoint = this.refPoint;
-      });
+      this._children.forEach(child => child.setSize(rect));
     } else {
       /* TODO */
     }
-    this.fit()
+    this.fit();
   }
 
   get boundingRect(): Rect {
@@ -231,7 +228,6 @@ export class XFocus implements XDraggable, XResizeable {
     this._lastPosition = this.position;
     this._lastSize = this.size;
     this._children.forEach(child => child.fixRect());
-    this.boundingBox.fixRefPoint();
   }
   fixRefPoint(): void {
     this.boundingBox.fixRefPoint();

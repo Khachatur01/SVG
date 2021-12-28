@@ -10,7 +10,7 @@ export class XRefPoint extends XPath {
   private readonly _r: number = 5; /* radius */
   private _center: Point = {x: 0, y: 0};
 
-  private lastPoint: Point = {x: 0, y: 0};
+  private _lastPoint: Point = {x: 0, y: 0};
 
   private moving: boolean = false;
   private _start = this.start.bind(this);
@@ -35,12 +35,18 @@ export class XRefPoint extends XPath {
     this.on();
   }
 
+  get lastRefPoint(): Point {
+    return this._lastPosition;
+  }
   set lastRefPoint(refPoint: Point) {
     this._lastPosition = refPoint;
   }
 
   override get position(): Point {
-    return this._center;
+    return {
+      x: this._center.x,
+      y: this._center.y
+    };
   }
   override set position(position: Point) {
     this._center = position;
@@ -79,18 +85,20 @@ export class XRefPoint extends XPath {
     this.moving = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
+    this._lastPosition = this.position;
+
     this.container.HTML.addEventListener("mousemove", this._move);
   }
   private move(event: MouseEvent) {
     let containerRect = this.container.HTML.getBoundingClientRect();
 
-    this.lastPoint.x = event.clientX - containerRect.left;
-    this.lastPoint.y = event.clientY - containerRect.top;
+    this._lastPoint.x = event.clientX - containerRect.left;
+    this._lastPoint.y = event.clientY - containerRect.top;
 
-    this.container.focused.refPointView = this.lastPoint;
+    this.container.focused.refPointView = this._lastPoint;
 
-    this.container.focused.refPoint = this.lastPoint;
-    this.container.focused.correct(this.lastPoint);
+    this.container.focused.refPoint = this._lastPoint;
+    this.container.focused.correct(this._lastPoint);
   }
   private end() {
     if(!this.moving) return;

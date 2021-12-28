@@ -82,8 +82,8 @@ export class XBoundingBox extends XBox {
   }
   get lastRefPoint(): Point {
     return {
-      x: this.xRefPoint.lastRect.x,
-      y: this.xRefPoint.lastRect.y
+      x: this.xRefPoint.lastRefPoint.x,
+      y: this.xRefPoint.lastRefPoint.y
     };
   }
 
@@ -168,7 +168,7 @@ export class XBoundingBox extends XBox {
     this.xRefPoint.position = refPoint;
   }
 
-  override rotate(angle: number) {
+  override rotate(angle: number): void {
     this.svgGroup.style.transform = "rotate(" + angle + "deg)";
 
     this._angle = angle;
