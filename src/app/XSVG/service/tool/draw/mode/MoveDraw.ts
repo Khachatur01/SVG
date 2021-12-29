@@ -39,9 +39,7 @@ export abstract class MoveDraw implements XDrawable {
     if (this.drawableElement.isComplete()) {
       this.container.blur();
 
-      let center: Point = this.drawableElement.center;
-      this.drawableElement.refPoint = center;
-      // this.container.focused.lastRefPoint = center;
+      this.drawableElement.refPoint = this.drawableElement.center;
 
       this.container.focus(this.drawableElement);
       this.container.focused.fixRect();
@@ -69,6 +67,7 @@ export abstract class MoveDraw implements XDrawable {
       else
         height = averageSize;
     }
+
     xElement.setSize({
       x: this.startPos.x,
       y: this.startPos.y,

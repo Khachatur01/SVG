@@ -96,7 +96,6 @@ export class XRefPoint extends XPath {
     this._lastPoint.y = event.clientY - containerRect.top;
 
     this.container.focused.refPointView = this._lastPoint;
-
     this.container.focused.refPoint = this._lastPoint;
     this.container.focused.correct(this._lastPoint);
   }

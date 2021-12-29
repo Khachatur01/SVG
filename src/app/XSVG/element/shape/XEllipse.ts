@@ -1,69 +1,120 @@
 import {Size} from "../../model/Size";
-import {XPath} from "../path/XPath";
-import {Path} from "../../model/path/Path";
-import {MoveTo} from "../../model/path/point/MoveTo";
-import {Arc} from "../../model/path/curve/arc/Arc";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
+import {XElement} from "../XElement";
 
-export class XEllipse extends XPath {
+export class XEllipse extends XElement {
   constructor(x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
     super();
-    this.makeEllipse(x, y, rx, ry);
+    this.svgElement = document.createElementNS(XElement.svgURI, "ellipse");
+
+    this.position = {x: x, y: y};
+    this.setSize({x: x, y: y, width: rx * 2, height: ry * 2});
 
     this.setOverEvent();
     this.setDefaultStyle();
   }
 
-  override get position(): Point {
-    return super.position;
+  get points(): Point[] {
+    return [];
   }
 
-  override set position(delta: Point) {
-    delta.x += this._lastPosition.x;
-    delta.y += this._lastPosition.y;
-    let size = this.size;
+  get position(): Point {
+    let centerPos: Point = {
+      x: parseInt(this.getAttr("cx")),
+      y: parseInt(this.getAttr("cy"))
+    }
+    let radius: Size = {
+      width: parseInt(this.getAttr("rx")),
+      height: parseInt(this.getAttr("ry"))
+    }
 
-    this.makeEllipse(delta.x, delta.y, size.width / 2, size.height / 2);
+    return {
+      x: centerPos.x - radius.width,
+      y: centerPos.y - radius.height
+    };
+  }
+  set position(delta: Point) {
+    this.setAttr({
+      cx: this._lastPosition.x + this._lastSize.width / 2 + delta.x,
+      cy: this._lastPosition.y + this._lastSize.height / 2 + delta.y
+    });
   }
 
-  override get size(): Size {
-    return super.size;
-  }
-  override setSize(rect: Rect) {
-    this.makeEllipse(rect.x, rect.y, rect.width / 2, rect.height / 2);
-  }
-
-  makeEllipse(x: number, y: number, rx: number, ry: number): void {
-    let path: Path = new Path();
+  setSize(rect: Rect): void {
+    let rx = rect.width / 2;
+    let ry = rect.height / 2;
 
     /* calculate positive position and size if size is negative */
-    if(rx < 0) {
+    if(rect.width < 0) {
       rx = -rx;
-      x -= rx * 2;
+      rect.x += rect.width;
     }
-    if(ry < 0) {
+    if(rect.height < 0) {
       ry = -ry;
-      y -= ry * 2;
+      rect.y += rect.height;
     }
 
-    let points: Point[] = [
-      {x:        x,  y: ry   + y},
-      {x: rx   + x,  y:        y},
-      {x: rx*2 + x,  y: ry   + y},
-      {x: rx   + x,  y: ry*2 + y},
-      {x: x,         y: ry   + y}
-    ];
-
-    path.add(new MoveTo(points[0]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[1]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[2]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[3]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[4]));
-
-    this.path = path;
+    rect.x += rx;
+    rect.y += ry;
     this.setAttr({
-      d: path.toString()
-    })
+      cx: rect.x,
+      cy: rect.y,
+      rx: rx,
+      ry: ry
+    });
+
+  }
+
+  get size(): Size {
+    return {
+      width: parseInt(this.getAttr("rx")) * 2,
+      height: parseInt(this.getAttr("ry")) * 2
+    };
+  }
+
+  isComplete(): boolean {
+    let size: Size = this.size;
+    return size.width > 0 && size.height > 0;
   }
 }
+
+
+
+
+
+
+
+/* make ellipse from path, with 4 arcs
+   makeEllipse(x: number, y: number, rx: number, ry: number): void {
+     let path: Path = new Path();
+
+     if(rx < 0) {
+       rx = -rx;
+       x -= rx * 2;
+     }
+     if(ry < 0) {
+       ry = -ry;
+       y -= ry * 2;
+     }
+
+     let points: Point[] = [
+       {x:        x,  y: ry   + y},
+       {x: rx   + x,  y:        y},
+       {x: rx*2 + x,  y: ry   + y},
+       {x: rx   + x,  y: ry*2 + y},
+       {x: x,         y: ry   + y}
+     ];
+
+     path.add(new MoveTo(points[0]));
+     path.add(new Arc(rx, ry, 0, 0, 1, points[1]));
+     path.add(new Arc(rx, ry, 0, 0, 1, points[2]));
+     path.add(new Arc(rx, ry, 0, 0, 1, points[3]));
+     path.add(new Arc(rx, ry, 0, 0, 1, points[4]));
+
+     this.path = path;
+     this.setAttr({
+       d: path.toString()
+     })
+   }
+*/

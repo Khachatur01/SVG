@@ -105,17 +105,18 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   correct(point: Point): void {
+    /* calculate delta */
     let rotatedRefPoint = Matrix.rotate(
       [this.lastRefPoint],
       point,
       this.angle
     )[0];
-
     let delta = {
         x: rotatedRefPoint.x - this.lastRefPoint.x,
         y: rotatedRefPoint.y - this.lastRefPoint.y
       };
 
+    /* correct by delta */
     this._children.forEach((child: XElement) => child.position = delta);
     this.fit();
   }
@@ -210,9 +211,6 @@ export class XFocus implements XDraggable, XResizeable {
     return this.boundingBox.boundingRect;
   }
 
-  set lastRefPoint(refPoint: Point) {
-    this.boundingBox.lastRefPoint = refPoint;
-  }
   get lastRefPoint(): Point {
     return this.boundingBox.lastRefPoint;
   }

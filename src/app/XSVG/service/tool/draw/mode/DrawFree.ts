@@ -46,9 +46,7 @@ export class DrawFree implements XDrawable {
     if (this.drawableElement.getAttr("points").split(" ").length == 2) {
       this.container.remove(this.drawableElement);
     } else {
-      let center: Point = this.drawableElement.center;
-      this.drawableElement.refPoint = center;
-      this.container.focused.lastRefPoint = center;
+      this.drawableElement.refPoint = this.drawableElement.center;
 
       this.container.focus(this.drawableElement);
       this.container.focused.fixRect();

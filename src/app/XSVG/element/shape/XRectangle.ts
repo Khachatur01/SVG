@@ -19,12 +19,6 @@ export class XRectangle extends XPolygon {
 
     ]);
 
-    this.position = {x: x, y: y};
-    this.setSize({
-      x: x, y: y,
-      width: width, height: height
-    });
-
     this.setOverEvent();
     this.setDefaultStyle();
   }

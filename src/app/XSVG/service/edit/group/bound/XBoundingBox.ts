@@ -111,9 +111,9 @@ export class XBoundingBox extends XBox {
 
   blur() {
     this.svgElement.style.display = "none";
-    for (let grip of this._grips) {
+    for (let grip of this._grips)
       grip.hide();
-    }
+
     this.xRefPoint.hide();
     this.xRotatePoint.hide();
   }

@@ -72,7 +72,7 @@ export abstract class XGrip extends XBox {
     if(!this.resizing) return;
 
     this.container.focused.refPoint = this._lastRefPoint;
-    // this.container.focused.correct(this._lastRefPoint);
+    this.container.focused.correct(this._lastRefPoint);
 
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.container.activeTool.on();
