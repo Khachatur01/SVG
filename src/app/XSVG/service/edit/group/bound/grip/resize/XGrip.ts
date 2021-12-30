@@ -8,7 +8,6 @@ export abstract class XGrip extends XBox {
   protected container: XSVG;
   private resizing: boolean = false;
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};
-  private _lastRefPoint: Point = {x: 0, y: 0};
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
@@ -54,7 +53,7 @@ export abstract class XGrip extends XBox {
   protected abstract onMove(client: Point): void;
   protected abstract onEnd(): void;
 
-  private start(event: MouseEvent) {
+  private start() {
     this.resizing = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
@@ -72,15 +71,9 @@ export abstract class XGrip extends XBox {
     )[0];
 
     this.onMove(client);
-
-    // this._lastRefPoint = this.container.focused.getRefPointByRect(this._lastResize);
-    // this.container.focused.refPointView = this._lastRefPoint;
   }
   private end() {
     if(!this.resizing) return;
-
-    // this.container.focused.refPoint = this._lastRefPoint;
-    // this.container.focused.correct(this._lastRefPoint);
 
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.container.activeTool.on();
