@@ -49,8 +49,8 @@ export class XFocus implements XDraggable, XResizeable {
     this.focus();
 
     if(this._children.size == 1) {
-      this.refPoint = xElement.refPoint;
-      this.refPointView = xElement.refPoint;
+      this.refPoint = Object.assign({}, xElement.refPoint);
+      this.refPointView = Object.assign({}, xElement.refPoint);
       this.rotate(xElement.angle);
     } else {
       this.fixRect();
@@ -68,8 +68,8 @@ export class XFocus implements XDraggable, XResizeable {
       this.blur();
     } else if(this._children.size == 1) {
       this._children.forEach((child: XElement) => {
-        this.refPoint = child.refPoint;
-        this.refPointView = child.refPoint;
+        this.refPoint = Object.assign({}, child.refPoint);
+        this.refPointView = Object.assign({}, child.refPoint);
         this.rotate(child.angle);
       });
     } else {
@@ -132,21 +132,6 @@ export class XFocus implements XDraggable, XResizeable {
     this.refPoint = refPoint;
     this.refPointView = refPoint;
     this.fit();
-  }
-
-  getRefPointByRect(rect: Rect): Point {
-    let dw = 1;
-    let dh = 1;
-
-    if(this._lastSize.width != 0)
-      dw = rect.width / this._lastSize.width;
-    if(this._lastSize.height != 0)
-      dh = rect.height / this._lastSize.height;
-
-    return { /* FIXME */
-      x: rect.x + Math.abs(this.lastRefPoint.x - rect.x) * dw,
-      y: rect.y + Math.abs(this.lastRefPoint.y - rect.y) * dh
-    };
   }
 
   get center(): Point {

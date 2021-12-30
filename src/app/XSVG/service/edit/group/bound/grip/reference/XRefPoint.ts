@@ -96,13 +96,13 @@ export class XRefPoint extends XPath {
     this._lastPoint.x = event.clientX - containerRect.left;
     this._lastPoint.y = event.clientY - containerRect.top;
 
-    this.container.focused.refPointView = this._lastPoint;
+    this.container.focused.refPointView = Object.assign({}, this._lastPoint);
   }
   private end() {
     if(!this.moving) return;
 
-    this.container.focused.refPoint = this._lastPoint;
-    this.container.focused.correct(this._lastPoint);
+    this.container.focused.refPoint = Object.assign({}, this._lastPoint);
+    this.container.focused.correct(Object.assign({}, this._lastPoint));
 
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.container.activeTool.on();

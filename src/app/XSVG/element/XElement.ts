@@ -79,7 +79,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   setAttr(attributes: object): void {
     for (const [key, value] of Object.entries(attributes))
       if (key && value)
-        this.SVG.setAttribute(key, value + "");
+        this.SVG.setAttribute(key, "" + value);
   }
 
   setStyle(attributes: object): void {

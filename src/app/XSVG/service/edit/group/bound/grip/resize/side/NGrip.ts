@@ -16,7 +16,7 @@ export class NGrip extends XGrip {
 
   protected onMove(client: Point): void {
     let elementRect = this.container.focused.lastRect;
-    let height = client.x - (elementRect.y + elementRect.height);
+    let height = client.y - (elementRect.y + elementRect.height);
 
     this._lastResize = {
       x: elementRect.x,

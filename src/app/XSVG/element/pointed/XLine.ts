@@ -24,10 +24,10 @@ export class XLine extends XPointed {
   }
   override set points(points: Point[]) {
     this.setAttr({
-      x1: points[0].x + "",
-      y1: points[0].y + "",
-      x2: points[1].x + "",
-      y2: points[1].y + ""
+      x1: points[0].x,
+      y1: points[0].y,
+      x2: points[1].x,
+      y2: points[1].y
     });
   }
 

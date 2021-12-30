@@ -107,12 +107,14 @@ export class XBoundingBox extends XBox {
   multipleFocus() {
     this.svgElement.style.display = "block";
     /* more effective than with one loop and condition */
-    for (let i = 0; i < this._grips.length; i += 2) {
-      this._grips[i].show();
-    }
-    for (let i = 1; i < this._grips.length; i += 2) {
-      this._grips[i].hide();
-    }
+    // for (let i = 0; i < this._grips.length; i += 2) {
+    //   this._grips[i].show();
+    // }
+    // for (let i = 1; i < this._grips.length; i += 2) {
+    //   this._grips[i].hide();
+    // }
+    for(let grip of this._grips)
+      grip.hide()
     this.xRefPoint.show();
     this.xRotatePoint.show();
   }

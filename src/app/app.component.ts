@@ -14,6 +14,10 @@ export class AppComponent implements AfterViewInit {
 
   private svg:XSVG | null = null;
 
+  public select() {
+    if(!this.svg) return;
+    this.svg.selectTool.on();
+  }
   public rectangle() {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.rectangle
@@ -43,10 +47,6 @@ export class AppComponent implements AfterViewInit {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.free
     this.svg.drawTool.on();
-  }
-  public select() {
-    if(!this.svg) return;
-    this.svg.selectTool.on();
   }
 
 
