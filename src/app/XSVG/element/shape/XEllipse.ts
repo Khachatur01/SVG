@@ -16,7 +16,14 @@ export class XEllipse extends XElement {
   }
 
   get points(): Point[] {
-    return [];
+    let position: Point = this.position;
+    let size: Size = this.size;
+    return [
+      {x: position.x, y: position.y + size.height / 2},
+      {x: position.x + size.width / 2, y: position.y},
+      {x: position.x + size.width, y: position.y + size.height / 2},
+      {x: position.x + size.width / 2, y: position.y + size.height}
+    ];
   }
 
   get position(): Point {

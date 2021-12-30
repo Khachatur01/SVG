@@ -12,7 +12,7 @@ export class NEGrip extends XGrip {
     this.position = {
       x: points[1].x - this.halfSide,
       y: points[1].y - this.halfSide
-    }
+    };
   }
 
   protected onStart(): void {

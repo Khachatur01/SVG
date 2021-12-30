@@ -32,6 +32,7 @@ export class XFocus implements XDraggable, XResizeable {
 
     this.svgGroup.appendChild(this.svgElements);
     this.svgGroup.appendChild(this.svgBounding);
+    this.svgGroup.appendChild(this.boundingBox.refPointGroup);
   }
 
   get SVG(): SVGGElement {
@@ -108,14 +109,15 @@ export class XFocus implements XDraggable, XResizeable {
     /* calculate delta */
     let rotatedRefPoint = Matrix.rotate(
       [this.lastRefPoint],
-      point,
+      {x: point.x, y: point.y},
       this.angle
     )[0];
     let delta = {
-        x: rotatedRefPoint.x - this.lastRefPoint.x,
-        y: rotatedRefPoint.y - this.lastRefPoint.y
+        x: Math.round(rotatedRefPoint.x - this.lastRefPoint.x),
+        y: Math.round(rotatedRefPoint.y - this.lastRefPoint.y)
       };
 
+    console.log(delta)
     /* correct by delta */
     this._children.forEach((child: XElement) => child.position = delta);
     this.fit();

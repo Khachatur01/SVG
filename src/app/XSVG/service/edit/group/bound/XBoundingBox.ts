@@ -20,7 +20,8 @@ export class XBoundingBox extends XBox {
   private _grips: XGrip[] = [];
   private xRefPoint: XRefPoint;
   private xRotatePoint: XRotatePoint;
-  private readonly svgGroup: SVGGElement;
+  private readonly _boundingBoxGroup: SVGGElement;
+  private readonly _refPointGroup: SVGGElement;
   private _boundingRect: Rect = {
     x: 0,
     y: 0,
@@ -59,18 +60,25 @@ export class XBoundingBox extends XBox {
     );
 
     /* create svg group */
-    this.svgGroup = document.createElementNS(XElement.svgURI, "g");
-    this.svgGroup.id = "bounding-box";
-    this.svgGroup.appendChild(this.svgElement);
-    this.svgGroup.appendChild(this.xRotatePoint.SVG);
+    this._boundingBoxGroup = document.createElementNS(XElement.svgURI, "g");
+    this._boundingBoxGroup.id = "bounding-box";
+    this._boundingBoxGroup.appendChild(this.svgElement);
+    this._boundingBoxGroup.appendChild(this.xRotatePoint.SVG);
     for(let grip of this._grips) {
-      this.svgGroup.appendChild(grip.SVG);
+      this._boundingBoxGroup.appendChild(grip.SVG);
     }
-    this.svgGroup.appendChild(this.xRefPoint.SVG);
+
+    this._refPointGroup = document.createElementNS(XElement.svgURI, "g");
+    this._refPointGroup.id = "reference-point";
+    this._refPointGroup.appendChild(this.xRefPoint.SVG);
   }
 
   get group(): SVGGElement {
-    return this.svgGroup;
+    return this._boundingBoxGroup;
+  }
+
+  get refPointGroup(): SVGGElement {
+    return this._refPointGroup;
   }
 
   fixRefPoint() {
@@ -145,8 +153,8 @@ export class XBoundingBox extends XBox {
     points[3].x = rect.x;
     points[3].y = rect.y + rect.height;
 
-    if (!points || !this._grips) return;
-    for (let grip of this._grips)
+    if(!points || !this._grips) return
+    for(let grip of this._grips)
       grip.setPosition(points);
 
     this.xRotatePoint.position = {
@@ -160,16 +168,18 @@ export class XBoundingBox extends XBox {
   }
 
   override set refPoint(refPoint: Point) {
-    this.svgGroup.style.transformOrigin = refPoint.x + "px " + refPoint.y + "px";
+    this._boundingBoxGroup.style.transformOrigin = refPoint.x + "px " + refPoint.y + "px";
     this._refPoint = refPoint;
   }
 
   set refPointView(refPoint: Point) {
     this.xRefPoint.position = refPoint;
+    this._refPointGroup.style.transformOrigin = refPoint.x + "px " + refPoint.y + "px";
   }
 
   override rotate(angle: number): void {
-    this.svgGroup.style.transform = "rotate(" + angle + "deg)";
+    this._boundingBoxGroup.style.transform = "rotate(" + angle + "deg)";
+    this._refPointGroup.style.transform = "rotate(" + angle + "deg)";
 
     this._angle = angle;
   }

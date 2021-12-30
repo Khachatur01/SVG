@@ -1,5 +1,4 @@
 import {Point} from "../../../../../../model/Point";
-import {XRectangle} from "../../../../../../element/shape/XRectangle";
 import {XSVG} from "../../../../../../XSVG";
 import {Rect} from "../../../../../../model/Rect";
 import {XBox} from "../../../../../../element/shape/XBox";
@@ -13,11 +12,11 @@ export abstract class XGrip extends XBox {
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
 
-  protected side: number = 8;
-  protected halfSide: number = 4;
+  protected side: number = 10;
+  protected halfSide: number = 5;
 
   protected constructor(container: XSVG, cursor: string) {
-    super(0, 0, 8, 8);
+    super(0, 0, 10, 10);
     this.container = container;
     this.svgElement.style.cursor = cursor;
     this.setAttr({

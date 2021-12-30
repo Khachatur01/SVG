@@ -64,10 +64,10 @@ export class XRefPoint extends XPath {
       new MoveTo({x: x - this._r, y: y}),
       new Arc(this._r, this._r, 0, 0, 1, {x: x + this._r, y: y}),
       new Arc(this._r, this._r, 0, 0, 1, {x: x - this._r, y: y}),
-      new MoveTo({x: x - this._r - 2, y: y}),
-      new LineTo({x: x + this._r + 2, y: y}),
-      new MoveTo({x: x, y: y - this._r - 2}),
-      new LineTo({x: x, y: y + this._r + 2})
+      new MoveTo({x: x - this._r - this._r / 2, y: y}),
+      new LineTo({x: x + this._r + this._r / 2, y: y}),
+      new MoveTo({x: x, y: y - this._r - this._r / 2}),
+      new LineTo({x: x, y: y + this._r + this._r / 2})
     ]);
     this.setAttr({
       d: this.path.toString()
@@ -85,6 +85,7 @@ export class XRefPoint extends XPath {
     this.moving = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
+
     this._lastPosition = this.position;
 
     this.container.HTML.addEventListener("mousemove", this._move);
@@ -96,11 +97,12 @@ export class XRefPoint extends XPath {
     this._lastPoint.y = event.clientY - containerRect.top;
 
     this.container.focused.refPointView = this._lastPoint;
-    this.container.focused.refPoint = this._lastPoint;
-    this.container.focused.correct(this._lastPoint);
   }
   private end() {
     if(!this.moving) return;
+
+    this.container.focused.refPoint = this._lastPoint;
+    this.container.focused.correct(this._lastPoint);
 
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.container.activeTool.on();
