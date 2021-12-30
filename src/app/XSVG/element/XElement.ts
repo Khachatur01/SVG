@@ -3,6 +3,7 @@ import {Size} from "../model/Size";
 import {XResizeable} from "../service/edit/resize/XResizeable";
 import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
+import {Matrix} from "../service/math/Matrix";
 
 export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
@@ -30,6 +31,14 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract get position(): Point;
   abstract set position(delta: Point);
   abstract get points(): Point[];
+
+  get rotatedPoints(): Point[] {
+    return Matrix.rotate(
+      this.points,
+      this._refPoint,
+      -this._angle
+    );
+  }
 
   get center(): Point {
     let position = this.position;

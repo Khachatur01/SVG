@@ -68,7 +68,7 @@ export class XSelectTool extends XTool {
 
     elementsLoop:
     for(let element of this.container.elements) {
-      let elementPoints = element.points;
+      let elementPoints = element.rotatedPoints;
 
       if(width > 0) {/* if select box drawn from right to left */
 
