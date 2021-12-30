@@ -1,13 +1,7 @@
 import {XGrip} from "../XGrip";
 import {Point} from "../../../../../../../model/Point";
-import {XSVG} from "../../../../../../../XSVG";
-import {Rect} from "../../../../../../../model/Rect";
 
 export class NWGrip extends XGrip {
-  constructor(container: XSVG) {
-    super(container, "nwse-resize");
-  }
-
   setPosition(points: Point[]) {
     this.position = {
       x: points[0].x - this.halfSide,
@@ -17,10 +11,10 @@ export class NWGrip extends XGrip {
   protected onStart(): void {
   }
 
-  protected onMove(containerRect: Rect, event: MouseEvent): void {
+  protected onMove(client: Point): void {
     let elementRect = this.container.focused.lastRect;
-    let width = (event.clientX - containerRect.x) - (elementRect.x + elementRect.width);
-    let height = (event.clientY - containerRect.y) - (elementRect.y + elementRect.height);
+    let width = (client.x) - (elementRect.x + elementRect.width);
+    let height = (client.y) - (elementRect.y + elementRect.height);
 
     this._lastResize = {
       x: elementRect.x + elementRect.width,

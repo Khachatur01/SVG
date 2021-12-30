@@ -59,10 +59,10 @@ export class XBox extends XElement {
     }
 
     this.setAttr({
-      x: rect.x,
-      y: rect.y,
-      width: rect.width,
-      height: rect.height
+      x: rect.x + "",
+      y: rect.y + "",
+      width: rect.width + "",
+      height: rect.height + ""
     });
   }
 

@@ -1,7 +1,6 @@
 import {XDrawable} from "../XDrawable";
 import {XSVG} from "../../../../XSVG";
 import {XPointed} from "../../../../element/type/XPointed";
-import {Point} from "../../../../model/Point";
 
 export abstract class ClickDraw implements XDrawable {
   private container: XSVG | null = null;

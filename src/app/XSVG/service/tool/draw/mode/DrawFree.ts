@@ -1,7 +1,6 @@
 import {XDrawable} from "../XDrawable";
 import {XFree} from "../../../../element/pointed/XFree";
 import {XSVG} from "../../../../XSVG";
-import {Point} from "../../../../model/Point";
 
 export class DrawFree implements XDrawable {
   private container: XSVG | null = null;

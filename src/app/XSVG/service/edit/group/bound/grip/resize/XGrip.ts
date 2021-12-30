@@ -2,6 +2,7 @@ import {Point} from "../../../../../../model/Point";
 import {XSVG} from "../../../../../../XSVG";
 import {Rect} from "../../../../../../model/Rect";
 import {XBox} from "../../../../../../element/shape/XBox";
+import {Matrix} from "../../../../../math/Matrix";
 
 export abstract class XGrip extends XBox {
   protected container: XSVG;
@@ -15,10 +16,10 @@ export abstract class XGrip extends XBox {
   protected side: number = 10;
   protected halfSide: number = 5;
 
-  protected constructor(container: XSVG, cursor: string) {
+  constructor(container: XSVG) {
     super(0, 0, 10, 10);
     this.container = container;
-    this.svgElement.style.cursor = cursor;
+    this.svgElement.style.cursor = "crosshair";
     this.setAttr({
       fill: "white",
       "stroke-width": 0.8,
@@ -50,28 +51,36 @@ export abstract class XGrip extends XBox {
   abstract setPosition(points: Point[]): void;
 
   protected abstract onStart(): void;
-  protected abstract onMove(containerRect: Rect, event: MouseEvent): void;
+  protected abstract onMove(client: Point): void;
   protected abstract onEnd(): void;
 
-  private start() {
+  private start(event: MouseEvent) {
     this.resizing = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
     this.container.focused.fixRefPoint();
+
     this.container.HTML.addEventListener("mousemove", this._move);
   }
   private move(event: MouseEvent) {
     let containerRect = this.container.HTML.getBoundingClientRect();
-    this.onMove(containerRect, event);
 
-    this._lastRefPoint = this.container.focused.getRefPointByRect(this._lastResize);
-    this.container.focused.refPointView = this._lastRefPoint;
+    let client: Point = Matrix.rotate(
+      [{x: event.clientX - containerRect.x, y: event.clientY - containerRect.y}],
+      this.container.focused.refPoint,
+      this.container.focused.angle
+    )[0];
+
+    this.onMove(client);
+
+    // this._lastRefPoint = this.container.focused.getRefPointByRect(this._lastResize);
+    // this.container.focused.refPointView = this._lastRefPoint;
   }
   private end() {
     if(!this.resizing) return;
 
-    this.container.focused.refPoint = this._lastRefPoint;
-    this.container.focused.correct(this._lastRefPoint);
+    // this.container.focused.refPoint = this._lastRefPoint;
+    // this.container.focused.correct(this._lastRefPoint);
 
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.container.activeTool.on();

@@ -117,7 +117,6 @@ export class XFocus implements XDraggable, XResizeable {
         y: Math.round(rotatedRefPoint.y - this.lastRefPoint.y)
       };
 
-    console.log(delta)
     /* correct by delta */
     this._children.forEach((child: XElement) => child.position = delta);
     this.fit();
