@@ -8,7 +8,7 @@ export class XPolyline extends XPointed {
     this.svgElement = document.createElementNS(XElement.svgURI, "polyline");
 
     this.points = points;
-    this.setDefaultStyle();
+    this.style.setDefaultStyle();
 
     this.setOverEvent();
   }

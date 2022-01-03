@@ -10,7 +10,7 @@ export class XPolygon extends XPointed {
     this.points = points;
 
     this.setOverEvent();
-    this.setDefaultStyle();
+    this.style.setDefaultStyle();
   }
 
   /* TODO fix coordinate fetching */

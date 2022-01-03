@@ -124,4 +124,33 @@ export class AppComponent implements AfterViewInit {
     this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
   }
 
+  transparentStroke() {
+    if(this.svg)
+      this.svg.focused.style.strokeColor = "none";
+  }
+  transparentFill() {
+    if(this.svg)
+      this.svg.focused.style.fill = "none";
+  }
+
+  strokeWidth(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let width = picker?.value;
+    if(this.svg && width)
+      this.svg.focused.style.strokeWidth = width;
+  }
+
+  strokeColorChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let color = picker?.value;
+    if(this.svg && color)
+      this.svg.focused.style.strokeColor = color;
+  }
+  fillColorChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let color = picker?.value;
+    if(this.svg && color)
+      this.svg.focused.style.fill = color;
+  }
+
 }

@@ -15,6 +15,14 @@
   <button id="free" (click)="free()">Free</button>
   <span id="coordinates"></span>
   <br>
+  stroke <input (change)="strokeWidth($event)" type="number" id="width" value="5" step="1">
+  <br>
+  stroke color <input (change)="strokeColorChange($event)" type="color" id="stroke-color" >
+  <button (click)="transparentStroke()">X</button>
+  <br>
+  fill color <input (change)="fillColorChange($event)" type="color" id="fill-color">
+  <button (click)="transparentFill()">X</button>
+  <br>
   <svg id="svgContainer" width="2000px" height="2000px" >
 
   </svg>

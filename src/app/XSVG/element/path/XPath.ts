@@ -16,7 +16,7 @@ export abstract class XPath extends XElement {
       d: this.path.toString()
     })
     this.setOverEvent();
-    this.setDefaultStyle();
+    this.style.setDefaultStyle();
   }
 
   override fixRect() {

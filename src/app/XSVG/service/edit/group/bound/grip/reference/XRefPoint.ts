@@ -21,11 +21,9 @@ export class XRefPoint extends XPath {
     super();
     this.container = container;
     this.removeOverEvent();
-    this.setStyle({
-      fill: "transparent",
-      stroke: "#002fff",
-      "stroke-width": 0.5,
-    });
+    this.style.fill = "transparent";
+    this.style.strokeColor = "#002fff";
+    this.style.strokeWidth = "0.5";
 
     this._center = {x: x, y: y};
     this.drawPoint(this._center);

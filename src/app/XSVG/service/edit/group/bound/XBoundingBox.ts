@@ -31,12 +31,10 @@ export class XBoundingBox extends XBox {
 
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(x, y, width, height);
-    this.setStyle({
-      fill: "none",
-      stroke: "#002fff",
-      "stroke-width": 1,
-      "stroke-dasharray": "2 2"
-    });
+    this.style.fill = "none";
+    this.style.strokeColor = "#002fff";
+    this.style.strokeWidth = "1";
+    this.style.strokeDashArray = "2 2";
 
     this.svgElement.style.display = "none";
     this.removeOverEvent();

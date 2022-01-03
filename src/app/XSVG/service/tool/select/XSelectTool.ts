@@ -15,12 +15,12 @@ export class XSelectTool extends XTool {
   constructor(container: XSVG) {
     super(container);
     this.boundingBox = new XRectangle();
-    this.boundingBox.setStyle({
-      fill: "none",
-      stroke: "#1545ff",
-      "stroke-width": "1",
-      "stroke-dasharray": "5 5"
-    });
+
+    this.boundingBox.style.fill = "none";
+    this.boundingBox.style.strokeColor = "#1545ff";
+    this.boundingBox.style.strokeWidth = "1";
+    this.boundingBox.style.strokeDashArray = "5 5";
+
     this.boundingBox.removeOverEvent();
   }
 

@@ -8,6 +8,31 @@ import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
 import {Matrix} from "../../math/Matrix";
 
+class FocusStyle {
+  private focused: XFocus;
+  constructor(focused: XFocus) {
+    this.focused = focused;
+  }
+  set strokeWidth(width: string) {
+    this.focused.children.forEach((child: XElement) => {
+      child.style.strokeWidth = width;
+      child.style.setGlobalStyle("stroke-width", width);
+    });
+  }
+  set strokeColor(color: string) {
+    this.focused.children.forEach((child: XElement) => {
+      child.style.strokeColor = color;
+      child.style.setGlobalStyle("stroke", color);
+    });
+  }
+  set fill(color: string) {
+    this.focused.children.forEach((child: XElement) => {
+      child.style.fill = color;
+      child.style.setGlobalStyle("fill", color);
+    });
+  }
+}
+
 export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
   private readonly container: XSVG;
@@ -16,12 +41,14 @@ export class XFocus implements XDraggable, XResizeable {
   private readonly svgGroup: SVGGElement;
   private readonly svgElements: SVGGElement;
   private readonly svgBounding: SVGGElement;
+  public readonly style: FocusStyle;
 
   private _lastPosition: Point = {x: 0, y: 0};
   private _lastSize: Size = {width: 0, height: 0};
 
   constructor(container: XSVG) {
     this.container = container;
+    this.style = new FocusStyle(this);
 
     this.boundingBox = new XBoundingBox(this.container)
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
@@ -199,6 +226,54 @@ export class XFocus implements XDraggable, XResizeable {
     return this.boundingBox.boundingRect;
   }
 
+  get rotatedBoundingRect(): Rect {
+    let minX, minY;
+    let maxX, maxY;
+
+    let children = Array.from(this._children);
+    if(children.length < 1)
+      return {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      };
+
+    let firstChild = children[0];
+
+    let firstRotatedBoundingRect = firstChild.rotatedBoundingRect;
+
+    minX = firstRotatedBoundingRect.x;
+    minY = firstRotatedBoundingRect.y;
+    maxX = firstRotatedBoundingRect.width + minX;
+    maxY = firstRotatedBoundingRect.height + minY;
+
+    for(let i = 1; i < children.length; i++) {
+      let rotatedBoundingRect = children[i].rotatedBoundingRect;
+      if(rotatedBoundingRect.x < minX)
+        minX = rotatedBoundingRect.x;
+      if(rotatedBoundingRect.y < minY)
+        minY = rotatedBoundingRect.y;
+      if(rotatedBoundingRect.width + rotatedBoundingRect.x > maxX)
+        maxX = rotatedBoundingRect.width + rotatedBoundingRect.x;
+      if(rotatedBoundingRect.height + rotatedBoundingRect.y > maxY)
+        maxY = rotatedBoundingRect.height + rotatedBoundingRect.y;
+
+      console.log("in loop", minX, minY, maxX, maxY);
+    }
+
+    console.log(minX, minY, maxX, maxY);
+
+    this.boundingBox.boundingRect = {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    };
+
+    return this.boundingBox.boundingRect;
+  }
+
   get lastRefPoint(): Point {
     return this.boundingBox.lastRefPoint;
   }
@@ -250,6 +325,14 @@ export class XFocus implements XDraggable, XResizeable {
 
   fit(): void {
     let contentRect: Rect = this.boundingRect;
+
+    this.boundingBox.position = contentRect;
+    this.boundingBox.setSize(contentRect);
+    this.boundingBox.positionGrips();
+  }
+
+  fitRotated(): void {
+    let contentRect: Rect = this.rotatedBoundingRect;
 
     this.boundingBox.position = contentRect;
     this.boundingBox.setSize(contentRect);

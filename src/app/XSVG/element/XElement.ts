@@ -5,15 +5,52 @@ import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
 import {Matrix} from "../service/math/Matrix";
 
+class Style {
+  private element: XElement;
+  public static globalStyle: any = {
+    "fill": "none",
+    "stroke": "#000000",
+    "stroke-width": 5,
+    "stroke-dasharray": ""
+  };
+  constructor(element: XElement) {
+    this.element = element;
+  }
+  set strokeWidth(width: string) {
+    this.element.setAttr({
+        "stroke-width": width
+    });
+  }
+  set strokeColor(color: string) {
+    this.element.setAttr({
+        "stroke": color
+    });
+  }
+  set strokeDashArray(array: string) {
+    this.element.setAttr({
+      "stroke-dasharray": array
+    });
+  }
+  set fill(color: string) {
+    this.element.setAttr({
+      "fill": color
+    });
+  }
+
+  setGlobalStyle(key: string, value: string) {
+    Style.globalStyle[key] = value;
+  }
+
+  setDefaultStyle(): void {
+    this.element.setAttr(Style.globalStyle);
+  }
+}
+
 export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
-  protected style: any = {
-    fill: "none",
-    stroke: "#24ff24",
-    highlight: "red",
-    strokeWidth: 10
-  }
+
+  public readonly style = new Style(this);
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
 
@@ -38,6 +75,33 @@ export abstract class XElement implements XResizeable, XDraggable {
       this._refPoint,
       -this._angle
     );
+  }
+
+  get rotatedBoundingRect(): Rect {
+    let points = this.rotatedPoints;
+    let minX = points[0].x;
+    let minY = points[0].y;
+    let maxX = points[0].x;
+    let maxY = points[0].y;
+
+    for(let i = 1; i < points.length; i++) {
+      if(points[i].x < minX)
+        minX = points[i].x;
+      if (points[i].y < minY)
+        minY = points[i].y;
+
+      if(points[i].x > maxX)
+        maxX = points[i].x;
+      if(points[i].y > maxY)
+        maxY = points[i].y;
+    }
+
+    return {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    };
   }
 
   get center(): Point {
@@ -82,17 +146,19 @@ export abstract class XElement implements XResizeable, XDraggable {
         this.SVG.setAttribute(key, "" + value);
   }
 
-  setStyle(attributes: object): void {
-    this.setAttr(attributes);
-  }
-
-  setDefaultStyle(): void {
-    this.setAttr({
-      fill: this.style.fill,
-      stroke: this.style.stroke,
-      "stroke-width": this.style.strokeWidth
-    });
-  }
+  // setStyle(attributes: object): void {
+  //   this.setAttr(attributes);
+  //   for(const [key, value] of Object.entries(attributes)) {
+  //     this.style[key] = value;
+  //   }
+  // }
+  //
+  // setDefaultStyle(): void {
+  //   this.setAttr(XElement.globalStyle);
+  //   for(const [key, value] of Object.entries(XElement.globalStyle)) {
+  //     this.style[key] = value;
+  //   }
+  // }
 
   setOverEvent(): void {
     this.svgElement.addEventListener("mouseover", this._highlight);
@@ -108,15 +174,11 @@ export abstract class XElement implements XResizeable, XDraggable {
   }
 
   highlight(): void {
-    this.setAttr({
-      stroke: this.style.highlight
-    });
+    this.svgElement.style.filter = "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.7))"
   }
 
   lowlight(): void {
-    this.setAttr({
-      stroke: this.style.stroke
-    });
+    this.svgElement.style.filter = "unset"
   }
 
   fixRect(): void {

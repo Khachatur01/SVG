@@ -12,7 +12,7 @@ export class XEllipse extends XElement {
     this.setSize({x: x, y: y, width: rx * 2, height: ry * 2});
 
     this.setOverEvent();
-    this.setDefaultStyle();
+    this.style.setDefaultStyle();
   }
 
   get points(): Point[] {

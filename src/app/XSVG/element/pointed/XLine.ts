@@ -13,7 +13,7 @@ export class XLine extends XPointed {
       y2: y2
     });
     this.setOverEvent();
-    this.setDefaultStyle();
+    this.style.setDefaultStyle();
   }
 
   override get points(): Point[] {

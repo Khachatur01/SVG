@@ -20,7 +20,7 @@ export class XRectangle extends XPolygon {
     ]);
 
     this.setOverEvent();
-    this.setDefaultStyle();
+    this.style.setDefaultStyle();
   }
 
   override get size(): Size {

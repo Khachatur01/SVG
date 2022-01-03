@@ -15,7 +15,7 @@ export class XBox extends XElement {
     });
 
     this.setOverEvent();
-    this.setDefaultStyle();
+    this.style.setDefaultStyle();
   }
 
   override isComplete(): boolean {
