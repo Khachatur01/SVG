@@ -4,6 +4,8 @@ import {XElement} from "./element/XElement";
 import {XFocus} from "./service/edit/group/XFocus";
 import {XSelectTool} from "./service/tool/select/XSelectTool";
 import {XTool} from "./service/tool/XTool";
+import {XEditTool} from "./service/tool/edit/XEditTool";
+import {XPointed} from "./element/type/XPointed";
 
 export class XSVG {
   private readonly container: HTMLElement;
@@ -13,6 +15,7 @@ export class XSVG {
   public readonly drawTool: XDrawTool;
   public readonly dragTool: XDragTool;
   public readonly selectTool: XSelectTool;
+  public readonly editTool: XEditTool;
   public activeTool: XTool;
 
   private _multiSelect: boolean = false;
@@ -27,11 +30,13 @@ export class XSVG {
     this.drawTool = new XDrawTool(this);
     this.dragTool = new XDragTool(this);
     this.selectTool = new XSelectTool(this);
+    this.editTool = new XEditTool(this);
     this.activeTool = this.selectTool;
 
     this.container.addEventListener("mousedown", event => {
       if(event.target == this.container) {
         this.blur();
+        this.editTool.removeEditableElement();
       }
     });
 
@@ -40,6 +45,7 @@ export class XSVG {
 
     this.container.appendChild(this.elementsGroup);
     this.container.appendChild(this._focusedElements.SVG);
+    this.container.appendChild(this.editTool.SVG);
   }
 
   add(xElement: XElement) {
@@ -51,22 +57,28 @@ export class XSVG {
       if(this.drawTool.isDrawing()) return;
       this.drawTool.off();
 
-      /* when tries to drag not selected element, all elements will blur, and that element will select */
-      if(this.dragTool.isOn()) {
-        if(!this._focusedElements.hasChild(xElement)) {
+      this.editTool.removeEditableElement();
+      if(this.editTool.isOn()) {
+        if(xElement instanceof XPointed)
+          this.editTool.editableElement = xElement;
+      } else {
+        /* when tries to drag not selected element, all elements will blur, and that element will select */
+        if(this.dragTool.isOn()) {
+          if(!this._focusedElements.hasChild(xElement)) {
+            this.blur();
+            this.focus(xElement);
+          }
+          return;
+        }
+
+        if(!this._multiSelect) {
           this.blur();
           this.focus(xElement);
+        } else if(this._focusedElements.hasChild(xElement)) {
+          this.blur(xElement);
+        } else {
+          this.focus(xElement);
         }
-        return;
-      }
-
-      if(!this._multiSelect) {
-        this.blur();
-        this.focus(xElement);
-      } else if(this._focusedElements.hasChild(xElement)) {
-        this.blur(xElement);
-      } else {
-        this.focus(xElement);
       }
     });
 

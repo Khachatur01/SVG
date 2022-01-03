@@ -52,10 +52,11 @@ export class XFocus implements XDraggable, XResizeable {
       this.refPoint = Object.assign({}, xElement.refPoint);
       this.refPointView = Object.assign({}, xElement.refPoint);
       this.rotate(xElement.angle);
-    } else {
+    } else { /* more than one element */
       this.fixRect();
       this.refPoint = this.center;
       this.refPointView = this.center;
+      this.boundingBox.rotate(0);
     }
   }
 
@@ -64,6 +65,7 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.delete(xElement);
     this.fit();
 
+    this.container.editTool.removeEditableElement();
     if (this._children.size == 0) {
       this.blur();
     } else if(this._children.size == 1) {

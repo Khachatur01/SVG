@@ -6,6 +6,7 @@ import {Point} from "../../../model/Point";
 export class XSelectTool extends XTool {
   private readonly boundingBox: XRectangle;
   private position: Point = {x: 0, y: 0};
+  private _isOn: boolean = false;
 
   private start = this.onStart.bind(this);
   private select = this.onSelect.bind(this);
@@ -42,7 +43,7 @@ export class XSelectTool extends XTool {
     let width = event.clientX - containerRect.left - this.position.x;
     let height = event.clientY - containerRect.top - this.position.y;
 
-    this.boundingBox.setSize({
+    this.boundingBox.drawSize({
       x: this.position.x,
       y: this.position.y,
       width: width,
@@ -95,20 +96,23 @@ export class XSelectTool extends XTool {
       }
     }
     this.container.singleSelect();
+    this.container.HTML.removeEventListener("mousemove", this.select);
   }
 
   _on(): void {
     this.container.HTML.addEventListener("mousedown", this.start);
     document.addEventListener("mouseup", this.end);
+    this._isOn = true;
   }
 
   off(): void {
     this.container.HTML.removeEventListener("mousedown", this.start);
     document.removeEventListener("mouseup", this.end);
+    this._isOn = false;
   }
 
   isOn(): boolean {
-    return false;
+    return this._isOn;
   }
 
 }

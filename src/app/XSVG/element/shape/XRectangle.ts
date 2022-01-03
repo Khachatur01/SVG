@@ -26,7 +26,13 @@ export class XRectangle extends XPolygon {
   override get size(): Size {
     return super.size;
   }
-  override setSize(rect: Rect) {
+
+  /* TODO change name.
+      This function sets size on drawing.
+      Elements, which draw by moving,
+      that elements must set size different on drawing
+  */
+  drawSize(rect: Rect) {
     let points: Point[] = [];
     points.push({ /* 0 */
       x: rect.x,

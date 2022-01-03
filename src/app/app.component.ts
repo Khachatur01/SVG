@@ -17,36 +17,48 @@ export class AppComponent implements AfterViewInit {
   public select() {
     if(!this.svg) return;
     this.svg.selectTool.on();
+    this.showToolName("select");
+  }
+  public edit() {
+    if(!this.svg) return;
+    this.svg.editTool.on();
+    this.showToolName("edit");
   }
   public rectangle() {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.rectangle
     this.svg.drawTool.on();
+    this.showToolName("rectangle");
   }
   public ellipse() {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.ellipse
     this.svg.drawTool.on();
+    this.showToolName("ellipse");
   }
   public line() {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.line
     this.svg.drawTool.on();
+    this.showToolName("line");
   }
   public polyline() {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.polyline
     this.svg.drawTool.on();
+    this.showToolName("polyline");
   }
   public polygon() {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.polygon
     this.svg.drawTool.on();
+    this.showToolName("polygon");
   }
   public free() {
     if(!this.svg) return;
     this.svg.drawTool.tool = Tool.free
     this.svg.drawTool.on();
+    this.showToolName("free");
   }
 
 
@@ -57,6 +69,7 @@ export class AppComponent implements AfterViewInit {
     }
     if (event.key == "Alt") {
       this.svg.dragTool.on();
+      this.showToolName("drag");
     }
     if (event.key == "Escape") {
       this.svg.selectTool.on();
@@ -72,6 +85,7 @@ export class AppComponent implements AfterViewInit {
     }
     if (event.key == "Alt") {
       this.svg.selectTool.on();
+      this.showToolName("select");
     }
     if (event.key == "Delete") {
       this.svg.focused?.remove();
@@ -96,6 +110,10 @@ export class AppComponent implements AfterViewInit {
       if(label)
         label.innerHTML = text;
     });
+  }
+  showToolName(name: string) {
+    let label = document.getElementById("tool-name");
+    if(label) label.innerText = name;
   }
 
   ngAfterViewInit(): void {

@@ -77,9 +77,13 @@ export abstract class XPointed extends XElement {
       dh = rect.height / this._lastSize.height;
 
     let points = this.points;
-    for(let i = 0; i < points.length; i++){
+    for(let i = 0; i < points.length; i++) {
+      /* points may not be fixed, and this._lastPoints[i] may be undefined */
+      if(!this._lastPoints[i]) this._lastPoints[i] = {x: 0, y: 0};
+
       points[i].x = rect.x + Math.abs(this._lastPoints[i].x - rect.x) * dw;
       points[i].y = rect.y + Math.abs(this._lastPoints[i].y - rect.y) * dh;
+
     }
 
     this.points = points;

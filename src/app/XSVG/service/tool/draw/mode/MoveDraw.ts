@@ -2,6 +2,8 @@ import {XDrawable} from "../XDrawable";
 import {XElement} from "../../../../element/XElement";
 import {XSVG} from "../../../../XSVG";
 import {Point} from "../../../../model/Point";
+import {XRectangle} from "../../../../element/shape/XRectangle";
+import {XEllipse} from "../../../../element/shape/XEllipse";
 
 export abstract class MoveDraw implements XDrawable {
   protected container: XSVG | null = null;
@@ -68,12 +70,20 @@ export abstract class MoveDraw implements XDrawable {
         height = averageSize;
     }
 
-    xElement.setSize({
-      x: this.startPos.x,
-      y: this.startPos.y,
-      width: width,
-      height: height
-    });
+    if(xElement instanceof XRectangle)
+      xElement.drawSize({
+        x: this.startPos.x,
+        y: this.startPos.y,
+        width: width,
+        height: height
+      });
+    else
+      xElement.setSize({
+        x: this.startPos.x,
+        y: this.startPos.y,
+        width: width,
+        height: height
+      });
   };
 
   start(container: XSVG): void {
