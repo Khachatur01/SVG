@@ -4,6 +4,7 @@ import {XResizeable} from "../service/edit/resize/XResizeable";
 import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
 import {Matrix} from "../service/math/Matrix";
+import {XSVG} from "../XSVG";
 
 class Style {
   private element: XElement;
@@ -15,6 +16,9 @@ class Style {
   };
   constructor(element: XElement) {
     this.element = element;
+  }
+  get strokeWidth(): string {
+    return this.element.getAttr("stroke-width");
   }
   set strokeWidth(width: string) {
     this.element.setAttr({
@@ -49,7 +53,7 @@ class Style {
 export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
-
+  protected readonly container: XSVG;
   public readonly style = new Style(this);
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
@@ -62,12 +66,32 @@ export abstract class XElement implements XResizeable, XDraggable {
   private _highlight = this.highlight.bind(this);
   private _lowlight = this.lowlight.bind(this);
 
+  constructor(container: XSVG) {
+    this.container = container;
+  }
+
   abstract get size(): Size;
   abstract setSize(rect: Rect): void;
   abstract isComplete(): boolean;
   abstract get position(): Point;
   abstract set position(delta: Point);
   abstract get points(): Point[];
+
+  correct(refPoint: Point, lastRefPoint: Point) {
+    /* calculate delta */
+    let rotatedRefPoint = Matrix.rotate(
+      [{x: lastRefPoint.x, y: lastRefPoint.y}],
+      {x: refPoint.x, y: refPoint.y},
+      this.angle
+    )[0];
+    /* correct by delta */
+    let delta = {
+      x: Math.round(rotatedRefPoint.x - lastRefPoint.x),
+      y: Math.round(rotatedRefPoint.y - lastRefPoint.y)
+    };
+    if(delta.x == 0 && delta.y == 0) return;
+    this.position = delta;
+  }
 
   get rotatedPoints(): Point[] {
     return Matrix.rotate(

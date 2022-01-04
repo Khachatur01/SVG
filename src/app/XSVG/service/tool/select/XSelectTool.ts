@@ -14,7 +14,7 @@ export class XSelectTool extends XTool {
 
   constructor(container: XSVG) {
     super(container);
-    this.boundingBox = new XRectangle();
+    this.boundingBox = new XRectangle(container);
 
     this.boundingBox.style.fill = "none";
     this.boundingBox.style.strokeColor = "#1545ff";

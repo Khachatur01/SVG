@@ -7,7 +7,7 @@ export class DrawEllipse extends MoveDraw {
     this.startPos.x = event.clientX - containerRect.left; //x position within the element.
     this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
 
-    let element = new XEllipse(this.startPos.x, this.startPos.y);
+    let element = new XEllipse(this.container, this.startPos.x, this.startPos.y);
     element.fixPosition();
     return element;
   }

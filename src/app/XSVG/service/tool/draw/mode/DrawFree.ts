@@ -3,11 +3,15 @@ import {XFree} from "../../../../element/pointed/XFree";
 import {XSVG} from "../../../../XSVG";
 
 export class DrawFree implements XDrawable {
-  private container: XSVG | null = null;
+  private container: XSVG;
   private drawableElement: XFree | null = null;
   private _onStart = this.onStart.bind(this);
   private _onDraw = this.onDraw.bind(this);
   private _onEnd = this.onEnd.bind(this);
+
+  constructor(container: XSVG) {
+    this.container = container;
+  }
 
   onStart(event: MouseEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
@@ -16,7 +20,7 @@ export class DrawFree implements XDrawable {
     let x1 = event.clientX - containerRect.left; //x position within the element.
     let y1 = event.clientY - containerRect.top;  //y position within the element.
 
-    this.drawableElement = new XFree([
+    this.drawableElement = new XFree(this.container, [
       {x: x1, y: y1}
     ]);
 
@@ -57,7 +61,7 @@ export class DrawFree implements XDrawable {
 
   start(container: XSVG): void {
     this.container = container;
-    container.HTML.addEventListener('mousedown', this._onStart);
+    this.container.HTML.addEventListener('mousedown', this._onStart);
     document.addEventListener('mouseup', this._onEnd);
   }
 

@@ -26,37 +26,37 @@ export class AppComponent implements AfterViewInit {
   }
   public rectangle() {
     if(!this.svg) return;
-    this.svg.drawTool.tool = Tool.rectangle
+    this.svg.drawTool.tool = this.svg.drawTools.rectangle;
     this.svg.drawTool.on();
     this.showToolName("rectangle");
   }
   public ellipse() {
     if(!this.svg) return;
-    this.svg.drawTool.tool = Tool.ellipse
+    this.svg.drawTool.tool = this.svg.drawTools.ellipse;
     this.svg.drawTool.on();
     this.showToolName("ellipse");
   }
   public line() {
     if(!this.svg) return;
-    this.svg.drawTool.tool = Tool.line
+    this.svg.drawTool.tool = this.svg.drawTools.line;
     this.svg.drawTool.on();
     this.showToolName("line");
   }
   public polyline() {
     if(!this.svg) return;
-    this.svg.drawTool.tool = Tool.polyline
+    this.svg.drawTool.tool = this.svg.drawTools.polyline;
     this.svg.drawTool.on();
     this.showToolName("polyline");
   }
   public polygon() {
     if(!this.svg) return;
-    this.svg.drawTool.tool = Tool.polygon
+    this.svg.drawTool.tool = this.svg.drawTools.polygon;
     this.svg.drawTool.on();
     this.showToolName("polygon");
   }
   public free() {
     if(!this.svg) return;
-    this.svg.drawTool.tool = Tool.free
+    this.svg.drawTool.tool = this.svg.drawTools.free;
     this.svg.drawTool.on();
     this.showToolName("free");
   }

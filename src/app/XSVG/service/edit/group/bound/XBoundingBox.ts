@@ -16,7 +16,6 @@ import {XElement} from "../../../../element/XElement";
 import {XBox} from "../../../../element/shape/XBox";
 
 export class XBoundingBox extends XBox {
-  private container: XSVG;
   private _grips: XGrip[] = [];
   private xRefPoint: XRefPoint;
   private xRotatePoint: XRotatePoint;
@@ -30,7 +29,7 @@ export class XBoundingBox extends XBox {
   };
 
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
-    super(x, y, width, height);
+    super(container, x, y, width, height);
     this.style.fill = "none";
     this.style.strokeColor = "#002fff";
     this.style.strokeWidth = "1";
@@ -38,8 +37,6 @@ export class XBoundingBox extends XBox {
 
     this.svgElement.style.display = "none";
     this.removeOverEvent();
-
-    this.container = container;
 
     this.xRefPoint = new XRefPoint(container);
     this.xRotatePoint = new XRotatePoint(container);
@@ -87,10 +84,7 @@ export class XBoundingBox extends XBox {
     this.xRefPoint.lastRefPoint = refPoint;
   }
   get lastRefPoint(): Point {
-    return {
-      x: this.xRefPoint.lastRefPoint.x,
-      y: this.xRefPoint.lastRefPoint.y
-    };
+    return this.xRefPoint.lastRefPoint;
   }
 
   singleFocus() {

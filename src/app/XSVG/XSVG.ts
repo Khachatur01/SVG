@@ -6,6 +6,7 @@ import {XSelectTool} from "./service/tool/select/XSelectTool";
 import {XTool} from "./service/tool/XTool";
 import {XEditTool} from "./service/tool/edit/XEditTool";
 import {XPointed} from "./element/type/XPointed";
+import {Tool} from "./dataSource/Tool";
 
 export class XSVG {
   private readonly container: HTMLElement;
@@ -16,6 +17,8 @@ export class XSVG {
   public readonly dragTool: XDragTool;
   public readonly selectTool: XSelectTool;
   public readonly editTool: XEditTool;
+
+  public readonly drawTools: Tool = new Tool(this);
   public activeTool: XTool;
 
   private _multiSelect: boolean = false;

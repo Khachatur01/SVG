@@ -3,10 +3,9 @@ import {XElement} from "../../../../element/XElement";
 import {XSVG} from "../../../../XSVG";
 import {Point} from "../../../../model/Point";
 import {XRectangle} from "../../../../element/shape/XRectangle";
-import {XEllipse} from "../../../../element/shape/XEllipse";
 
 export abstract class MoveDraw implements XDrawable {
-  protected container: XSVG | null = null;
+  protected container: XSVG;
   private perfectMode: boolean = false;
   protected startPos: Point = {x: 0, y: 0}
 
@@ -15,6 +14,10 @@ export abstract class MoveDraw implements XDrawable {
   private drawEnd = this._onEnd.bind(this);
 
   private drawableElement: XElement | null = null;
+
+  constructor(container: XSVG) {
+    this.container = container;
+  }
 
   private _onStart(event: MouseEvent) {
     if(!this.container) return;
@@ -42,6 +45,7 @@ export abstract class MoveDraw implements XDrawable {
       this.container.blur();
 
       this.drawableElement.refPoint = this.drawableElement.center;
+      this.container.focused.lastRefPoint = this.drawableElement.refPoint;
 
       this.container.focus(this.drawableElement);
       this.container.focused.fixRect();
@@ -88,7 +92,7 @@ export abstract class MoveDraw implements XDrawable {
 
   start(container: XSVG): void {
     this.container = container;
-    container.HTML.addEventListener('mousedown', this.drawStart);
+    this.container.HTML.addEventListener('mousedown', this.drawStart);
     document.addEventListener('mouseup', this.drawEnd);
   }
 

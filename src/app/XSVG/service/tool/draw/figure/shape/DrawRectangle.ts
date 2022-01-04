@@ -7,6 +7,6 @@ export class DrawRectangle extends MoveDraw {
     this.startPos.x = event.clientX - containerRect.left; //x position within the element.
     this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
 
-    return new XRectangle(this.startPos.x, this.startPos.y);
+    return new XRectangle(this.container, this.startPos.x, this.startPos.y);
   }
 }

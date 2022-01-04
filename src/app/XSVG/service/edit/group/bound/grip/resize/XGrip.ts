@@ -5,7 +5,6 @@ import {XBox} from "../../../../../../element/shape/XBox";
 import {Matrix} from "../../../../../math/Matrix";
 
 export abstract class XGrip extends XBox {
-  protected container: XSVG;
   private resizing: boolean = false;
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};
   private _start = this.start.bind(this);
@@ -16,8 +15,7 @@ export abstract class XGrip extends XBox {
   protected halfSide: number = 5;
 
   constructor(container: XSVG) {
-    super(0, 0, 10, 10);
-    this.container = container;
+    super(container, 0, 0, 10, 10);
     this.svgElement.style.cursor = "crosshair";
     this.setAttr({
       fill: "white",

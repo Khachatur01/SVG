@@ -2,13 +2,14 @@ import {XElement} from "../XElement";
 import {Path} from "../../model/path/Path";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
+import {XSVG} from "../../XSVG";
 
 export abstract class XPath extends XElement {
   protected _size: Size = {width: 0, height: 0};
   protected path: Path;
   protected _lastPath: Path;
-  protected constructor(path: Path = new Path()) {
-    super();
+  protected constructor(container: XSVG, path: Path = new Path()) {
+    super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "path");
     this.path = path;
     this._lastPath = path;

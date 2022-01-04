@@ -1,10 +1,11 @@
 import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {XPointed} from "../type/XPointed";
+import {XSVG} from "../../XSVG";
 
 export class XPolyline extends XPointed {
-  constructor(points: Point[]) {
-    super();
+  constructor(container: XSVG, points: Point[]) {
+    super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "polyline");
 
     this.points = points;

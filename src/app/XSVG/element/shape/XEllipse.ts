@@ -2,10 +2,11 @@ import {Size} from "../../model/Size";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {XElement} from "../XElement";
+import {XSVG} from "../../XSVG";
 
 export class XEllipse extends XElement {
-  constructor(x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
-    super();
+  constructor(container: XSVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
+    super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "ellipse");
 
     this.position = {x: x, y: y};
@@ -13,6 +14,19 @@ export class XEllipse extends XElement {
 
     this.setOverEvent();
     this.style.setDefaultStyle();
+  }
+
+  override get rotatedBoundingRect(): Rect {
+    let containerRect: Rect = this.container.HTML.getBoundingClientRect();
+    let stoke = parseInt(this.style.strokeWidth);
+    let rotatedBoundingRect: Rect = this.svgElement.getBoundingClientRect();
+
+    rotatedBoundingRect.x += stoke / 2 - containerRect.x;
+    rotatedBoundingRect.y += stoke / 2 - containerRect.y;
+    rotatedBoundingRect.width -= stoke;
+    rotatedBoundingRect.height -= stoke
+
+    return rotatedBoundingRect;
   }
 
   get points(): Point[] {

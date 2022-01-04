@@ -8,7 +8,7 @@ export class DrawPolygon extends ClickDraw {
     let y1 = event.clientY - containerRect.top;  //y position within the element.
 
     if(!this.drawableElement) {
-      this.drawableElement = new XPolygon([
+      this.drawableElement = new XPolygon(this.container, [
         {x: x1, y: y1},
         {x: x1, y: y1}
       ]);

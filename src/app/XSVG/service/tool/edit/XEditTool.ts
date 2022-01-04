@@ -38,7 +38,7 @@ export class XEditTool extends XTool {
     if(!editableElement) return;
     let order = 0;
     for(let point of editableElement.points) {
-      let node: XNode = new XNode(this, point, order++);
+      let node: XNode = new XNode(this.container, this, point, order++);
       this.nodesGroup.appendChild(node.SVG);
     }
     this.refPoint = editableElement.refPoint;

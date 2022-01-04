@@ -7,8 +7,6 @@ import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
 
 export class XRotatePoint extends XPath {
-  private container: XSVG;
-
   private rotating: boolean = false;
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
@@ -21,8 +19,7 @@ export class XRotatePoint extends XPath {
   private dAngle: number = 0;
 
   constructor(container: XSVG, x: number = 0, y: number = 0) {
-    super();
-    this.container = container;
+    super(container);
     this.removeOverEvent();
     this.style.fill = "transparent";
     this.style.strokeColor = "#002fff";

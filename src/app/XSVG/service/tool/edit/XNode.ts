@@ -3,6 +3,7 @@ import {Point} from "../../../model/Point";
 import {XEditTool} from "./XEditTool";
 import {Rect} from "../../../model/Rect";
 import {Matrix} from "../../math/Matrix";
+import {XSVG} from "../../../XSVG";
 
 export class XNode extends XEllipse {
   private readonly editTool: XEditTool;
@@ -13,8 +14,8 @@ export class XNode extends XEllipse {
   private _move = this.onMove.bind(this);
   private _end = this.onEnd.bind(this);
 
-  constructor(editTool: XEditTool, position: Point, order: number) {
-    super(position.x - 8, position.y - 8, 8, 8);
+  constructor(container: XSVG, editTool: XEditTool, position: Point, order: number) {
+    super(container, position.x - 8, position.y - 8, 8, 8);
     this.removeOverEvent();
     this.setAttr({
       fill: "white",

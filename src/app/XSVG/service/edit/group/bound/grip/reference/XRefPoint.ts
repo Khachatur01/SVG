@@ -6,7 +6,6 @@ import {XPath} from "../../../../../../element/path/XPath";
 import {Point} from "../../../../../../model/Point";
 
 export class XRefPoint extends XPath {
-  private container: XSVG;
   private readonly _r: number = 5; /* radius */
   private _center: Point = {x: 0, y: 0};
 
@@ -18,8 +17,7 @@ export class XRefPoint extends XPath {
   private _end = this.end.bind(this);
 
   constructor(container: XSVG, x: number = 0, y: number = 0) {
-    super();
-    this.container = container;
+    super(container);
     this.removeOverEvent();
     this.style.fill = "transparent";
     this.style.strokeColor = "#002fff";
@@ -79,21 +77,25 @@ export class XRefPoint extends XPath {
     this.svgElement.style.display = "none";
   }
 
-  private start() {
+  private initLastPoint(event: MouseEvent) {
+    let containerRect = this.container.HTML.getBoundingClientRect();
+    this._lastPoint.x = event.clientX - containerRect.left;
+    this._lastPoint.y = event.clientY - containerRect.top;
+  }
+
+  private start(event: MouseEvent) {
     this.moving = true;
     this.container.activeTool.off();
     this.container.focused.fixRect();
+    this._lastPosition = Object.assign({}, this.position);
 
-    this._lastPosition = this.position;
+    this.initLastPoint(event);
+    this.container.focused.refPointView = Object.assign({}, this._lastPoint);
 
     this.container.HTML.addEventListener("mousemove", this._move);
   }
   private move(event: MouseEvent) {
-    let containerRect = this.container.HTML.getBoundingClientRect();
-
-    this._lastPoint.x = event.clientX - containerRect.left;
-    this._lastPoint.y = event.clientY - containerRect.top;
-
+    this.initLastPoint(event);
     this.container.focused.refPointView = Object.assign({}, this._lastPoint);
   }
   private end() {

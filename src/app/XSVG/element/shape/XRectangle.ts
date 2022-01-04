@@ -2,6 +2,7 @@ import {Size} from "../../model/Size";
 import {XPolygon} from "../pointed/XPolygon";
 import {Rect} from "../../model/Rect";
 import {Point} from "../../model/Point";
+import {XSVG} from "../../XSVG";
 
 /*
 *  0_____1
@@ -10,8 +11,8 @@ import {Point} from "../../model/Point";
 * */
 
 export class XRectangle extends XPolygon {
-  constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
-    super([
+  constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+    super(container, [
       /* 0 */                                             /* 1 */
       {x: x, y: y},                          {x: width + x, y: y},
       {x: width + x, y: height + y},        {x: x, y: height + y}

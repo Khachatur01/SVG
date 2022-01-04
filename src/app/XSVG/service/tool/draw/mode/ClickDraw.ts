@@ -3,11 +3,15 @@ import {XSVG} from "../../../../XSVG";
 import {XPointed} from "../../../../element/type/XPointed";
 
 export abstract class ClickDraw implements XDrawable {
-  private container: XSVG | null = null;
+  protected container: XSVG;
   private perfectMode: boolean = false;
   protected drawableElement: XPointed | null = null;
   private click = this._click.bind(this);
   private move = this._move.bind(this);
+
+  constructor(container: XSVG) {
+    this.container = container;
+  }
 
   _click(event: MouseEvent) {
     if(!this.container) return;
@@ -42,7 +46,7 @@ export abstract class ClickDraw implements XDrawable {
 
   start(container: XSVG): void {
     this.container = container;
-    container.HTML.addEventListener('mousedown', this.click);
+    this.container.HTML.addEventListener('mousedown', this.click);
     document.addEventListener("mousemove", this.move);
   }
 

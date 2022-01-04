@@ -9,7 +9,7 @@ export class DrawLine extends MoveDraw {
     this.startPos.x = event.clientX - containerRect.left; //x position within the element.
     this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
 
-    let element = new XLine(this.startPos.x, this.startPos.y, this.startPos.x, this.startPos.y);
+    let element = new XLine(this.container, this.startPos.x, this.startPos.y, this.startPos.x, this.startPos.y);
     element.fixPosition();
     return element;
   }

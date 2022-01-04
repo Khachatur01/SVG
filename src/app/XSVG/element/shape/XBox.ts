@@ -2,10 +2,11 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
+import {XSVG} from "../../XSVG";
 
 export class XBox extends XElement {
-  constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
-    super();
+  constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+    super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "rect");
 
     this.position = {x: x, y: y};
