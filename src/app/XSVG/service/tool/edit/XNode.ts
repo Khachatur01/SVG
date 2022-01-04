@@ -37,8 +37,8 @@ export class XNode extends XEllipse {
     let containerRect: Rect = this.editTool.getContainer().HTML.getBoundingClientRect();
     let position: Point = Matrix.rotate(
       [{x: event.clientX - containerRect.x, y: event.clientY - containerRect.y}],
-      this.editTool.getContainer().focused.refPoint,
-      this.editTool.getContainer().focused.angle
+      this.editTool.editableElement.refPoint,
+      this.editTool.editableElement.angle
     )[0];
 
     this.editTool.editableElement.replacePoint(this.order, position);
