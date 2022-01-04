@@ -101,9 +101,10 @@ export class XFocus implements XDraggable, XResizeable {
         this.refPoint = Object.assign({}, child.refPoint);
         this.refPointView = Object.assign({}, child.refPoint);
         this.rotate(child.angle);
+        this.focus();
       });
     } else {
-      this.fixRect();
+      // this.fixRect();
       this.focus();
     }
     this.fixPosition();
