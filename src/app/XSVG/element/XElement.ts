@@ -57,6 +57,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   public readonly style = new Style(this);
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
+  private _lastAngle: number = 0;
 
   protected _angle: number = 0;
   protected _refPoint: Point = {x: 0, y: 0};
@@ -170,20 +171,6 @@ export abstract class XElement implements XResizeable, XDraggable {
         this.SVG.setAttribute(key, "" + value);
   }
 
-  // setStyle(attributes: object): void {
-  //   this.setAttr(attributes);
-  //   for(const [key, value] of Object.entries(attributes)) {
-  //     this.style[key] = value;
-  //   }
-  // }
-  //
-  // setDefaultStyle(): void {
-  //   this.setAttr(XElement.globalStyle);
-  //   for(const [key, value] of Object.entries(XElement.globalStyle)) {
-  //     this.style[key] = value;
-  //   }
-  // }
-
   setOverEvent(): void {
     this.svgElement.addEventListener("mouseover", this._highlight);
     this.svgElement.addEventListener("mouseout", this._lowlight);
@@ -215,6 +202,9 @@ export abstract class XElement implements XResizeable, XDraggable {
   fixSize(): void {
     this._lastSize = this.size;
   }
+  fixAngle(): void {
+    this._lastAngle = this.angle;
+  }
   get lastRect(): Rect {
     return {
       x: this._lastPosition.x,
@@ -222,6 +212,9 @@ export abstract class XElement implements XResizeable, XDraggable {
       width: this._lastSize.width,
       height: this._lastSize.height
     }
+  }
+  get lastAngle(): number {
+    return this._lastAngle;
   }
 
   centerRefPoint() {

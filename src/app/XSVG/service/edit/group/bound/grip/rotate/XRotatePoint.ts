@@ -5,6 +5,8 @@ import {XPath} from "../../../../../../element/path/XPath";
 import {MoveTo} from "../../../../../../model/path/point/MoveTo";
 import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
+import {XElement} from "../../../../../../element/XElement";
+import {Rect} from "../../../../../../model/Rect";
 
 export class XRotatePoint extends XPath {
   private rotating: boolean = false;
@@ -68,6 +70,24 @@ export class XRotatePoint extends XPath {
     this.svgElement.style.display = "none";
   }
 
+  getAngle(containerRect: Rect, event: MouseEvent): number {
+    let x = event.clientX - containerRect.x;
+    let y = event.clientY - containerRect.y;
+
+    let angle = Angle.fromPoints(
+      {x: 0, y: this.container.focused.refPoint.y},
+      this.container.focused.refPoint,
+      {x: x, y: y}
+    );
+
+    angle -= this.dAngle;
+
+    if(angle < 0)
+      angle += 360;
+
+    return angle;
+  }
+
   private start(event: MouseEvent) {
     this.rotating = true;
     this.container.activeTool.off();
@@ -82,23 +102,14 @@ export class XRotatePoint extends XPath {
       this.container.focused.refPoint,
       {x: x, y: y}
     ) - this.container.focused.angle;
+
+    this.container.focused.children.forEach((child: XElement) => {
+      child.fixAngle();
+    });
+    this.container.focused.lastAngle = this.getAngle(containerRect, event);
   }
   private move(event: MouseEvent) {
-    let containerRect = this.container.HTML.getBoundingClientRect();
-
-    let x = event.clientX - containerRect.left;
-    let y = event.clientY - containerRect.top;
-
-    let angle = Angle.fromPoints(
-      {x: 0, y: this.container.focused.refPoint.y},
-      this.container.focused.refPoint,
-      {x: x, y: y}
-    );
-
-    angle -= this.dAngle;
-
-    if(angle < 0)
-      angle += 360;
+    let angle = this.getAngle(this.container.HTML.getBoundingClientRect(), event);
 
     this.container.focused.rotate(angle);
   }

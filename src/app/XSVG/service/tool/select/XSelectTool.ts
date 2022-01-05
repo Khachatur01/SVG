@@ -72,7 +72,6 @@ export class XSelectTool extends XTool {
       let elementPoints = element.rotatedPoints;
 
       if(width > 0) {/* if select box drawn from right to left */
-
         for(let point of elementPoints)
           if(/* full match */
             point.x < boxPoints.topLeft.x || point.x > boxPoints.bottomRight.x ||
@@ -81,9 +80,7 @@ export class XSelectTool extends XTool {
             continue elementsLoop;
 
         this.container.focus(element);
-
       } else {/* if select box drawn from left to right */
-
         for(let point of elementPoints)
           if(/* one point match */
             point.x > boxPoints.topLeft.x && point.x < boxPoints.bottomRight.x &&
@@ -92,7 +89,6 @@ export class XSelectTool extends XTool {
             this.container.focus(element);
             break;
           }
-
       }
     }
     this.container.singleSelect();

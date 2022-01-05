@@ -57,8 +57,10 @@ export class XSVG {
     this._elements.add(xElement);
 
     xElement.SVG.addEventListener("mousedown", () => {
-      if(this.drawTool.isDrawing()) return;
-      this.drawTool.off();
+      if(this.drawTool.isOn()) {
+        this.blur();
+        return;
+      }
 
       this.editTool.removeEditableElement();
       if(this.editTool.isOn()) {
