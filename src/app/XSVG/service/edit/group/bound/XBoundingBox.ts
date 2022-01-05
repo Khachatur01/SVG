@@ -157,6 +157,30 @@ export class XBoundingBox extends XBox {
     }
   }
 
+  correctByDelta(delta: Point) {
+    if(delta.x == 0 && delta.y == 0) return;
+
+    console.log(delta)
+
+    this.position = delta;
+    let position = this.position;
+    let size = this.size;
+
+    this._boundingRect = {
+      x: position.x,
+      y: position.y,
+      width: size.width,
+      height: size.height
+    }
+
+    this.positionGrips();
+  }
+
+  override correct(refPoint: Point, lastRefPoint: Point) {
+    let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
+    this.correctByDelta(delta);
+  }
+
   override get refPoint(): Point {
     return this._refPoint;
   }

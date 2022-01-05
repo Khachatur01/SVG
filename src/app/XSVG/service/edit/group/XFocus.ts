@@ -135,7 +135,7 @@ export class XFocus implements XDraggable, XResizeable {
   correct(point: Point): void {
     this._children.forEach((child: XElement) => child.correct(point, this.lastRefPoint));
 
-    this.fit();
+    this.boundingBox.correct(point, this.lastRefPoint);
   }
 
   set position(delta: Point) {
@@ -147,6 +147,10 @@ export class XFocus implements XDraggable, XResizeable {
     };
     this.refPoint = refPoint;
     this.refPointView = refPoint;
+
+    // this.boundingBox.correct(refPoint, this.lastRefPoint);
+    // this.boundingBox.correctByDelta(delta);
+    // this.boundingBox.positionGrips();
     this.fit();
   }
 
@@ -212,7 +216,6 @@ export class XFocus implements XDraggable, XResizeable {
 
     return this.boundingBox.boundingRect;
   }
-
   get rotatedBoundingRect(): Rect {
     let minX, minY;
     let maxX, maxY;
@@ -275,6 +278,7 @@ export class XFocus implements XDraggable, XResizeable {
     this._lastPosition = this.position;
     this._lastSize = this.size;
     this._children.forEach(child => child.fixRect());
+    this.boundingBox.fixPosition();
   }
   fixRefPoint(): void {
     this.boundingBox.fixRefPoint();
@@ -299,7 +303,6 @@ export class XFocus implements XDraggable, XResizeable {
   set refPoint(point: Point) {
     this._children.forEach(child => child.refPoint = point);
     this.boundingBox.refPoint = point;
-    this.fit();
   }
   set refPointView(point: Point) {
     this.boundingBox.refPointView = point;
@@ -333,8 +336,6 @@ export class XFocus implements XDraggable, XResizeable {
 
   fitRotated(): void {
     let contentRect: Rect = this.rotatedBoundingRect;
-
-    console.log(contentRect)
 
     this.boundingBox.position = contentRect;
     this.boundingBox.setSize(contentRect);

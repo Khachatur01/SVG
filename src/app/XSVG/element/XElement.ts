@@ -78,7 +78,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract set position(delta: Point);
   abstract get points(): Point[];
 
-  correct(refPoint: Point, lastRefPoint: Point) {
+  getCorrectionDelta(refPoint: Point, lastRefPoint: Point) {
     /* calculate delta */
     let rotatedRefPoint = Matrix.rotate(
       [{x: lastRefPoint.x, y: lastRefPoint.y}],
@@ -86,10 +86,15 @@ export abstract class XElement implements XResizeable, XDraggable {
       this.angle
     )[0];
     /* correct by delta */
-    let delta = {
+    return {
       x: Math.round(rotatedRefPoint.x - lastRefPoint.x),
       y: Math.round(rotatedRefPoint.y - lastRefPoint.y)
     };
+
+  }
+
+  correct(refPoint: Point, lastRefPoint: Point) {
+    let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if(delta.x == 0 && delta.y == 0) return;
     this.position = delta;
   }
