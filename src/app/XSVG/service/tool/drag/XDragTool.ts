@@ -18,6 +18,8 @@ export class XDragTool extends XTool {
   }
 
   private onDragStart(event: MouseEvent) {
+    if(event.target == this.container.HTML) return;
+
     this.mouseStartPos.x = event.clientX;
     this.mouseStartPos.y = event.clientY;
     this.elementStartPos = this.container.focused?.position as Point;
@@ -41,10 +43,14 @@ export class XDragTool extends XTool {
     this.container.focused.lowlight();
   }
 
+  override on() {
+    this._on();
+  }
+
   public _on(): void {
-    this.isDrag = true;
     this.container.HTML.addEventListener("mousedown", this.dragStart);
     document.addEventListener("mouseup", this.dragEnd);
+    this.isDrag = true;
   }
 
   public off(): void {

@@ -2,7 +2,6 @@ import {XDrawable} from "../XDrawable";
 import {XElement} from "../../../../element/XElement";
 import {XSVG} from "../../../../XSVG";
 import {Point} from "../../../../model/Point";
-import {XRectangle} from "../../../../element/shape/XRectangle";
 import {MoveDrawable} from "../type/MoveDrawable";
 
 export abstract class MoveDraw implements XDrawable {

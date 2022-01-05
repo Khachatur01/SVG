@@ -2,9 +2,11 @@ import {XTool} from "../XTool";
 import {XSVG} from "../../../XSVG";
 import {XRectangle} from "../../../element/shape/XRectangle";
 import {Point} from "../../../model/Point";
+import {XDragTool} from "../drag/XDragTool";
 
 export class XSelectTool extends XTool {
   private readonly boundingBox: XRectangle;
+  public readonly dragTool: XDragTool;
   private position: Point = {x: 0, y: 0};
   private _isOn: boolean = false;
 
@@ -15,6 +17,7 @@ export class XSelectTool extends XTool {
   constructor(container: XSVG) {
     super(container);
     this.boundingBox = new XRectangle(container);
+    this.dragTool = new XDragTool(container);
 
     this.boundingBox.style.fill = "none";
     this.boundingBox.style.strokeColor = "#1545ff";
@@ -25,9 +28,11 @@ export class XSelectTool extends XTool {
   }
 
   private onStart(event: MouseEvent): void {
+    if(event.target != this.container.HTML) return;
+
     let containerRect = this.container.HTML.getBoundingClientRect();
-    this.position.x = event.clientX - containerRect.left; //x position within the element.
-    this.position.y = event.clientY - containerRect.top;  //y position within the element.
+    this.position.x = event.clientX - containerRect.left; // x position within the element.
+    this.position.y = event.clientY - containerRect.top;  // y position within the element.
     this.boundingBox.setSize({
       x: this.position.x,
       y: this.position.y,
@@ -99,12 +104,14 @@ export class XSelectTool extends XTool {
     this.container.HTML.addEventListener("mousedown", this.start);
     document.addEventListener("mouseup", this.end);
     this._isOn = true;
+    this.dragTool.on();
   }
 
   off(): void {
     this.container.HTML.removeEventListener("mousedown", this.start);
     document.removeEventListener("mouseup", this.end);
     this._isOn = false;
+    this.dragTool.off();
   }
 
   isOn(): boolean {

@@ -1,5 +1,4 @@
 import {XDrawTool} from "./service/tool/draw/XDrawTool";
-import {XDragTool} from "./service/tool/drag/XDragTool";
 import {XElement} from "./element/XElement";
 import {XFocus} from "./service/edit/group/XFocus";
 import {XSelectTool} from "./service/tool/select/XSelectTool";
@@ -14,7 +13,6 @@ export class XSVG {
   private _elements: Set<XElement> = new Set<XElement>();
   public elementsGroup: SVGGElement;
   public readonly drawTool: XDrawTool;
-  public readonly dragTool: XDragTool;
   public readonly selectTool: XSelectTool;
   public readonly editTool: XEditTool;
 
@@ -31,7 +29,6 @@ export class XSVG {
       throw DOMException;
 
     this.drawTool = new XDrawTool(this);
-    this.dragTool = new XDragTool(this);
     this.selectTool = new XSelectTool(this);
     this.editTool = new XEditTool(this);
     this.activeTool = this.selectTool;
@@ -57,7 +54,7 @@ export class XSVG {
     this._elements.add(xElement);
 
     xElement.SVG.addEventListener("mousedown", () => {
-      if(this.drawTool.isOn()) {
+      if(!this.selectTool.isOn()) {
         this.blur();
         return;
       }
@@ -67,14 +64,7 @@ export class XSVG {
         if(xElement instanceof XPointed)
           this.editTool.editableElement = xElement;
       } else {
-        /* when tries to drag not selected element, all elements will blur, and that element will select */
-        if(this.dragTool.isOn()) {
-          if(!this._focusedElements.hasChild(xElement)) {
-            this.blur();
-            this.focus(xElement);
-          }
-          return;
-        }
+        if(this._focusedElements.hasChild(xElement)) return;
 
         if(!this._multiSelect) {
           this.blur();
@@ -88,7 +78,7 @@ export class XSVG {
     });
 
     xElement.SVG.addEventListener("mousemove", () => {
-      if(this.dragTool.isOn() && this._focusedElements.hasChild(xElement)) {
+      if(this.selectTool.isOn()) {
         xElement.SVG.style.cursor = "move";
       } else {
         xElement.SVG.style.cursor = "pointer";

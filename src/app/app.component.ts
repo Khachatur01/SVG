@@ -1,6 +1,5 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {XSVG} from "./XSVG/XSVG";
-import {Tool} from "./XSVG/dataSource/Tool";
 import {Rect} from "./XSVG/model/Rect";
 
 @Component({
@@ -67,10 +66,6 @@ export class AppComponent implements AfterViewInit {
     if (event.key == "Shift") {
         this.svg.drawTool.perfect = true;
     }
-    if (event.key == "Alt") {
-      this.svg.dragTool.on();
-      this.showToolName("drag");
-    }
     if (event.key == "Escape") {
       this.svg.selectTool.on();
     }
@@ -82,10 +77,6 @@ export class AppComponent implements AfterViewInit {
     if(!this.svg) return;
     if (event.key == "Shift") {
         this.svg.drawTool.perfect = false;
-    }
-    if (event.key == "Alt") {
-      this.svg.selectTool.on();
-      this.showToolName("select");
     }
     if (event.key == "Delete") {
       this.svg.focused?.remove();
