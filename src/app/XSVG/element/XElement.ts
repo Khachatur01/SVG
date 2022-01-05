@@ -190,7 +190,8 @@ export abstract class XElement implements XResizeable, XDraggable {
   }
 
   highlight(): void {
-    this.svgElement.style.filter = "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.7))"
+    if(this.container.selectTool.isOn())
+      this.svgElement.style.filter = "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.7))"
   }
 
   lowlight(): void {
