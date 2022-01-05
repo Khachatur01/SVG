@@ -3,6 +3,7 @@ import {XPolygon} from "../pointed/XPolygon";
 import {Rect} from "../../model/Rect";
 import {Point} from "../../model/Point";
 import {XSVG} from "../../XSVG";
+import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
 
 /*
 *  0_____1
@@ -10,7 +11,7 @@ import {XSVG} from "../../XSVG";
 * 3|_____|2
 * */
 
-export class XRectangle extends XPolygon {
+export class XRectangle extends XPolygon implements MoveDrawable {
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container, [
       /* 0 */                                             /* 1 */
@@ -28,7 +29,7 @@ export class XRectangle extends XPolygon {
     return super.size;
   }
 
-  /* TODO change name.
+  /*
       This function sets size on drawing.
       Elements, which draw by moving,
       that elements must set size different on drawing

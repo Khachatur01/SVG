@@ -3,8 +3,9 @@ import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {XElement} from "../XElement";
 import {XSVG} from "../../XSVG";
+import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
 
-export class XEllipse extends XElement {
+export class XEllipse extends XElement implements MoveDrawable {
   constructor(container: XSVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "ellipse");
@@ -84,7 +85,10 @@ export class XEllipse extends XElement {
       rx: rx,
       ry: ry
     });
+  }
 
+  drawSize(rect: Rect) {
+    this.setSize(rect);
   }
 
   get size(): Size {
