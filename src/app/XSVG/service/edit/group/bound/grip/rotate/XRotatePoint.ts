@@ -116,6 +116,7 @@ export class XRotatePoint extends XPath {
   private end() {
     if(!this.rotating) return;
 
+    this.container.selectTool.on();
     this.container.HTML.removeEventListener("mousemove", this._move);
     this.rotating = false;
   }

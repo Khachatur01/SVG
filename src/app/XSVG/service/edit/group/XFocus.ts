@@ -148,11 +148,7 @@ export class XFocus implements XDraggable, XResizeable {
     this.refPoint = refPoint;
     this.refPointView = refPoint;
 
-    // this.boundingBox.position = delta;
-    // this.boundingBox.correct(refPoint, this.lastRefPoint);
     this.boundingBox.correctByDelta(delta);
-    // this.boundingBox.positionGrips();
-    // this.fit();
   }
 
   get center(): Point {
