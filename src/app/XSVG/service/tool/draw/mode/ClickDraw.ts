@@ -21,9 +21,15 @@ export abstract class ClickDraw implements XDrawable {
     this.container.drawTool.drawing();
 
     let containerRect = this.container?.HTML.getBoundingClientRect();
-    if(!containerRect) return;
 
-    let element = this.onClick(containerRect, event);
+    let snapPoint = {
+      x: event.clientX - containerRect.left,
+      y: event.clientY - containerRect.top
+    };
+
+    snapPoint = this.container.grid.getSnapPoint(snapPoint);
+
+    let element = this.onClick(snapPoint);
     if(element) {
       this.drawableElement = element;
       this.container?.add(this.drawableElement);
@@ -36,7 +42,7 @@ export abstract class ClickDraw implements XDrawable {
     this.onMove(containerRect, event, this.perfectMode);
   }
 
-  abstract onClick(containerRect: DOMRect, event: MouseEvent): XPointed | null;
+  abstract onClick(position: Point): XPointed | null;
   onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
     if(!this.drawableElement) return;
 

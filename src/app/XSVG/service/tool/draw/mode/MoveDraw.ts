@@ -23,8 +23,12 @@ export abstract class MoveDraw implements XDrawable {
     if(!this.container) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
+    this.startPos.x = event.clientX - containerRect.left; //x position within the element.
+    this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
 
-    this.drawableElement = this.onStart(containerRect, event);
+    this.startPos = this.container.grid.getSnapPoint(this.startPos);
+
+    this.drawableElement = this.onStart(this.startPos);
     this.container.add(this.drawableElement);
     this.container.HTML.addEventListener('mousemove', this.draw);
     this.container.drawTool.drawing();
@@ -57,7 +61,7 @@ export abstract class MoveDraw implements XDrawable {
     this.drawableElement = null;
   }
 
-  abstract onStart(containerRect: DOMRect, event: MouseEvent): XElement;
+  abstract onStart(position: Point): XElement;
   onDraw(containerRect: DOMRect, event: MouseEvent, xElement: XElement, perfectMode: boolean): void {
     let width = event.clientX - containerRect.left - this.startPos.x;
     let height = event.clientY - containerRect.top - this.startPos.y;

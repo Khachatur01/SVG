@@ -20,12 +20,14 @@ export class DrawFree implements XDrawable {
     let containerRect = this.container?.HTML.getBoundingClientRect();
     if(!containerRect) return;
 
-    let x1 = event.clientX - containerRect.left; //x position within the element.
-    let y1 = event.clientY - containerRect.top;  //y position within the element.
+    let snapPoint = {
+      x: event.clientX - containerRect.left,
+      y: event.clientY - containerRect.top
+    }
 
-    this.drawableElement = new XFree(this.container, [
-      {x: x1, y: y1}
-    ]);
+    snapPoint = this.container.grid.getSnapPoint(snapPoint);
+
+    this.drawableElement = new XFree(this.container, [snapPoint]);
 
     this.container?.add(this.drawableElement);
     this.container?.HTML.addEventListener('mousemove', this._onDraw);

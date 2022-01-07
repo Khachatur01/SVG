@@ -3,13 +3,11 @@ import {XLine} from "../../../../../element/pointed/XLine";
 import {Point} from "../../../../../model/Point";
 import {Angle} from "../../../../math/Angle";
 import {XPointed} from "../../../../../element/type/XPointed";
+import {XElement} from "../../../../../element/XElement";
 
 export class DrawLine extends MoveDraw {
-  onStart(containerRect: DOMRect, event: MouseEvent): XPointed {
-    this.startPos.x = event.clientX - containerRect.left; //x position within the element.
-    this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
-
-    let element = new XLine(this.container, this.startPos.x, this.startPos.y, this.startPos.x, this.startPos.y);
+  onStart(position: Point): XElement {
+    let element = new XLine(this.container, position.x, position.y, position.x, position.y);
     element.fixPosition();
     return element;
   }
