@@ -27,6 +27,12 @@ export class XPolygon extends XPointed {
     }
     return pointsArray;
   }
+  override getPoint(index: number): Point {
+    let points = this.points;
+    if(index < 0)
+      index = points.length + index;
+    return points[index];
+  }
   override set points(points: Point[]) {
     let pointsString = "";
     for(let point of points) {

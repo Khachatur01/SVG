@@ -6,6 +6,7 @@ import {Rect} from "../../model/Rect";
 export abstract class XPointed extends XElement {
   protected _lastPoints: Point[] = [];
   override set points(points: Point[]) {};
+  abstract getPoint(index: number): Point;
   abstract pushPoint(point: Point): void;
   abstract removePoint(index: number): void;
   abstract replacePoint(index: number, point: Point): void;

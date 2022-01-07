@@ -34,6 +34,7 @@ export class XRefPoint extends XPath {
   get lastRefPoint(): Point {
     return this._lastPosition;
   }
+
   set lastRefPoint(refPoint: Point) {
     this._lastPosition = refPoint;
   }
@@ -44,6 +45,7 @@ export class XRefPoint extends XPath {
       y: this._center.y
     };
   }
+
   override set position(position: Point) {
     this._center = position;
     this.drawPoint(position);
@@ -73,6 +75,7 @@ export class XRefPoint extends XPath {
   show() {
     this.svgElement.style.display = "block";
   }
+
   hide() {
     this.svgElement.style.display = "none";
   }
@@ -94,12 +97,14 @@ export class XRefPoint extends XPath {
 
     this.container.HTML.addEventListener("mousemove", this._move);
   }
+
   private move(event: MouseEvent) {
     this.initLastPoint(event);
     this.container.focused.refPointView = Object.assign({}, this._lastPoint);
   }
+
   private end() {
-    if(!this.moving) return;
+    if (!this.moving) return;
 
     this.container.focused.refPoint = Object.assign({}, this._lastPoint);
     this.container.focused.correct(Object.assign({}, this._lastPoint));
@@ -113,6 +118,7 @@ export class XRefPoint extends XPath {
     this.svgElement.addEventListener("mousedown", this._start);
     document.addEventListener("mouseup", this._end);
   }
+
   off() {
     this.svgElement.removeEventListener("mousedown", this._start);
     this.container.HTML.removeEventListener("mousemove", this._move);

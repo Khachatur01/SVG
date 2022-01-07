@@ -1,6 +1,8 @@
 import {XDrawable} from "../XDrawable";
 import {XSVG} from "../../../../XSVG";
 import {XPointed} from "../../../../element/type/XPointed";
+import {Point} from "../../../../model/Point";
+import {Angle} from "../../../math/Angle";
 
 export abstract class ClickDraw implements XDrawable {
   protected container: XSVG;
@@ -38,17 +40,19 @@ export abstract class ClickDraw implements XDrawable {
   onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
     if(!this.drawableElement) return;
 
-    // let x = event.clientX - containerRect.left; //x position within the element.
-    // let y = event.clientY - containerRect.top;  //y position within the element.
-
-    let snapPoint = this.container.grid.getSnapPoint({
+    let snapPoint = {
       x: event.clientX - containerRect.left,
-      y: event.clientY - containerRect.top});
+      y: event.clientY - containerRect.top
+    };
 
-    let x = snapPoint.x;
-    let y = snapPoint.y;
+    if(this.container.grid.isSnap())
+      snapPoint = this.container.grid.getSnapPoint(snapPoint);
+    else if(perfectMode) {
+      let lastPoint: Point = this.drawableElement.getPoint(-2);
+      snapPoint = Angle.snapLineEnd(lastPoint.x, snapPoint.x, lastPoint.y, snapPoint.y) as Point;
+    }
 
-    this.drawableElement.replacePoint(-1,{x: x, y: y});
+    this.drawableElement.replacePoint(-1, snapPoint);
   };
 
   start(container: XSVG): void {

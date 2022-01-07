@@ -32,6 +32,13 @@ export class XLine extends XPointed {
     });
   }
 
+  override getPoint(index: number): Point {
+    return {
+      x: parseFloat(this.getAttr("x2")),
+      y: parseFloat(this.getAttr("y2"))
+    };
+  }
+
   override pushPoint(point: Point): void {
   }
 
