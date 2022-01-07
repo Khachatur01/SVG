@@ -31,10 +31,15 @@ export class DrawFree implements XDrawable {
   onDraw(event: MouseEvent): void {
     let containerRect = this.container?.HTML.getBoundingClientRect();
     if(!containerRect) return;
-    let nextX = event.clientX - containerRect.left;
-    let nextY = event.clientY - containerRect.top;
 
     if(!this.drawableElement) return;
+    let snapPoint = this.container.grid.getSnapPoint({
+      x: event.clientX - containerRect.left,
+      y: event.clientY - containerRect.top
+    });
+
+    let nextX = snapPoint.x;
+    let nextY = snapPoint.y;
 
     this.drawableElement.setAttr({
       points: this.drawableElement.getAttr("points") + " " + nextX + " " + nextY

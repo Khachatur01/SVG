@@ -38,8 +38,15 @@ export abstract class ClickDraw implements XDrawable {
   onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
     if(!this.drawableElement) return;
 
-    let x = event.clientX - containerRect.left; //x position within the element.
-    let y = event.clientY - containerRect.top;  //y position within the element.
+    // let x = event.clientX - containerRect.left; //x position within the element.
+    // let y = event.clientY - containerRect.top;  //y position within the element.
+
+    let snapPoint = this.container.grid.getSnapPoint({
+      x: event.clientX - containerRect.left,
+      y: event.clientY - containerRect.top});
+
+    let x = snapPoint.x;
+    let y = snapPoint.y;
 
     this.drawableElement.replacePoint(-1,{x: x, y: y});
   };

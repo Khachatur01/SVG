@@ -23,6 +23,21 @@ export class AppComponent implements AfterViewInit {
     this.svg.editTool.on();
     this.showToolName("edit");
   }
+  public grid() {
+    if(!this.svg) return;
+    if(this.svg.grid.isGrid())
+      this.svg.grid.gridOff();
+    else
+      this.svg.grid.gridOn(20);
+  }
+  public snap() {
+    if(!this.svg) return;
+    if(this.svg.grid.isSnap())
+      this.svg.grid.snapOff();
+    else
+      this.svg.grid.snapOn();
+  }
+
   public rectangle() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.rectangle;

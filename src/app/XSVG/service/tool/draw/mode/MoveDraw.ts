@@ -74,6 +74,15 @@ export abstract class MoveDraw implements XDrawable {
         height = averageSize;
     }
 
+    if(this.container.grid.isSnap()) {
+      let snapPoint = this.container.grid.getSnapPoint({
+        x: this.startPos.x + width,
+        y: this.startPos.y + height
+      });
+      width = snapPoint.x - this.startPos.x;
+      height = snapPoint.y - this.startPos.y;
+    }
+
     /* if xElement instance of MoveDrawable, set drawSize */
     (xElement as unknown as MoveDrawable)?.drawSize({
       x: this.startPos.x,

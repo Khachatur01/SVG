@@ -6,6 +6,7 @@ import {XTool} from "./service/tool/XTool";
 import {XEditTool} from "./service/tool/edit/XEditTool";
 import {XPointed} from "./element/type/XPointed";
 import {Tool} from "./dataSource/Tool";
+import {XGrid} from "./service/grid/XGrid";
 
 export class XSVG {
   private readonly container: HTMLElement;
@@ -15,6 +16,7 @@ export class XSVG {
   public readonly drawTool: XDrawTool;
   public readonly selectTool: XSelectTool;
   public readonly editTool: XEditTool;
+  public grid: XGrid;
 
   public readonly drawTools: Tool = new Tool(this);
   public activeTool: XTool;
@@ -32,6 +34,7 @@ export class XSVG {
     this.selectTool = new XSelectTool(this);
     this.editTool = new XEditTool(this);
     this.activeTool = this.selectTool;
+    this.grid = new XGrid(this);
 
     this.container.addEventListener("mousedown", event => {
       if(event.target == this.container) {
@@ -43,6 +46,7 @@ export class XSVG {
     this.elementsGroup = document.createElementNS(XElement.svgURI, "g");
     this.elementsGroup.id = "elements";
 
+    this.container.appendChild(this.grid.group);
     this.container.appendChild(this.elementsGroup);
     this.container.appendChild(this._focusedElements.SVG);
     this.container.appendChild(this.editTool.SVG);

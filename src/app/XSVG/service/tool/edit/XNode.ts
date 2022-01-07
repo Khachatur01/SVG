@@ -42,6 +42,8 @@ export class XNode extends XEllipse {
       this.editTool.editableElement.angle
     )[0];
 
+    position = this.container.grid.getSnapPoint(position);
+
     this.editTool.editableElement.replacePoint(this.order, position);
     this.position = position;
   };
