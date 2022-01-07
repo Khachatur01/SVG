@@ -1,9 +1,12 @@
 import {XDrawable} from "../XDrawable";
 import {XFree} from "../../../../element/pointed/XFree";
 import {XSVG} from "../../../../XSVG";
+import {Point} from "../../../../model/Point";
+import {Angle} from "../../../math/Angle";
 
 export class DrawFree implements XDrawable {
   private container: XSVG;
+  private perfectMode: boolean = false;
   private drawableElement: XFree | null = null;
   private _onStart = this.onStart.bind(this);
   private _onDraw = this.onDraw.bind(this);
@@ -33,17 +36,22 @@ export class DrawFree implements XDrawable {
     if(!containerRect) return;
 
     if(!this.drawableElement) return;
-    let snapPoint = this.container.grid.getSnapPoint({
+
+    let snapPoint = {
       x: event.clientX - containerRect.left,
       y: event.clientY - containerRect.top
-    });
+    };
 
-    let nextX = snapPoint.x;
-    let nextY = snapPoint.y;
-
-    this.drawableElement.setAttr({
-      points: this.drawableElement.getAttr("points") + " " + nextX + " " + nextY
-    });
+    if(this.container.grid.isSnap()) {
+      snapPoint = this.container.grid.getSnapPoint(snapPoint);
+      this.drawableElement.pushPoint(snapPoint);
+    } else if(this.perfectMode) {
+      let lastPoint: Point = this.drawableElement.getPoint(-2);
+      snapPoint = Angle.snapLineEnd(lastPoint.x, snapPoint.x, lastPoint.y, snapPoint.y) as Point;
+      this.drawableElement.replacePoint(-1, snapPoint);
+    } else {
+      this.drawableElement.pushPoint(snapPoint);
+    }
   }
 
   onEnd() {
@@ -62,6 +70,7 @@ export class DrawFree implements XDrawable {
   }
 
   set perfect(mode: boolean) {
+    this.perfectMode = mode;
   }
 
   start(container: XSVG): void {
