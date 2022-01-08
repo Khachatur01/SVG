@@ -93,6 +93,7 @@ export class XRefPoint extends XPath {
     this._lastPosition = Object.assign({}, this.position);
 
     this.initLastPoint(event);
+    this._lastPoint = this.container.grid.getSnapPoint(this._lastPoint);
     this.container.focused.refPointView = Object.assign({}, this._lastPoint);
 
     this.container.HTML.addEventListener("mousemove", this._move);
@@ -100,6 +101,7 @@ export class XRefPoint extends XPath {
 
   private move(event: MouseEvent) {
     this.initLastPoint(event);
+    this._lastPoint = this.container.grid.getSnapPoint(this._lastPoint);
     this.container.focused.refPointView = Object.assign({}, this._lastPoint);
   }
 
