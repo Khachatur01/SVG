@@ -64,8 +64,7 @@ export class XSVG {
       }
 
       this.editTool.removeEditableElement();
-      if(this.editTool.isOn()) {
-        if(xElement instanceof XPointed)
+      if(this.editTool.isOn() && xElement instanceof XPointed) {
           this.editTool.editableElement = xElement;
       } else {
         if(this._focusedElements.hasChild(xElement)) return;

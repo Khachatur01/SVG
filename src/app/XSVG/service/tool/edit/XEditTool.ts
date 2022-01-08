@@ -57,7 +57,7 @@ export class XEditTool extends XTool {
         break;
       }
     }
-    this.container.focused.blur();
+    this.container.blur();
   }
 
   off(): void {

@@ -21,6 +21,13 @@ export class Path {
     return points;
   }
 
+  get pointedCommands(): Command[] {
+    let commands: Command[] = [];
+    for(let command of this.commands)
+      if(!(command instanceof Close))
+        commands.push(command);
+    return commands;
+  }
   getAll(): Command[] {
     return this.commands;
   }
@@ -43,15 +50,21 @@ export class Path {
     this.commands.push(command);
   }
   remove(index: number) {
+    let pointedCommands = this.pointedCommands;
     if(index < 0)
-      index = this.commands.length - index;
+      index = pointedCommands.length - index;
 
-    this.commands = this.commands.splice(index, 1);
+    let command = pointedCommands[index];
+    this.commands = this.commands.splice(this.commands.indexOf(command), 1);
+  }
+  replace(index: number, point: Point) {
+    let pointedCommands = this.pointedCommands;
+    if(index < 0)
+      index = pointedCommands.length - index;
+
+    this.pointedCommands[index].position = point;
   }
 
-  addClose() {
-
-  }
 
   toString(close: boolean = false): string {
     let result = "";

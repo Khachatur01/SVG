@@ -370,7 +370,9 @@ export class XFocus implements XDraggable, XResizeable {
       path.add(child.toPath());
     });
     this.remove();
-    this.appendChild(path);
+
+    this.container.add(path);
+    this.container.focus(path);
 
     this.refPointView = refPoint;
     this.refPoint = refPoint;
