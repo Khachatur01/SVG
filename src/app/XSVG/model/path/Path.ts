@@ -1,5 +1,6 @@
 import {Command} from "./Command";
 import {Point} from "../Point";
+import {Close} from "./close/Close";
 
 export class Path {
   private commands: Command[] = [];
@@ -15,12 +16,9 @@ export class Path {
   get points(): Point[] {
     let points: Point[] = [];
     for(let command of this.commands)
-      points.push(command.position);
+      if(!(command instanceof Close))
+        points.push(command.position);
     return points;
-  }
-  set points(points: Point[]) {
-    for(let i = 0; i < this.commands.length; i++)
-      this.commands[i].position = points[i];
   }
 
   getAll(): Command[] {
@@ -49,6 +47,10 @@ export class Path {
       index = this.commands.length - index;
 
     this.commands = this.commands.splice(index, 1);
+  }
+
+  addClose() {
+
   }
 
   toString(close: boolean = false): string {

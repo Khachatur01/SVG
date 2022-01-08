@@ -61,8 +61,4 @@ export class XLine extends XPointed {
     return this.getAttr("x1") != this.getAttr("x2") ||
       this.getAttr("y1") != this.getAttr("y2")
   }
-
-  override toPath(): XPath {
-    return new XPath(this.container);
-  }
 }

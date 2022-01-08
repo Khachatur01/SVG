@@ -4,6 +4,7 @@ import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {XSVG} from "../../XSVG";
 import {Command} from "../../model/path/Command";
+import {Close} from "../../model/path/close/Close";
 
 export class XPath extends XElement {
   protected _size: Size = {width: 0, height: 0};
@@ -47,9 +48,11 @@ export class XPath extends XElement {
     let leftTop: Point = Object.assign({}, commands[0].position);
 
     for(let i = 1; i < commands.length; i++) {
-      if (commands[i].position.x < leftTop.x)
+      if(commands[i] instanceof Close) continue;
+
+      if(commands[i].position.x < leftTop.x)
         leftTop.x = commands[i].position.x;
-      if (commands[i].position.y < leftTop.y)
+      if(commands[i].position.y < leftTop.y)
         leftTop.y = commands[i].position.y;
     }
     return leftTop;
@@ -58,11 +61,14 @@ export class XPath extends XElement {
     let lastCommands = this._lastPath.getAll();
     let thisCommands = this.path.getAll();
 
-    for(let i = 0; i < lastCommands.length; i++)
+    for(let i = 0; i < lastCommands.length; i++) {
+      if(lastCommands[i] instanceof Close) continue;
+
       thisCommands[i].position = {
         x: lastCommands[i].position.x + delta.x,
         y: lastCommands[i].position.y + delta.y
       }
+    }
 
     this.path.setAll(thisCommands);
 
@@ -78,6 +84,8 @@ export class XPath extends XElement {
     let max = Object.assign({}, commands[0].position);
 
     for(let i = 1; i < commands.length; i++) {
+      if(commands[i] instanceof Close) continue;
+
       if(commands[i].position.x < min.x)
         min.x = commands[i].position.x
       if(commands[i].position.y < min.y)
@@ -102,6 +110,13 @@ export class XPath extends XElement {
     path.commands.forEach((command: Command) => {
       this.path.add(command);
     });
+
+    this.setAttr({
+      d: this.path.toString()
+    });
+  }
+  addCommand(command: Command) {
+    this.path.add(command);
 
     this.setAttr({
       d: this.path.toString()

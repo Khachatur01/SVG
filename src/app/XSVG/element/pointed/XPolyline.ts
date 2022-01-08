@@ -71,8 +71,4 @@ export class XPolyline extends XPointed {
     let pointsArr = this.getAttr("points").split(" ", 6);
     return pointsArr.length >= 6;
   }
-
-  override toPath(): XPath {
-    return new XPath(this.container);
-  }
 }

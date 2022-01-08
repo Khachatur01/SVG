@@ -3,6 +3,7 @@ import {Point} from "../../model/Point";
 import {XPointed} from "../type/XPointed";
 import {XSVG} from "../../XSVG";
 import {XPath} from "../path/XPath";
+import {Close} from "../../model/path/close/Close";
 
 export class XPolygon extends XPointed {
   constructor(container: XSVG, points: Point[]) {
@@ -71,6 +72,8 @@ export class XPolygon extends XPointed {
   }
 
   override toPath(): XPath {
-    return new XPath(this.container);
+    let path = super.toPath();
+    path.addCommand(new Close());
+    return path;
   }
 }

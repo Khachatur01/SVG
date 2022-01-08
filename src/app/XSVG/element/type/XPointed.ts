@@ -2,6 +2,10 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
+import {XPath} from "../path/XPath";
+import {Path} from "../../model/path/Path";
+import {MoveTo} from "../../model/path/point/MoveTo";
+import {LineTo} from "../../model/path/line/LineTo";
 
 export abstract class XPointed extends XElement {
   protected _lastPoints: Point[] = [];
@@ -88,5 +92,16 @@ export abstract class XPointed extends XElement {
     }
 
     this.points = points;
+  }
+
+  override toPath(): XPath {
+    let rotatedPoints = this.rotatedPoints;
+    let path = new Path();
+
+    path.add(new MoveTo(rotatedPoints[0]));
+    for(let i = 1; i < rotatedPoints.length; i++)
+      path.add(new LineTo(rotatedPoints[i]));
+
+    return new XPath(this.container, path);
   }
 }
