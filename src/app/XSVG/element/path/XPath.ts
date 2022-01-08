@@ -3,12 +3,13 @@ import {Path} from "../../model/path/Path";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {XSVG} from "../../XSVG";
+import {Command} from "../../model/path/Command";
 
-export abstract class XPath extends XElement {
+export class XPath extends XElement {
   protected _size: Size = {width: 0, height: 0};
   protected path: Path;
   protected _lastPath: Path;
-  protected constructor(container: XSVG, path: Path = new Path()) {
+  constructor(container: XSVG, path: Path = new Path()) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "path");
     this.path = path;
@@ -31,6 +32,10 @@ export abstract class XPath extends XElement {
   isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;
+  }
+
+  get commands(): Command[] {
+    return this.path.getAll();
   }
 
   get points(): Point[] {
@@ -92,4 +97,17 @@ export abstract class XPath extends XElement {
     return this._size;
   }
   setSize(size: Size) {}
+
+  add(path: XPath) {
+    path.commands.forEach((command: Command) => {
+      this.path.add(command);
+    });
+
+    this.setAttr({
+      d: this.path.toString()
+    });
+  }
+  override toPath(): XPath {
+    return this;
+  }
 }

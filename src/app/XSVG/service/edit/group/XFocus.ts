@@ -6,6 +6,7 @@ import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
 import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
+import {XPath} from "../../../element/path/XPath";
 
 class FocusStyle {
   private focused: XFocus;
@@ -359,5 +360,19 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.forEach((child: XElement) => {
       child.lowlight();
     });
+  }
+
+  toPath() {
+    let refPoint = Object.assign({}, this.refPoint);
+
+    let path = new XPath(this.container);
+    this._children.forEach((child: XElement) => {
+      path.add(child.toPath());
+    });
+    this.remove();
+    this.appendChild(path);
+
+    this.refPointView = refPoint;
+    this.refPoint = refPoint;
   }
 }

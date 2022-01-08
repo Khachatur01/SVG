@@ -4,6 +4,7 @@ import {Rect} from "../../model/Rect";
 import {Point} from "../../model/Point";
 import {XSVG} from "../../XSVG";
 import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
+import {XPath} from "../path/XPath";
 
 /*
 *  0_____1
@@ -59,6 +60,10 @@ export class XRectangle extends XPolygon implements MoveDrawable {
   override isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;
+  }
+
+  override toPath(): XPath {
+    return new XPath(this.container);
   }
 
 }

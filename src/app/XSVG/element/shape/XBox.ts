@@ -3,6 +3,7 @@ import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
 import {XSVG} from "../../XSVG";
+import {XPath} from "../path/XPath";
 
 export class XBox extends XElement {
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
@@ -72,5 +73,9 @@ export class XBox extends XElement {
       width: parseInt(this.getAttr("width")),
       height: parseInt(this.getAttr("height"))
     };
+  }
+
+  override toPath(): XPath {
+    return new XPath(this.container);
   }
 }

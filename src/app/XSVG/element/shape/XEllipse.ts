@@ -4,6 +4,10 @@ import {Rect} from "../../model/Rect";
 import {XElement} from "../XElement";
 import {XSVG} from "../../XSVG";
 import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
+import {XPath} from "../path/XPath";
+import {Path} from "../../model/path/Path";
+import {Arc} from "../../model/path/curve/arc/Arc";
+import {MoveTo} from "../../model/path/point/MoveTo";
 
 export class XEllipse extends XElement implements MoveDrawable {
   constructor(container: XSVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
@@ -102,44 +106,44 @@ export class XEllipse extends XElement implements MoveDrawable {
     let size: Size = this.size;
     return size.width > 0 && size.height > 0;
   }
+
+  override toPath(): XPath {
+    let path: Path = new Path();
+    let position = this.position;
+    let size = this.size;
+
+    let x = position.x;
+    let y = position.y;
+    let rx = size.width / 2;
+    let ry = size.height / 2;
+
+    if(rx < 0) {
+      rx = -rx;
+      x -= rx * 2;
+    }
+    if(ry < 0) {
+      ry = -ry;
+      y -= ry * 2;
+    }
+
+    let points: Point[] = [
+      {x:        x,  y: ry   + y},
+      {x: rx   + x,  y:        y},
+      {x: rx*2 + x,  y: ry   + y},
+      {x: rx   + x,  y: ry*2 + y},
+      {x: x,         y: ry   + y}
+    ];
+
+    path.add(new MoveTo(points[0]));
+    path.add(new Arc(rx, ry, 0, 0, 1, points[1]));
+    path.add(new Arc(rx, ry, 0, 0, 1, points[2]));
+    path.add(new Arc(rx, ry, 0, 0, 1, points[3]));
+    path.add(new Arc(rx, ry, 0, 0, 1, points[4]));
+
+    this.setAttr({
+      d: path.toString()
+    })
+
+    return new XPath(this.container, path);
+  }
 }
-
-
-
-
-
-
-
-/* make ellipse from path, with 4 arcs
-   makeEllipse(x: number, y: number, rx: number, ry: number): void {
-     let path: Path = new Path();
-
-     if(rx < 0) {
-       rx = -rx;
-       x -= rx * 2;
-     }
-     if(ry < 0) {
-       ry = -ry;
-       y -= ry * 2;
-     }
-
-     let points: Point[] = [
-       {x:        x,  y: ry   + y},
-       {x: rx   + x,  y:        y},
-       {x: rx*2 + x,  y: ry   + y},
-       {x: rx   + x,  y: ry*2 + y},
-       {x: x,         y: ry   + y}
-     ];
-
-     path.add(new MoveTo(points[0]));
-     path.add(new Arc(rx, ry, 0, 0, 1, points[1]));
-     path.add(new Arc(rx, ry, 0, 0, 1, points[2]));
-     path.add(new Arc(rx, ry, 0, 0, 1, points[3]));
-     path.add(new Arc(rx, ry, 0, 0, 1, points[4]));
-
-     this.path = path;
-     this.setAttr({
-       d: path.toString()
-     })
-   }
-*/

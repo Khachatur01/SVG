@@ -2,6 +2,7 @@ import {XElement} from "../XElement";
 import {XPointed} from "../type/XPointed";
 import {Point} from "../../model/Point";
 import {XSVG} from "../../XSVG";
+import {XPath} from "../path/XPath";
 
 export class XLine extends XPointed {
   constructor(container: XSVG, x1: number = 0, y1: number = 0, x2: number = 0, y2: number = 0) {
@@ -61,4 +62,7 @@ export class XLine extends XPointed {
       this.getAttr("y1") != this.getAttr("y2")
   }
 
+  override toPath(): XPath {
+    return new XPath(this.container);
+  }
 }

@@ -37,6 +37,10 @@ export class AppComponent implements AfterViewInit {
     else
       this.svg.grid.snapOn();
   }
+  public toPath() {
+    if(!this.svg) return;
+    this.svg.focused.toPath();
+  }
 
   public rectangle() {
     if(!this.svg) return;

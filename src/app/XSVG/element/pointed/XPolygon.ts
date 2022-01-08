@@ -2,6 +2,7 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {XPointed} from "../type/XPointed";
 import {XSVG} from "../../XSVG";
+import {XPath} from "../path/XPath";
 
 export class XPolygon extends XPointed {
   constructor(container: XSVG, points: Point[]) {
@@ -69,4 +70,7 @@ export class XPolygon extends XPointed {
     return pointsArr.length >= 3;
   }
 
+  override toPath(): XPath {
+    return new XPath(this.container);
+  }
 }

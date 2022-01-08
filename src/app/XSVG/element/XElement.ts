@@ -5,6 +5,7 @@ import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
 import {Matrix} from "../service/math/Matrix";
 import {XSVG} from "../XSVG";
+import {XPath} from "./path/XPath";
 
 class Style {
   private element: XElement;
@@ -77,6 +78,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract get position(): Point;
   abstract set position(delta: Point);
   abstract get points(): Point[];
+  abstract toPath(): XPath;
 
   getCorrectionDelta(refPoint: Point, lastRefPoint: Point) {
     /* calculate delta */
