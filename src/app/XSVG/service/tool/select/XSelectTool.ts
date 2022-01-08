@@ -105,6 +105,7 @@ export class XSelectTool extends XTool {
     document.addEventListener("mouseup", this.end);
     this._isOn = true;
     this.dragTool.on();
+    this.container.HTML.style.cursor = "default";
   }
 
   off(): void {

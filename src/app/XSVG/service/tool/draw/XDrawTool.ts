@@ -21,10 +21,12 @@ export class XDrawTool extends XTool {
   _on() {
     this._isOn = true;
     this._drawTool?.start(this.container);
+    this.container.HTML.style.cursor = "crosshair";
   }
   off() {
     this._isOn = false;
     this._drawTool?.stop();
+    this.container.HTML.style.cursor = "pointer";
   }
 
   isOn(): boolean {

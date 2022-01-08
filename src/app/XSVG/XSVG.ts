@@ -84,8 +84,8 @@ export class XSVG {
     xElement.SVG.addEventListener("mousemove", () => {
       if(this.selectTool.isOn()) {
         xElement.SVG.style.cursor = "move";
-      } else {
-        xElement.SVG.style.cursor = "pointer";
+      } else if(this.drawTool.isOn()) {
+        xElement.SVG.style.cursor = "crosshair";
       }
     });
   }
