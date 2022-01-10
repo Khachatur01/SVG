@@ -38,10 +38,6 @@ export class XDrawTool extends XTool {
       this._drawTool.perfect = mode;
   }
 
-  isDrawing(): boolean {
-    return this._isDrawing;
-  }
-
   drawing() {
     this._isDrawing = true;
   }

@@ -66,8 +66,8 @@ export class DrawFree implements XDrawable {
     } else {
       this.drawableElement.refPoint = this.drawableElement.center;
 
-      this.container.focus(this.drawableElement);
-      this.container.focused.fixRect();
+      // this.container.focus(this.drawableElement);
+      // this.container.focused.fixRect();
     }
   }
 

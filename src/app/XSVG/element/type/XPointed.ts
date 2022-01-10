@@ -88,7 +88,6 @@ export abstract class XPointed extends XElement {
 
       points[i].x = rect.x + Math.abs(this._lastPoints[i].x - rect.x) * dw;
       points[i].y = rect.y + Math.abs(this._lastPoints[i].y - rect.y) * dh;
-
     }
 
     this.points = points;

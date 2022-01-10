@@ -86,7 +86,8 @@ export class AppComponent implements AfterViewInit {
         this.svg.drawTool.perfect = true;
     }
     if (event.key == "Escape") {
-      this.svg.selectTool.on();
+      this.svg.drawTool.off();
+      this.svg.drawTool.on();
     }
     if (event.key == "Control") {
       this.svg.multiSelect();

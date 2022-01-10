@@ -73,8 +73,6 @@ export class XFocus implements XDraggable, XResizeable {
   appendChild(xElement: XElement): void {
     this.svgElements.appendChild(xElement.SVG);
     this._children.add(xElement);
-    this.focus();
-    this.fit();
 
     if(this._children.size == 1) {
       this.refPointView = Object.assign({}, xElement.refPoint);
@@ -87,6 +85,8 @@ export class XFocus implements XDraggable, XResizeable {
       xElement.refPoint = refPoint;
       xElement.correct(refPoint, elementRefPoint);
     }
+    this.focus();
+    this.fit();
   }
 
   removeChild(xElement: XElement): void {

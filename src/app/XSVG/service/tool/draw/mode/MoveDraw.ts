@@ -49,10 +49,10 @@ export abstract class MoveDraw implements XDrawable {
       this.container.blur();
 
       this.drawableElement.refPoint = this.drawableElement.center;
-      this.container.focused.lastRefPoint = this.drawableElement.refPoint;
+      // this.container.focused.lastRefPoint = this.drawableElement.refPoint;
 
-      this.container.focus(this.drawableElement);
-      this.container.focused.fixRect();
+      // this.container.focus(this.drawableElement);
+      // this.container.focused.fixRect();
     } else {
       this.container.remove(this.drawableElement);
     }
