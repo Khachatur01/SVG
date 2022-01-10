@@ -363,6 +363,7 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   toPath() {
+    if(this._children.size == 0) return;
     let refPoint = Object.assign({}, this.refPoint);
 
     let path = new XPath(this.container);
