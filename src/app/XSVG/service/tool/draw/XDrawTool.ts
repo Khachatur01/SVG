@@ -26,7 +26,7 @@ export class XDrawTool extends XTool {
   off() {
     this._isOn = false;
     this._drawTool?.stop();
-    this.container.HTML.style.cursor = "pointer";
+    this.container.HTML.style.cursor = "default";
   }
 
   isOn(): boolean {

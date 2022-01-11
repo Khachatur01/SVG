@@ -1,6 +1,9 @@
 import {XSVG} from "../../XSVG";
 import {XElement} from "../../element/XElement";
 import {Point} from "../../model/Point";
+import {Path} from "../../model/path/Path";
+import {MoveTo} from "../../model/path/point/MoveTo";
+import {LineTo} from "../../model/path/line/LineTo";
 
 export class XGrid {
   private readonly container: XSVG;
@@ -33,7 +36,7 @@ export class XGrid {
     return this._isGrid;
   }
 
-  gridOn(side: number) {
+  gridOn(side: number, stokeWidth: number, strokeColor: string) {
     this._group.innerHTML = "";
     this.squareSide = side;
     this._isGrid = true;
@@ -41,21 +44,21 @@ export class XGrid {
     let height: number = this.container.HTML.clientHeight;
 
     let grid = document.createElementNS(XElement.svgURI, "path");
-    grid.style.strokeWidth = "1";
-    grid.style.stroke = "#777";
+    grid.style.strokeWidth = stokeWidth + "";
+    grid.style.stroke = strokeColor;
 
-    let pathString = "";
+    let path = new Path();
 
     for(let i = side; i < width; i += side) {
-      pathString += "M " + (i + 0.5) + " 0 ";
-      pathString += "L " + (i + 0.5) + " " + height + " ";
+      path.add(new MoveTo({x: i + 0.5, y: 0}));
+      path.add(new LineTo({x: i + 0.5, y: height}));
     }
     for(let i = side; i < height; i += side) {
-      pathString += "M " + "0 " + (i + 0.5) + " ";
-      pathString += "L " + width + " " + (i + 0.5) + " ";
+      path.add(new MoveTo({x: 0, y: i + 0.5}));
+      path.add(new LineTo({x: width, y: i + 0.5}));
     }
 
-    grid.setAttribute("d", pathString);
+    grid.setAttribute("d", path.toString());
     this._group.appendChild(grid);
   }
   gridOff() {

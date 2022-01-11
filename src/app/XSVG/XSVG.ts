@@ -62,7 +62,8 @@ export class XSVG {
         return;
 
       this.editTool.removeEditableElement();
-      if(this.editTool.isOn() && xElement instanceof XPointed) {
+      if(this.editTool.isOn()) {
+        if(xElement instanceof XPointed)
           this.editTool.editableElement = xElement;
       } else {
         let hasChild = this._focusedElements.hasChild(xElement);
@@ -82,7 +83,7 @@ export class XSVG {
     xElement.SVG.addEventListener("mousemove", () => {
       if(this.selectTool.isOn()) {
         xElement.SVG.style.cursor = "move";
-      } else if(this.drawTool.isOn()) {
+      } else if(this.editTool.isOn()) {
         xElement.SVG.style.cursor = "crosshair";
       }
     });
