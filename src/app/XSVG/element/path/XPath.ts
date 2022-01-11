@@ -22,7 +22,9 @@ export class XPath extends XPointed {
       d: this.path.toString()
     })
     this.setOverEvent();
-    // this.style.setDefaultStyle();
+    try {
+      this.style.setDefaultStyle();
+    } catch (error: any) {}
   }
 
   override fixRect() {
