@@ -20,31 +20,28 @@ class GlobalStyle {
     this.container = container;
   }
   set strokeWidth(width: string) {
-    // if(this.container.focused.children.size == 0) {
       this._globalStyle["stroke-width"] = width;
-    //   return;
-    // }
     this.container.focused.children.forEach((child: XElement) => {
       child.style.strokeWidth = width;
     });
   }
   set strokeColor(color: string) {
-    // if(this.container.focused.children.size == 0) {
       this._globalStyle["stroke"] = color;
-    //   return;
-    // }
     this.container.focused.children.forEach((child: XElement) => {
       child.style.strokeColor = color;
     });
   }
   set fill(color: string) {
-    // if(this.container.focused.children.size == 0) {
       this._globalStyle["fill"] = color;
-    //   return;
-    // }
     this.container.focused.children.forEach((child: XElement) => {
       child.style.fill = color;
     });
+  }
+  setGlobalStyle(xElement: XElement) {
+    this._globalStyle = Object.assign({}, xElement.style.style);
+    this.container.strokeWidthCallBack();
+    this.container.strokeColorCallBack();
+    this.container.fillCallBack();
   }
   get globalStyle(): any {
     return this._globalStyle;

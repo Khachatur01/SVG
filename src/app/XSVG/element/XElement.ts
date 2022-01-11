@@ -25,15 +25,30 @@ class Style {
         "stroke": color
     });
   }
+  get strokeDashArray(): string {
+    return this.element.getAttr("stroke-dasharray");
+  }
   set strokeDashArray(array: string) {
     this.element.setAttr({
       "stroke-dasharray": array
     });
   }
+  get fill(): string {
+    return this.element.getAttr("fill");
+  }
   set fill(color: string) {
     this.element.setAttr({
       "fill": color
     });
+  }
+
+  get style(): any {
+    return {
+      "fill": this.element.getAttr("fill"),
+      "stroke": this.element.getAttr("stroke"),
+      "stroke-width": this.element.getAttr("stroke-width"),
+      "stroke-dasharray": this.element.getAttr("stroke-dasharray")
+    }
   }
 
   setDefaultStyle(): void {

@@ -51,7 +51,7 @@ export class XFocus implements XDraggable, XResizeable {
       this.refPointView = Object.assign({}, xElement.refPoint);
       this.refPoint = Object.assign({}, xElement.refPoint);
       this.rotate(xElement.angle);
-      this.container.strokeWidthCallBack();
+      this.container.style.setGlobalStyle(xElement);
     } else { /* more than one element */
       let elementRefPoint = Object.assign({}, xElement.refPoint);
       let refPoint = Object.assign({}, this.refPoint);

@@ -155,14 +155,17 @@ export class AppComponent implements AfterViewInit {
   strokeWidthCallBack() {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
     if(!stokeWidthInput || !this.svg) return;
-
     stokeWidthInput.value = this.svg.style.globalStyle["stroke-width"];
   }
   strokeColorCallBack() {
-
+    let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
+    if(!stokeColorInput || !this.svg) return;
+    stokeColorInput.value = this.svg.style.globalStyle["stroke"];
   }
   fillCallBack() {
-
+    let fillInput = document.getElementById("fill-color") as HTMLInputElement;
+    if(!fillInput || !this.svg) return;
+    fillInput.value = this.svg.style.globalStyle["fill"];
   }
 
   selectToolCallBack() {
@@ -171,7 +174,7 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer", this.selectToolCallBack.bind(this));
-    this.svg.setStyleCallBacks(this.strokeWidthCallBack, this.strokeColorCallBack, this.fillCallBack);
+    this.svg.setStyleCallBacks(this.strokeWidthCallBack.bind(this), this.strokeColorCallBack.bind(this), this.fillCallBack.bind(this));
     this.select();
     window.addEventListener("keydown", this.keyDown.bind(this));
     window.addEventListener("keyup", this.keyUp.bind(this));
