@@ -71,11 +71,12 @@ export class XFocus implements XDraggable, XResizeable {
     if (this._children.size == 0) {
       this.blur();
     } else if(this._children.size == 1) {
+      this.refPoint = Object.assign({}, xElement.refPoint);
+      this.refPointView = Object.assign({}, xElement.refPoint);
+      this.rotate(xElement.angle);
+      this.focus();
       this._children.forEach((child: XElement) => {
-        this.refPoint = Object.assign({}, child.refPoint);
-        this.refPointView = Object.assign({}, child.refPoint);
-        this.rotate(child.angle);
-        this.focus();
+        this.container.style.setGlobalStyle(child);
       });
     } else {
       this.focus();
