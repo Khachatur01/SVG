@@ -8,31 +8,6 @@ import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
 import {XPath} from "../../../element/path/XPath";
 
-class FocusStyle {
-  private focused: XFocus;
-  constructor(focused: XFocus) {
-    this.focused = focused;
-  }
-  set strokeWidth(width: string) {
-    this.focused.children.forEach((child: XElement) => {
-      child.style.strokeWidth = width;
-      child.style.setGlobalStyle("stroke-width", width);
-    });
-  }
-  set strokeColor(color: string) {
-    this.focused.children.forEach((child: XElement) => {
-      child.style.strokeColor = color;
-      child.style.setGlobalStyle("stroke", color);
-    });
-  }
-  set fill(color: string) {
-    this.focused.children.forEach((child: XElement) => {
-      child.style.fill = color;
-      child.style.setGlobalStyle("fill", color);
-    });
-  }
-}
-
 export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
   private readonly container: XSVG;
@@ -41,7 +16,6 @@ export class XFocus implements XDraggable, XResizeable {
   private readonly svgGroup: SVGGElement;
   private readonly svgElements: SVGGElement;
   private readonly svgBounding: SVGGElement;
-  public readonly style: FocusStyle;
 
   private _lastPosition: Point = {x: 0, y: 0};
   private _lastSize: Size = {width: 0, height: 0};
@@ -49,7 +23,6 @@ export class XFocus implements XDraggable, XResizeable {
 
   constructor(container: XSVG) {
     this.container = container;
-    this.style = new FocusStyle(this);
 
     this.boundingBox = new XBoundingBox(this.container)
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
@@ -78,6 +51,7 @@ export class XFocus implements XDraggable, XResizeable {
       this.refPointView = Object.assign({}, xElement.refPoint);
       this.refPoint = Object.assign({}, xElement.refPoint);
       this.rotate(xElement.angle);
+      this.container.strokeWidthCallBack();
     } else { /* more than one element */
       let elementRefPoint = Object.assign({}, xElement.refPoint);
       let refPoint = Object.assign({}, this.refPoint);
@@ -106,7 +80,7 @@ export class XFocus implements XDraggable, XResizeable {
     } else {
       this.focus();
     }
-    
+
     this.fit();
     this.fixPosition();
   }

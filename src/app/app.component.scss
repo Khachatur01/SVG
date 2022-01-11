@@ -2,7 +2,10 @@ body{
   font-size: 14px;
 }
 svg {
-  background: #999;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #333;
+  background: #FFF;
   stroke-linecap: round;
   stroke-linejoin: round;
 }

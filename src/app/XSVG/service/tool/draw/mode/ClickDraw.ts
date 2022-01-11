@@ -78,8 +78,8 @@ export abstract class ClickDraw implements XDrawable {
 
       this.drawableElement.refPoint = this.drawableElement.center;
 
-      // this.container.focus(this.drawableElement);
-      // this.container.focused.fixRect();
+      this.container.focus(this.drawableElement);
+      this.container.focused.fixRect();
     } else {
       this.container.remove(this.drawableElement);
     }

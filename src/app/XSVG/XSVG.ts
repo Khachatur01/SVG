@@ -8,33 +8,85 @@ import {XPointed} from "./element/type/XPointed";
 import {Tool} from "./dataSource/Tool";
 import {XGrid} from "./service/grid/XGrid";
 
+class GlobalStyle {
+  private _globalStyle: any = {
+    "fill": "none",
+    "stroke": "#000000",
+    "stroke-width": 5,
+    "stroke-dasharray": ""
+  };
+  private container: XSVG;
+  constructor(container: XSVG) {
+    this.container = container;
+  }
+  set strokeWidth(width: string) {
+    // if(this.container.focused.children.size == 0) {
+      this._globalStyle["stroke-width"] = width;
+    //   return;
+    // }
+    this.container.focused.children.forEach((child: XElement) => {
+      child.style.strokeWidth = width;
+    });
+  }
+  set strokeColor(color: string) {
+    // if(this.container.focused.children.size == 0) {
+      this._globalStyle["stroke"] = color;
+    //   return;
+    // }
+    this.container.focused.children.forEach((child: XElement) => {
+      child.style.strokeColor = color;
+    });
+  }
+  set fill(color: string) {
+    // if(this.container.focused.children.size == 0) {
+      this._globalStyle["fill"] = color;
+    //   return;
+    // }
+    this.container.focused.children.forEach((child: XElement) => {
+      child.style.fill = color;
+    });
+  }
+  get globalStyle(): any {
+    return this._globalStyle;
+  }
+}
+
 export class XSVG {
   private readonly container: HTMLElement;
   private _focusedElements: XFocus = new XFocus(this);
   private _elements: Set<XElement> = new Set<XElement>();
+  public strokeWidthCallBack: Function = () => {};
+  public strokeColorCallBack: Function = () => {};
+  public fillCallBack: Function = () => {};
+  public selectToolCallBack: Function = () => {};
+
   public elementsGroup: SVGGElement;
   public readonly drawTool: XDrawTool;
   public readonly selectTool: XSelectTool;
   public readonly editTool: XEditTool;
   public grid: XGrid;
+  public style: GlobalStyle = new GlobalStyle(this);
 
   public readonly drawTools: Tool = new Tool(this);
   public activeTool: XTool;
 
   private _multiSelect: boolean = false;
 
-  constructor(containerId: string) {
+  constructor(containerId: string, selectToolCallBack: Function) {
     let container = document.getElementById(containerId);
     if(container)
       this.container = container;
     else
       throw new DOMException("Can't create container", "Container not found");
 
+    this.selectToolCallBack = selectToolCallBack;
+
     this.drawTool = new XDrawTool(this);
     this.selectTool = new XSelectTool(this);
     this.editTool = new XEditTool(this);
     this.activeTool = this.selectTool;
     this.grid = new XGrid(this);
+    this.style = new GlobalStyle(this);
 
     this.container.addEventListener("mousedown", event => {
       if(event.target == this.container) {
@@ -50,6 +102,12 @@ export class XSVG {
     this.container.appendChild(this.elementsGroup);
     this.container.appendChild(this._focusedElements.SVG);
     this.container.appendChild(this.editTool.SVG);
+  }
+
+  setStyleCallBacks(strokeWidth: Function, strokeColor: Function, fill: Function) {
+    this.strokeWidthCallBack = strokeWidth;
+    this.strokeColorCallBack = strokeColor;
+    this.fillCallBack = fill;
   }
 
   add(xElement: XElement) {

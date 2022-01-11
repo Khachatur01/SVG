@@ -97,8 +97,7 @@ export class AppComponent implements AfterViewInit {
         this.svg.drawTool.perfect = true;
     }
     if (event.key == "Escape") {
-      this.svg.drawTool.off();
-      this.svg.drawTool.on();
+      this.svg.selectTool.on();
     }
     if (event.key == "Control") {
       this.svg.multiSelect();
@@ -153,8 +152,26 @@ export class AppComponent implements AfterViewInit {
     element.classList.remove("active")
   }
 
+  strokeWidthCallBack() {
+    let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
+    if(!stokeWidthInput || !this.svg) return;
+
+    stokeWidthInput.value = this.svg.style.globalStyle["stroke-width"];
+  }
+  strokeColorCallBack() {
+
+  }
+  fillCallBack() {
+
+  }
+
+  selectToolCallBack() {
+    this.switchActive("select")
+  }
+
   ngAfterViewInit(): void {
-    this.svg = new XSVG("svgContainer");
+    this.svg = new XSVG("svgContainer", this.selectToolCallBack.bind(this));
+    this.svg.setStyleCallBacks(this.strokeWidthCallBack, this.strokeColorCallBack, this.fillCallBack);
     this.select();
     window.addEventListener("keydown", this.keyDown.bind(this));
     window.addEventListener("keyup", this.keyUp.bind(this));
@@ -164,31 +181,31 @@ export class AppComponent implements AfterViewInit {
 
   transparentStroke() {
     if(this.svg)
-      this.svg.focused.style.strokeColor = "none";
+      this.svg.style.strokeColor = "none";
   }
   transparentFill() {
     if(this.svg)
-      this.svg.focused.style.fill = "none";
+      this.svg.style.fill = "none";
   }
 
   strokeWidth(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let width = picker?.value;
     if(this.svg && width)
-      this.svg.focused.style.strokeWidth = width;
+      this.svg.style.strokeWidth = width;
   }
 
   strokeColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
     if(this.svg && color)
-      this.svg.focused.style.strokeColor = color;
+      this.svg.style.strokeColor = color;
   }
   fillColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
     if(this.svg && color)
-      this.svg.focused.style.fill = color;
+      this.svg.style.fill = color;
   }
 
 

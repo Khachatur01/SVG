@@ -22,7 +22,6 @@ export class XImage extends XElement {
     });
     this.setOverEvent();
 
-    this.style.setDefaultStyle();
     this.setAttr({
       preserveAspectRatio: "none"
     });

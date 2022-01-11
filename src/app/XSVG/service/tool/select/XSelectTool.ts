@@ -106,6 +106,7 @@ export class XSelectTool extends XTool {
     this._isOn = true;
     this.dragTool.on();
     this.container.HTML.style.cursor = "default";
+    this.container.selectToolCallBack();
   }
 
   off(): void {

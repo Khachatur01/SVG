@@ -9,12 +9,6 @@ import {XPath} from "./path/XPath";
 
 class Style {
   private element: XElement;
-  public static globalStyle: any = {
-    "fill": "none",
-    "stroke": "#000000",
-    "stroke-width": 5,
-    "stroke-dasharray": ""
-  };
   constructor(element: XElement) {
     this.element = element;
   }
@@ -42,20 +36,16 @@ class Style {
     });
   }
 
-  setGlobalStyle(key: string, value: string) {
-    Style.globalStyle[key] = value;
-  }
-
   setDefaultStyle(): void {
-    this.element.setAttr(Style.globalStyle);
+    this.element.setAttr(this.element.container.style.globalStyle);
   }
 }
 
 export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
-  protected readonly container: XSVG;
-  public readonly style = new Style(this);
+  public readonly container: XSVG;
+  public readonly style;
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
   private _lastAngle: number = 0;
@@ -70,6 +60,7 @@ export abstract class XElement implements XResizeable, XDraggable {
 
   constructor(container: XSVG) {
     this.container = container;
+    this.style = new Style(this);
   }
 
   abstract get size(): Size;
