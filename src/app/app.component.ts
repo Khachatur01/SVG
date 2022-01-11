@@ -13,29 +13,38 @@ export class AppComponent implements AfterViewInit {
 
   private svg:XSVG | null = null;
 
+  private activeElement: HTMLElement | null = null;
+
   public select() {
     if(!this.svg) return;
     this.svg.selectTool.on();
-    this.showToolName("select");
+    this.switchActive('select');
   }
   public edit() {
     if(!this.svg) return;
     this.svg.editTool.on();
-    this.showToolName("edit");
+    this.switchActive('edit');
   }
   public grid() {
     if(!this.svg) return;
-    if(this.svg.grid.isGrid())
+    if(this.svg.grid.isGrid()) {
       this.svg.grid.gridOff();
-    else
+      this.makePassive('snap');
+      this.makePassive('grid');
+    } else {
       this.svg.grid.gridOn(20);
+      this.makeActive('grid');
+    }
   }
   public snap() {
     if(!this.svg) return;
-    if(this.svg.grid.isSnap())
+    if(this.svg.grid.isSnap()) {
       this.svg.grid.snapOff();
-    else
+      this.makePassive('snap');
+    } else if(this.svg.grid.isGrid()) {
       this.svg.grid.snapOn();
+      this.makeActive('snap');
+    }
   }
   public toPath() {
     if(!this.svg) return;
@@ -46,37 +55,37 @@ export class AppComponent implements AfterViewInit {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.rectangle;
     this.svg.drawTool.on();
-    this.showToolName("rectangle");
+    this.switchActive('rect');
   }
   public ellipse() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.ellipse;
     this.svg.drawTool.on();
-    this.showToolName("ellipse");
+    this.switchActive('ellipse');
   }
   public line() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.line;
     this.svg.drawTool.on();
-    this.showToolName("line");
+    this.switchActive('line');
   }
   public polyline() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.polyline;
     this.svg.drawTool.on();
-    this.showToolName("polyline");
+    this.switchActive('polyline');
   }
   public polygon() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.polygon;
     this.svg.drawTool.on();
-    this.showToolName("polygon");
+    this.switchActive('polygon');
   }
   public free() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.free;
     this.svg.drawTool.on();
-    this.showToolName("free");
+    this.switchActive('free');
   }
 
 
@@ -122,9 +131,24 @@ export class AppComponent implements AfterViewInit {
         label.innerHTML = text;
     });
   }
-  showToolName(name: string) {
-    let label = document.getElementById("tool-name");
-    if(label) label.innerText = name;
+
+  switchActive(id: string) {
+    if(this.activeElement)
+      this.makePassive(this.activeElement.id);
+
+    this.activeElement = document.getElementById(id);
+    if(this.activeElement)
+      this.makeActive(this.activeElement.id);
+  }
+  makeActive(id: string) {
+    let element = document.getElementById(id);
+    if(!element) return;
+    element.classList.add("active")
+  }
+  makePassive(id: string) {
+    let element = document.getElementById(id);
+    if(!element) return;
+    element.classList.remove("active")
   }
 
   ngAfterViewInit(): void {

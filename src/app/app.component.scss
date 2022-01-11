@@ -1,5 +1,7 @@
+body{
+  font-size: 14px;
+}
 svg {
-  margin: 10px;
   background: #999999;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -12,4 +14,28 @@ svg {
 
 #width {
   width: 60px;
+}
+
+.btn-default {
+  border: 1px solid #cecece;
+  color: #333;
+  padding: 4px 8px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  background: #fff;
+  font-size: 14px;
+}
+.btn-default.active{
+  background: #ddf2df;
+  border-color: #b5deb9;
+}
+input[type=color] {
+  width: 31px;
+  padding: 4px;
+}
+
+.separator {
+  width: 1px;
+  height: 31px;
+  background: #cecece;
 }

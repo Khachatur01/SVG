@@ -83,6 +83,7 @@ export class XFocus implements XDraggable, XResizeable {
       let refPoint = Object.assign({}, this.refPoint);
 
       xElement.refPoint = refPoint;
+      // console.log(refPoint, elementRefPoint)
       xElement.correct(refPoint, elementRefPoint);
     }
     this.focus();

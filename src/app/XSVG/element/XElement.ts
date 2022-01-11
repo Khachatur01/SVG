@@ -97,6 +97,7 @@ export abstract class XElement implements XResizeable, XDraggable {
 
   correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
+    // console.log(delta)
     if(delta.x == 0 && delta.y == 0) return;
     this.position = delta;
   }

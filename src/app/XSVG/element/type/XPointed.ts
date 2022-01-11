@@ -40,7 +40,7 @@ export abstract class XPointed extends XElement {
 
     for(let i = 0; i < points.length; i++) {
       if(!this._lastPoints[i])
-        this._lastPoints[i] = {x: 0, y: 0};
+        this._lastPoints[i] = {x: points[i].x, y: points[i].y};
 
       points[i].x = (delta.x + this._lastPoints[i].x);
       points[i].y = (delta.y + this._lastPoints[i].y);
