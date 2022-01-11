@@ -5,6 +5,7 @@ import {XTool} from "../XTool";
 
 export class XDragTool extends XTool {
   private isDrag: boolean = false;
+  private dragging: boolean = false;
 
   private mouseStartPos: Point = {x: 0, y: 0};
   private elementStartPos: Point = {x: 0, y: 0};
@@ -20,15 +21,18 @@ export class XDragTool extends XTool {
   private onDragStart(event: MouseEvent) {
     if(event.target == this.container.HTML) return;
 
+    this.dragging = true;
     this.mouseStartPos.x = event.clientX;
+
     this.mouseStartPos.y = event.clientY;
     this.elementStartPos = this.container.focused?.position as Point;
-
     this.container.focused.fixPosition();
+
     this.container.focused.fixRefPoint();
     this.container.focused?.children.forEach((child: XElement) => {
       child.fixRect();
     });
+    this.container.focused.highlight();
 
     this.container.HTML.addEventListener("mousemove", this.drag);
   }
@@ -37,11 +41,13 @@ export class XDragTool extends XTool {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
-    this.container.focused.highlight();
   }
-  private onDragEnd(){
+  private onDragEnd() {
+    if(!this.dragging) return;
+
     this.container.HTML.removeEventListener("mousemove", this.drag);
     this.container.focused.lowlight();
+    this.dragging = false;
   }
 
   override on() {

@@ -1,6 +1,8 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {XSVG} from "./XSVG/XSVG";
 import {Rect} from "./XSVG/model/Rect";
+import {XImage} from "./XSVG/element/image/XImage";
+import {XForeignObject} from "./XSVG/element/foreign/XForeignObject";
 
 @Component({
   selector: 'app-root',
@@ -153,6 +155,7 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer");
+    this.select();
     window.addEventListener("keydown", this.keyDown.bind(this));
     window.addEventListener("keyup", this.keyUp.bind(this));
 
@@ -186,6 +189,27 @@ export class AppComponent implements AfterViewInit {
     let color = picker?.value;
     if(this.svg && color)
       this.svg.focused.style.fill = color;
+  }
+
+  selectImage(event: Event) {
+    if(!this.svg) return;
+
+    let image = new XImage(this.svg, 0, 0, 200, 200);
+    image.refPoint = {x: 100, y: 100};
+    image.setImage("https://absolutearmenia.com/wp-content/uploads/2021/01/Yerevan-Armenia-from-Cascades.jpg")
+
+    this.svg?.add(image);
+  }
+  selectHTML(event: Event) {
+    if(!this.svg) return;
+
+    let element = new XForeignObject(this.svg, 0, 0, 200, 200);
+    element.refPoint = {x: 100, y: 100};
+    element.setContent(
+      "<div><h1>DIV CONTENT</h1></div>"
+    );
+
+    this.svg.add(element);
   }
 
 }
