@@ -42,17 +42,17 @@ export class XGrid {
 
     let grid = document.createElementNS(XElement.svgURI, "path");
     grid.style.strokeWidth = "1";
-    grid.style.stroke = "#555555";
+    grid.style.stroke = "#777";
 
     let pathString = "";
 
     for(let i = side; i < width; i += side) {
-      pathString += "M " + i + " 0 ";
-      pathString += "L " + i + " " + height + " ";
+      pathString += "M " + (i + 0.5) + " 0 ";
+      pathString += "L " + (i + 0.5) + " " + height + " ";
     }
     for(let i = side; i < height; i += side) {
-      pathString += "M " + "0 " + i + " ";
-      pathString += "L " + width + " " + i + " ";
+      pathString += "M " + "0 " + (i + 0.5) + " ";
+      pathString += "L " + width + " " + (i + 0.5) + " ";
     }
 
     grid.setAttribute("d", pathString);
