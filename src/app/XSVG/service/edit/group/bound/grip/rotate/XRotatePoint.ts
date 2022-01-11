@@ -23,7 +23,7 @@ export class XRotatePoint extends XPath {
   constructor(container: XSVG, x: number = 0, y: number = 0) {
     super(container);
     this.removeOverEvent();
-    this.style.fill = "#FFFFFF";
+    this.style.fill = "transparent";
     this.style.strokeColor = "#002fff";
     this.style.strokeWidth = "1";
 

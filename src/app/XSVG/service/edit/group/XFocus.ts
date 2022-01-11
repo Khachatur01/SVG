@@ -83,17 +83,15 @@ export class XFocus implements XDraggable, XResizeable {
       let refPoint = Object.assign({}, this.refPoint);
 
       xElement.refPoint = refPoint;
-      // console.log(refPoint, elementRefPoint)
       xElement.correct(refPoint, elementRefPoint);
     }
-    this.focus();
     this.fit();
+    this.focus();
   }
 
   removeChild(xElement: XElement): void {
     this.container.elementsGroup.appendChild(xElement.SVG);
     this._children.delete(xElement);
-    this.fit();
 
     this.container.editTool.removeEditableElement();
     if (this._children.size == 0) {
@@ -108,6 +106,8 @@ export class XFocus implements XDraggable, XResizeable {
     } else {
       this.focus();
     }
+    
+    this.fit();
     this.fixPosition();
   }
 

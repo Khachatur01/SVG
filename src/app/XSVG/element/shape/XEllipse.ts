@@ -67,6 +67,19 @@ export class XEllipse extends XElement implements MoveDrawable {
     });
   }
 
+  override correct(refPoint: Point, lastRefPoint: Point) {
+    let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
+    if(delta.x == 0 && delta.y == 0) return;
+
+    let position = this.position;
+    let size = this.size;
+
+    this.setAttr({
+      cx: position.x + size.width / 2 + delta.x,
+      cy: position.y + size.height / 2 + delta.y
+    });
+  }
+
   setSize(rect: Rect): void {
     let rx = rect.width / 2;
     let ry = rect.height / 2;

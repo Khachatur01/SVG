@@ -49,6 +49,21 @@ export abstract class XPointed extends XElement {
     this.points = points;
   }
 
+  override correct(refPoint:Point, lastRefPoint:Point) {
+    let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
+    if(delta.x == 0 && delta.y == 0) return;
+
+    let points = this.points;
+
+    for(let i = 0; i < points.length; i++) {
+      this._lastPoints[i] = {x: points[i].x, y: points[i].y};
+
+      points[i].x = (delta.x + this._lastPoints[i].x);
+      points[i].y = (delta.y + this._lastPoints[i].y);
+    }
+
+    this.points = points;
+  }
   get size(): Size {
     let points = this.points
     let maxX = points[0].x;

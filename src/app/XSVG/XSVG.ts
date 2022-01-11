@@ -28,7 +28,7 @@ export class XSVG {
     if(container)
       this.container = container;
     else
-      throw DOMException;
+      throw new DOMException("Can't create container", "Container not found");
 
     this.drawTool = new XDrawTool(this);
     this.selectTool = new XSelectTool(this);
@@ -58,21 +58,20 @@ export class XSVG {
     this._elements.add(xElement);
 
     xElement.SVG.addEventListener("mousedown", () => {
-      if(!this.selectTool.isOn() && !this.editTool.isOn()) {
-        this.blur();
+      if(!this.selectTool.isOn() && !this.editTool.isOn())
         return;
-      }
 
       this.editTool.removeEditableElement();
       if(this.editTool.isOn() && xElement instanceof XPointed) {
           this.editTool.editableElement = xElement;
       } else {
-        if(this._focusedElements.hasChild(xElement)) return;
+        let hasChild = this._focusedElements.hasChild(xElement);
+        if(!this._multiSelect && hasChild) return;
 
-        if(!this._multiSelect) {
+        if(!this._multiSelect && !hasChild) {
           this.blur();
           this.focus(xElement);
-        } else if(this._focusedElements.hasChild(xElement)) {
+        } else if(hasChild) {
           this.blur(xElement);
         } else {
           this.focus(xElement);
