@@ -18,7 +18,6 @@ export class XForeignObject extends XElement {
     });
     this.setOverEvent();
 
-    this.style.setDefaultStyle();
     this.setAttr({
       preserveAspectRatio: "none"
     });
@@ -89,8 +88,8 @@ export class XForeignObject extends XElement {
     });
   }
 
-  setContent(content: string): void {
-    this.svgElement.innerHTML = content;
+  setContent(div: HTMLDivElement): void {
+    this.svgElement.appendChild(div);
   }
 
   toPath(): XPath {

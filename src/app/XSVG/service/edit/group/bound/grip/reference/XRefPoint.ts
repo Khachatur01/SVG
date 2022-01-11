@@ -27,7 +27,7 @@ export class XRefPoint extends XPath {
     this.drawPoint(this._center);
 
     this.svgElement.style.display = "none";
-    this.svgElement.style.cursor = "move";
+    this.svgElement.style.cursor = "crosshair";
     this.on();
   }
 
