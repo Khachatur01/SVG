@@ -109,18 +109,22 @@ export class AppComponent implements AfterViewInit {
     if(event.key == "ArrowLeft") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: -5, y: 0};
+      event.preventDefault();
     }
     if(event.key == "ArrowRight") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: +5, y: 0};
+      event.preventDefault();
     }
     if(event.key == "ArrowDown") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: +5};
+      event.preventDefault();
     }
     if(event.key == "ArrowUp") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: -5};
+      event.preventDefault();
     }
 
     if(event.key == "Shift") {
