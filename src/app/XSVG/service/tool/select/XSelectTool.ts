@@ -36,8 +36,8 @@ export class XSelectTool extends XTool {
     this.boundingBox.setSize({
       x: this.position.x,
       y: this.position.y,
-      width: 0,
-      height: 0
+      width: 1,
+      height: 1
     });
 
     this.container.HTML.appendChild(this.boundingBox.SVG);

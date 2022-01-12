@@ -81,6 +81,7 @@ export class XEllipse extends XElement implements MoveDrawable {
   }
 
   setSize(rect: Rect): void {
+    if(!this.validSize(rect)) return;
     let rx = rect.width / 2;
     let ry = rect.height / 2;
 

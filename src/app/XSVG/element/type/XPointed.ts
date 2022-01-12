@@ -88,6 +88,7 @@ export abstract class XPointed extends XElement {
     };
   }
   setSize(rect: Rect): void {
+    if(!this.validSize(rect)) return;
     let dw = 1;
     let dh = 1;
 
