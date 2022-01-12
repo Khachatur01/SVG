@@ -38,7 +38,7 @@ export class XGrid {
 
   gridOn(side: number, stokeWidth: number, strokeColor: string) {
     this._group.innerHTML = "";
-    this.squareSide = side;
+    this.squareSide = Math.floor(side);
     this._isGrid = true;
     let width: number = this.container.HTML.clientWidth;
     let height: number = this.container.HTML.clientHeight;
@@ -49,11 +49,11 @@ export class XGrid {
 
     let path = new Path();
 
-    for(let i = side; i < width; i += side) {
+    for(let i = this.squareSide; i < width; i += this.squareSide) {
       path.add(new MoveTo({x: i + 0.5, y: 0}));
       path.add(new LineTo({x: i + 0.5, y: height}));
     }
-    for(let i = side; i < height; i += side) {
+    for(let i = this.squareSide; i < height; i += this.squareSide) {
       path.add(new MoveTo({x: 0, y: i + 0.5}));
       path.add(new LineTo({x: width, y: i + 0.5}));
     }
@@ -71,8 +71,8 @@ export class XGrid {
     if(!this._isSnap)
       return point;
 
-    let x = Math.round(point.x / this.squareSide) * this.squareSide;
-    let y = Math.round(point.y / this.squareSide) * this.squareSide;
+    let x = Math.round(point.x / (this.squareSide)) * this.squareSide;
+    let y = Math.round(point.y / (this.squareSide)) * this.squareSide;
     return {x: x, y: y};
   }
 }
