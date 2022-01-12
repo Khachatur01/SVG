@@ -103,28 +103,45 @@ export class AppComponent implements AfterViewInit {
     this.switchActive('free');
   }
 
-
   private keyDown(event: KeyboardEvent) {
     if(!this.svg) return;
-    if (event.key == "Shift") {
+
+    if(event.key == "ArrowLeft") {
+      this.svg.focused.fixPosition();
+      this.svg.focused.position = {x: -5, y: 0};
+    }
+    if(event.key == "ArrowRight") {
+      this.svg.focused.fixPosition();
+      this.svg.focused.position = {x: +5, y: 0};
+    }
+    if(event.key == "ArrowDown") {
+      this.svg.focused.fixPosition();
+      this.svg.focused.position = {x: 0, y: +5};
+    }
+    if(event.key == "ArrowUp") {
+      this.svg.focused.fixPosition();
+      this.svg.focused.position = {x: 0, y: -5};
+    }
+
+    if(event.key == "Shift") {
         this.svg.drawTool.perfect = true;
     }
-    if (event.key == "Escape") {
+    if(event.key == "Escape") {
       this.svg.selectTool.on();
     }
-    if (event.key == "Control") {
+    if(event.key == "Control") {
       this.svg.multiSelect();
     }
   }
   private keyUp(event: KeyboardEvent) {
     if(!this.svg) return;
-    if (event.key == "Shift") {
+    if(event.key == "Shift") {
         this.svg.drawTool.perfect = false;
     }
-    if (event.key == "Delete") {
+    if(event.key == "Delete") {
       this.svg.focused?.remove();
     }
-    if (event.key == "Control") {
+    if(event.key == "Control") {
       this.svg.singleSelect();
     }
   }
@@ -180,7 +197,6 @@ export class AppComponent implements AfterViewInit {
     if(!fillInput || !this.svg) return;
     fillInput.value = this.svg.style.globalStyle["fill"];
   }
-
   selectToolCallBack() {
     this.switchActive("select")
   }
@@ -208,7 +224,7 @@ export class AppComponent implements AfterViewInit {
       this.svg.style.fill = "none";
   }
 
-  strokeWidth(event: Event) {
+  strokeWidthChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let width = picker?.value;
     if(this.svg && width)
@@ -226,6 +242,10 @@ export class AppComponent implements AfterViewInit {
     let color = picker?.value;
     if(this.svg && color)
       this.svg.style.fill = color;
+  }
+
+  positionChange(event: Event) {
+
   }
 
   demoImage() {

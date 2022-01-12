@@ -264,6 +264,8 @@ export class XFocus implements XDraggable, XResizeable {
   }
   fixPosition(): void {
     this._lastPosition = this.position;
+    this._children.forEach(child => child.fixPosition());
+    this.boundingBox.fixRefPoint();
     this.boundingBox.fixPosition();
   }
   fixSize(): void {

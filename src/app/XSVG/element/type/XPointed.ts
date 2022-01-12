@@ -19,6 +19,11 @@ export abstract class XPointed extends XElement {
     super.fixRect();
     this.fixPoints();
   }
+  override fixPosition() {
+    super.fixPosition();
+    this.fixPoints();
+  }
+
   fixPoints() {
     this._lastPoints = this.points.slice();
   }
