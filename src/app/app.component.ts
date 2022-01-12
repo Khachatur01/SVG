@@ -65,6 +65,18 @@ export class AppComponent implements AfterViewInit {
     this.svg.drawTool.on();
     this.switchActive('ellipse');
   }
+  public triangle() {
+    if(!this.svg) return;
+    this.svg.drawTool.tool = this.svg.drawTools.triangle;
+    this.svg.drawTool.on();
+    this.switchActive('triangle');
+  }
+  public rightTriangle() {
+    if(!this.svg) return;
+    this.svg.drawTool.tool = this.svg.drawTools.rightTriangle;
+    this.svg.drawTool.on();
+    this.switchActive('right-triangle');
+  }
   public line() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.line;
