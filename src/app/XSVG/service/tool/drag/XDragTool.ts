@@ -2,6 +2,7 @@ import {XSVG} from "../../../XSVG";
 import {Point} from "../../../model/Point";
 import {XElement} from "../../../element/XElement";
 import {XTool} from "../XTool";
+import {XGrid} from "../../grid/XGrid";
 
 export class XDragTool extends XTool {
   private isDrag: boolean = false;

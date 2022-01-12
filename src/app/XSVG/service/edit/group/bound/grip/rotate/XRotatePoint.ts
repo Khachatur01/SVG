@@ -111,6 +111,8 @@ export class XRotatePoint extends XPath {
   private move(event: MouseEvent) {
     let angle = this.getAngle(this.container.HTML.getBoundingClientRect(), event);
 
+    if(this.container.grid.isSnap())
+      angle = Math.round(angle / 15) * 15;
     this.container.focused.rotate(angle);
   }
   private end() {

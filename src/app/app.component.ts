@@ -226,7 +226,7 @@ export class AppComponent implements AfterViewInit {
 
   demoImage() {
     if(!this.svg) return;
-    let image = new XImage(this.svg, 0, 0, 200, 200);
+    let image = new XImage(this.svg, 0, 0, 340, 200);
     image.refPoint = {x: 100, y: 100};
     image.setImage("/assets/test/img1.png");
 
