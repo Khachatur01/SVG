@@ -34,7 +34,7 @@ export class AppComponent implements AfterViewInit {
       this.makePassive('snap');
       this.makePassive('grid');
     } else {
-      this.svg.grid.gridOn(30, 1, "#777");
+      this.svg.grid.gridOn(20, 1, "#777");
       this.makeActive('grid');
     }
   }

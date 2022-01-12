@@ -15,30 +15,58 @@ class GlobalStyle {
     "stroke-width": 5,
     "stroke-dasharray": ""
   };
+  private _lastGlobalStyle: any = Object.assign({}, this._globalStyle);
   private container: XSVG;
   constructor(container: XSVG) {
     this.container = container;
   }
   set strokeWidth(width: string) {
+    if(this.container.focused.children.size == 0) {
       this._globalStyle["stroke-width"] = width;
+      this._lastGlobalStyle["stroke-width"] = width;
+      return;
+    }
+    this._globalStyle["stroke-width"] = width;
     this.container.focused.children.forEach((child: XElement) => {
       child.style.strokeWidth = width;
     });
   }
   set strokeColor(color: string) {
+    if(this.container.focused.children.size == 0) {
       this._globalStyle["stroke"] = color;
+      this._lastGlobalStyle["stroke"] = color;
+      return;
+    }
+    this._globalStyle["stroke"] = color;
     this.container.focused.children.forEach((child: XElement) => {
       child.style.strokeColor = color;
     });
   }
   set fill(color: string) {
+    if(this.container.focused.children.size == 0) {
       this._globalStyle["fill"] = color;
+      this._lastGlobalStyle["fill"] = color;
+      return;
+    }
+    this._globalStyle["fill"] = color;
     this.container.focused.children.forEach((child: XElement) => {
       child.style.fill = color;
     });
   }
-  setGlobalStyle(xElement: XElement) {
-    this._globalStyle = Object.assign({}, xElement.style.style);
+
+  recoverGlobalStyle() {
+    this.setGlobalStyle(this._lastGlobalStyle);
+    this.fixGlobalStyle();
+  }
+  fixGlobalStyle() {
+    this._lastGlobalStyle = Object.assign({}, this._globalStyle);
+  }
+  get lastGlobalStyle(): any{
+    return this._lastGlobalStyle;
+  }
+  setGlobalStyle(style: any) {
+    this.fixGlobalStyle();
+    this._globalStyle = Object.assign({}, style);
     this.container.strokeWidthCallBack();
     this.container.strokeColorCallBack();
     this.container.fillCallBack();

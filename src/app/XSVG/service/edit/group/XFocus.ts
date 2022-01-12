@@ -51,11 +51,13 @@ export class XFocus implements XDraggable, XResizeable {
       this.refPointView = Object.assign({}, xElement.refPoint);
       this.refPoint = Object.assign({}, xElement.refPoint);
       this.rotate(xElement.angle);
-      this.container.style.setGlobalStyle(xElement);
+
+      this.container.style.setGlobalStyle(xElement.style.style);
     } else { /* more than one element */
       let elementRefPoint = Object.assign({}, xElement.refPoint);
       let refPoint = Object.assign({}, this.refPoint);
 
+      this.container.style.recoverGlobalStyle();
       xElement.refPoint = refPoint;
       xElement.correct(refPoint, elementRefPoint);
     }
@@ -69,14 +71,16 @@ export class XFocus implements XDraggable, XResizeable {
 
     this.container.editTool.removeEditableElement();
     if (this._children.size == 0) {
+      // this.container.style.recoverGlobalStyle();
       this.blur();
     } else if(this._children.size == 1) {
       this.refPoint = Object.assign({}, xElement.refPoint);
       this.refPointView = Object.assign({}, xElement.refPoint);
       this.rotate(xElement.angle);
       this.focus();
+      /* one element */
       this._children.forEach((child: XElement) => {
-        this.container.style.setGlobalStyle(child);
+        this.container.style.setGlobalStyle(child.style.style);
       });
     } else {
       this.focus();
@@ -91,6 +95,7 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.forEach((child: XElement) => parent?.appendChild(child.SVG));
     this._children.clear();
     this.blur();
+    this.container.style.recoverGlobalStyle();
   }
 
   remove() {
