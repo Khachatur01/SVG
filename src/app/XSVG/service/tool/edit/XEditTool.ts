@@ -4,6 +4,7 @@ import {XPointed} from "../../../element/type/XPointed";
 import {XElement} from "../../../element/XElement";
 import {Point} from "../../../model/Point";
 import {XNode} from "./XNode";
+import {Callback} from "../../../model/Callback";
 
 export class XEditTool extends XTool {
   private readonly nodesGroup: SVGGElement;
@@ -58,6 +59,10 @@ export class XEditTool extends XTool {
       }
     }
     this.container.blur();
+
+    let callback = this.container.callBacks.get(Callback.EDIT_TOOl);
+    if(callback)
+      callback();
   }
 
   off(): void {

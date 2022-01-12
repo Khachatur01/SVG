@@ -1,10 +1,10 @@
-import {XTriangle} from "../../../../../../element/shape/triangle/XTriangle";
 import {MoveDraw} from "../../../mode/MoveDraw";
 import {XElement} from "../../../../../../element/XElement";
+import {XRectangle} from "../../../../../../element/shape/XRectangle";
 import {Point} from "../../../../../../model/Point";
 
-export class DrawTriangle extends MoveDraw {
+export class DrawRectangle extends MoveDraw {
   onStart(position: Point): XElement {
-    return new XTriangle(this.container);
+    return new XRectangle(this.container, position.x, position.y);
   }
 }

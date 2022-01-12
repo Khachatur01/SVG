@@ -102,6 +102,12 @@ export class AppComponent implements AfterViewInit {
     this.svg.drawTool.on();
     this.switchActive('free');
   }
+  textBox() {
+    if(!this.svg) return;
+    this.svg.drawTool.tool = this.svg.drawTools.textBox;
+    this.svg.drawTool.on();
+    this.switchActive('text-box');
+  }
 
   private keyDown(event: KeyboardEvent) {
     if(!this.svg) return;
@@ -109,22 +115,22 @@ export class AppComponent implements AfterViewInit {
     if(event.key == "ArrowLeft") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: -5, y: 0};
-      event.preventDefault();
+      event.preventDefault(); /* disable window scrolling */
     }
     if(event.key == "ArrowRight") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: +5, y: 0};
-      event.preventDefault();
+      event.preventDefault(); /* disable window scrolling */
     }
     if(event.key == "ArrowDown") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: +5};
-      event.preventDefault();
+      event.preventDefault(); /* disable window scrolling */
     }
     if(event.key == "ArrowUp") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: -5};
-      event.preventDefault();
+      event.preventDefault(); /* disable window scrolling */
     }
 
     if(event.key == "Shift") {
@@ -204,10 +210,14 @@ export class AppComponent implements AfterViewInit {
   selectToolCallBack() {
     this.switchActive("select")
   }
+  editToolCallBack() {
+    this.switchActive("edit")
+  }
 
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer");
     this.svg.addCallBack(Callback.SELECT_TOOl, this.selectToolCallBack.bind(this));
+    this.svg.addCallBack(Callback.EDIT_TOOl, this.editToolCallBack.bind(this));
     this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
     this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));
     this.svg.style.addCallBack(Callback.FILL_COLOR_CHANGE, this.fillCallBack.bind(this));
@@ -255,7 +265,7 @@ export class AppComponent implements AfterViewInit {
   demoImage() {
     if(!this.svg) return;
     let image = new XImage(this.svg, 0, 0, 340, 200);
-    image.refPoint = {x: 100, y: 100};
+    image.refPoint = {x: 170, y: 100};
     image.setImage("/assets/test/img1.png");
 
     this.svg?.add(image);

@@ -21,9 +21,19 @@ export class XForeignObject extends XElement {
     this.setAttr({
       preserveAspectRatio: "none"
     });
+
+
+    this.svgElement.addEventListener("mousedown", function(event) {
+      // event.stopImmediatePropagation();
+    }, true);
+
+    this.svgElement.addEventListener("dblclick", () => {
+      this.container.editTool.on();
+    });
   }
   isComplete(): boolean {
-    return false;
+    let size = this.size;
+    return size.width > 0 && size.height > 0;
   }
 
   get points(): Point[] {
@@ -88,7 +98,7 @@ export class XForeignObject extends XElement {
     });
   }
 
-  setContent(div: HTMLDivElement): void {
+  setContent(div: HTMLElement): void {
     this.svgElement.appendChild(div);
   }
 

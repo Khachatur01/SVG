@@ -13,7 +13,7 @@ export abstract class MoveDraw implements XDrawable {
   private draw = this._onDraw.bind(this);
   private drawEnd = this._onEnd.bind(this);
 
-  private drawableElement: XElement | null = null;
+  protected drawableElement: XElement | null = null;
 
   constructor(container: XSVG) {
     this.container = container;
@@ -60,6 +60,7 @@ export abstract class MoveDraw implements XDrawable {
 
     this.container.drawTool.drawingEnd();
     this.drawableElement = null;
+    this.onEnd();
   }
 
   abstract onStart(position: Point): XElement;
@@ -96,6 +97,9 @@ export abstract class MoveDraw implements XDrawable {
       height: height
     });
   };
+  onEnd() {
+
+  }
 
   start(container: XSVG): void {
     this.container = container;

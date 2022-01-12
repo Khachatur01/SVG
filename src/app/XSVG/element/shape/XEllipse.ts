@@ -8,6 +8,7 @@ import {XPath} from "../path/XPath";
 import {Path} from "../../model/path/Path";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {MoveTo} from "../../model/path/point/MoveTo";
+import {Matrix} from "../../service/math/Matrix";
 
 export class XEllipse extends XElement implements MoveDrawable {
   constructor(container: XSVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
@@ -123,36 +124,16 @@ export class XEllipse extends XElement implements MoveDrawable {
 
   override toPath(): XPath {
     let path: Path = new Path();
-    let position = this.position;
     let size = this.size;
-
-    let x = position.x;
-    let y = position.y;
     let rx = size.width / 2;
     let ry = size.height / 2;
-
-    if(rx < 0) {
-      rx = -rx;
-      x -= rx * 2;
-    }
-    if(ry < 0) {
-      ry = -ry;
-      y -= ry * 2;
-    }
-
-    let points: Point[] = [
-      {x:        x,  y: ry   + y},
-      {x: rx   + x,  y:        y},
-      {x: rx*2 + x,  y: ry   + y},
-      {x: rx   + x,  y: ry*2 + y},
-      {x: x,         y: ry   + y}
-    ];
+    let points = this.rotatedPoints;
 
     path.add(new MoveTo(points[0]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[1]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[2]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[3]));
-    path.add(new Arc(rx, ry, 0, 0, 1, points[4]));
+    path.add(new Arc(rx, ry, this._angle, 0, 1, points[1]));
+    path.add(new Arc(rx, ry, this._angle, 0, 1, points[2]));
+    path.add(new Arc(rx, ry, this._angle, 0, 1, points[3]));
+    path.add(new Arc(rx, ry, this._angle, 0, 1, points[0]));
 
     this.setAttr({
       d: path.toString()

@@ -1,12 +1,13 @@
-import {DrawRectangle} from "../service/tool/draw/figure/shape/DrawRectangle";
-import {DrawLine} from "../service/tool/draw/figure/line/DrawLine";
-import {DrawPolyline} from "../service/tool/draw/figure/line/DrawPolyline";
-import {DrawEllipse} from "../service/tool/draw/figure/shape/DrawEllipse";
-import {DrawPolygon} from "../service/tool/draw/figure/shape/DrawPolygon";
+import {DrawRectangle} from "../service/tool/draw/element/figure/shape/DrawRectangle";
+import {DrawLine} from "../service/tool/draw/element/figure/line/DrawLine";
+import {DrawPolyline} from "../service/tool/draw/element/figure/line/DrawPolyline";
+import {DrawEllipse} from "../service/tool/draw/element/figure/shape/DrawEllipse";
+import {DrawPolygon} from "../service/tool/draw/element/figure/shape/DrawPolygon";
 import {DrawFree} from "../service/tool/draw/mode/DrawFree";
 import {XSVG} from "../XSVG";
-import {DrawTriangle} from "../service/tool/draw/figure/shape/triangle/DrawTriangle";
-import {DrawRightTriangle} from "../service/tool/draw/figure/shape/triangle/DrawRightTriangle";
+import {DrawTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawTriangle";
+import {DrawRightTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawRightTriangle";
+import {DrawTextBox} from "../service/tool/draw/element/foreign/DrawTextBox";
 
 export class Tool {
   private container: XSVG;
@@ -18,6 +19,7 @@ export class Tool {
   private readonly _rectangle: DrawRectangle;
   private readonly _triangle: DrawTriangle;
   private readonly _rightTriangle: DrawRightTriangle;
+  private readonly _textBox: DrawTextBox;
 
   constructor(container: XSVG) {
     this.container = container;
@@ -30,6 +32,7 @@ export class Tool {
     this._rectangle = new DrawRectangle(container);
     this._triangle = new DrawTriangle(container);
     this._rightTriangle = new DrawRightTriangle(container);
+    this._textBox = new DrawTextBox(container);
   }
 
   get free(): DrawFree {
@@ -62,5 +65,9 @@ export class Tool {
 
   get rightTriangle(): DrawRightTriangle {
     return this._rightTriangle;
+  }
+
+  get textBox(): DrawTextBox {
+    return this._textBox;
   }
 }

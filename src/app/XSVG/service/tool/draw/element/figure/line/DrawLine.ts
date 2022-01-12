@@ -1,9 +1,9 @@
-import {MoveDraw} from "../../mode/MoveDraw";
-import {XLine} from "../../../../../element/pointed/XLine";
-import {Point} from "../../../../../model/Point";
-import {Angle} from "../../../../math/Angle";
-import {XPointed} from "../../../../../element/type/XPointed";
-import {XElement} from "../../../../../element/XElement";
+import {MoveDraw} from "../../../mode/MoveDraw";
+import {XLine} from "../../../../../../element/pointed/XLine";
+import {Point} from "../../../../../../model/Point";
+import {Angle} from "../../../../../math/Angle";
+import {XPointed} from "../../../../../../element/type/XPointed";
+import {XElement} from "../../../../../../element/XElement";
 
 export class DrawLine extends MoveDraw {
   onStart(position: Point): XElement {
