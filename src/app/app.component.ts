@@ -3,6 +3,7 @@ import {XSVG} from "./XSVG/XSVG";
 import {Rect} from "./XSVG/model/Rect";
 import {XImage} from "./XSVG/element/image/XImage";
 import {XForeignObject} from "./XSVG/element/foreign/XForeignObject";
+import fetch from 'node-fetch';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +35,7 @@ export class AppComponent implements AfterViewInit {
       this.makePassive('snap');
       this.makePassive('grid');
     } else {
-      this.svg.grid.gridOn(20, 1, "#777");
+      this.svg.grid.gridOn(20, 1, "#b3b2b2");
       this.makeActive('grid');
     }
   }
@@ -222,7 +223,6 @@ export class AppComponent implements AfterViewInit {
     if(this.svg && color)
       this.svg.style.fill = color;
   }
-
 
   demoImage() {
     if(!this.svg) return;

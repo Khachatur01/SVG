@@ -8,7 +8,7 @@ import {LineTo} from "../../model/path/line/LineTo";
 export class XGrid {
   private readonly container: XSVG;
   private readonly _group: SVGGElement;
-  private squareSide: number = 40;
+  private squareSide: number = 20; /* default */
   private _isGrid: boolean = false;
   private _isSnap: boolean = false;
 
