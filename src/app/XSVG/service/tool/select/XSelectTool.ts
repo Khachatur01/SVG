@@ -3,6 +3,7 @@ import {XSVG} from "../../../XSVG";
 import {XRectangle} from "../../../element/shape/XRectangle";
 import {Point} from "../../../model/Point";
 import {XDragTool} from "../drag/XDragTool";
+import {Callback} from "../../../model/Callback";
 
 export class XSelectTool extends XTool {
   private readonly boundingBox: XRectangle;
@@ -106,7 +107,9 @@ export class XSelectTool extends XTool {
     this._isOn = true;
     this.dragTool.on();
     this.container.HTML.style.cursor = "default";
-    this.container.selectToolCallBack();
+    let callback = this.container.callBacks.get(Callback.SELECT_TOOl);
+    if(callback)
+      callback();
   }
 
   off(): void {

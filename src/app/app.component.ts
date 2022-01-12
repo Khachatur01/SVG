@@ -3,7 +3,7 @@ import {XSVG} from "./XSVG/XSVG";
 import {Rect} from "./XSVG/model/Rect";
 import {XImage} from "./XSVG/element/image/XImage";
 import {XForeignObject} from "./XSVG/element/foreign/XForeignObject";
-import fetch from 'node-fetch';
+import {Callback} from './XSVG/model/Callback';
 
 @Component({
   selector: 'app-root',
@@ -186,8 +186,12 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.svg = new XSVG("svgContainer", this.selectToolCallBack.bind(this));
-    this.svg.setStyleCallBacks(this.strokeWidthCallBack.bind(this), this.strokeColorCallBack.bind(this), this.fillCallBack.bind(this));
+    this.svg = new XSVG("svgContainer");
+    this.svg.addCallBack(Callback.SELECT_TOOl, this.selectToolCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.FILL_COLOR_CHANGE, this.fillCallBack.bind(this));
+
     this.select();
     window.addEventListener("keydown", this.keyDown.bind(this));
     window.addEventListener("keyup", this.keyUp.bind(this));

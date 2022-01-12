@@ -7,8 +7,10 @@ import {XEditTool} from "./service/tool/edit/XEditTool";
 import {XPointed} from "./element/type/XPointed";
 import {Tool} from "./dataSource/Tool";
 import {XGrid} from "./service/grid/XGrid";
+import {Callback} from "./model/Callback";
 
 class GlobalStyle {
+  private _styleCallBacks: Map<Callback, Function> = new Map<Callback, Function>();
   private _globalStyle: any = {
     "fill": "none",
     "stroke": "#000000",
@@ -54,6 +56,11 @@ class GlobalStyle {
     });
   }
 
+
+  addCallBack(name: Callback, callback: Function) {
+    this._styleCallBacks.set(name, callback);
+  }
+
   recoverGlobalStyle() {
     this.setGlobalStyle(this._lastGlobalStyle);
     this.fixGlobalStyle();
@@ -67,9 +74,7 @@ class GlobalStyle {
   setGlobalStyle(style: any) {
     this.fixGlobalStyle();
     this._globalStyle = Object.assign({}, style);
-    this.container.strokeWidthCallBack();
-    this.container.strokeColorCallBack();
-    this.container.fillCallBack();
+    this._styleCallBacks.forEach((callback) => callback());
   }
   get globalStyle(): any {
     return this._globalStyle;
@@ -80,10 +85,7 @@ export class XSVG {
   private readonly container: HTMLElement;
   private _focusedElements: XFocus = new XFocus(this);
   private _elements: Set<XElement> = new Set<XElement>();
-  public strokeWidthCallBack: Function = () => {};
-  public strokeColorCallBack: Function = () => {};
-  public fillCallBack: Function = () => {};
-  public selectToolCallBack: Function = () => {};
+  private _callBacks: Map<Callback, Function> = new Map<Callback, Function>();
 
   public elementsGroup: SVGGElement;
   public readonly drawTool: XDrawTool;
@@ -97,14 +99,12 @@ export class XSVG {
 
   private _multiSelect: boolean = false;
 
-  constructor(containerId: string, selectToolCallBack: Function) {
+  constructor(containerId: string) {
     let container = document.getElementById(containerId);
     if(container)
       this.container = container;
     else
       throw new DOMException("Can't create container", "Container not found");
-
-    this.selectToolCallBack = selectToolCallBack;
 
     this.drawTool = new XDrawTool(this);
     this.selectTool = new XSelectTool(this);
@@ -129,10 +129,12 @@ export class XSVG {
     this.container.appendChild(this.editTool.SVG);
   }
 
-  setStyleCallBacks(strokeWidth: Function, strokeColor: Function, fill: Function) {
-    this.strokeWidthCallBack = strokeWidth;
-    this.strokeColorCallBack = strokeColor;
-    this.fillCallBack = fill;
+  get callBacks(): Map<Callback, Function> {
+    return this._callBacks;
+  }
+
+  addCallBack(name: Callback, callback: Function) {
+    this._callBacks.set(name, callback);
   }
 
   add(xElement: XElement) {
