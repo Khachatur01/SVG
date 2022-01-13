@@ -7,7 +7,7 @@ import {XPath} from "../path/XPath";
 import {Callback} from "../../model/Callback";
 
 export class XForeignObject extends XElement {
-  protected content: HTMLElement | null = null;
+  protected _content: HTMLElement | null = null;
 
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
@@ -25,17 +25,18 @@ export class XForeignObject extends XElement {
       preserveAspectRatio: "none"
     });
 
-    this.container.addCallBack(Callback.SELECT_TOOl, () => {
-      if(this.content) {
-        this.content.style.userSelect = "none";
-        this.content.style.cursor = "move";
+    this.container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
+      if(this._content) {
+        this._content.style.userSelect = "none";
+        this._content.style.cursor = "unset";
+        this._content.style.border = "none"
       }
     });
 
-    this.container.addCallBack(Callback.EDIT_TOOl, () => {
-      if(this.content) {
-        this.content.style.userSelect = "unset";
-        this.content.style.cursor = "text";
+    this.container.addCallBack(Callback.EDIT_TOOl_ON, () => {
+      if(this._content) {
+        this._content.style.userSelect = "unset";
+        this._content.style.cursor = "text";
       }
     });
   }
@@ -106,17 +107,25 @@ export class XForeignObject extends XElement {
     });
   }
 
+  get content(): HTMLElement | null {
+    return this._content;
+  }
   setContent(div: HTMLElement): void {
-    this.content = div;
+    this._content = div;
     div.style.userSelect = "none";
+    div.contentEditable = "true";
     this.svgElement.appendChild(div);
 
-    this.content?.addEventListener("focus", () => {
+    div.addEventListener("focus", (event) => {
       if(this.container.editTool.isOn()) {
-        this.content?.focus();
+        div.focus();
+        div.style.border = "1px solid #999"
       } else {
-        this.content?.blur();
+        div.blur();
       }
+    });
+    div.addEventListener("blur", (event) => {
+      div.style.border = "none";
     });
   }
 

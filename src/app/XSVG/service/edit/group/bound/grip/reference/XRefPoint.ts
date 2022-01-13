@@ -97,6 +97,7 @@ export class XRefPoint extends XPath {
     this.container.focused.refPointView = Object.assign({}, this._lastPoint);
 
     this.container.HTML.addEventListener("mousemove", this._move);
+    document.addEventListener("mouseup", this._end);
   }
 
   private move(event: MouseEvent) {
@@ -112,18 +113,16 @@ export class XRefPoint extends XPath {
     this.container.focused.correct(Object.assign({}, this._lastPoint));
 
     this.container.HTML.removeEventListener("mousemove", this._move);
+    document.removeEventListener("mouseup", this._end);
     this.container.activeTool.on();
     this.moving = false;
   }
 
   on() {
     this.svgElement.addEventListener("mousedown", this._start);
-    document.addEventListener("mouseup", this._end);
   }
 
   off() {
     this.svgElement.removeEventListener("mousedown", this._start);
-    this.container.HTML.removeEventListener("mousemove", this._move);
-    document.removeEventListener("mouseup", this._end);
   }
 }

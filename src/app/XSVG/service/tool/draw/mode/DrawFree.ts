@@ -31,6 +31,7 @@ export class DrawFree implements XDrawable {
 
     this.container?.add(this.drawableElement);
     this.container?.HTML.addEventListener('mousemove', this._onDraw);
+    document.addEventListener('mouseup', this._onEnd);
   }
 
   onDraw(event: MouseEvent): void {
@@ -60,6 +61,7 @@ export class DrawFree implements XDrawable {
     if (!this.drawableElement || !this.container) return;
 
     this.container.HTML.removeEventListener('mousemove', this._onDraw);
+    document.removeEventListener('mouseup', this._onEnd);
 
     if (this.drawableElement.getAttr("points").split(" ").length == 2) {
       this.container.remove(this.drawableElement);
@@ -78,13 +80,10 @@ export class DrawFree implements XDrawable {
   start(container: XSVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this._onStart);
-    document.addEventListener('mouseup', this._onEnd);
   }
 
   stop(): void {
-    this.container?.HTML.removeEventListener('mousemove', this._onDraw);
     this.container?.HTML.removeEventListener('mousedown', this._onStart);
-    document.removeEventListener('mouseup', this._onEnd);
   }
 
 }

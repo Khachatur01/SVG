@@ -128,6 +128,7 @@ export class XSVG {
 
     this.elementsGroup = document.createElementNS(XElement.svgURI, "g");
     this.elementsGroup.id = "elements";
+    this._focusedElements.SVG.style.cursor = "move";
 
     this.container.appendChild(this.grid.group);
     this.container.appendChild(this.elementsGroup);

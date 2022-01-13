@@ -115,22 +115,26 @@ export class AppComponent implements AfterViewInit {
     if(event.key == "ArrowLeft") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: -5, y: 0};
-      event.preventDefault(); /* disable window scrolling */
+      if(!this.svg.editTool.isOn())
+        event.preventDefault(); /* disable window scrolling */
     }
     if(event.key == "ArrowRight") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: +5, y: 0};
-      event.preventDefault(); /* disable window scrolling */
+      if(!this.svg.editTool.isOn())
+        event.preventDefault(); /* disable window scrolling */
     }
     if(event.key == "ArrowDown") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: +5};
-      event.preventDefault(); /* disable window scrolling */
+      if(!this.svg.editTool.isOn())
+        event.preventDefault(); /* disable window scrolling */
     }
     if(event.key == "ArrowUp") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: -5};
-      event.preventDefault(); /* disable window scrolling */
+      if(!this.svg.editTool.isOn())
+        event.preventDefault(); /* disable window scrolling */
     }
 
     if(event.key == "Shift") {
@@ -216,8 +220,8 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer");
-    this.svg.addCallBack(Callback.SELECT_TOOl, this.selectToolCallBack.bind(this));
-    this.svg.addCallBack(Callback.EDIT_TOOl, this.editToolCallBack.bind(this));
+    this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
+    this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolCallBack.bind(this));
     this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
     this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));
     this.svg.style.addCallBack(Callback.FILL_COLOR_CHANGE, this.fillCallBack.bind(this));

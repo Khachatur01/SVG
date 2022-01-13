@@ -58,6 +58,7 @@ export abstract class XGrip extends XBox {
     this.container.focused.fixRefPoint();
 
     this.container.HTML.addEventListener("mousemove", this._move);
+    document.addEventListener("mouseup", this._end);
   }
   private move(event: MouseEvent) {
     let containerRect = this.container.HTML.getBoundingClientRect();
@@ -74,17 +75,15 @@ export abstract class XGrip extends XBox {
     if(!this.resizing) return;
 
     this.container.HTML.removeEventListener("mousemove", this._move);
+    document.removeEventListener("mouseup", this._end);
     this.container.activeTool.on();
     this.resizing = false;
   }
 
   on() {
     this.svgElement.addEventListener("mousedown", this._start);
-    document.addEventListener("mouseup", this._end);
   }
   off() {
     this.svgElement.removeEventListener("mousedown", this._start);
-    this.container.HTML.removeEventListener("mousemove", this._move);
-    document.removeEventListener("mouseup", this._end);
   }
 }

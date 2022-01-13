@@ -5,11 +5,24 @@ import {XTextBox} from "../../../../../element/text/XTextBox";
 
 export class DrawTextBox extends MoveDraw {
   onStart(position: Point): XElement {
-    return new XTextBox(this.container, position.x, position.y);
+    let textBox = new XTextBox(this.container, position.x, position.y);
+    if(textBox.content)
+      textBox.content.style.border = "1px solid #999";
+    return textBox;
+  }
+
+  override onIsNotComplete() {
+    if(!this.drawableElement) return;
+    this.drawableElement.setSize({
+      x: this.startPos.x,
+      y: this.startPos.y,
+      width: 200,
+      height: 100
+    });
+    this.drawableElement.refPoint = this.drawableElement?.center;
   }
 
   override onEnd() {
-    if(this.drawableElement?.isComplete())
-      this.container.editTool.on();
+    this.container.editTool.on();
   }
 }

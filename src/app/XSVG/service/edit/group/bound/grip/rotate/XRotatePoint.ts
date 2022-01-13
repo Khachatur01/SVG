@@ -92,6 +92,7 @@ export class XRotatePoint extends XPath {
     this.rotating = true;
     this.container.activeTool.off();
     this.container.HTML.addEventListener("mousemove", this._move);
+    document.addEventListener("mouseup", this._end);
 
     let containerRect = this.container.HTML.getBoundingClientRect();
     let x = event.clientX - containerRect.left;
@@ -113,7 +114,7 @@ export class XRotatePoint extends XPath {
 
     if(this.container.grid.isSnap())
       angle = Math.round(angle / 15) * 15;
-    
+
     this.container.focused.rotate(angle);
   }
   private end() {
@@ -121,16 +122,14 @@ export class XRotatePoint extends XPath {
 
     this.container.selectTool.on();
     this.container.HTML.removeEventListener("mousemove", this._move);
+    document.removeEventListener("mouseup", this._end);
     this.rotating = false;
   }
 
   on() {
     this.svgElement.addEventListener("mousedown", this._start);
-    document.addEventListener("mouseup", this._end);
   }
   off() {
     this.svgElement.removeEventListener("mousedown", this._start);
-    this.container.HTML.removeEventListener("mousemove", this._move);
-    document.removeEventListener("mouseup", this._end);
   }
 }

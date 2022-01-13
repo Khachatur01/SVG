@@ -75,4 +75,8 @@ export class XGrid {
     let y = Math.round(point.y / this.squareSide) * this.squareSide;
     return {x: x, y: y};
   }
+
+  get snapSide(): number {
+    return this.squareSide;
+  }
 }

@@ -31,6 +31,7 @@ export class XNode extends XEllipse {
   protected onStart(): void {
     this.editing = true;
     this.editTool.getContainer().HTML.addEventListener("mousemove", this._move);
+    document.addEventListener("mouseup", this._end);
   };
   protected onMove(event: MouseEvent): void {
     if(!this.editTool.editableElement) return;
@@ -54,12 +55,12 @@ export class XNode extends XEllipse {
   protected onEnd(): void {
     if(!this.editing) return;
     this.editTool.getContainer().HTML.removeEventListener("mousemove", this._move);
+    document.removeEventListener("mouseup", this._end);
     this.editing = true;
   };
 
   private on() {
     this.svgElement.addEventListener("mousedown", this._start);
-    document.addEventListener("mouseup", this._end);
   }
 
 }

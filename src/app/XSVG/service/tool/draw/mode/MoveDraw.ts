@@ -31,6 +31,7 @@ export abstract class MoveDraw implements XDrawable {
     this.drawableElement = this.onStart(this.startPos);
     this.container.add(this.drawableElement);
     this.container.HTML.addEventListener('mousemove', this.draw);
+    document.addEventListener('mouseup', this.drawEnd);
     this.container.drawTool.drawing();
   }
   private _onDraw(event: MouseEvent) {
@@ -43,6 +44,7 @@ export abstract class MoveDraw implements XDrawable {
     if(!this.container || !this.drawableElement) return;
 
     this.container.HTML.removeEventListener('mousemove', this.draw);
+    document.removeEventListener('mouseup', this.drawEnd);
 
     /* if element isn't drawn */
     if (this.drawableElement.isComplete()) {
@@ -55,7 +57,7 @@ export abstract class MoveDraw implements XDrawable {
       this.container.focused.fixRect();
       this.container.selectTool.on();
     } else {
-      this.container.remove(this.drawableElement);
+      this.onIsNotComplete();
     }
 
     this.onEnd();
@@ -64,6 +66,7 @@ export abstract class MoveDraw implements XDrawable {
   }
 
   abstract onStart(position: Point): XElement;
+
   onDraw(containerRect: DOMRect, event: MouseEvent, xElement: XElement, perfectMode: boolean): void {
     let width = event.clientX - containerRect.left - this.startPos.x;
     let height = event.clientY - containerRect.top - this.startPos.y;
@@ -97,20 +100,19 @@ export abstract class MoveDraw implements XDrawable {
       height: height
     });
   };
-  onEnd() {
-
+  onIsNotComplete() {
+    if(this.drawableElement)
+      this.container.remove(this.drawableElement);
   }
+  onEnd() {}
 
   start(container: XSVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this.drawStart);
-    document.addEventListener('mouseup', this.drawEnd);
   }
 
   stop(): void {
-    this.container?.HTML.removeEventListener('mousemove', this.draw);
     this.container?.HTML.removeEventListener('mousedown', this.drawStart);
-    document.removeEventListener('mouseup', this.drawEnd);
   }
 
   set perfect(mode: boolean) {
