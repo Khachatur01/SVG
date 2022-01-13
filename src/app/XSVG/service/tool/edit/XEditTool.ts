@@ -62,7 +62,9 @@ export class XEditTool extends XTool {
 
     let callback = this.container.callBacks.get(Callback.EDIT_TOOl);
     if(callback)
-      callback();
+      callback.forEach((func: Function) => {
+        func();
+      });
   }
 
   off(): void {

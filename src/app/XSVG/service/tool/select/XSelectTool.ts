@@ -107,9 +107,12 @@ export class XSelectTool extends XTool {
     this._isOn = true;
     this.dragTool.on();
     this.container.HTML.style.cursor = "default";
+
     let callback = this.container.callBacks.get(Callback.SELECT_TOOl);
     if(callback)
-      callback();
+      callback.forEach((func: Function) => {
+        func();
+      });
   }
 
   off(): void {

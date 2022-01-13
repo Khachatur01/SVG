@@ -4,8 +4,11 @@ import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
 import {XPath} from "../path/XPath";
+import {Callback} from "../../model/Callback";
 
 export class XForeignObject extends XElement {
+  protected content: HTMLElement | null = null;
+
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "foreignObject");
@@ -22,13 +25,18 @@ export class XForeignObject extends XElement {
       preserveAspectRatio: "none"
     });
 
+    this.container.addCallBack(Callback.SELECT_TOOl, () => {
+      if(this.content) {
+        this.content.style.userSelect = "none";
+        this.content.style.cursor = "move";
+      }
+    });
 
-    this.svgElement.addEventListener("mousedown", function(event) {
-      // event.stopImmediatePropagation();
-    }, true);
-
-    this.svgElement.addEventListener("dblclick", () => {
-      this.container.editTool.on();
+    this.container.addCallBack(Callback.EDIT_TOOl, () => {
+      if(this.content) {
+        this.content.style.userSelect = "unset";
+        this.content.style.cursor = "text";
+      }
     });
   }
   isComplete(): boolean {
@@ -99,7 +107,17 @@ export class XForeignObject extends XElement {
   }
 
   setContent(div: HTMLElement): void {
+    this.content = div;
+    div.style.userSelect = "none";
     this.svgElement.appendChild(div);
+
+    this.content?.addEventListener("focus", () => {
+      if(this.container.editTool.isOn()) {
+        this.content?.focus();
+      } else {
+        this.content?.blur();
+      }
+    });
   }
 
   toPath(): XPath {

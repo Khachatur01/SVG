@@ -10,7 +10,7 @@ import {XGrid} from "./service/grid/XGrid";
 import {Callback} from "./model/Callback";
 
 class GlobalStyle {
-  private _styleCallBacks: Map<Callback, Function> = new Map<Callback, Function>();
+  private _styleCallBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
   private _globalStyle: any = {
     "fill": "none",
     "stroke": "#000000",
@@ -58,7 +58,11 @@ class GlobalStyle {
 
 
   addCallBack(name: Callback, callback: Function) {
-    this._styleCallBacks.set(name, callback);
+    let functions = this._styleCallBacks.get(name);
+    if(!functions) {
+      this._styleCallBacks.set(name, []);
+    }
+    this._styleCallBacks.get(name)?.push(callback)
   }
 
   recoverGlobalStyle() {
@@ -74,7 +78,9 @@ class GlobalStyle {
   setGlobalStyle(style: any) {
     this.fixGlobalStyle();
     this._globalStyle = Object.assign({}, style);
-    this._styleCallBacks.forEach((callback) => callback());
+    this._styleCallBacks.forEach((callback) => callback.forEach((func: Function) => {
+      func()
+    }));
   }
   get globalStyle(): any {
     return this._globalStyle;
@@ -85,7 +91,7 @@ export class XSVG {
   private readonly container: HTMLElement;
   private _focusedElements: XFocus = new XFocus(this);
   private _elements: Set<XElement> = new Set<XElement>();
-  private _callBacks: Map<Callback, Function> = new Map<Callback, Function>();
+  private _callBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
 
   public elementsGroup: SVGGElement;
   public readonly drawTool: XDrawTool;
@@ -129,12 +135,16 @@ export class XSVG {
     this.container.appendChild(this.editTool.SVG);
   }
 
-  get callBacks(): Map<Callback, Function> {
+  get callBacks(): Map<Callback, Function[]> {
     return this._callBacks;
   }
 
   addCallBack(name: Callback, callback: Function) {
-    this._callBacks.set(name, callback);
+    let functions = this._callBacks.get(name);
+    if(!functions) {
+      this._callBacks.set(name, []);
+    }
+    this._callBacks.get(name)?.push(callback)
   }
 
   add(xElement: XElement) {

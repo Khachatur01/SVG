@@ -9,6 +9,7 @@ export class DrawTextBox extends MoveDraw {
   }
 
   override onEnd() {
-    this.container.editTool.on();
+    if(this.drawableElement?.isComplete())
+      this.container.editTool.on();
   }
 }

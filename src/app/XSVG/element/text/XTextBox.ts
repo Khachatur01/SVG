@@ -13,11 +13,14 @@ export class XTextBox extends XForeignObject implements MoveDrawable {
     textarea.style.border = "1px solid #999";
     textarea.style.background = "transparent";
     this.setContent(textarea);
-
-    // this.style.fill = function () {};
   }
 
   drawSize(rect: Rect): void {
     this.setSize(rect);
+  }
+
+  override isComplete(): boolean {
+    let size = this.size;
+    return size.width > 15 && size.height > 15;
   }
 }

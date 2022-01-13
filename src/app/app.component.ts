@@ -506,7 +506,6 @@ export class AppComponent implements AfterViewInit {
 
     let element = new XForeignObject(this.svg, 0, 0, 600, 200);
     element.refPoint = {x: 300, y: 100};
-    htmlDiv.style.userSelect = "none";
     element.setContent(htmlDiv);
 
     this.svg.add(element);

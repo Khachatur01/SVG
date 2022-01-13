@@ -58,9 +58,9 @@ export abstract class MoveDraw implements XDrawable {
       this.container.remove(this.drawableElement);
     }
 
+    this.onEnd();
     this.container.drawTool.drawingEnd();
     this.drawableElement = null;
-    this.onEnd();
   }
 
   abstract onStart(position: Point): XElement;
