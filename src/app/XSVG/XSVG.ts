@@ -64,6 +64,11 @@ class GlobalStyle {
     }
     this._styleCallBacks.get(name)?.push(callback)
   }
+  removeCallBack(name: Callback, callback: Function) {
+    let functions = this._styleCallBacks.get(name);
+    if(functions)
+      functions.splice(functions.indexOf(callback), 1);
+  }
 
   recoverGlobalStyle() {
     this.setGlobalStyle(this._lastGlobalStyle);
@@ -146,6 +151,11 @@ export class XSVG {
       this._callBacks.set(name, []);
     }
     this._callBacks.get(name)?.push(callback)
+  }
+  removeCallBack(name: Callback, callback: Function) {
+    let functions = this._callBacks.get(name);
+    if(functions)
+      functions.splice(functions.indexOf(callback), 1);
   }
 
   add(xElement: XElement) {
