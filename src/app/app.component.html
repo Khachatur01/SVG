@@ -10,31 +10,31 @@
 <body>
 <div class="container-fluid py-2">
   <div class="d-flex flex-wrap">
-    <button class="btn btn-default" id="select" (click)="select()">
+    <button class="btn btn-default" id="select" (click)="select()" title="Select">
       <img src="../assets/img/cursor-arrow.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="edit" (click)="edit()">
+    <button class="btn btn-default" id="edit" (click)="edit()" title="Edit">
       <img src="../assets/img/edit-node.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="ellipse" (click)="ellipse()">
+    <button class="btn btn-default" id="ellipse" (click)="ellipse()" title="Circle">
       <img src="../assets/img/draw-ellipse.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="rect" (click)="rectangle()">
+    <button class="btn btn-default" id="rect" (click)="rectangle()" title="Rectangle">
       <img src="../assets/img/draw-rectangle.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="triangle" (click)="triangle()">
+    <button class="btn btn-default" id="triangle" (click)="triangle()" title="Isosceles triangle">
       <img src="../assets/img/draw-triangle.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="right-triangle" (click)="rightTriangle()">
+    <button class="btn btn-default" id="right-triangle" (click)="rightTriangle()" title="Right Triangle">
       <img src="../assets/img/draw-right-triangle.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="line" (click)="line()">
+    <button class="btn btn-default" id="line" (click)="line()" title="Segment">
       <img src="../assets/img/draw-line.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="polyline" (click)="polyline()">
+    <button class="btn btn-default" id="polyline" (click)="polyline()" title="Polyline">
       <img src="../assets/img/polyline.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="polygon" (click)="polygon()">
+    <button class="btn btn-default" id="polygon" (click)="polygon()" title="Polygon">
       <img src="../assets/img/polygon.svg" height="17" alt="">
     </button>
     <button class="btn btn-default" id="free" (click)="free()" title="Free">
@@ -45,17 +45,17 @@
     </button>
 
     <div class="separator mx-2"></div>
-    <button class="btn btn-default" id="toPath" (click)="toPath()">Combine</button>
-    <div class="separator mx-2"></div>
+<!--    <button class="btn btn-default" id="toPath" (click)="toPath()">Combine</button>-->
+<!--    <div class="separator mx-2"></div>-->
 
-    <button class="btn btn-default" id="grid" (click)="grid()">
+    <button class="btn btn-default" id="grid" (click)="grid()" title="Grid">
       <img src="../assets/img/grid.svg" height="17" alt="">
     </button>
-    <button class="btn btn-default" id="snap" (click)="snap()">Snap</button>
+    <button class="btn btn-default" id="snap" (click)="snap()" title="Snap to Grid">Snap</button>
 
     <div class="separator mx-2"></div>
-    <button class="btn btn-default" (click)="demoImage()">Demo Image</button>
-    <button class="btn btn-default" (click)="demoAsset()">Demo Asset</button>
+    <button class="btn btn-default" (click)="demoImage()" title="Place Demo Image">Demo Image</button>
+    <button class="btn btn-default" (click)="demoAsset()" title="Place Demo Problem">Demo Problem</button>
 
   </div>
 
