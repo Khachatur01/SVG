@@ -17,7 +17,6 @@ export class XFocus implements XDraggable, XResizeable {
 
   public readonly boundingBox: XBoundingBox;
   private readonly svgGroup: SVGGElement;
-  private readonly svgElements: SVGGElement;
   private readonly svgBounding: SVGGElement;
 
   private _lastPosition: Point = {x: 0, y: 0};
@@ -30,11 +29,8 @@ export class XFocus implements XDraggable, XResizeable {
     this.boundingBox = new XBoundingBox(this.container)
     this.svgGroup = document.createElementNS(XElement.svgURI, "g");
     this.svgGroup.id = "focus";
-    this.svgElements = document.createElementNS(XElement.svgURI, "g");
-    this.svgElements.id = "elements";
     this.svgBounding = this.boundingBox.svgGroup;
 
-    this.svgGroup.appendChild(this.svgElements);
     this.svgGroup.appendChild(this.svgBounding);
     this.svgGroup.appendChild(this.boundingBox.refPointGroup);
   }
@@ -47,7 +43,6 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   appendChild(xElement: XElement): void {
-    this.svgElements.appendChild(xElement.SVG);
     this._children.add(xElement);
 
     if(this._children.size == 1) {
@@ -74,7 +69,6 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   removeChild(xElement: XElement): void {
-    this.container.elementsGroup.appendChild(xElement.SVG);
     this._children.delete(xElement);
 
     this.container.editTool.removeEditableElement();
@@ -108,7 +102,6 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   remove() {
-    this.svgElements.innerHTML = "";
     this._children.forEach((child: XElement) => this.container.remove(child));
 
     this._children.clear();
@@ -140,7 +133,6 @@ export class XFocus implements XDraggable, XResizeable {
     this._children.clear();
     this.container.add(group);
 
-    this.svgElements.appendChild(group.SVG);
     this._children.add(group);
 
     let lastRefPoint = this.refPoint;
