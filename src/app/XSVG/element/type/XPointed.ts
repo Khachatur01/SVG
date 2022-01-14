@@ -114,6 +114,16 @@ export abstract class XPointed extends XElement {
     this.points = points;
   }
 
+
+  get boundingRect(): Rect {
+    let points = this.points;
+    return this.calculateBoundingBox(points);
+  }
+  get rotatedBoundingRect(): Rect {
+    let points = this.rotatedPoints;
+    return this.calculateBoundingBox(points);
+  }
+
   override toPath(): XPath {
     let rotatedPoints = this.rotatedPoints;
     let path = new Path();

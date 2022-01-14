@@ -48,17 +48,12 @@ export class XGroup extends XElement {
   }
 
   get position(): Point {
-    let points = this.rotatedPoints;
+    let boundingRect = this.rotatedBoundingRect;
 
-    let leftTop: Point = points[0];
-
-    for(let i = 1; i < points.length; i++) {
-      if (points[i].x < leftTop.x)
-        leftTop.x = points[i].x;
-      if (points[i].y < leftTop.y)
-        leftTop.y = points[i].y;
-    }
-    return leftTop;
+    return  {
+      x: boundingRect.x,
+      y: boundingRect.y
+    };
   }
   set position(delta: Point) {
     this._elements.forEach((element: XElement) => {
@@ -73,30 +68,60 @@ export class XGroup extends XElement {
   }
 
   get size(): Size {
-    let points = this.rotatedPoints;
-
-    let maxX = points[0].x;
-    let maxY = points[0].y;
-    let minX = points[0].x;
-    let minY = points[0].y;
-
-    for(let i = 1; i < points.length; i++) {
-      if(points[i].x > maxX)
-        maxX = points[i].x;
-      if(points[i].y > maxY)
-        maxY = points[i].y;
-      if(points[i].x < minX)
-        minX = points[i].x;
-      if(points[i].y < minY)
-        minY = points[i].y;
-    }
+    let boundingRect = this.rotatedBoundingRect;
 
     return  {
-      width: maxX - minX,
-      height: maxY - minY
+      width: boundingRect.width,
+      height: boundingRect.height
     };
   }
   setSize(rect: Rect): void {
+  }
+
+
+  get boundingRect(): Rect {
+    return this.rotatedBoundingRect;
+  }
+  get rotatedBoundingRect(): Rect {
+    let minX, minY;
+    let maxX, maxY;
+
+    let children = Array.from(this._elements);
+    if(children.length < 1)
+      return {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
+      };
+
+    let firstChild = children[0];
+
+    let firstBoundingRect = firstChild.rotatedBoundingRect;
+
+    minX = firstBoundingRect.x;
+    minY = firstBoundingRect.y;
+    maxX = firstBoundingRect.width + minX;
+    maxY = firstBoundingRect.height + minY;
+
+    for(let i = 1; i < children.length; i++) {
+      let boundingRect = children[i].rotatedBoundingRect;
+      if(boundingRect.x < minX)
+        minX = boundingRect.x;
+      if(boundingRect.y < minY)
+        minY = boundingRect.y;
+      if(boundingRect.width + boundingRect.x > maxX)
+        maxX = boundingRect.width + boundingRect.x;
+      if(boundingRect.height + boundingRect.y > maxY)
+        maxY = boundingRect.height + boundingRect.y;
+    }
+
+    return {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    };
   }
 
   override get refPoint(): Point {

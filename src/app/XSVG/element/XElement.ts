@@ -87,6 +87,8 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract get position(): Point;
   abstract set position(delta: Point);
   abstract get points(): Point[];
+  abstract get boundingRect(): Rect;
+  abstract get rotatedBoundingRect(): Rect;
   abstract toPath(): XPath;
 
   correct(refPoint: Point, lastRefPoint: Point): void {};
@@ -126,8 +128,7 @@ export abstract class XElement implements XResizeable, XDraggable {
     );
   }
 
-  get rotatedBoundingRect(): Rect {
-    let points = this.rotatedPoints;
+  protected calculateBoundingBox(points: Point[]): Rect {
     let minX = points[0].x;
     let minY = points[0].y;
     let maxX = points[0].x;

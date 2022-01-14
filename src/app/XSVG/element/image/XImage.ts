@@ -93,6 +93,15 @@ export class XImage extends XElement {
     });
   }
 
+  get boundingRect(): Rect {
+    let points = this.points;
+    return this.calculateBoundingBox(points);
+  }
+  get rotatedBoundingRect(): Rect {
+    let points = this.rotatedPoints;
+    return this.calculateBoundingBox(points);
+  }
+
   setImage(URI: string): void {
     this.setAttr({href: URI});
   }

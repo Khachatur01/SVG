@@ -129,6 +129,15 @@ export class XForeignObject extends XElement {
     });
   }
 
+  get boundingRect(): Rect {
+    let points = this.points;
+    return this.calculateBoundingBox(points);
+  }
+  get rotatedBoundingRect(): Rect {
+    let points = this.rotatedPoints;
+    return this.calculateBoundingBox(points);
+  }
+
   toPath(): XPath {
     return new XPath(this.container);
   }

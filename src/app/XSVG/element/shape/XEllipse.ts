@@ -22,19 +22,6 @@ export class XEllipse extends XElement implements MoveDrawable {
     this.style.setDefaultStyle();
   }
 
-  override get rotatedBoundingRect(): Rect {
-    let containerRect: Rect = this.container.HTML.getBoundingClientRect();
-    let stoke = parseInt(this.style.strokeWidth);
-    let rotatedBoundingRect: Rect = this.svgElement.getBoundingClientRect();
-
-    rotatedBoundingRect.x += stoke / 2 - containerRect.x;
-    rotatedBoundingRect.y += stoke / 2 - containerRect.y;
-    rotatedBoundingRect.width -= stoke;
-    rotatedBoundingRect.height -= stoke
-
-    return rotatedBoundingRect;
-  }
-
   get points(): Point[] {
     let position: Point = this.position;
     let size: Size = this.size;
@@ -104,6 +91,23 @@ export class XEllipse extends XElement implements MoveDrawable {
       rx: rx,
       ry: ry
     });
+  }
+
+  get boundingRect(): Rect {
+    let points = this.points;
+    return this.calculateBoundingBox(points);
+  }
+  get rotatedBoundingRect(): Rect {
+    let containerRect: Rect = this.container.HTML.getBoundingClientRect();
+    let stoke = parseInt(this.style.strokeWidth);
+    let rotatedBoundingRect: Rect = this.svgElement.getBoundingClientRect();
+
+    rotatedBoundingRect.x += stoke / 2 - containerRect.x;
+    rotatedBoundingRect.y += stoke / 2 - containerRect.y;
+    rotatedBoundingRect.width -= stoke;
+    rotatedBoundingRect.height -= stoke
+
+    return rotatedBoundingRect;
   }
 
   drawSize(rect: Rect) {

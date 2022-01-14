@@ -118,11 +118,11 @@ export class XBoundingBox extends XBox {
     this.xRotatePoint.hide();
   }
 
-  get boundingRect(): Rect {
+  override get boundingRect(): Rect {
     return this._boundingRect;
   }
 
-  set boundingRect(value: Rect) {
+  override set boundingRect(value: Rect) {
     this._boundingRect = value;
   }
 

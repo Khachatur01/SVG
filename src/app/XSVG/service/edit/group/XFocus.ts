@@ -184,7 +184,7 @@ export class XFocus implements XDraggable, XResizeable {
     this.fit();
   }
 
-  get boundingRect(): Rect {
+  private calculateBoundingRect(rotated: boolean): Rect {
     let minX, minY;
     let maxX, maxY;
 
@@ -198,24 +198,24 @@ export class XFocus implements XDraggable, XResizeable {
       };
 
     let firstChild = children[0];
-    let firstChildPos = firstChild.position;
-    let firstChildSize = firstChild.size;
-    minX = firstChildPos.x;
-    minY = firstChildPos.y;
-    maxX = firstChildSize.width + minX;
-    maxY = firstChildSize.height + minY;
+
+    let firstBoundingRect = rotated ? firstChild.rotatedBoundingRect : firstChild.boundingRect;
+
+    minX = firstBoundingRect.x;
+    minY = firstBoundingRect.y;
+    maxX = firstBoundingRect.width + minX;
+    maxY = firstBoundingRect.height + minY;
 
     for(let i = 1; i < children.length; i++) {
-      let childPos = children[i].position;
-      let childSize = children[i].size;
-      if(childPos.x < minX)
-        minX = childPos.x;
-      if(childPos.y < minY)
-        minY = childPos.y;
-      if(childSize.width + childPos.x > maxX)
-        maxX = childSize.width + childPos.x;
-      if(childSize.height + childPos.y > maxY)
-        maxY = childSize.height + childPos.y;
+      let boundingRect = rotated ? children[i].rotatedBoundingRect : children[i].boundingRect;
+      if(boundingRect.x < minX)
+        minX = boundingRect.x;
+      if(boundingRect.y < minY)
+        minY = boundingRect.y;
+      if(boundingRect.width + boundingRect.x > maxX)
+        maxX = boundingRect.width + boundingRect.x;
+      if(boundingRect.height + boundingRect.y > maxY)
+        maxY = boundingRect.height + boundingRect.y;
     }
 
     this.boundingBox.boundingRect = {
@@ -227,48 +227,12 @@ export class XFocus implements XDraggable, XResizeable {
 
     return this.boundingBox.boundingRect;
   }
+
+  get boundingRect(): Rect {
+    return this.calculateBoundingRect(false);
+  }
   get rotatedBoundingRect(): Rect {
-    let minX, minY;
-    let maxX, maxY;
-
-    let children = Array.from(this._children);
-    if(children.length < 1)
-      return {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0
-      };
-
-    let firstChild = children[0];
-
-    let firstRotatedBoundingRect = firstChild.rotatedBoundingRect;
-
-    minX = firstRotatedBoundingRect.x;
-    minY = firstRotatedBoundingRect.y;
-    maxX = firstRotatedBoundingRect.width + minX;
-    maxY = firstRotatedBoundingRect.height + minY;
-
-    for(let i = 1; i < children.length; i++) {
-      let rotatedBoundingRect = children[i].rotatedBoundingRect;
-      if(rotatedBoundingRect.x < minX)
-        minX = rotatedBoundingRect.x;
-      if(rotatedBoundingRect.y < minY)
-        minY = rotatedBoundingRect.y;
-      if(rotatedBoundingRect.width + rotatedBoundingRect.x > maxX)
-        maxX = rotatedBoundingRect.width + rotatedBoundingRect.x;
-      if(rotatedBoundingRect.height + rotatedBoundingRect.y > maxY)
-        maxY = rotatedBoundingRect.height + rotatedBoundingRect.y;
-    }
-
-    this.boundingBox.boundingRect = {
-      x: minX,
-      y: minY,
-      width: maxX - minX,
-      height: maxY - minY
-    };
-
-    return this.boundingBox.boundingRect;
+    return this.calculateBoundingRect(true);
   }
 
   set lastRefPoint(point: Point) {

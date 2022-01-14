@@ -68,6 +68,14 @@ export class XBox extends XElement {
       height: rect.height + ""
     });
   }
+  get boundingRect(): Rect {
+    let points = this.points;
+    return this.calculateBoundingBox(points);
+  }
+  get rotatedBoundingRect(): Rect {
+    let points = this.rotatedPoints;
+    return this.calculateBoundingBox(points);
+  }
 
   get size(): Size {
     return {
