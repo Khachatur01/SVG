@@ -76,8 +76,14 @@ export class XGroup extends XElement {
     };
   }
   setSize(rect: Rect): void {
+    let delta = {
+      x: rect.width / this._lastSize.width,
+      y: rect.height / this._lastSize.height
+    }
+    this._elements.forEach((element: XElement) => {
+      element.setSize(rect, delta);
+    });
   }
-
 
   get boundingRect(): Rect {
     return this.rotatedBoundingRect;

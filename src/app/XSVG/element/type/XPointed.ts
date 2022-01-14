@@ -6,6 +6,7 @@ import {XPath} from "../pointed/path/XPath";
 import {Path} from "../../model/path/Path";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {LineTo} from "../../model/path/line/LineTo";
+import {Matrix} from "../../service/math/Matrix";
 
 export abstract class XPointed extends XElement {
   protected _lastPoints: Point[] = [];
@@ -92,15 +93,20 @@ export abstract class XPointed extends XElement {
       height: maxY - minY
     };
   }
-  setSize(rect: Rect): void {
+  setSize(rect: Rect, delta: Point | null = null): void {
     if(!this.validSize(rect)) return;
     let dw = 1;
     let dh = 1;
 
-    if(this._lastSize.width != 0)
-      dw = rect.width / this._lastSize.width;
-    if(this._lastSize.height != 0)
-      dh = rect.height / this._lastSize.height;
+    if(delta) {
+      dw = delta.x;
+      dh = delta.y;
+    } else {
+      if (this._lastSize.width != 0)
+        dw = rect.width / this._lastSize.width;
+      if (this._lastSize.height != 0)
+        dh = rect.height / this._lastSize.height;
+    }
 
     let points = this.points;
     for(let i = 0; i < points.length; i++) {

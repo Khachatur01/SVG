@@ -22,6 +22,7 @@ export class XDrawTool extends XTool {
     this._isOn = true;
     this._drawTool?.start(this.container);
     this.container.HTML.style.cursor = "crosshair";
+    this.container.blur();
   }
   off() {
     this._isOn = false;

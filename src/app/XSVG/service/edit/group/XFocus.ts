@@ -114,6 +114,8 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   group(): void {
+    if(this._children.size < 2) return;
+
     let group = new XGroup(this.container);
     this._children.forEach((element: XElement) => {
       group.addElement(element);
@@ -166,18 +168,20 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   get center(): Point {
+    let position = this.position;
+    let size = this.size;
     return {
-      x: this._lastPosition.x + this._lastSize.width / 2,
-      y: this._lastPosition.y + this._lastSize.height / 2
+      x: position.x + size.width / 2,
+      y: position.y + size.height / 2
     };
   }
 
   get size(): Size {
     return this.boundingRect;
   }
-  setSize(rect: Rect): void {
+  setSize(rect: Rect, delta: Point | null = null): void {
     if (this._children.size == 1) {
-      this._children.forEach(child => child.setSize(rect));
+      this._children.forEach(child => child.setSize(rect, delta));
     } else {
       /* TODO */
     }
@@ -321,10 +325,16 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   focus() {
-    if(this._children.size > 1)
+    if(this._children.size > 1) {
       this.boundingBox.multipleFocus();
-    else
-      this.boundingBox.singleFocus();
+    } else {
+      let [singleElement] = this._children;
+
+      if(singleElement instanceof XGroup)
+        this.boundingBox.multipleFocus();
+      else
+        this.boundingBox.singleFocus();
+    }
   }
   blur() {
     this.boundingBox.blur();

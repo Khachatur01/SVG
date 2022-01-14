@@ -68,8 +68,27 @@ export class XEllipse extends XElement implements MoveDrawable {
     });
   }
 
-  setSize(rect: Rect): void {
+  drawSize(rect: Rect) {
+    this.setSize(rect);
+  }
+
+  get size(): Size {
+    return {
+      width: parseInt(this.getAttr("rx")) * 2,
+      height: parseInt(this.getAttr("ry")) * 2
+    };
+  }
+
+  setSize(rect: Rect, delta: Point | null = null): void {
     if(!this.validSize(rect)) return;
+    if(delta)
+      rect = {
+        x: rect.x + Math.abs(this._lastPosition.x - rect.x) * delta.x,
+        y: rect.y + Math.abs(this._lastPosition.y - rect.y) * delta.y,
+        width: rect.width,
+        height: rect.height
+      }
+
     let rx = rect.width / 2;
     let ry = rect.height / 2;
 
@@ -91,6 +110,7 @@ export class XEllipse extends XElement implements MoveDrawable {
       rx: rx,
       ry: ry
     });
+
   }
 
   get boundingRect(): Rect {
@@ -108,17 +128,6 @@ export class XEllipse extends XElement implements MoveDrawable {
     rotatedBoundingRect.height -= stoke
 
     return rotatedBoundingRect;
-  }
-
-  drawSize(rect: Rect) {
-    this.setSize(rect);
-  }
-
-  get size(): Size {
-    return {
-      width: parseInt(this.getAttr("rx")) * 2,
-      height: parseInt(this.getAttr("ry")) * 2
-    };
   }
 
   isComplete(): boolean {

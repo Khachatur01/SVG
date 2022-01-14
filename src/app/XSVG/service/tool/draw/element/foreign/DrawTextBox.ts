@@ -18,7 +18,7 @@ export class DrawTextBox extends MoveDraw {
       y: this.startPos.y,
       width: 200,
       height: 100
-    });
+    }, null);
     this.drawableElement.refPoint = this.drawableElement?.center;
   }
 

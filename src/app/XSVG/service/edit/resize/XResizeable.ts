@@ -1,10 +1,11 @@
 import {Size} from "../../../model/Size";
 import {Rect} from "../../../model/Rect";
+import {Point} from "../../../model/Point";
 
 export interface XResizeable {
   get lastRect(): Rect;
   get size(): Size;
-  setSize(rect: Rect): void;
+  setSize(rect: Rect, delta: Point | null): void;
   fixRect(): void;
   fixSize(): void;
 }
