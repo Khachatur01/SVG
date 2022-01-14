@@ -9,6 +9,7 @@ import {Size} from "../../../model/Size";
 import {XPath} from "../../../element/pointed/path/XPath";
 import {XGroup} from "../../../element/group/XGroup";
 import {Callback} from "../../../model/Callback";
+import {Matrix} from "../../math/Matrix";
 
 export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
@@ -194,13 +195,20 @@ export class XFocus implements XDraggable, XResizeable {
     this.boundingBox.correct(point, this.lastRefPoint);
   }
 
+  get rotatedCenter(): Point {
+    return Matrix.rotate(
+      [this.center],
+      this.refPoint,
+      -this. angle
+    )[0];
+  }
   get center(): Point {
-    let position = this.position;
-    let size = this.size;
+    let rect = this.boundingRect;
+
     return {
-      x: position.x + size.width / 2,
-      y: position.y + size.height / 2
-    };
+      x: rect.x + rect.width / 2,
+      y: rect.y + rect.height / 2
+    }
   }
 
   get size(): Size {

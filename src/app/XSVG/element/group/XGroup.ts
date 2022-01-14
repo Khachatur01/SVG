@@ -151,8 +151,9 @@ export class XGroup extends XElement {
     this._elements.forEach(child => child.refPoint = point);
   }
   override rotate(angle: number) {
+    this._angle = angle;
     this._elements.forEach(child =>
-      child.rotate((angle + child.lastAngle) % 360)
+      child.rotate((angle + child.lastAngle - this._lastAngle) % 360)
     );
   }
 
@@ -169,6 +170,7 @@ export class XGroup extends XElement {
     this._elements.forEach((element: XElement) => element.fixSize());
   }
   override fixAngle(): void {
+    super.fixAngle();
     this._elements.forEach((element: XElement) => element.fixAngle());
   }
 

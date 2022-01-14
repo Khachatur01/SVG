@@ -16,6 +16,7 @@ export class XTextBox extends XForeignObject implements MoveDrawable {
     textarea.style.background = "transparent";
     textarea.style.overflow = "hidden";
     textarea.style.lineHeight = container.grid.snapSide + 'px';
+    textarea.style.fontSize = "16px"
     this.setContent(textarea);
 
     this.container.addCallBack(Callback.EDIT_TOOl_OFF, () => {

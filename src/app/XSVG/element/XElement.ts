@@ -154,13 +154,19 @@ export abstract class XElement implements XResizeable, XDraggable {
     };
   }
 
+  get rotatedCenter(): Point {
+    return Matrix.rotate(
+      [this.center],
+      this._refPoint,
+      -this._angle
+    )[0];
+  }
   get center(): Point {
-    let position = this.position;
-    let size = this.size;
+    let rect = this.boundingRect;
 
     return {
-      x: position.x + size.width / 2,
-      y: position.y + size.height / 2
+      x: rect.x + rect.width / 2,
+      y: rect.y + rect.height / 2
     }
   }
 
