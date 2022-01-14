@@ -210,6 +210,7 @@ export class XSVG {
   }
   add(xElement: XElement) {
     if(!xElement) return;
+    xElement.group = null;
     this.elementsGroup.appendChild(xElement.SVG);
     this._elements.add(xElement);
     this.setElementActivity(xElement);

@@ -119,8 +119,8 @@ export class XFocus implements XDraggable, XResizeable {
   }
   get canUngroup(): boolean {
     if(this._children.size == 1) {
-      let [first] = this._children;
-      if(first instanceof XGroup)
+      let [element] = this._children;
+      if(element instanceof XGroup)
         return true;
     }
     return false;
@@ -153,6 +153,17 @@ export class XFocus implements XDraggable, XResizeable {
     this.focus();
   }
   ungroup() {
+    if(this._children.size > 1) return;
+    let [group] = this._children;
+    if(!(group instanceof XGroup)) /* can ungroup only single, group element */
+      return;
+    group.elements.forEach((element: XElement) => {
+      this.container.add(element);
+      this.container.focus(element)
+    });
+
+
+    this.container.remove(group);
 
   }
 
