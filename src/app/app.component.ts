@@ -16,7 +16,7 @@ export class AppComponent implements AfterViewInit {
 
   private svg:XSVG | null = null;
 
-  private activeElement: HTMLElement | null = null;
+  private activeTool: HTMLElement | null = null;
 
   public select() {
     if(!this.svg) return;
@@ -55,7 +55,7 @@ export class AppComponent implements AfterViewInit {
   }
   ungroup() {
     if(!this.svg) return;
-
+    this.svg.focused.ungroup();
   }
   public toPath() {
     if(!this.svg) return;
@@ -186,12 +186,12 @@ export class AppComponent implements AfterViewInit {
   }
 
   switchActive(id: string) {
-    if(this.activeElement)
-      this.makePassive(this.activeElement.id);
+    if(this.activeTool)
+      this.makePassive(this.activeTool.id);
 
-    this.activeElement = document.getElementById(id);
-    if(this.activeElement)
-      this.makeActive(this.activeElement.id);
+    this.activeTool = document.getElementById(id);
+    if(this.activeTool)
+      this.makeActive(this.activeTool.id);
   }
   makeActive(id: string) {
     let element = document.getElementById(id);
@@ -225,11 +225,29 @@ export class AppComponent implements AfterViewInit {
   editToolCallBack() {
     this.switchActive("edit")
   }
+  focusChanged() {
+    if(this.svg?.focused.canGroup)
+      document.getElementById("group")?.removeAttribute("disabled");
+    else
+      document.getElementById("group")?.setAttribute("disabled", "true");
+
+    if(this.svg?.focused.canUngroup)
+      document.getElementById("ungroup")?.removeAttribute("disabled");
+    else
+      document.getElementById("ungroup")?.setAttribute("disabled", "true");
+  }
+  blured() {
+    document.getElementById("group")?.setAttribute("disabled", "true");
+    document.getElementById("ungroup")?.setAttribute("disabled", "true");
+  }
 
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer");
     this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
     this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolCallBack.bind(this));
+    this.svg.addCallBack(Callback.FOCUS_CHANGED, this.focusChanged.bind(this));
+    this.svg.addCallBack(Callback.BLURED, this.blured.bind(this));
+
     this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
     this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));
     this.svg.style.addCallBack(Callback.FILL_COLOR_CHANGE, this.fillCallBack.bind(this));

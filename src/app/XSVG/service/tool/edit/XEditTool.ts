@@ -60,22 +60,14 @@ export class XEditTool extends XTool {
     }
     this.container.blur();
 
-    let callback = this.container.callBacks.get(Callback.EDIT_TOOl_ON);
-    if(callback)
-      callback.forEach((func: Function) => {
-        func();
-      });
+    this.container.callCallBacks(Callback.EDIT_TOOl_ON);
   }
 
   off(): void {
     this._isOn = false;
     this.removeEditableElement();
 
-    let callback = this.container.callBacks.get(Callback.EDIT_TOOl_OFF);
-    if(callback)
-      callback.forEach((func: Function) => {
-        func();
-      });
+    this.container.callCallBacks(Callback.EDIT_TOOl_OFF);
   }
 
   isOn(): boolean {

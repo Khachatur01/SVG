@@ -81,13 +81,10 @@ export class XEllipse extends XElement implements MoveDrawable {
 
   setSize(rect: Rect, delta: Point | null = null): void {
     if(!this.validSize(rect)) return;
-    if(delta)
-      rect = {
-        x: rect.x + Math.abs(this._lastPosition.x - rect.x) * delta.x,
-        y: rect.y + Math.abs(this._lastPosition.y - rect.y) * delta.y,
-        width: rect.width,
-        height: rect.height
-      }
+    if(delta) {
+      rect.width = this._lastSize.width * delta.x;
+      rect.height = this._lastSize.height * delta.y;
+    }
 
     let rx = rect.width / 2;
     let ry = rect.height / 2;

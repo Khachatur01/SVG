@@ -108,11 +108,7 @@ export class XSelectTool extends XTool {
     this.dragTool.on();
     this.container.HTML.style.cursor = "default";
 
-    let callback = this.container.callBacks.get(Callback.SELECT_TOOl_ON);
-    if(callback)
-      callback.forEach((func: Function) => {
-        func();
-      });
+    this.container.callCallBacks(Callback.SELECT_TOOl_ON);
   }
 
   off(): void {
@@ -121,11 +117,7 @@ export class XSelectTool extends XTool {
     this._isOn = false;
     this.dragTool.off();
 
-    let callback = this.container.callBacks.get(Callback.SELECT_TOOl_OFF);
-    if(callback)
-      callback.forEach((func: Function) => {
-        func();
-      });
+    this.container.callCallBacks(Callback.SELECT_TOOl_OFF);
   }
 
   isOn(): boolean {

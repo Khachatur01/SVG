@@ -8,6 +8,7 @@ import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
 import {XPath} from "../../../element/pointed/path/XPath";
 import {XGroup} from "../../../element/group/XGroup";
+import {Callback} from "../../../model/Callback";
 
 export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
@@ -113,6 +114,18 @@ export class XFocus implements XDraggable, XResizeable {
     this.blur();
   }
 
+  get canGroup(): boolean {
+    return this._children.size > 1;
+  }
+  get canUngroup(): boolean {
+    if(this._children.size == 1) {
+      let [first] = this._children;
+      if(first instanceof XGroup)
+        return true;
+    }
+    return false;
+  }
+
   group(): void {
     if(this._children.size < 2) return;
 
@@ -138,6 +151,9 @@ export class XFocus implements XDraggable, XResizeable {
     this.fit();
     this.boundingBox.rotate(0);
     this.focus();
+  }
+  ungroup() {
+
   }
 
   get children(): Set<XElement> {
@@ -325,6 +341,7 @@ export class XFocus implements XDraggable, XResizeable {
   }
 
   focus() {
+    this.container.callCallBacks(Callback.FOCUS_CHANGED);
     if(this._children.size > 1) {
       this.boundingBox.multipleFocus();
     } else {
@@ -337,6 +354,7 @@ export class XFocus implements XDraggable, XResizeable {
     }
   }
   blur() {
+    this.container.callCallBacks(Callback.BLURED);
     this.boundingBox.blur();
   }
 

@@ -7,5 +7,7 @@ export enum Callback {
   EDIT_TOOl_ON,
   EDIT_TOOl_OFF,
   ANGLE_CHANGE,
-  REF_POINT_CHANGE
+  REF_POINT_CHANGE,
+  FOCUS_CHANGED,
+  BLURED
 }

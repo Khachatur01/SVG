@@ -146,6 +146,13 @@ export class XSVG {
     return this._callBacks;
   }
 
+  callCallBacks(name: Callback): void {
+    let callback = this.callBacks.get(name);
+    if(callback)
+      callback.forEach((func: Function) => {
+        func();
+      });
+  }
   addCallBack(name: Callback, callback: Function) {
     let functions = this._callBacks.get(name);
     if(!functions) {
