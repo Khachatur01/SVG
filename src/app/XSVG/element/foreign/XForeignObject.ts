@@ -30,14 +30,12 @@ export class XForeignObject extends XElement {
     this.container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
       if(this._content) {
         this._content.style.userSelect = "none";
-        this._content.style.cursor = "unset";
       }
     });
 
     this.container.addCallBack(Callback.EDIT_TOOl_ON, () => {
       if(this._content) {
         this._content.style.userSelect = "unset";
-        this._content.style.cursor = "text";
       }
     });
   }

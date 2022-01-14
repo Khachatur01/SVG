@@ -90,12 +90,9 @@ export class XFocus implements XDraggable, XResizeable {
     }
 
     this.fit();
-    this.fixPosition();
   }
 
   clear() {
-    let parent = this.container.elementsGroup;
-    this._children.forEach((child: XElement) => parent?.appendChild(child.SVG));
     this._children.clear();
     this.blur();
     this.container.style.recoverGlobalStyle();

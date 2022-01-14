@@ -201,6 +201,8 @@ export class XSVG {
         element.SVG.style.cursor = "move";
       } else if(this.editTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
+      } else if(this.drawTool.isOn()) {
+        element.SVG.style.cursor = "crosshair";
       }
     });
   }
