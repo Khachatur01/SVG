@@ -171,14 +171,13 @@ export class AppComponent implements AfterViewInit {
   showCoordinates(containerId: string, labelId: string, mask: string) { /* x: {x} y: {y} ... replace {x} to x coordinate and {y} to y*/
     let container = document.getElementById(containerId);
     let label = document.getElementById(labelId);
-    if(!container) return;
 
-    let containerRect: Rect = container.getBoundingClientRect();
-
-    container.addEventListener("mousemove", (event) => {
+    container?.addEventListener("mousemove", (event) => {
+      if(!container) return;
+      let containerRect: Rect = container.getBoundingClientRect();
       let text = mask
-          .replace("{x}", (event.clientX - containerRect.x + window.scrollX) + "")
-          .replace("{y}", (event.clientY - containerRect.y + window.scrollY) + "");
+          .replace("{x}", (event.clientX - containerRect.x) + "")
+          .replace("{y}", (event.clientY - containerRect.y) + "");
 
       if(label)
         label.innerHTML = text;
