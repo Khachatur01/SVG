@@ -8,10 +8,12 @@ import {Callback} from "../../model/Callback";
 
 export class XForeignObject extends XElement {
   protected _content: HTMLElement | null = null;
+  private readonly outline: string = "thin solid #999";
 
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "foreignObject");
+    this.svgElement.style.outline = this.outline;
 
     this.position = {x: x, y: y};
 
@@ -29,7 +31,6 @@ export class XForeignObject extends XElement {
       if(this._content) {
         this._content.style.userSelect = "none";
         this._content.style.cursor = "unset";
-        this._content.style.border = "none"
       }
     });
 
@@ -116,16 +117,16 @@ export class XForeignObject extends XElement {
     div.contentEditable = "true";
     this.svgElement.appendChild(div);
 
-    div.addEventListener("focus", (event) => {
+    div.addEventListener("focus", () => {
       if(this.container.editTool.isOn()) {
         div.focus();
-        div.style.border = "1px solid #999"
+        this.svgElement.style.outline = this.outline;
       } else {
         div.blur();
       }
     });
-    div.addEventListener("blur", (event) => {
-      div.style.border = "none";
+    div.addEventListener("blur", () => {
+      this.svgElement.style.outline = "unset";
     });
   }
 

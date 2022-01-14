@@ -11,7 +11,6 @@ export class XGroup extends XElement {
   constructor(container: XSVG) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "g");
-    this.style.fill = "transparent";
   }
 
   get elements(): XElement[] {
@@ -128,6 +127,20 @@ export class XGroup extends XElement {
       width: maxX - minX,
       height: maxY - minY
     };
+  }
+
+  override getAttr(attribute: string): string {
+    let value = this._elements[0].SVG.getAttribute(attribute);
+    if (!value)
+      return "0";
+    return value;
+  }
+
+  override setAttr(attributes: object): void {
+    for(let element of this._elements)
+      for (const [key, value] of Object.entries(attributes))
+        if (key && value)
+          element.SVG.setAttribute(key, "" + value);
   }
 
   override get refPoint(): Point {

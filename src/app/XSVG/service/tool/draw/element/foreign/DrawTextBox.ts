@@ -5,10 +5,7 @@ import {XTextBox} from "../../../../../element/text/XTextBox";
 
 export class DrawTextBox extends MoveDraw {
   onStart(position: Point): XElement {
-    let textBox = new XTextBox(this.container, position.x, position.y);
-    if(textBox.content)
-      textBox.content.style.border = "1px solid #999";
-    return textBox;
+    return new XTextBox(this.container, position.x, position.y);
   }
 
   override onIsNotComplete() {
