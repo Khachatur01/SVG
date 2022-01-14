@@ -5,7 +5,8 @@ import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
 import {Matrix} from "../service/math/Matrix";
 import {XSVG} from "../XSVG";
-import {XPath} from "./path/XPath";
+import {XPath} from "./pointed/path/XPath";
+import {XGroup} from "./group/XGroup";
 
 class Style {
   private element: XElement;
@@ -63,10 +64,12 @@ export abstract class XElement implements XResizeable, XDraggable {
   public readonly style;
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
-  private _lastAngle: number = 0;
+  protected _lastAngle: number = 0;
 
   protected _angle: number = 0;
   protected _refPoint: Point = {x: 0, y: 0};
+
+  private _group: XGroup | null = null;
 
   protected svgElement: SVGElement = document.createElementNS(XElement.svgURI, "rect"); // default element
 
@@ -86,6 +89,8 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract get points(): Point[];
   abstract toPath(): XPath;
 
+  correct(refPoint: Point, lastRefPoint: Point): void {};
+
   validSize(rect: Rect): boolean {
     return !(Math.abs(rect.width) < 1 || Math.abs(rect.height) < 1);
   }
@@ -103,6 +108,14 @@ export abstract class XElement implements XResizeable, XDraggable {
       y: Math.round(rotatedRefPoint.y - lastRefPoint.y)
     };
 
+  }
+
+  get group(): XGroup | null {
+    return this._group;
+  }
+
+  set group(group: XGroup | null) {
+    this._group = group;
   }
 
   get rotatedPoints(): Point[] {
@@ -215,7 +228,7 @@ export abstract class XElement implements XResizeable, XDraggable {
     this._lastSize = this.size;
   }
   fixAngle(): void {
-    this._lastAngle = this.angle;
+    this._lastAngle = this._angle;
   }
   get lastRect(): Rect {
     return {
@@ -228,8 +241,6 @@ export abstract class XElement implements XResizeable, XDraggable {
   get lastAngle(): number {
     return this._lastAngle;
   }
-
-  correct(refPoint: Point, lastRefPoint: Point): void {};
 
   centerRefPoint() {
     this.refPoint = {

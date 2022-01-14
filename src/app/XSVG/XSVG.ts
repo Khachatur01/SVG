@@ -4,10 +4,11 @@ import {XFocus} from "./service/edit/group/XFocus";
 import {XSelectTool} from "./service/tool/select/XSelectTool";
 import {XTool} from "./service/tool/XTool";
 import {XEditTool} from "./service/tool/edit/XEditTool";
-import {XPointed} from "./element/type/XPointed";
 import {Tool} from "./dataSource/Tool";
 import {XGrid} from "./service/grid/XGrid";
 import {Callback} from "./model/Callback";
+import {XGroup} from "./element/group/XGroup";
+import {XPointed} from "./element/type/XPointed";
 
 class GlobalStyle {
   private _styleCallBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
@@ -158,46 +159,62 @@ export class XSVG {
       functions.splice(functions.indexOf(callback), 1);
   }
 
-  add(xElement: XElement) {
-    if(!xElement) return;
-    this.elementsGroup.appendChild(xElement.SVG);
-    this._elements.add(xElement);
 
-    xElement.SVG.addEventListener("mousedown", () => {
+  setElementActivity(element: XElement) {
+    if(element instanceof XGroup) return;
+    element.SVG.addEventListener("mousedown", () => {
       if(!this.selectTool.isOn() && !this.editTool.isOn())
         return;
 
       this.editTool.removeEditableElement();
+
       if(this.editTool.isOn()) {
-        if(xElement instanceof XPointed)
-          this.editTool.editableElement = xElement;
+        if(element instanceof XPointed)
+          this.editTool.editableElement = element;
       } else {
-        let hasChild = this._focusedElements.hasChild(xElement);
+        if(element.group) /* if element has grouped, then select group */
+          element = element.group;
+
+        let hasChild = this._focusedElements.hasChild(element);
         if(!this._multiSelect && hasChild) return;
 
         if(!this._multiSelect && !hasChild) {
           this.blur();
-          this.focus(xElement);
+          this.focus(element);
         } else if(hasChild) {
-          this.blur(xElement);
+          this.blur(element);
         } else {
-          this.focus(xElement);
+          this.focus(element);
         }
       }
     });
 
-    xElement.SVG.addEventListener("mousemove", () => {
+    element.SVG.addEventListener("mousemove", () => {
       if(this.selectTool.isOn()) {
-        xElement.SVG.style.cursor = "move";
+        element.SVG.style.cursor = "move";
       } else if(this.editTool.isOn()) {
-        xElement.SVG.style.cursor = "crosshair";
+        element.SVG.style.cursor = "crosshair";
       }
     });
+  }
+
+  get elements(): Set<XElement> {
+    return this._elements;
+  }
+  add(xElement: XElement) {
+    if(!xElement) return;
+    this.elementsGroup.appendChild(xElement.SVG);
+    this._elements.add(xElement);
+    this.setElementActivity(xElement);
   }
 
   remove(xElement: XElement) {
     this._elements.delete(xElement);
     xElement.remove();
+  }
+  clear() {
+    this._elements.clear();
+    this.elementsGroup.innerHTML = "";
   }
 
   get HTML(): HTMLElement {
@@ -223,9 +240,5 @@ export class XSVG {
   }
   singleSelect(): void {
     this._multiSelect = false;
-  }
-
-  get elements(): Set<XElement> {
-    return this._elements;
   }
 }

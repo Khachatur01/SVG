@@ -2,7 +2,7 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {XPointed} from "../type/XPointed";
 import {XSVG} from "../../XSVG";
-import {XPath} from "../path/XPath";
+import {XPath} from "./path/XPath";
 import {Close} from "../../model/path/close/Close";
 
 export class XPolygon extends XPointed {

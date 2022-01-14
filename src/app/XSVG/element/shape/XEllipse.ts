@@ -4,7 +4,7 @@ import {Rect} from "../../model/Rect";
 import {XElement} from "../XElement";
 import {XSVG} from "../../XSVG";
 import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
-import {XPath} from "../path/XPath";
+import {XPath} from "../pointed/path/XPath";
 import {Path} from "../../model/path/Path";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {MoveTo} from "../../model/path/point/MoveTo";

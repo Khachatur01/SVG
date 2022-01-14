@@ -3,7 +3,7 @@ import {XSVG} from "../../XSVG";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
-import {XPath} from "../path/XPath";
+import {XPath} from "../pointed/path/XPath";
 import {Callback} from "../../model/Callback";
 
 export class XForeignObject extends XElement {

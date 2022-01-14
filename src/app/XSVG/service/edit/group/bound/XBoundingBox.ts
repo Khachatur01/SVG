@@ -68,7 +68,7 @@ export class XBoundingBox extends XBox {
     this._refPointGroup.appendChild(this.xRefPoint.SVG);
   }
 
-  get group(): SVGGElement {
+  get svgGroup(): SVGGElement {
     return this._boundingBoxGroup;
   }
 

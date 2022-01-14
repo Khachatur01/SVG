@@ -1,5 +1,5 @@
 import {XElement} from "../XElement";
-import {XPath} from "../path/XPath";
+import {XPath} from "../pointed/path/XPath";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
 import {Point} from "../../model/Point";

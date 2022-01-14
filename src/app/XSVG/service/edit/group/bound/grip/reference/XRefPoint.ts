@@ -2,7 +2,7 @@ import {XSVG} from "../../../../../../XSVG";
 import {MoveTo} from "../../../../../../model/path/point/MoveTo";
 import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
-import {XPath} from "../../../../../../element/path/XPath";
+import {XPath} from "../../../../../../element/pointed/path/XPath";
 import {Point} from "../../../../../../model/Point";
 
 export class XRefPoint extends XPath {

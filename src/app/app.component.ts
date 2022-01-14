@@ -49,6 +49,14 @@ export class AppComponent implements AfterViewInit {
       this.makeActive('snap');
     }
   }
+  group() {
+    if(!this.svg) return;
+    this.svg.focused.group();
+  }
+  ungroup() {
+    if(!this.svg) return;
+
+  }
   public toPath() {
     if(!this.svg) return;
     this.svg.focused.toPath();
@@ -260,10 +268,6 @@ export class AppComponent implements AfterViewInit {
     let color = picker?.value;
     if(this.svg && color)
       this.svg.style.fill = color;
-  }
-
-  positionChange(event: Event) {
-
   }
 
   demoImage() {

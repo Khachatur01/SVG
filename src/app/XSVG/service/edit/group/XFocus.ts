@@ -6,7 +6,8 @@ import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
 import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
-import {XPath} from "../../../element/path/XPath";
+import {XPath} from "../../../element/pointed/path/XPath";
+import {XGroup} from "../../../element/group/XGroup";
 
 export class XFocus implements XDraggable, XResizeable {
   private readonly _children: Set<XElement> = new Set<XElement>();
@@ -29,7 +30,7 @@ export class XFocus implements XDraggable, XResizeable {
     this.svgGroup.id = "focus";
     this.svgElements = document.createElementNS(XElement.svgURI, "g");
     this.svgElements.id = "elements";
-    this.svgBounding = this.boundingBox.group;
+    this.svgBounding = this.boundingBox.svgGroup;
 
     this.svgGroup.appendChild(this.svgElements);
     this.svgGroup.appendChild(this.svgBounding);
@@ -50,7 +51,12 @@ export class XFocus implements XDraggable, XResizeable {
     if(this._children.size == 1) {
       this.refPointView = Object.assign({}, xElement.refPoint);
       this.refPoint = Object.assign({}, xElement.refPoint);
-      this.rotate(xElement.angle);
+      this._children.forEach((child: XElement) => {
+        if(!(child instanceof XGroup))
+          this.rotate(xElement.angle);
+        else
+          this.boundingBox.rotate(0);
+      });
 
       this.container.style.setGlobalStyle(xElement.style.style);
     } else { /* more than one element */
@@ -81,6 +87,7 @@ export class XFocus implements XDraggable, XResizeable {
       /* one element */
       this._children.forEach((child: XElement) => {
         this.container.style.setGlobalStyle(child.style.style);
+        this.rotate(child.angle);
       });
     } else {
       this.focus();
@@ -106,18 +113,37 @@ export class XFocus implements XDraggable, XResizeable {
     this.blur();
   }
 
+  group(): void {
+    let group = new XGroup(this.container);
+    this._children.forEach((element: XElement) => {
+      group.addElement(element);
+      this.container.elements.delete(element);
+      element.group = group;
+    });
+
+    this._children.clear();
+    this.container.add(group);
+
+    this.svgElements.appendChild(group.SVG);
+    this._children.add(group);
+
+    let lastRefPoint = this.refPoint;
+    let refPoint = Object.assign({}, group.center);
+    this.refPoint = refPoint;
+    this.refPointView = refPoint;
+    group.correct(refPoint, lastRefPoint);
+
+    this.fit();
+    this.boundingBox.rotate(0);
+    this.focus();
+  }
+
   get children(): Set<XElement> {
     return this._children;
   }
 
   get position(): Point {
     return this.boundingBox.position;
-  }
-
-  correct(point: Point): void {
-    this._children.forEach((child: XElement) => child.correct(point, this.lastRefPoint));
-
-    this.boundingBox.correct(point, this.lastRefPoint);
   }
 
   set position(delta: Point) {
@@ -131,6 +157,12 @@ export class XFocus implements XDraggable, XResizeable {
     this.refPointView = refPoint;
 
     this.boundingBox.correctByDelta(delta);
+  }
+
+  correct(point: Point): void {
+    this._children.forEach((child: XElement) => child.correct(point, this.lastRefPoint));
+
+    this.boundingBox.correct(point, this.lastRefPoint);
   }
 
   get center(): Point {
@@ -297,9 +329,8 @@ export class XFocus implements XDraggable, XResizeable {
     if(this._children.size == 1)
       this._children.forEach(child => child.rotate(angle));
     else
-      this._children.forEach(child => {
-        child.rotate((angle + child.lastAngle - this._lastAngle) % 360);
-      });
+      this._children.forEach(child =>
+        child.rotate((angle + child.lastAngle - this._lastAngle) % 360));
     this.boundingBox.rotate(angle);
   }
 
@@ -309,6 +340,7 @@ export class XFocus implements XDraggable, XResizeable {
       this.boundingBox.rotate(0);
       return;
     }
+
     let contentRect: Rect = this.boundingRect;
 
     this.boundingBox.position = contentRect;
