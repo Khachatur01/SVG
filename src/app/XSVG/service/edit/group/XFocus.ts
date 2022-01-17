@@ -129,7 +129,6 @@ export class XFocus implements XDraggable, XResizeable {
 
     this._children.clear();
     this.container.add(group);
-
     this._children.add(group);
 
     let lastRefPoint = this.refPoint;

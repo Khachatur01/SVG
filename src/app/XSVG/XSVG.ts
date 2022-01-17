@@ -267,7 +267,13 @@ export class XSVG {
     let elements: XElement[] = ElementsClipboard.get();
 
     elements.forEach((element: XElement) => {
-      this.add(element.copy);
+      element = element.copy;
+      if(element instanceof XGroup)
+        element.elements.forEach((child: XElement) => {
+          this.setElementActivity(child);
+        });
+
+      this.add(element);
     });
   }
 }
