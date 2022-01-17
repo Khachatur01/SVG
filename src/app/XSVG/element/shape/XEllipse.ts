@@ -8,7 +8,6 @@ import {XPath} from "../pointed/path/XPath";
 import {Path} from "../../model/path/Path";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {MoveTo} from "../../model/path/point/MoveTo";
-import {Matrix} from "../../service/math/Matrix";
 
 export class XEllipse extends XElement implements MoveDrawable {
   constructor(container: XSVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
@@ -80,7 +79,6 @@ export class XEllipse extends XElement implements MoveDrawable {
   }
 
   setSize(rect: Rect, delta: Point | null = null): void {
-    if(!this.validSize(rect)) return;
     if(delta) {
       rect.width = this._lastSize.width * delta.x;
       rect.height = this._lastSize.height * delta.y;

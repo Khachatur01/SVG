@@ -6,7 +6,6 @@ import {XPath} from "../pointed/path/XPath";
 import {Path} from "../../model/path/Path";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {LineTo} from "../../model/path/line/LineTo";
-import {Matrix} from "../../service/math/Matrix";
 
 export abstract class XPointed extends XElement {
   protected _lastPoints: Point[] = [];
@@ -94,7 +93,6 @@ export abstract class XPointed extends XElement {
     };
   }
   setSize(rect: Rect, delta: Point | null = null): void {
-    if(!this.validSize(rect)) return;
     let dw = 1;
     let dh = 1;
 

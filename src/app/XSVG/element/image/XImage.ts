@@ -75,7 +75,6 @@ export class XImage extends XElement {
   }
 
   setSize(rect: Rect): void {
-    if(!this.validSize(rect)) return;
     if(rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;

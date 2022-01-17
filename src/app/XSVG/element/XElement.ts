@@ -93,10 +93,6 @@ export abstract class XElement implements XResizeable, XDraggable {
 
   correct(refPoint: Point, lastRefPoint: Point): void {};
 
-  validSize(rect: Rect): boolean {
-    return !(Math.abs(rect.width) < 1 || Math.abs(rect.height) < 1);
-  }
-
   getCorrectionDelta(refPoint: Point, lastRefPoint: Point) {
     /* calculate delta */
     let rotatedRefPoint = Matrix.rotate(

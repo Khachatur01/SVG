@@ -229,6 +229,7 @@ export class XFocus implements XDraggable, XResizeable {
 
     let firstBoundingRect = rotated ? firstChild.rotatedBoundingRect : firstChild.boundingRect;
 
+
     minX = firstBoundingRect.x;
     minY = firstBoundingRect.y;
     maxX = firstBoundingRect.width + minX;
@@ -252,7 +253,6 @@ export class XFocus implements XDraggable, XResizeable {
       width: maxX - minX,
       height: maxY - minY
     };
-
     return this.boundingBox.boundingRect;
   }
 
