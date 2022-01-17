@@ -5,8 +5,9 @@ import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
 import {Matrix} from "../service/math/Matrix";
 import {XSVG} from "../XSVG";
-import {XPath} from "./pointed/path/XPath";
+import {XPath} from "./pointed/XPath";
 import {XGroup} from "./group/XGroup";
+import {XEllipse} from "./shape/XEllipse";
 
 class Style {
   private element: XElement;
@@ -43,13 +44,16 @@ class Style {
     });
   }
 
-  get style(): any {
+  get get(): any {
     return {
       "fill": this.element.getAttr("fill"),
       "stroke": this.element.getAttr("stroke"),
       "stroke-width": this.element.getAttr("stroke-width"),
       "stroke-dasharray": this.element.getAttr("stroke-dasharray")
     }
+  }
+  set set(style: any) {
+    this.element.setAttr(style);
   }
 
   setDefaultStyle(): void {
@@ -90,6 +94,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract get boundingRect(): Rect;
   abstract get rotatedBoundingRect(): Rect;
   abstract toPath(): XPath;
+  abstract get copy(): XElement;
 
   correct(refPoint: Point, lastRefPoint: Point): void {};
 

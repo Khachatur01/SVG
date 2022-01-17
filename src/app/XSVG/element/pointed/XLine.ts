@@ -17,6 +17,17 @@ export class XLine extends XPointed {
     this.style.setDefaultStyle();
   }
 
+  get copy(): XLine {
+    let line: XLine = new XLine(this.container);
+    line.points = this.points;
+
+    line.refPoint = Object.assign({}, this.refPoint);
+    line.rotate(this._angle);
+
+    line.style.set = this.style.get;
+
+    return line;
+  }
   override get points(): Point[] {
     return [
       {x: parseFloat(this.getAttr("x1")), y: parseFloat(this.getAttr("y1"))},

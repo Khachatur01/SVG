@@ -4,7 +4,7 @@ import {Rect} from "../../model/Rect";
 import {XElement} from "../XElement";
 import {XSVG} from "../../XSVG";
 import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
-import {XPath} from "../pointed/path/XPath";
+import {XPath} from "../pointed/XPath";
 import {Path} from "../../model/path/Path";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {MoveTo} from "../../model/path/point/MoveTo";
@@ -21,6 +21,24 @@ export class XEllipse extends XElement implements MoveDrawable {
     this.style.setDefaultStyle();
   }
 
+  get copy(): XEllipse {
+    let position = this.position;
+    let size = this.size;
+    let ellipse: XEllipse = new XEllipse(this.container);
+    ellipse.position = position;
+    ellipse.setSize({
+      x: position.x,
+      y: position.y,
+      width: size.width,
+      height: size.height
+    });
+    ellipse.refPoint = Object.assign({}, this.refPoint);
+    ellipse.rotate(this._angle);
+
+    ellipse.style.set = this.style.get;
+
+    return ellipse;
+  }
   get points(): Point[] {
     let position: Point = this.position;
     let size: Size = this.size;

@@ -1,5 +1,5 @@
 import {XElement} from "../XElement";
-import {XPath} from "../pointed/path/XPath";
+import {XPath} from "../pointed/XPath";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
 import {Point} from "../../model/Point";
@@ -28,6 +28,28 @@ export class XImage extends XElement {
   }
   isComplete(): boolean {
     return false;
+  }
+
+  get copy(): XImage {
+    let position = this.position;
+    let size = this.size;
+
+    let image: XImage = new XImage(this.container);
+    image.setImage(this.getImage());
+    image.position = position;
+    image.setSize({
+      x: position.x,
+      y: position.y,
+      width: size.width,
+      height: size.height
+    });
+
+    image.refPoint = Object.assign({}, this.refPoint);
+    image.rotate(this._angle);
+
+    image.style.set = this.style.get;
+
+    return image;
   }
 
   get points(): Point[] {
@@ -101,6 +123,9 @@ export class XImage extends XElement {
     return this.calculateBoundingBox(points);
   }
 
+  getImage(): string {
+    return this.getAttr("href");
+  }
   setImage(URI: string): void {
     this.setAttr({href: URI});
   }

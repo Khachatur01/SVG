@@ -24,6 +24,9 @@ export class XRectangle extends XPolygon implements MoveDrawable {
     this.setOverEvent();
     this.style.setDefaultStyle();
   }
+  override get copy(): XRectangle {
+    return super.copy as XRectangle;
+  }
 
   override get size(): Size {
     return super.size;

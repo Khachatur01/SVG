@@ -2,7 +2,7 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
-import {XPath} from "../pointed/path/XPath";
+import {XPath} from "../pointed/XPath";
 import {Path} from "../../model/path/Path";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {LineTo} from "../../model/path/line/LineTo";

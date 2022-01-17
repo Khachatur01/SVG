@@ -14,6 +14,9 @@ export class XRightTriangle extends XTriangle {
       super(container);
     }
   }
+  override get copy(): XRightTriangle {
+    return super.copy as XRightTriangle;
+  }
 
   override drawSize(rect: Rect) {
     let points: Point[] = [];

@@ -535,4 +535,13 @@ export class AppComponent implements AfterViewInit {
 
     this.svg.add(element);
   }
+
+  copyFocused() {
+    if(!this.svg) return;
+    this.svg.copyFocused();
+  }
+  paste() {
+    if(!this.svg) return;
+    this.svg.paste();
+  }
 }

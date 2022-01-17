@@ -1,7 +1,7 @@
 import {Point} from "../../../../../../model/Point";
 import {XSVG} from "../../../../../../XSVG";
 import {Angle} from "../../../../../math/Angle";
-import {XPath} from "../../../../../../element/pointed/path/XPath";
+import {XPath} from "../../../../../../element/pointed/XPath";
 import {MoveTo} from "../../../../../../model/path/point/MoveTo";
 import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
@@ -51,7 +51,7 @@ export class XRotatePoint extends XPath {
   private drawPoint(point: Point): void {
     let x = point.x;
     let y = point.y;
-    this.path.setAll([
+    this._path.setAll([
       new MoveTo({x: x - this._r, y: y}),
       new Arc(this._r, this._r, 0, 0, 1, {x: x + this._r, y: y}),
       new Arc(this._r, this._r, 0, 0, 1, {x: x - this._r, y: y}),
@@ -59,7 +59,7 @@ export class XRotatePoint extends XPath {
       new LineTo({x: x, y: y + this._lineLength}),
     ]);
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
 

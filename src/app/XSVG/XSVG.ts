@@ -9,6 +9,7 @@ import {XGrid} from "./service/grid/XGrid";
 import {Callback} from "./model/Callback";
 import {XGroup} from "./element/group/XGroup";
 import {XPointed} from "./element/type/XPointed";
+import {ElementsClipboard} from "./dataSource/ElementsClipboard";
 
 class GlobalStyle {
   private _styleCallBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
@@ -250,5 +251,23 @@ export class XSVG {
   }
   singleSelect(): void {
     this._multiSelect = false;
+  }
+
+  copyFocused(): void {
+    let elements: XElement[] = [];
+    for(let element of this._focusedElements.children) {
+      elements.push(element.copy);
+    }
+
+    navigator.clipboard.writeText(this.elementsGroup.outerHTML);
+
+    ElementsClipboard.save(elements);
+  }
+  paste(): void {
+    let elements: XElement[] = ElementsClipboard.get();
+
+    elements.forEach((element: XElement) => {
+      this.add(element.copy);
+    });
   }
 }

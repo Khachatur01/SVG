@@ -1,25 +1,26 @@
-import {XElement} from "../../XElement";
-import {Path} from "../../../model/path/Path";
-import {Point} from "../../../model/Point";
-import {Size} from "../../../model/Size";
-import {XSVG} from "../../../XSVG";
-import {Command} from "../../../model/path/Command";
-import {Close} from "../../../model/path/close/Close";
-import {XPointed} from "../../type/XPointed";
-import {MoveTo} from "../../../model/path/point/MoveTo";
-import {Rect} from "../../../model/Rect";
+import {XElement} from "../XElement";
+import {Path} from "../../model/path/Path";
+import {Point} from "../../model/Point";
+import {Size} from "../../model/Size";
+import {XSVG} from "../../XSVG";
+import {Command} from "../../model/path/Command";
+import {Close} from "../../model/path/close/Close";
+import {XPointed} from "../type/XPointed";
+import {MoveTo} from "../../model/path/point/MoveTo";
+import {Rect} from "../../model/Rect";
+import {XRectangle} from "../shape/XRectangle";
 
 export class XPath extends XPointed {
   protected _size: Size = {width: 0, height: 0};
-  protected path: Path;
+  protected _path: Path;
   protected _lastPath: Path;
   constructor(container: XSVG, path: Path = new Path()) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "path");
-    this.path = path;
+    this._path = path;
     this._lastPath = path;
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     })
     this.setOverEvent();
     try {
@@ -27,13 +28,34 @@ export class XPath extends XPointed {
     } catch (error: any) {}
   }
 
+  get path(): Path {
+    return this._path;
+  }
+  set path(path: Path) {
+    this._path = path;
+    this.setAttr({
+      d: path.toString()
+    })
+  }
+
+  get copy(): XPath {
+    let path: XPath = new XPath(this.container);
+    path.path = this._path.copy;
+
+    path.refPoint = Object.assign({}, this.refPoint);
+    path.rotate(this._angle);
+
+    path.style.set = this.style.get;
+
+    return path;
+  }
   override fixRect() {
     super.fixRect();
     this.fixPath();
     this._lastPoints = this._lastPath.points;
   }
   fixPath() {
-    this._lastPath = this.path.copy;
+    this._lastPath = this._path.copy;
   }
 
   isComplete(): boolean {
@@ -42,15 +64,15 @@ export class XPath extends XPointed {
   }
 
   get commands(): Command[] {
-    return this.path.getAll();
+    return this._path.getAll();
   }
 
   override get points(): Point[] {
-    return this.path.points;
+    return this._path.points;
   }
 
   override get position(): Point {
-    let commands = this.path.getAll();
+    let commands = this._path.getAll();
     let leftTop: Point = Object.assign({}, commands[0].position);
 
     for(let i = 1; i < commands.length; i++) {
@@ -65,7 +87,7 @@ export class XPath extends XPointed {
   }
   override set position(delta: Point) {
     let lastCommands = this._lastPath.getAll();
-    let thisCommands = this.path.getAll();
+    let thisCommands = this._path.getAll();
 
     for(let i = 0; i < lastCommands.length; i++) {
       thisCommands[i].position = {
@@ -74,15 +96,15 @@ export class XPath extends XPointed {
       }
     }
 
-    this.path.setAll(thisCommands);
+    this._path.setAll(thisCommands);
 
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
 
   override get size(): Size {
-    let commands = this.path.getAll();
+    let commands = this._path.getAll();
     /* get copy, not reference */
     let min = Object.assign({}, commands[0].position);
     let max = Object.assign({}, commands[0].position);
@@ -128,28 +150,28 @@ export class XPath extends XPointed {
       commands[i].position.y = rect.y + Math.abs(this._lastPoints[i].y - rect.y) * dh;
     }
 
-    this.path = new Path();
-    this.path.setAll(commands);
+    this._path = new Path();
+    this._path.setAll(commands);
 
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
 
   add(path: XPath) {
     path.commands.forEach((command: Command) => {
-      this.path.add(command);
+      this._path.add(command);
     });
 
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
   addCommand(command: Command) {
-    this.path.add(command);
+    this._path.add(command);
 
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
   override toPath(): XPath {
@@ -158,30 +180,30 @@ export class XPath extends XPointed {
 
 
   getPoint(index: number): Point {
-    return this.path.get(index).position;
+    return this._path.get(index).position;
   }
 
   pushPoint(point: Point): void {
-    this.path.add(new MoveTo(point));
+    this._path.add(new MoveTo(point));
 
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
 
   removePoint(index: number): void {
-    this.path.remove(index);
+    this._path.remove(index);
 
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
 
   replacePoint(index: number, point: Point): void {
-    this.path.replace(index, point);
+    this._path.replace(index, point);
 
     this.setAttr({
-      d: this.path.toString()
+      d: this._path.toString()
     });
   }
 }

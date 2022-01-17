@@ -32,6 +32,10 @@ export class XTextBox extends XForeignObject implements MoveDrawable {
     });
   }
 
+  override get copy(): XTextBox {
+    return super.copy as XTextBox;
+  }
+
   drawSize(rect: Rect): void {
     this.setSize(rect);
   }

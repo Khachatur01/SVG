@@ -12,6 +12,9 @@ export class XTriangle extends XPolygon implements MoveDrawable {
     this.style.setDefaultStyle();
   }
 
+  override get copy(): XTriangle {
+    return super.copy as XTriangle;
+  }
   drawSize(rect: Rect): void {
     let points: Point[] = [];
     points.push({ /* A */

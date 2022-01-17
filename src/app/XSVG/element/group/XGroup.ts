@@ -2,7 +2,7 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
-import {XPath} from "../pointed/path/XPath";
+import {XPath} from "../pointed/XPath";
 import {XSVG} from "../../XSVG";
 
 export class XGroup extends XElement {
@@ -11,6 +11,22 @@ export class XGroup extends XElement {
   constructor(container: XSVG) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "g");
+  }
+
+  get copy(): XGroup {
+    let group: XGroup = new XGroup(this.container);
+    this._elements.forEach((element: XElement) => {
+      let copy = element.copy;
+      copy.group = group;
+      group.addElement(copy);
+    });
+
+    group.refPoint = Object.assign({}, this.refPoint);
+    group._angle = (this._angle);
+
+    group.style.set = this.style.get;
+
+    return group;
   }
 
   get elements(): XElement[] {
@@ -121,6 +137,7 @@ export class XGroup extends XElement {
         maxY = boundingRect.height + boundingRect.y;
     }
 
+    this._angle = 0;
     return {
       x: minX,
       y: minY,
@@ -173,7 +190,6 @@ export class XGroup extends XElement {
     super.fixAngle();
     this._elements.forEach((element: XElement) => element.fixAngle());
   }
-
 
   toPath(): XPath {
     return new XPath(this.container);

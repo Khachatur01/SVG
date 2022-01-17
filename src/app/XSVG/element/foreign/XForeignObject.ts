@@ -3,7 +3,7 @@ import {XSVG} from "../../XSVG";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
-import {XPath} from "../pointed/path/XPath";
+import {XPath} from "../pointed/XPath";
 import {Callback} from "../../model/Callback";
 
 export class XForeignObject extends XElement {
@@ -39,6 +39,31 @@ export class XForeignObject extends XElement {
       }
     });
   }
+
+  get copy(): XForeignObject {
+    let position = this.position;
+    let size = this.size;
+
+    let foreignObject: XForeignObject = new XForeignObject(this.container);
+    if(this._content)
+      foreignObject.setContent(this._content.cloneNode(true) as HTMLElement);
+
+    foreignObject.position = position;
+    foreignObject.setSize({
+      x: position.x,
+      y: position.y,
+      width: size.width,
+      height: size.height
+    });
+
+    foreignObject.refPoint = Object.assign({}, this.refPoint);
+    foreignObject.rotate(this._angle);
+
+    foreignObject.style.set = this.style.get;
+
+    return foreignObject;
+  }
+
   isComplete(): boolean {
     let size = this.size;
     return size.width > 0 && size.height > 0;

@@ -6,7 +6,7 @@ import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
 import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
-import {XPath} from "../../../element/pointed/path/XPath";
+import {XPath} from "../../../element/pointed/XPath";
 import {XGroup} from "../../../element/group/XGroup";
 import {Callback} from "../../../model/Callback";
 import {Matrix} from "../../math/Matrix";
@@ -55,7 +55,7 @@ export class XFocus implements XDraggable, XResizeable {
           this.boundingBox.rotate(0);
       });
 
-      this.container.style.setGlobalStyle(xElement.style.style);
+      this.container.style.setGlobalStyle(xElement.style.get);
     } else { /* more than one element */
       let elementRefPoint = Object.assign({}, xElement.refPoint);
       let refPoint = Object.assign({}, this.refPoint);
@@ -82,7 +82,7 @@ export class XFocus implements XDraggable, XResizeable {
       this.focus();
       /* one element */
       this._children.forEach((child: XElement) => {
-        this.container.style.setGlobalStyle(child.style.style);
+        this.container.style.setGlobalStyle(child.style.get);
         this.rotate(child.angle);
       });
     } else {

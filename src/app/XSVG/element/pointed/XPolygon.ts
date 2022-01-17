@@ -2,11 +2,11 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {XPointed} from "../type/XPointed";
 import {XSVG} from "../../XSVG";
-import {XPath} from "./path/XPath";
+import {XPath} from "./XPath";
 import {Close} from "../../model/path/close/Close";
 
 export class XPolygon extends XPointed {
-  constructor(container: XSVG, points: Point[]) {
+  constructor(container: XSVG, points: Point[] = []) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "polygon");
 
@@ -14,6 +14,18 @@ export class XPolygon extends XPointed {
 
     this.setOverEvent();
     this.style.setDefaultStyle();
+  }
+
+  get copy(): XPolygon {
+    let polygon: XPolygon = new XPolygon(this.container);
+    polygon.points = this.points;
+
+    polygon.refPoint = Object.assign({}, this.refPoint);
+    polygon.rotate(this._angle);
+
+    polygon.style.set = this.style.get;
+
+    return polygon;
   }
 
   /* TODO fix coordinate fetching */

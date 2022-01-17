@@ -3,7 +3,7 @@ import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
 import {XSVG} from "../../XSVG";
-import {XPath} from "../pointed/path/XPath";
+import {XPath} from "../pointed/XPath";
 
 export class XBox extends XElement {
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
@@ -20,6 +20,24 @@ export class XBox extends XElement {
     // this.style.setDefaultStyle();
   }
 
+  get copy(): XBox {
+    let position = this.position;
+    let size = this.size;
+    let box: XBox = new XBox(this.container);
+    box.position = position;
+    box.setSize({
+      x: position.x,
+      y: position.y,
+      width: size.width,
+      height: size.height
+    });
+    box.style.set = this.style.get;
+
+    box.refPoint = Object.assign({}, this.refPoint);
+    box.rotate(this._angle);
+
+    return box;
+  }
   override isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;

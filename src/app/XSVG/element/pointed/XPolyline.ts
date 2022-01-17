@@ -4,7 +4,7 @@ import {XPointed} from "../type/XPointed";
 import {XSVG} from "../../XSVG";
 
 export class XPolyline extends XPointed {
-  constructor(container: XSVG, points: Point[]) {
+  constructor(container: XSVG, points: Point[] = []) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "polyline");
 
@@ -14,6 +14,17 @@ export class XPolyline extends XPointed {
     this.setOverEvent();
   }
 
+  get copy(): XPolyline {
+    let polyline: XPolyline = new XPolyline(this.container);
+    polyline.points = this.points;
+
+    polyline.refPoint = Object.assign({}, this.refPoint);
+    polyline.rotate(this._angle);
+
+    polyline.style.set = this.style.get;
+
+    return polyline;
+  }
   // TODO fix coordinate fetching
   override get points(): Point[] {
     let points: string[] = this.getAttr("points").split(" ");
