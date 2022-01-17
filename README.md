@@ -1,3 +1,4 @@
+http://svg-board-hosting.s3-website-us-east-1.amazonaws.com/
 # SvgBoard
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.1.
