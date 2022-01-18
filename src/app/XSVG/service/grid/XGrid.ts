@@ -9,6 +9,8 @@ export class XGrid {
   private readonly container: XSVG;
   private readonly _group: SVGGElement;
   private squareSide: number = 20; /* default */
+  private strokeWidth: number = 1; /* default */
+  private strokeColor: string = "#ddd"; /* default */
   private _isGrid: boolean = false;
   private _isSnap: boolean = false;
 
@@ -36,16 +38,16 @@ export class XGrid {
     return this._isGrid;
   }
 
-  gridOn(side: number, stokeWidth: number, strokeColor: string) {
+  gridOn() {
     this._group.innerHTML = "";
-    this.squareSide = Math.floor(side);
+    this.squareSide = Math.floor(this.squareSide);
     this._isGrid = true;
     let width: number = this.container.HTML.clientWidth;
     let height: number = this.container.HTML.clientHeight;
 
     let grid = document.createElementNS(XElement.svgURI, "path");
-    grid.style.strokeWidth = stokeWidth + "";
-    grid.style.stroke = strokeColor;
+    grid.style.strokeWidth = this.strokeWidth + "";
+    grid.style.stroke = this.strokeColor;
 
     let path = new Path();
 
@@ -76,6 +78,13 @@ export class XGrid {
     return {x: x, y: y};
   }
 
+  set snapSide(squareSide: number) {
+    this.squareSide = squareSide;
+    if(this._isGrid) {
+      this.gridOff();
+      this.gridOn();
+    }
+  }
   get snapSide(): number {
     return this.squareSide;
   }

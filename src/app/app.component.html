@@ -51,6 +51,9 @@
     <button class="btn btn-default" id="grid" (click)="grid()" title="Grid">
       <img src="../assets/img/grid.svg" height="17" alt="">
     </button>
+    <div class="align-items-center me-1">
+      <input (change)="gridSideChange($event)" type="number" class="input form-control form-control-sm" id="gridSide" value="20" step="1" min="5" max="99">
+    </div>
     <button class="btn btn-default" id="snap" (click)="snap()" title="Snap to Grid">Snap</button>
 
     <div class="separator mx-2"></div>
@@ -93,10 +96,11 @@
     <span id="coordinates" class="ms-auto"></span>
   </div>
 
-  <button class="btn btn-default" (click)="copyFocused()" title="Copy">Copy</button>
-  <button class="btn btn-default" (click)="cutFocused()" title="Cut">Cut</button>
-  <button class="btn btn-default" (click)="paste()" title="Paste">Paste</button>
-  <button class="btn btn-default" (click)="selectAll()" title="Select All">Select All</button>
+  <button class="btn btn-default" (click)="copyFocused()" title="Ctrl + C">Copy</button>
+  <button class="btn btn-default" (click)="cutFocused()" title="Ctrl + X">Cut</button>
+  <button class="btn btn-default" (click)="paste()" title="Ctrl + V">Paste</button>
+  <button class="btn btn-default" (click)="selectAll()" title="Ctrl + A">Select All</button>
+  <button class="btn btn-default" (click)="delete()" title="Del">Delete</button>
 
   <svg id="svgContainer" width="100%" height="100vh" >
 

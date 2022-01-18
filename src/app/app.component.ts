@@ -35,7 +35,7 @@ export class AppComponent implements AfterViewInit {
       this.makePassive('snap');
       this.makePassive('grid');
     } else {
-      this.svg.grid.gridOn(20, 1, "#ddd");
+      this.svg.grid.gridOn();
       this.makeActive('grid');
     }
   }
@@ -44,9 +44,11 @@ export class AppComponent implements AfterViewInit {
     if(this.svg.grid.isSnap()) {
       this.svg.grid.snapOff();
       this.makePassive('snap');
-    } else if(this.svg.grid.isGrid()) {
+    } else {
       this.svg.grid.snapOn();
+      this.svg.grid.gridOn();
       this.makeActive('snap');
+      this.makeActive('grid');
     }
   }
   group() {
@@ -169,19 +171,6 @@ export class AppComponent implements AfterViewInit {
       this.svg.multiSelect();
     }
   }
-  private keyUp(event: KeyboardEvent) {
-    if(!this.svg) return;
-    if(event.key == "Shift") {
-        this.svg.drawTool.perfect = false;
-    }
-    if(event.key == "Delete") {
-      this.svg.focused?.remove();
-    }
-    if(event.key == "Control") {
-      this.svg.singleSelect();
-    }
-  }
-
   showCoordinates(containerId: string, labelId: string, mask: string) { /* x: {x} y: {y} ... replace {x} to x coordinate and {y} to y*/
     let container = document.getElementById(containerId);
     let label = document.getElementById(labelId);
@@ -197,7 +186,6 @@ export class AppComponent implements AfterViewInit {
         label.innerHTML = text;
     });
   }
-
   switchActive(id: string) {
     if(this.activeTool)
       this.makePassive(this.activeTool.id);
@@ -206,6 +194,7 @@ export class AppComponent implements AfterViewInit {
     if(this.activeTool)
       this.makeActive(this.activeTool.id);
   }
+
   makeActive(id: string) {
     let element = document.getElementById(id);
     if(!element) return;
@@ -216,12 +205,12 @@ export class AppComponent implements AfterViewInit {
     if(!element) return;
     element.classList.remove("active")
   }
-
   strokeWidthCallBack() {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
     if(!stokeWidthInput || !this.svg) return;
     stokeWidthInput.value = this.svg.style.globalStyle["stroke-width"];
   }
+
   strokeColorCallBack() {
     let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
     if(!stokeColorInput || !this.svg) return;
@@ -253,7 +242,6 @@ export class AppComponent implements AfterViewInit {
     document.getElementById("group")?.setAttribute("disabled", "true");
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
-
   ngAfterViewInit(): void {
     this.svg = new XSVG("svgContainer");
     this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
@@ -276,9 +264,28 @@ export class AppComponent implements AfterViewInit {
     if(this.svg)
       this.svg.style.strokeColor = "none";
   }
+
   transparentFill() {
     if(this.svg)
       this.svg.style.fill = "none";
+  }
+  private keyUp(event: KeyboardEvent) {
+    if(!this.svg) return;
+    if(event.key == "Shift") {
+      this.svg.drawTool.perfect = false;
+    }
+    if(event.key == "Delete") {
+      this.svg.focused?.remove();
+    }
+    if(event.key == "Control") {
+      this.svg.singleSelect();
+    }
+  }
+  gridSideChange(event: Event) {
+    let gridSide = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let side = gridSide?.value;
+    if(this.svg && side)
+      this.svg.grid.snapSide = parseInt(side);
   }
 
   strokeWidthChange(event: Event) {
@@ -565,5 +572,9 @@ export class AppComponent implements AfterViewInit {
   selectAll() {
     if(!this.svg) return;
     this.svg.focusAll();
+  }
+  delete() {
+    if(!this.svg) return;
+    this.svg.focused.remove();
   }
 }
