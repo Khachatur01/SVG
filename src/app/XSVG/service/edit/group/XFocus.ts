@@ -92,17 +92,34 @@ export class XFocus implements XDraggable, XResizeable {
     this.fit();
   }
 
-  clear() {
+  clear(): void {
     this._children.clear();
     this.blur();
     this.container.style.recoverGlobalStyle();
   }
 
-  remove() {
+  remove(): void {
     this._children.forEach((child: XElement) => this.container.remove(child));
 
     this._children.clear();
     this.blur();
+  }
+
+  orderTop(): void {
+    this._children.forEach((child: XElement) => {
+      this.container.elementsGroup.appendChild(child.SVG);
+    });
+  }
+  orderUp(): void {
+  }
+  orderDown(): void {
+
+  }
+  orderBottom(): void {
+    let firstChild = this.container.elementsGroup.firstChild;
+    this._children.forEach((child: XElement) => {
+      this.container.elementsGroup.insertBefore(child.SVG, firstChild);
+    });
   }
 
   get canGroup(): boolean {

@@ -96,7 +96,7 @@ class GlobalStyle {
 
 export class XSVG {
   private readonly container: HTMLElement;
-  private _focusedElements: XFocus = new XFocus(this);
+  private _focus: XFocus = new XFocus(this);
   private _elements: Set<XElement> = new Set<XElement>();
   private _callBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
 
@@ -135,11 +135,11 @@ export class XSVG {
 
     this.elementsGroup = document.createElementNS(XElement.svgURI, "g");
     this.elementsGroup.id = "elements";
-    this._focusedElements.SVG.style.cursor = "move";
+    this._focus.SVG.style.cursor = "move";
 
     this.container.appendChild(this.grid.group);
     this.container.appendChild(this.elementsGroup);
-    this.container.appendChild(this._focusedElements.SVG);
+    this.container.appendChild(this._focus.SVG);
     this.container.appendChild(this.editTool.SVG);
   }
 
@@ -167,7 +167,6 @@ export class XSVG {
       functions.splice(functions.indexOf(callback), 1);
   }
 
-
   setElementActivity(element: XElement) {
     if(element instanceof XGroup) return;
     element.SVG.addEventListener("mousedown", () => {
@@ -183,7 +182,7 @@ export class XSVG {
         if(element.group) /* if element has grouped, then select group */
           element = element.group;
 
-        let hasChild = this._focusedElements.hasChild(element);
+        let hasChild = this._focus.hasChild(element);
         if(!this._multiSelect && hasChild) return;
 
         if(!this._multiSelect && !hasChild) {
@@ -238,17 +237,17 @@ export class XSVG {
     });
   }
   focus(xElement: XElement) {
-    this._focusedElements.appendChild(xElement);
+    this._focus.appendChild(xElement);
   }
   blur(xElement: XElement | null = null) {
     if(xElement)
-      this._focusedElements.removeChild(xElement);
+      this._focus.removeChild(xElement);
     else
-      this._focusedElements.clear();
+      this._focus.clear();
   }
 
   get focused(): XFocus {
-    return this._focusedElements;
+    return this._focus;
   }
 
   multiSelect(): void {
@@ -260,18 +259,15 @@ export class XSVG {
 
   copyFocused(): void {
     let elements: XElement[] = [];
-    let elementsHTML = "";
-    for(let element of this._focusedElements.children) {
+    for(let element of this._focus.children) {
       elements.push(element.copy);
-      elementsHTML += element.SVG.outerHTML + "\n";
     }
-    navigator.clipboard.writeText(elementsHTML);
 
     ElementsClipboard.save(elements);
   }
   cutFocused(): void {
     this.copyFocused();
-    this._focusedElements.remove();
+    this._focus.remove();
   }
   paste(): void {
     let elements: XElement[] = ElementsClipboard.get();

@@ -137,6 +137,14 @@ export class AppComponent implements AfterViewInit {
       event.preventDefault(); /* remove browser all selection */
     }
 
+    if(event.shiftKey && event.key == "PageUp") {
+      this.orderTop();
+      event.preventDefault(); /* disable window scrolling */
+    }
+    if(event.shiftKey && event.key == "PageDown") {
+      this.orderBottom();
+      event.preventDefault(); /* disable window scrolling */
+    }
     if(event.key == "ArrowLeft") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: -5, y: 0};
@@ -585,5 +593,13 @@ export class AppComponent implements AfterViewInit {
   delete() {
     if(!this.svg) return;
     this.svg.focused.remove();
+  }
+  orderTop() {
+    if(!this.svg) return;
+    this.svg.focused.orderTop();
+  }
+  orderBottom() {
+    if(!this.svg) return;
+    this.svg.focused.orderBottom();
   }
 }

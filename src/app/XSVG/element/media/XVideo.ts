@@ -11,6 +11,7 @@ export class XVideo extends XForeignObject {
     video.style.marginLeft = "10px";
     video.style.marginTop = "10px";
     video.style.height = "calc(100% - 20px)";
+    video.style.cursor = "pointer";
     video.setAttribute("controls", "");
     this.source = document.createElement("source");
     video.appendChild(this.source);
