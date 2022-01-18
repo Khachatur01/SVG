@@ -5,7 +5,7 @@ import {DrawEllipse} from "../service/tool/draw/element/figure/shape/DrawEllipse
 import {DrawPolygon} from "../service/tool/draw/element/figure/shape/DrawPolygon";
 import {DrawFree} from "../service/tool/draw/mode/DrawFree";
 import {XSVG} from "../XSVG";
-import {DrawTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawTriangle";
+import {DrawIsoscelesTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawIsoscelesTriangle";
 import {DrawRightTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawRightTriangle";
 import {DrawTextBox} from "../service/tool/draw/element/foreign/DrawTextBox";
 
@@ -17,7 +17,7 @@ export class Tool {
   private readonly _ellipse: DrawEllipse;
   private readonly _polygon: DrawPolygon;
   private readonly _rectangle: DrawRectangle;
-  private readonly _triangle: DrawTriangle;
+  private readonly _isoscelesTriangle: DrawIsoscelesTriangle;
   private readonly _rightTriangle: DrawRightTriangle;
   private readonly _textBox: DrawTextBox;
 
@@ -30,7 +30,7 @@ export class Tool {
     this._ellipse = new DrawEllipse(container);
     this._polygon = new DrawPolygon(container);
     this._rectangle = new DrawRectangle(container);
-    this._triangle = new DrawTriangle(container);
+    this._isoscelesTriangle = new DrawIsoscelesTriangle(container);
     this._rightTriangle = new DrawRightTriangle(container);
     this._textBox = new DrawTextBox(container);
   }
@@ -59,8 +59,8 @@ export class Tool {
     return this._rectangle;
   }
 
-  get triangle(): DrawTriangle {
-    return this._triangle;
+  get isoscelesTriangle(): DrawIsoscelesTriangle {
+    return this._isoscelesTriangle;
   }
 
   get rightTriangle(): DrawRightTriangle {

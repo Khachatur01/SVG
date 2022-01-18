@@ -134,23 +134,25 @@ export class XForeignObject extends XElement {
   get content(): HTMLElement | null {
     return this._content;
   }
-  setContent(div: HTMLElement): void {
+  setContent(div: HTMLElement, setListeners: boolean = true): void {
     this._content = div;
     div.style.userSelect = "none";
     div.contentEditable = "true";
     this.svgElement.appendChild(div);
 
-    div.addEventListener("focus", () => {
-      if(this._container.editTool.isOn()) {
-        div.focus();
-        this.svgElement.style.outline = this.outline;
-      } else {
-        div.blur();
-      }
-    });
-    div.addEventListener("blur", () => {
-      this.svgElement.style.outline = "unset";
-    });
+    if(setListeners) {
+      div.addEventListener("focus", () => {
+        if (this._container.editTool.isOn()) {
+          div.focus();
+          this.svgElement.style.outline = this.outline;
+        } else {
+          div.blur();
+        }
+      });
+      div.addEventListener("blur", () => {
+        this.svgElement.style.outline = "unset";
+      });
+    }
   }
 
   get boundingRect(): Rect {

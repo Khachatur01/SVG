@@ -1,9 +1,10 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {XSVG} from "./XSVG/XSVG";
 import {Rect} from "./XSVG/model/Rect";
-import {XImage} from "./XSVG/element/image/XImage";
+import {XImage} from "./XSVG/element/media/XImage";
 import {XForeignObject} from "./XSVG/element/foreign/XForeignObject";
 import {Callback} from './XSVG/model/Callback';
+import {XVideo} from "./XSVG/element/media/XVideo";
 
 @Component({
   selector: 'app-root',
@@ -45,10 +46,10 @@ export class AppComponent implements AfterViewInit {
       this.svg.grid.snapOff();
       this.makePassive('snap');
     } else {
-      this.svg.grid.snapOn();
       this.svg.grid.gridOn();
-      this.makeActive('snap');
       this.makeActive('grid');
+      this.svg.grid.snapOn();
+      this.makeActive('snap');
     }
   }
   group() {
@@ -78,7 +79,7 @@ export class AppComponent implements AfterViewInit {
   }
   public triangle() {
     if(!this.svg) return;
-    this.svg.drawTool.tool = this.svg.drawTools.triangle;
+    this.svg.drawTool.tool = this.svg.drawTools.isoscelesTriangle;
     this.svg.drawTool.on();
     this.switchActive('triangle');
   }
@@ -308,11 +309,19 @@ export class AppComponent implements AfterViewInit {
       this.svg.style.fill = color;
   }
 
+  demoVideo() {
+    if(!this.svg) return;
+    let video = new XVideo(this.svg, 0, 0, 340, 200);
+    video.refPoint = {x: 170, y: 100};
+    video.src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+    this.svg?.add(video);
+  }
   demoImage() {
     if(!this.svg) return;
     let image = new XImage(this.svg, 0, 0, 340, 200);
     image.refPoint = {x: 170, y: 100};
-    image.setImage("/assets/test/img1.png");
+    image.src = "/assets/test/img1.png";
 
     this.svg?.add(image);
   }

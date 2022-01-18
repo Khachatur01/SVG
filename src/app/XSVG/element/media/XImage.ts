@@ -27,7 +27,7 @@ export class XImage extends XElement {
     });
   }
   isComplete(): boolean {
-    return false;
+    return true;
   }
 
   get copy(): XImage {
@@ -35,7 +35,7 @@ export class XImage extends XElement {
     let size = this.size;
 
     let image: XImage = new XImage(this._container);
-    image.setImage(this.getImage());
+    image.src = this.src;
     image.position = position;
     image.setSize({
       x: position.x,
@@ -123,10 +123,10 @@ export class XImage extends XElement {
     return this.calculateBoundingBox(points);
   }
 
-  getImage(): string {
+  get src(): string {
     return this.getAttr("href");
   }
-  setImage(URI: string): void {
+  set src(URI: string) {
     this.setAttr({href: URI});
   }
 

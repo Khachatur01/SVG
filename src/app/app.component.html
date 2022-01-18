@@ -52,15 +52,16 @@
       <img src="../assets/img/grid.svg" height="17" alt="">
     </button>
     <div class="align-items-center me-1">
-      <input (change)="gridSideChange($event)" type="number" class="input form-control form-control-sm" id="gridSide" value="20" step="1" min="5" max="99">
+      <input (change)="gridSideChange($event)" title="Grid size" type="number" class="input form-control form-control-sm" id="gridSide" value="20" step="1" min="5" max="99">
     </div>
     <button class="btn btn-default" id="snap" (click)="snap()" title="Snap to Grid">Snap</button>
 
     <div class="separator mx-2"></div>
-    <button class="btn btn-default" id="group" disabled (click)="group()">Group</button>
-    <button class="btn btn-default" id="ungroup" disabled (click)="ungroup()">Ungroup</button>
+    <button class="btn btn-default" id="group" title="Group two or more elements" disabled (click)="group()">Group</button>
+    <button class="btn btn-default" id="ungroup" title="Ungroup a group" disabled (click)="ungroup()">Ungroup</button>
 
     <div class="separator mx-2"></div>
+    <button class="btn btn-default" (click)="demoVideo()" title="Place Demo Video">Demo Video</button>
     <button class="btn btn-default" (click)="demoImage()" title="Place Demo Image">Demo Image</button>
     <button class="btn btn-default" (click)="demoAsset()" title="Place Demo Problem">Demo Problem</button>
 

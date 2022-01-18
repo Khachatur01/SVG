@@ -12,7 +12,6 @@ export class XTextBox extends XForeignObject implements MoveDrawable {
     textarea.style.height = "100%";
     textarea.style.resize = "none";
     textarea.style.border = "none";
-    // textarea.style.filter = "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.7))";
     textarea.style.background = "transparent";
     textarea.style.overflow = "hidden";
     textarea.style.lineHeight = container.grid.snapSide + 'px';
@@ -24,7 +23,7 @@ export class XTextBox extends XForeignObject implements MoveDrawable {
         this._container.remove(this);
     });
 
-    textarea.addEventListener("blur", (event) => {
+    textarea.addEventListener('blur', (event) => {
       if(textarea.value == "") {
         this._container.remove(this);
         this._container.selectTool.on();
