@@ -129,6 +129,10 @@ export class AppComponent implements AfterViewInit {
     if(event.ctrlKey && event.key === "v") {
       this.paste();
     }
+    if(event.ctrlKey && event.key === "a") {
+      this.selectAll();
+      event.preventDefault(); /* remove browser all selection */
+    }
 
     if(event.key == "ArrowLeft") {
       this.svg.focused.fixPosition();
@@ -557,5 +561,9 @@ export class AppComponent implements AfterViewInit {
   paste() {
     if(!this.svg) return;
     this.svg.paste();
+  }
+  selectAll() {
+    if(!this.svg) return;
+    this.svg.focusAll();
   }
 }

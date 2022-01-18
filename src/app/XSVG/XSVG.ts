@@ -232,6 +232,11 @@ export class XSVG {
     return this.container;
   }
 
+  focusAll() {
+    this._elements.forEach((element: XElement) => {
+      this.focus(element);
+    });
+  }
   focus(xElement: XElement) {
     this._focusedElements.appendChild(xElement);
   }
