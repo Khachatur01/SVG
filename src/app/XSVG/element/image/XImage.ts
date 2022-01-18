@@ -34,7 +34,7 @@ export class XImage extends XElement {
     let position = this.position;
     let size = this.size;
 
-    let image: XImage = new XImage(this.container);
+    let image: XImage = new XImage(this._container);
     image.setImage(this.getImage());
     image.position = position;
     image.setSize({
@@ -131,7 +131,7 @@ export class XImage extends XElement {
   }
 
   toPath(): XPath {
-    return new XPath(this.container);
+    return new XPath(this._container);
   }
 
 }

@@ -120,6 +120,16 @@ export class AppComponent implements AfterViewInit {
   private keyDown(event: KeyboardEvent) {
     if(!this.svg) return;
 
+    if(event.ctrlKey && event.key === "c") {
+      this.copyFocused();
+    }
+    if(event.ctrlKey && event.key === "x") {
+      this.cutFocused();
+    }
+    if(event.ctrlKey && event.key === "v") {
+      this.paste();
+    }
+
     if(event.key == "ArrowLeft") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: -5, y: 0};
@@ -539,6 +549,10 @@ export class AppComponent implements AfterViewInit {
   copyFocused() {
     if(!this.svg) return;
     this.svg.copyFocused();
+  }
+  cutFocused() {
+    if(!this.svg) return;
+    this.svg.cutFocused();
   }
   paste() {
     if(!this.svg) return;

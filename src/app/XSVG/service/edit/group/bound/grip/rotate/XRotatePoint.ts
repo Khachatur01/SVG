@@ -75,8 +75,8 @@ export class XRotatePoint extends XPath {
     let y = event.clientY - containerRect.y;
 
     let angle = Angle.fromPoints(
-      {x: 0, y: this.container.focused.refPoint.y},
-      this.container.focused.refPoint,
+      {x: 0, y: this._container.focused.refPoint.y},
+      this._container.focused.refPoint,
       {x: x, y: y}
     );
 
@@ -90,38 +90,38 @@ export class XRotatePoint extends XPath {
 
   private start(event: MouseEvent) {
     this.rotating = true;
-    this.container.activeTool.off();
-    this.container.HTML.addEventListener("mousemove", this._move);
+    this._container.activeTool.off();
+    this._container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
 
-    let containerRect = this.container.HTML.getBoundingClientRect();
+    let containerRect = this._container.HTML.getBoundingClientRect();
     let x = event.clientX - containerRect.left;
     let y = event.clientY - containerRect.top;
 
     this.dAngle = Angle.fromPoints(
-      {x: 0, y: this.container.focused.refPoint.y},
-      this.container.focused.refPoint,
+      {x: 0, y: this._container.focused.refPoint.y},
+      this._container.focused.refPoint,
       {x: x, y: y}
-    ) - this.container.focused.angle;
+    ) - this._container.focused.angle;
 
-    this.container.focused.children.forEach((child: XElement) => {
+    this._container.focused.children.forEach((child: XElement) => {
       child.fixAngle();
     });
-    this.container.focused.lastAngle = this.getAngle(containerRect, event);
+    this._container.focused.lastAngle = this.getAngle(containerRect, event);
   }
   private move(event: MouseEvent) {
-    let angle = this.getAngle(this.container.HTML.getBoundingClientRect(), event);
+    let angle = this.getAngle(this._container.HTML.getBoundingClientRect(), event);
 
-    if(this.container.grid.isSnap())
+    if(this._container.grid.isSnap())
       angle = Math.round(angle / 15) * 15;
 
-    this.container.focused.rotate(angle);
+    this._container.focused.rotate(angle);
   }
   private end() {
     if(!this.rotating) return;
 
-    this.container.selectTool.on();
-    this.container.HTML.removeEventListener("mousemove", this._move);
+    this._container.selectTool.on();
+    this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
     this.rotating = false;
   }

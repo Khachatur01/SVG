@@ -14,7 +14,7 @@ export class XGroup extends XElement {
   }
 
   get copy(): XGroup {
-    let group: XGroup = new XGroup(this.container);
+    let group: XGroup = new XGroup(this._container);
     this._elements.forEach((element: XElement) => {
       let copy = element.copy;
       copy.group = group;
@@ -192,7 +192,7 @@ export class XGroup extends XElement {
   }
 
   toPath(): XPath {
-    return new XPath(this.container);
+    return new XPath(this._container);
   }
   isComplete(): boolean {
     return true;

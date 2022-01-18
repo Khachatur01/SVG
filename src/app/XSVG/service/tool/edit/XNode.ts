@@ -38,7 +38,7 @@ export class XNode extends XEllipse {
 
     let containerRect: Rect = this.editTool.getContainer().HTML.getBoundingClientRect();
 
-    let position = this.container.grid.getSnapPoint({
+    let position = this._container.grid.getSnapPoint({
       x: event.clientX - containerRect.x,
       y: event.clientY - containerRect.y
     });

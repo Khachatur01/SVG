@@ -14,16 +14,16 @@ export class SEGrip extends XGrip {
   }
 
   protected onMove(client: Point): void {
-    let width = client.x - this.container.focused.lastRect.x;
-    let height = client.y - this.container.focused.lastRect.y;
+    let width = client.x - this._container.focused.lastRect.x;
+    let height = client.y - this._container.focused.lastRect.y;
 
     this._lastResize = {
-      x: this.container.focused.lastRect.x,
-      y: this.container.focused.lastRect.y,
+      x: this._container.focused.lastRect.x,
+      y: this._container.focused.lastRect.y,
       width: width,
       height: height
     };
-    this.container.focused.setSize(this._lastResize);
+    this._container.focused.setSize(this._lastResize);
   }
 
   protected onEnd(): void {

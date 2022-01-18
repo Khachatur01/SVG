@@ -64,8 +64,8 @@ class Style {
 export abstract class XElement implements XResizeable, XDraggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
-  public readonly container: XSVG;
   public readonly style;
+  protected _container: XSVG;
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
   protected _lastAngle: number = 0;
@@ -81,7 +81,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   private _lowlight = this.lowlight.bind(this);
 
   constructor(container: XSVG) {
-    this.container = container;
+    this._container = container;
     this.style = new Style(this);
   }
 
@@ -96,6 +96,12 @@ export abstract class XElement implements XResizeable, XDraggable {
   abstract toPath(): XPath;
   abstract get copy(): XElement;
 
+  get container(): XSVG {
+    return this._container;
+  }
+  set container(container: XSVG) {
+    this._container = container;
+  }
   correct(refPoint: Point, lastRefPoint: Point): void {};
 
   getCorrectionDelta(refPoint: Point, lastRefPoint: Point) {
@@ -217,7 +223,7 @@ export abstract class XElement implements XResizeable, XDraggable {
   }
 
   highlight(): void {
-    if(this.container.selectTool.isOn())
+    if(this._container.selectTool.isOn())
       this.svgElement.style.filter = "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.7))";
   }
 

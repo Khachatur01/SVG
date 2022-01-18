@@ -81,40 +81,40 @@ export class XRefPoint extends XPath {
   }
 
   private initLastPoint(event: MouseEvent) {
-    let containerRect = this.container.HTML.getBoundingClientRect();
+    let containerRect = this._container.HTML.getBoundingClientRect();
     this._lastPoint.x = event.clientX - containerRect.left;
     this._lastPoint.y = event.clientY - containerRect.top;
   }
 
   private start(event: MouseEvent) {
     this.moving = true;
-    this.container.activeTool.off();
-    this.container.focused.fixRect();
+    this._container.activeTool.off();
+    this._container.focused.fixRect();
     this._lastPosition = Object.assign({}, this.position);
 
     this.initLastPoint(event);
-    this._lastPoint = this.container.grid.getSnapPoint(this._lastPoint);
-    this.container.focused.refPointView = Object.assign({}, this._lastPoint);
+    this._lastPoint = this._container.grid.getSnapPoint(this._lastPoint);
+    this._container.focused.refPointView = Object.assign({}, this._lastPoint);
 
-    this.container.HTML.addEventListener("mousemove", this._move);
+    this._container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
   }
 
   private move(event: MouseEvent) {
     this.initLastPoint(event);
-    this._lastPoint = this.container.grid.getSnapPoint(this._lastPoint);
-    this.container.focused.refPointView = Object.assign({}, this._lastPoint);
+    this._lastPoint = this._container.grid.getSnapPoint(this._lastPoint);
+    this._container.focused.refPointView = Object.assign({}, this._lastPoint);
   }
 
   private end() {
     if (!this.moving) return;
 
-    this.container.focused.refPoint = Object.assign({}, this._lastPoint);
-    this.container.focused.correct(Object.assign({}, this._lastPoint));
+    this._container.focused.refPoint = Object.assign({}, this._lastPoint);
+    this._container.focused.correct(Object.assign({}, this._lastPoint));
 
-    this.container.HTML.removeEventListener("mousemove", this._move);
+    this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
-    this.container.activeTool.on();
+    this._container.activeTool.on();
     this.moving = false;
   }
 

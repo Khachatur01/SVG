@@ -53,20 +53,20 @@ export abstract class XGrip extends XBox {
 
   private start() {
     this.resizing = true;
-    this.container.activeTool.off();
-    this.container.focused.fixRect();
-    this.container.focused.fixRefPoint();
+    this._container.activeTool.off();
+    this._container.focused.fixRect();
+    this._container.focused.fixRefPoint();
 
-    this.container.HTML.addEventListener("mousemove", this._move);
+    this._container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
   }
   private move(event: MouseEvent) {
-    let containerRect = this.container.HTML.getBoundingClientRect();
+    let containerRect = this._container.HTML.getBoundingClientRect();
 
     let client: Point = Matrix.rotate(
       [{x: event.clientX - containerRect.x, y: event.clientY - containerRect.y}],
-      this.container.focused.refPoint,
-      this.container.focused.angle
+      this._container.focused.refPoint,
+      this._container.focused.angle
     )[0];
 
     this.onMove(client);
@@ -74,9 +74,9 @@ export abstract class XGrip extends XBox {
   private end() {
     if(!this.resizing) return;
 
-    this.container.HTML.removeEventListener("mousemove", this._move);
+    this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
-    this.container.activeTool.on();
+    this._container.activeTool.on();
     this.resizing = false;
   }
 

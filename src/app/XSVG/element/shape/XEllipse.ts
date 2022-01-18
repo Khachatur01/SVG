@@ -24,7 +24,7 @@ export class XEllipse extends XElement implements MoveDrawable {
   get copy(): XEllipse {
     let position = this.position;
     let size = this.size;
-    let ellipse: XEllipse = new XEllipse(this.container);
+    let ellipse: XEllipse = new XEllipse(this._container);
     ellipse.position = position;
     ellipse.setSize({
       x: position.x,
@@ -131,7 +131,7 @@ export class XEllipse extends XElement implements MoveDrawable {
     return this.calculateBoundingBox(points);
   }
   get rotatedBoundingRect(): Rect {
-    let containerRect: Rect = this.container.HTML.getBoundingClientRect();
+    let containerRect: Rect = this._container.HTML.getBoundingClientRect();
     let stoke = parseInt(this.style.strokeWidth);
     let rotatedBoundingRect: Rect = this.svgElement.getBoundingClientRect();
 
@@ -165,6 +165,6 @@ export class XEllipse extends XElement implements MoveDrawable {
       d: path.toString()
     })
 
-    return new XPath(this.container, path);
+    return new XPath(this._container, path);
   }
 }

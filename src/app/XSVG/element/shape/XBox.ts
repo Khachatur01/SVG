@@ -23,7 +23,7 @@ export class XBox extends XElement {
   get copy(): XBox {
     let position = this.position;
     let size = this.size;
-    let box: XBox = new XBox(this.container);
+    let box: XBox = new XBox(this._container);
     box.position = position;
     box.setSize({
       x: position.x,
@@ -102,6 +102,6 @@ export class XBox extends XElement {
   }
 
   override toPath(): XPath {
-    return new XPath(this.container);
+    return new XPath(this._container);
   }
 }

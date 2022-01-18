@@ -255,25 +255,34 @@ export class XSVG {
 
   copyFocused(): void {
     let elements: XElement[] = [];
+    let elementsHTML = "";
     for(let element of this._focusedElements.children) {
       elements.push(element.copy);
+      elementsHTML += element.SVG.outerHTML + "\n";
     }
-
-    navigator.clipboard.writeText(this.elementsGroup.outerHTML);
+    navigator.clipboard.writeText(elementsHTML);
 
     ElementsClipboard.save(elements);
+  }
+  cutFocused(): void {
+    this.copyFocused();
+    this._focusedElements.remove();
   }
   paste(): void {
     let elements: XElement[] = ElementsClipboard.get();
 
+    this.blur();
     elements.forEach((element: XElement) => {
       element = element.copy;
+      element.container = this;
       if(element instanceof XGroup)
         element.elements.forEach((child: XElement) => {
           this.setElementActivity(child);
+          child.container = this;
         });
 
       this.add(element);
+      this.focus(element);
     });
   }
 }

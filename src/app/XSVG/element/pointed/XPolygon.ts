@@ -17,7 +17,7 @@ export class XPolygon extends XPointed {
   }
 
   get copy(): XPolygon {
-    let polygon: XPolygon = new XPolygon(this.container);
+    let polygon: XPolygon = new XPolygon(this._container);
     polygon.points = this.points;
 
     polygon.refPoint = Object.assign({}, this.refPoint);

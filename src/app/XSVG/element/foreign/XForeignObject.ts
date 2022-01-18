@@ -27,13 +27,13 @@ export class XForeignObject extends XElement {
       preserveAspectRatio: "none"
     });
 
-    this.container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
+    this._container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
       if(this._content) {
         this._content.style.userSelect = "none";
       }
     });
 
-    this.container.addCallBack(Callback.EDIT_TOOl_ON, () => {
+    this._container.addCallBack(Callback.EDIT_TOOl_ON, () => {
       if(this._content) {
         this._content.style.userSelect = "unset";
       }
@@ -44,7 +44,7 @@ export class XForeignObject extends XElement {
     let position = this.position;
     let size = this.size;
 
-    let foreignObject: XForeignObject = new XForeignObject(this.container);
+    let foreignObject: XForeignObject = new XForeignObject(this._container);
     if(this._content)
       foreignObject.setContent(this._content.cloneNode(true) as HTMLElement);
 
@@ -141,7 +141,7 @@ export class XForeignObject extends XElement {
     this.svgElement.appendChild(div);
 
     div.addEventListener("focus", () => {
-      if(this.container.editTool.isOn()) {
+      if(this._container.editTool.isOn()) {
         div.focus();
         this.svgElement.style.outline = this.outline;
       } else {
@@ -163,7 +163,7 @@ export class XForeignObject extends XElement {
   }
 
   toPath(): XPath {
-    return new XPath(this.container);
+    return new XPath(this._container);
   }
 
 }

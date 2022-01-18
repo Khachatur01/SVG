@@ -39,7 +39,7 @@ export class XPath extends XPointed {
   }
 
   get copy(): XPath {
-    let path: XPath = new XPath(this.container);
+    let path: XPath = new XPath(this._container);
     path.path = this._path.copy;
 
     path.refPoint = Object.assign({}, this.refPoint);

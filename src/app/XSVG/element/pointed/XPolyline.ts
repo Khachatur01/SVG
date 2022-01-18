@@ -15,7 +15,7 @@ export class XPolyline extends XPointed {
   }
 
   get copy(): XPolyline {
-    let polyline: XPolyline = new XPolyline(this.container);
+    let polyline: XPolyline = new XPolyline(this._container);
     polyline.points = this.points;
 
     polyline.refPoint = Object.assign({}, this.refPoint);

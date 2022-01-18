@@ -18,7 +18,7 @@ export class XLine extends XPointed {
   }
 
   get copy(): XLine {
-    let line: XLine = new XLine(this.container);
+    let line: XLine = new XLine(this._container);
     line.points = this.points;
 
     line.refPoint = Object.assign({}, this.refPoint);

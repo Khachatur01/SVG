@@ -19,15 +19,15 @@ export class XTextBox extends XForeignObject implements MoveDrawable {
     textarea.style.fontSize = "16px"
     this.setContent(textarea);
 
-    this.container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
+    this._container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
       if (textarea.value == "")
-        this.container.remove(this);
+        this._container.remove(this);
     });
 
     textarea.addEventListener("blur", (event) => {
       if(textarea.value == "") {
-        this.container.remove(this);
-        this.container.selectTool.on();
+        this._container.remove(this);
+        this._container.selectTool.on();
       }
     });
   }

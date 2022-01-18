@@ -13,7 +13,7 @@ export class NEGrip extends XGrip {
   }
 
   protected onMove(client: Point): void {
-    let elementRect = this.container.focused.lastRect;
+    let elementRect = this._container.focused.lastRect;
 
     let width = (client.x) - (elementRect.x);
     let height = client.y - (elementRect.y + elementRect.height);
@@ -24,7 +24,7 @@ export class NEGrip extends XGrip {
       width: width,
       height: height
     };
-    this.container.focused.setSize(this._lastResize);
+    this._container.focused.setSize(this._lastResize);
   }
 
   protected onEnd(): void {

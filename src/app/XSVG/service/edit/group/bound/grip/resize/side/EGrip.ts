@@ -15,7 +15,7 @@ export class EGrip extends XGrip {
   }
 
   protected onMove(client: Point): void {
-    let elementRect = this.container.focused.lastRect;
+    let elementRect = this._container.focused.lastRect;
 
     this._lastResize = {
       x: elementRect.x,
@@ -23,7 +23,7 @@ export class EGrip extends XGrip {
       width: (client.x) - (elementRect.x),
       height: elementRect.height
     };
-    this.container.focused.setSize(this._lastResize);
+    this._container.focused.setSize(this._lastResize);
   }
 
   protected onStart(): void {

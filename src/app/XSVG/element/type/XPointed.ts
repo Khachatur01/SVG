@@ -136,6 +136,6 @@ export abstract class XPointed extends XElement {
     for(let i = 1; i < rotatedPoints.length; i++)
       path.add(new LineTo(rotatedPoints[i]));
 
-    return new XPath(this.container, path);
+    return new XPath(this._container, path);
   }
 }
