@@ -169,7 +169,6 @@ export class XFocus implements XDraggable, XResizeable {
 
 
     this.container.remove(group);
-
   }
 
   get children(): Set<XElement> {
@@ -207,7 +206,7 @@ export class XFocus implements XDraggable, XResizeable {
     )[0];
   }
   get center(): Point {
-    let rect = this.boundingRect;
+    let rect = this.rotatedBoundingRect;
 
     return {
       x: rect.x + rect.width / 2,
@@ -318,6 +317,23 @@ export class XFocus implements XDraggable, XResizeable {
     return this._children.has(xElement);
   }
 
+  recenterRefPoint() {
+    this.fixRefPoint();
+    let center;
+    if(this._children.size > 1) {
+      this.fit();
+      center = this.rotatedCenter;
+      this.refPointView = center;
+      this.refPoint = center;
+      this.correct(center);
+    } else {
+      center = this.center;
+      this.refPointView = center;
+      this.refPoint = center;
+      this.correct(center);
+      this.fit();
+    }
+  }
   get refPoint(): Point {
     return this.boundingBox.refPoint;
   }

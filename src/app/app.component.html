@@ -103,10 +103,13 @@
   <button class="btn btn-default" (click)="selectAll()" title="Ctrl + A">Select All</button>
   <button class="btn btn-default" (click)="delete()" title="Del">Delete</button>
   <button class="btn btn-default" (click)="orderTop()" title="To Top (Shift + PageUp)">
-    <img src="../assets/img/object-order-front.svg" height="17" alt="">
+    <img src="../assets/img/order-top.svg" height="17" alt="">
   </button>
   <button class="btn btn-default" (click)="orderBottom()" title="To Bottom (Shift + PageDown)">
-    <img src="../assets/img/object-order-back.svg" height="17" alt="">
+    <img src="../assets/img/order-bottom.svg" height="17" alt="">
+  </button>
+  <button class="btn btn-default" (click)="recenterRefPoint()" title="Recenter Reference Point">
+    <img src="../assets/img/recenter-reference-point.svg" height="17" alt="">
   </button>
 
   <svg id="svgContainer" width="100%" height="100vh" >

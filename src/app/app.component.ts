@@ -602,4 +602,9 @@ export class AppComponent implements AfterViewInit {
     if(!this.svg) return;
     this.svg.focused.orderBottom();
   }
+
+  recenterRefPoint() {
+    if(!this.svg) return;
+    this.svg.focused.recenterRefPoint();
+  }
 }
