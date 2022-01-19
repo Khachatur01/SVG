@@ -45,3 +45,4 @@ testem.log
 .DS_Store
 Thumbs.db
 /aws_sync.sh
+/push.sh

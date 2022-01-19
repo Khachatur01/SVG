@@ -43,6 +43,7 @@ export class XSelectTool extends XTool {
 
     this.container.HTML.appendChild(this.boundingBox.SVG);
     this.container.HTML.addEventListener("mousemove", this.select);
+    document.addEventListener("mouseup", this.end);
   }
   private onSelect(event: MouseEvent): void {
     let containerRect = this.container.HTML.getBoundingClientRect();
@@ -99,11 +100,11 @@ export class XSelectTool extends XTool {
     }
     this.container.singleSelect();
     this.container.HTML.removeEventListener("mousemove", this.select);
+    document.removeEventListener("mouseup", this.end);
   }
 
   _on(): void {
     this.container.HTML.addEventListener("mousedown", this.start);
-    document.addEventListener("mouseup", this.end);
     this._isOn = true;
     this.dragTool.on();
     this.container.HTML.style.cursor = "default";
@@ -113,7 +114,6 @@ export class XSelectTool extends XTool {
 
   off(): void {
     this.container.HTML.removeEventListener("mousedown", this.start);
-    document.removeEventListener("mouseup", this.end);
     this._isOn = false;
     this.dragTool.off();
 

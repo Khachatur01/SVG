@@ -5,7 +5,6 @@ import {XTool} from "../XTool";
 
 export class XDragTool extends XTool {
   private isDrag: boolean = false;
-  private dragging: boolean = false;
 
   private mouseStartPos: Point = {x: 0, y: 0};
   private elementStartPos: Point = {x: 0, y: 0};
@@ -20,8 +19,6 @@ export class XDragTool extends XTool {
 
   private onDragStart(event: MouseEvent) {
     if(event.target == this.container.HTML) return;
-
-    this.dragging = true;
     this.mouseStartPos.x = event.clientX;
 
     this.mouseStartPos.y = event.clientY;
@@ -35,6 +32,7 @@ export class XDragTool extends XTool {
     this.container.focused.highlight();
 
     this.container.HTML.addEventListener("mousemove", this.drag);
+    document.addEventListener("mouseup", this.dragEnd);
   }
   private onDrag(event: MouseEvent) {
     this.container.focused.position = {
@@ -43,11 +41,9 @@ export class XDragTool extends XTool {
     };
   }
   private onDragEnd() {
-    if(!this.dragging) return;
-
     this.container.HTML.removeEventListener("mousemove", this.drag);
+    document.removeEventListener("mouseup", this.dragEnd);
     this.container.focused.lowlight();
-    this.dragging = false;
   }
 
   override on() {
@@ -56,19 +52,15 @@ export class XDragTool extends XTool {
 
   public _on(): void {
     this.container.HTML.addEventListener("mousedown", this.dragStart);
-    document.addEventListener("mouseup", this.dragEnd);
     this.isDrag = true;
   }
 
   public off(): void {
-    this.isDrag = false;
     this.container.HTML.removeEventListener("mousedown", this.dragStart);
-    this.container.HTML.removeEventListener("mousemove", this.drag);
-    document.removeEventListener("mouseup", this.dragEnd);
+    this.isDrag = false;
   }
 
   public isOn(): boolean {
     return this.isDrag;
   }
-
 }

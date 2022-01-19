@@ -5,7 +5,6 @@ import {XBox} from "../../../../../../element/shape/XBox";
 import {Matrix} from "../../../../../math/Matrix";
 
 export abstract class XGrip extends XBox {
-  private resizing: boolean = false;
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
@@ -52,7 +51,6 @@ export abstract class XGrip extends XBox {
   protected abstract onEnd(): void;
 
   private start() {
-    this.resizing = true;
     this._container.activeTool.off();
     this._container.focused.fixRect();
     this._container.focused.fixRefPoint();
@@ -72,12 +70,9 @@ export abstract class XGrip extends XBox {
     this.onMove(client);
   }
   private end() {
-    if(!this.resizing) return;
-
     this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
     this._container.activeTool.on();
-    this.resizing = false;
   }
 
   on() {

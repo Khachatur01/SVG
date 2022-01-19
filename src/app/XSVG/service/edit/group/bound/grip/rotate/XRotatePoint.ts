@@ -9,7 +9,6 @@ import {XElement} from "../../../../../../element/XElement";
 import {Rect} from "../../../../../../model/Rect";
 
 export class XRotatePoint extends XPath {
-  private rotating: boolean = false;
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
@@ -89,7 +88,6 @@ export class XRotatePoint extends XPath {
   }
 
   private start(event: MouseEvent) {
-    this.rotating = true;
     this._container.activeTool.off();
     this._container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
@@ -118,12 +116,9 @@ export class XRotatePoint extends XPath {
     this._container.focused.rotate(angle);
   }
   private end() {
-    if(!this.rotating) return;
-
     this._container.selectTool.on();
     this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
-    this.rotating = false;
   }
 
   on() {

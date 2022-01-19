@@ -8,7 +8,6 @@ import {XSVG} from "../../../XSVG";
 export class XNode extends XEllipse {
   private readonly editTool: XEditTool;
   private readonly order: number;
-  private editing: boolean = false;
 
   private _start = this.onStart.bind(this);
   private _move = this.onMove.bind(this);
@@ -29,7 +28,6 @@ export class XNode extends XEllipse {
   }
 
   protected onStart(): void {
-    this.editing = true;
     this.editTool.getContainer().HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
   };
@@ -53,10 +51,8 @@ export class XNode extends XEllipse {
     this.position = position;
   };
   protected onEnd(): void {
-    if(!this.editing) return;
     this.editTool.getContainer().HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
-    this.editing = true;
   };
 
   private on() {
