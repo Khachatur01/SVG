@@ -165,7 +165,6 @@ export class XFocus implements XDraggable, XResizeable {
       return;
     group.elements.forEach((element: XElement) => {
       this.container.add(element);
-      this.container.focus(element)
     });
 
 
