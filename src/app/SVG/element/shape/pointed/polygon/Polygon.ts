@@ -23,7 +23,7 @@ export class Polygon extends Pointed {
     polygon.refPoint = Object.assign({}, this.refPoint);
     polygon.rotate(this._angle);
 
-    polygon.style.set = this.style.get;
+    polygon.style.set = this.style;
 
     return polygon;
   }

@@ -48,7 +48,7 @@ export class Image extends Foreign {
     image.refPoint = Object.assign({}, this.refPoint);
     image.rotate(this._angle);
 
-    image.style.set = this.style.get;
+    image.style.set = this.style;
 
     return image;
   }

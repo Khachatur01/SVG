@@ -36,7 +36,7 @@ export class Ellipse extends Shape implements MoveDrawable {
     ellipse.refPoint = Object.assign({}, this.refPoint);
     ellipse.rotate(this._angle);
 
-    ellipse.style.set = this.style.get;
+    ellipse.style.set = this.style;
 
     return ellipse;
   }

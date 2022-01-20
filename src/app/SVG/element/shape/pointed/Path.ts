@@ -44,7 +44,7 @@ export class Path extends Pointed {
     path.refPoint = Object.assign({}, this.refPoint);
     path.rotate(this._angle);
 
-    path.style.set = this.style.get;
+    path.style.set = this.style;
 
     return path;
   }

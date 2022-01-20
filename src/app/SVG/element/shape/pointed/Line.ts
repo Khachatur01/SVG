@@ -24,7 +24,7 @@ export class Line extends Pointed {
     line.refPoint = Object.assign({}, this.refPoint);
     line.rotate(this._angle);
 
-    line.style.set = this.style.get;
+    line.style.set = this.style;
 
     return line;
   }

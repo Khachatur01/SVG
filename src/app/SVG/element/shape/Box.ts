@@ -32,7 +32,7 @@ export class Box extends Shape {
       width: size.width,
       height: size.height
     });
-    box.style.set = this.style.get;
+    box.style.set = this.style;
 
     box.refPoint = Object.assign({}, this.refPoint);
     box.rotate(this._angle);

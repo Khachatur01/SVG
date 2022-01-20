@@ -10,87 +10,138 @@ import {Callback} from "./model/Callback";
 import {Group} from "./element/group/Group";
 import {Pointed} from "./element/shape/pointed/Pointed";
 import {ElementsClipboard} from "./dataSource/ElementsClipboard";
+import {Style} from "./service/style/Style";
 
-class GlobalStyle {
-  private _styleCallBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
-  private _globalStyle: any = {
-    "fill": "none",
-    "stroke": "#000000",
-    "stroke-width": 5,
-    "stroke-dasharray": ""
-  };
-  private _lastGlobalStyle: any = Object.assign({}, this._globalStyle);
+class GlobalStyle extends Style {
+  private readonly default: Style;
   private container: SVG;
+
   constructor(container: SVG) {
+    super();
     this.container = container;
+    this.default = new Style();
   }
-  set strokeWidth(width: string) {
+
+  override get strokeWidth(): string {
+    return super.strokeWidth;
+  }
+  override set strokeWidth(width: string) {
+    super.strokeWidth = width;
     if(this.container.focused.children.size == 0) {
-      this._globalStyle["stroke-width"] = width;
-      this._lastGlobalStyle["stroke-width"] = width;
+      this.default.strokeWidth = width;
       return;
     }
-    this._globalStyle["stroke-width"] = width;
     this.container.focused.children.forEach((child: Element) => {
       child.style.strokeWidth = width;
     });
   }
-  set strokeColor(color: string) {
+
+  override get strokeDashArray(): string {
+    return super.strokeDashArray;
+  }
+  override set strokeDashArray(array: string) {
+    super.strokeDashArray = array;
     if(this.container.focused.children.size == 0) {
-      this._globalStyle["stroke"] = color;
-      this._lastGlobalStyle["stroke"] = color;
+      this.default.strokeDashArray = array;
       return;
     }
-    this._globalStyle["stroke"] = color;
+    this.container.focused.children.forEach((child: Element) => {
+      child.style.strokeDashArray = array;
+    });
+  }
+
+  override get strokeColor(): string {
+    return super.strokeColor;
+  }
+  override set strokeColor(color: string) {
+    super.strokeColor = color;
+    if(this.container.focused.children.size == 0) {
+      this.default.strokeColor = color;
+      return;
+    }
     this.container.focused.children.forEach((child: Element) => {
       child.style.strokeColor = color;
     });
   }
-  set fill(color: string) {
+
+  override get fillColor(): string {
+    return super.fillColor;
+  }
+  override set fillColor(color: string) {
+    super.fillColor = color;
     if(this.container.focused.children.size == 0) {
-      this._globalStyle["fill"] = color;
-      this._lastGlobalStyle["fill"] = color;
+      this.default.fillColor = color;
       return;
     }
-    this._globalStyle["fill"] = color;
     this.container.focused.children.forEach((child: Element) => {
-      child.style.fill = color;
+      child.style.fillColor = color;
     });
   }
 
-
-  addCallBack(name: Callback, callback: Function) {
-    let functions = this._styleCallBacks.get(name);
-    if(!functions) {
-      this._styleCallBacks.set(name, []);
-    }
-    this._styleCallBacks.get(name)?.push(callback)
+  override get fontSize(): string {
+    return super.fontSize;
   }
-  removeCallBack(name: Callback, callback: Function) {
-    let functions = this._styleCallBacks.get(name);
-    if(functions)
-      functions.splice(functions.indexOf(callback), 1);
+  override set fontSize(size: string) {
+    super.fontSize = size;
+    if(this.container.focused.children.size == 0) {
+      this.default.fontSize = size;
+      return;
+    }
+    this.container.focused.children.forEach((child: Element) => {
+      child.style.fontSize = size;
+    });
+  }
+
+  override get fontColor(): string {
+    return super.fontColor;
+  }
+  override set fontColor(color: string) {
+    super.fontColor = color;
+    if(this.container.focused.children.size == 0) {
+      this.default.fontColor = color;
+      return;
+    }
+    this.container.focused.children.forEach((child: Element) => {
+      child.style.fontColor = color;
+    });
+  }
+
+  override get backgroundColor(): string {
+    return super.backgroundColor;
+  }
+  override set backgroundColor(color: string) {
+    super.backgroundColor = color;
+    if(this.container.focused.children.size == 0) {
+      this.default.backgroundColor = color;
+      return;
+    }
+    this.container.focused.children.forEach((child: Element) => {
+      child.style.backgroundColor = color;
+    });
   }
 
   recoverGlobalStyle() {
-    this.setGlobalStyle(this._lastGlobalStyle);
-    this.fixGlobalStyle();
+    this.setGlobalStyle(this.default);
   }
   fixGlobalStyle() {
-    this._lastGlobalStyle = Object.assign({}, this._globalStyle);
+    this.default.strokeWidth = this.strokeWidth;
+    this.default.strokeColor = this.strokeColor;
+    this.default.fillColor =  this.fillColor;
+    this.default.fontSize =  this.fontSize;
+    this.default.fontColor =  this.fontColor;
+    this.default.backgroundColor =  this.backgroundColor;
   }
-  get lastGlobalStyle(): any{
-    return this._lastGlobalStyle;
-  }
-  setGlobalStyle(style: any) {
-    this.fixGlobalStyle();
-    this._globalStyle = Object.assign({}, style);
+  setGlobalStyle(style: Style) {
+    super.strokeWidth = style.strokeWidth;
+    super.strokeColor = style.strokeColor;
+    super.fillColor = style.fillColor;
+    super.fontSize = style.fontSize;
+    super.fontColor = style.fontColor;
+    super.backgroundColor = style.backgroundColor;
+
     this._styleCallBacks.forEach((callback) => callback.forEach((func: Function) => {
-      func()
+      func();
     }));
-  }
-  get globalStyle(): any {
-    return this._globalStyle;
   }
 }
 

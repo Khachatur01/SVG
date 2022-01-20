@@ -19,7 +19,7 @@ export class RefPoint extends Path {
   constructor(container: SVG, x: number = 0, y: number = 0) {
     super(container);
     this.removeOverEvent();
-    this.style.fill = "transparent";
+    this.style.fillColor = "transparent";
     this.style.strokeColor = "#002fff";
     this.style.strokeWidth = "0.5";
 

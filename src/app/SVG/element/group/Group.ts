@@ -24,7 +24,7 @@ export class Group extends Element {
     group.refPoint = Object.assign({}, this.refPoint);
     group._angle = (this._angle);
 
-    group.style.set = this.style.get;
+    group.style.set = this.style;
 
     return group;
   }

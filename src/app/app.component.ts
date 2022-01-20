@@ -214,21 +214,21 @@ export class AppComponent implements AfterViewInit {
     if(!element) return;
     element.classList.remove("active")
   }
+
   strokeWidthCallBack() {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
     if(!stokeWidthInput || !this.svg) return;
-    stokeWidthInput.value = this.svg.style.globalStyle["stroke-width"];
+    stokeWidthInput.value = this.svg.style.strokeWidth;
   }
-
   strokeColorCallBack() {
     let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
     if(!stokeColorInput || !this.svg) return;
-    stokeColorInput.value = this.svg.style.globalStyle["stroke"];
+    stokeColorInput.value = this.svg.style.strokeColor;
   }
   fillCallBack() {
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
     if(!fillInput || !this.svg) return;
-    fillInput.value = this.svg.style.globalStyle["fill"];
+    fillInput.value = this.svg.style.fillColor;
   }
   selectToolCallBack() {
     this.switchActive("select")
@@ -268,16 +268,6 @@ export class AppComponent implements AfterViewInit {
 
     this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
   }
-
-  transparentStroke() {
-    if(this.svg)
-      this.svg.style.strokeColor = "none";
-  }
-
-  transparentFill() {
-    if(this.svg)
-      this.svg.style.fill = "none";
-  }
   private keyUp(event: KeyboardEvent) {
     if(!this.svg) return;
     if(event.key == "Shift") {
@@ -297,6 +287,16 @@ export class AppComponent implements AfterViewInit {
       this.svg.grid.snapSide = parseInt(side);
   }
 
+
+  transparentStroke() {
+    if(this.svg)
+      this.svg.style.strokeColor = "none";
+  }
+
+  transparentFill() {
+    if(this.svg)
+      this.svg.style.fillColor = "none";
+  }
   strokeWidthChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let width = picker?.value;
@@ -314,7 +314,7 @@ export class AppComponent implements AfterViewInit {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
     if(this.svg && color)
-      this.svg.style.fill = color;
+      this.svg.style.fillColor = color;
   }
 
   demoVideo() {

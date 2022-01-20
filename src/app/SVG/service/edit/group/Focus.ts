@@ -49,19 +49,18 @@ export class Focus implements Draggable, Resizeable {
       this.refPointView = Object.assign({}, xElement.refPoint);
       this.refPoint = Object.assign({}, xElement.refPoint);
       this._children.forEach((child: Element) => {
-        if(!(child instanceof Group))
+        if(!(child instanceof Group)) {
           this.rotate(xElement.angle);
-        else
+        } else
           this.boundingBox.rotate(0);
       });
-
-      this.container.style.setGlobalStyle(xElement.style.get);
+      this.container.style.fixGlobalStyle();
+      this.container.style.setGlobalStyle(xElement.style);
     } else { /* more than one element */
       let elementRefPoint = Object.assign({}, xElement.refPoint);
       let refPoint = Object.assign({}, this.refPoint);
       xElement.refPoint = refPoint;
       xElement.correct(refPoint, elementRefPoint);
-
       this.container.style.recoverGlobalStyle();
     }
     this.fit();
@@ -81,8 +80,9 @@ export class Focus implements Draggable, Resizeable {
       this.rotate(xElement.angle);
       this.focus();
       /* one element */
+      this.container.style.fixGlobalStyle();
       this._children.forEach((child: Element) => {
-        this.container.style.setGlobalStyle(child.style.get);
+        this.container.style.setGlobalStyle(child.style);
         this.rotate(child.angle);
       });
     } else {
@@ -93,16 +93,14 @@ export class Focus implements Draggable, Resizeable {
   }
 
   clear(): void {
+    this.container.style.recoverGlobalStyle();
     this._children.clear();
     this.blur();
-    this.container.style.recoverGlobalStyle();
   }
 
   remove(): void {
     this._children.forEach((child: Element) => this.container.remove(child));
-
-    this._children.clear();
-    this.blur();
+    this.clear();
   }
 
   orderTop(): void {

@@ -60,7 +60,7 @@ export class ForeignObject extends Foreign {
     foreignObject.refPoint = Object.assign({}, this.refPoint);
     foreignObject.rotate(this._angle);
 
-    foreignObject.style.set = this.style.get;
+    foreignObject.style.set = this.style;
 
     return foreignObject;
   }

@@ -7,47 +7,81 @@ import {Matrix} from "../service/math/Matrix";
 import {SVG} from "../SVG";
 import {Path} from "./shape/pointed/Path";
 import {Group} from "./group/Group";
+import {Style} from "../service/style/Style";
 
-class Style {
+class ElementStyle extends Style {
   private element: Element;
+
   constructor(element: Element) {
+    super();
     this.element = element;
   }
-  set strokeWidth(width: string) {
-    this.element.setAttr({
-        "stroke-width": width
-    });
+
+  override get strokeWidth(): string {
+    return super.strokeWidth;
   }
-  set strokeColor(color: string) {
-    this.element.setAttr({
-        "stroke": color
-    });
-  }
-  set strokeDashArray(array: string) {
-    this.element.setAttr({
-      "stroke-dasharray": array
-    });
-  }
-  set fill(color: string) {
-    this.element.setAttr({
-      "fill": color
-    });
+  override set strokeWidth(width: string) {
+    super.strokeWidth = width;
+    this.element.setAttr({"stroke-width": width});
   }
 
-  get get(): object {
-    return {
-      "fill": this.element.getAttr("fill"),
-      "stroke": this.element.getAttr("stroke"),
-      "stroke-width": this.element.getAttr("stroke-width"),
-      "stroke-dasharray": this.element.getAttr("stroke-dasharray")
-    }
+  override get strokeColor(): string {
+    return super.strokeColor;
   }
-  set set(style: object) {
-    this.element.setAttr(style);
+  override set strokeColor(color: string) {
+    super.strokeColor = color;
+    this.element.setAttr({"stroke": color});
+  }
+
+  override get strokeDashArray(): string {
+    return super.strokeDashArray;
+  }
+  override set strokeDashArray(array: string) {
+    super.strokeDashArray = array;
+    this.element.setAttr({"stroke-dasharray": array});
+  }
+
+  override get fillColor(): string {
+    return super.fillColor;
+  }
+  override set fillColor(color: string) {
+    super.fillColor = color;
+    this.element.setAttr({"fill": color});
+  }
+
+  override get fontSize(): string {
+    return super.fontSize;
+  }
+  override set fontSize(size: string) {
+    super.fontSize = size;
+    this.element.SVG.style.fontSize = size + "px";
+  }
+
+  override get fontColor(): string {
+    return super.fontColor;
+  }
+  override set fontColor(color: string) {
+    super.fontColor = color;
+    this.element.SVG.style.color = color;
+  }
+
+  override get backgroundColor(): string {
+    return super.backgroundColor;
+  }
+  override set backgroundColor(color: string) {
+    super.backgroundColor = color;
+    this.element.SVG.style.backgroundColor = color;
   }
 
   setDefaultStyle(): void {
-    this.element.setAttr(this.element.container.style.globalStyle);
+    let style = this.element.container.style;
+
+    this.strokeWidth = style.strokeWidth;
+    this.strokeColor = style.strokeColor;
+    this.fillColor = style.fillColor;
+    this.fontSize = style.fontSize;
+    this.fontColor = style.fontColor;
+    this.backgroundColor = style.backgroundColor;
   }
 }
 
@@ -72,7 +106,7 @@ export abstract class Element implements Resizeable, Draggable {
 
   constructor(container: SVG) {
     this._container = container;
-    this.style = new Style(this);
+    this.style = new ElementStyle(this);
   }
 
   abstract get size(): Size;
@@ -197,12 +231,6 @@ export abstract class Element implements Resizeable, Draggable {
       if (key && value)
         this.SVG.setAttribute(key, "" + value);
   }
-  getStyle(key: string): string {
-    return "";
-  }
-  setStyle(styles: object): void {
-
-  }
 
   setOverEvent(): void {
     this.svgElement.addEventListener("mouseover", this._highlight);
@@ -257,12 +285,6 @@ export abstract class Element implements Resizeable, Draggable {
       y: this._lastPosition.y + this._lastSize.height / 2
     };
   }
-
-  /* style */
-  set strokeWidth(width: string) {
-
-  }
-  /* style */
 }
 
 

@@ -21,7 +21,7 @@ export class Polyline extends Pointed {
     polyline.refPoint = Object.assign({}, this.refPoint);
     polyline.rotate(this._angle);
 
-    polyline.style.set = this.style.get;
+    polyline.style.set = this.style;
 
     return polyline;
   }

@@ -30,7 +30,7 @@ export class BoundingBox extends Box {
 
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container, x, y, width, height);
-    this.style.fill = "transparent";
+    this.style.fillColor = "transparent";
     this.style.strokeColor = "#002fff";
     this.style.strokeWidth = "1";
     this.style.strokeDashArray = "2 2";

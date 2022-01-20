@@ -20,7 +20,7 @@ export class SelectTool extends Tool {
     this.boundingBox = new Rectangle(container);
     this.dragTool = new DragTool(container);
 
-    this.boundingBox.style.fill = "none";
+    this.boundingBox.style.fillColor = "none";
     this.boundingBox.style.strokeColor = "#1545ff";
     this.boundingBox.style.strokeWidth = "1";
     this.boundingBox.style.strokeDashArray = "5 5";
