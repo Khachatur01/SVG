@@ -1,10 +1,10 @@
 import {AfterViewInit, Component} from '@angular/core';
-import {XSVG} from "./XSVG/XSVG";
-import {Rect} from "./XSVG/model/Rect";
-import {XImage} from "./XSVG/element/foreign/media/XImage";
-import {XForeignObject} from "./XSVG/element/foreign/XForeignObject";
-import {Callback} from './XSVG/model/Callback';
-import {XVideo} from "./XSVG/element/foreign/media/XVideo";
+import {SVG} from "./SVG/SVG";
+import {Rect} from "./SVG/model/Rect";
+import {Image} from "./SVG/element/foreign/media/Image";
+import {ForeignObject} from "./SVG/element/foreign/ForeignObject";
+import {Callback} from './SVG/model/Callback';
+import {Video} from "./SVG/element/foreign/media/Video";
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ import {XVideo} from "./XSVG/element/foreign/media/XVideo";
 export class AppComponent implements AfterViewInit {
   title = 'svg-board';
 
-  private svg:XSVG | null = null;
+  private svg:SVG | null = null;
 
   private activeTool: HTMLElement | null = null;
 
@@ -252,7 +252,7 @@ export class AppComponent implements AfterViewInit {
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
   ngAfterViewInit(): void {
-    this.svg = new XSVG("svgContainer");
+    this.svg = new SVG("svgContainer");
     this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
     this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolCallBack.bind(this));
     this.svg.addCallBack(Callback.FOCUS_CHANGED, this.focusChanged.bind(this));
@@ -319,7 +319,7 @@ export class AppComponent implements AfterViewInit {
 
   demoVideo() {
     if(!this.svg) return;
-    let video = new XVideo(this.svg, 0, 0, 340, 200);
+    let video = new Video(this.svg, 0, 0, 340, 200);
     video.refPoint = {x: 170, y: 100};
     video.src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
@@ -327,7 +327,7 @@ export class AppComponent implements AfterViewInit {
   }
   demoImage() {
     if(!this.svg) return;
-    let image = new XImage(this.svg, 0, 0, 340, 200);
+    let image = new Image(this.svg, 0, 0, 340, 200);
     image.refPoint = {x: 170, y: 100};
     image.src = "/assets/test/img1.png";
 
@@ -567,7 +567,7 @@ export class AppComponent implements AfterViewInit {
       "  </div>\n" +
       "</div>\n"
 
-    let element = new XForeignObject(this.svg, 0, 0, 600, 200);
+    let element = new ForeignObject(this.svg, 0, 0, 600, 200);
     element.refPoint = {x: 300, y: 100};
     element.setContent(htmlDiv);
 

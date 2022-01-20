@@ -1,0 +1,31 @@
+import {Grip} from "../Grip";
+import {Point} from "../../../../../../../model/Point";
+
+export class SWGrip extends Grip {
+  setPosition(points: Point[]): void {
+    this.position = {
+      x: points[3].x - this.halfSide,
+      y: points[3].y - this.halfSide
+    }
+  }
+
+  protected onEnd(): void {
+  }
+
+  protected onMove(client: Point): void {
+    let elementRect = this._container.focused.lastRect;
+    let width = (client.x) - (elementRect.x + elementRect.width);
+    let height = client.y - (elementRect.y);
+
+    this._lastResize = {
+      x: elementRect.x + elementRect.width,
+      y: elementRect.y,
+      width: width,
+      height: height
+    };
+    this._container.focused.setSize(this._lastResize);
+  }
+
+  protected onStart(): void {
+  }
+}
