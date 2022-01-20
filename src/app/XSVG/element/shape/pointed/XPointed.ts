@@ -1,13 +1,13 @@
-import {XElement} from "../XElement";
-import {Point} from "../../model/Point";
-import {Size} from "../../model/Size";
-import {Rect} from "../../model/Rect";
-import {XPath} from "../pointed/XPath";
-import {Path} from "../../model/path/Path";
-import {MoveTo} from "../../model/path/point/MoveTo";
-import {LineTo} from "../../model/path/line/LineTo";
+import {Point} from "../../../model/Point";
+import {Size} from "../../../model/Size";
+import {Rect} from "../../../model/Rect";
+import {XPath} from "./XPath";
+import {Path} from "../../../model/path/Path";
+import {MoveTo} from "../../../model/path/point/MoveTo";
+import {LineTo} from "../../../model/path/line/LineTo";
+import {XShape} from "../../type/XShape";
 
-export abstract class XPointed extends XElement {
+export abstract class XPointed extends XShape {
   protected _lastPoints: Point[] = [];
   override set points(points: Point[]) {};
   abstract getPoint(index: number): Point;

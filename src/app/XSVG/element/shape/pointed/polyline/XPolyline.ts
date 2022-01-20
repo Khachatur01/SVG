@@ -1,7 +1,7 @@
-import {XElement} from "../XElement";
-import {Point} from "../../model/Point";
-import {XPointed} from "../type/XPointed";
-import {XSVG} from "../../XSVG";
+import {XElement} from "../../../XElement";
+import {Point} from "../../../../model/Point";
+import {XPointed} from "../XPointed";
+import {XSVG} from "../../../../XSVG";
 
 export class XPolyline extends XPointed {
   constructor(container: XSVG, points: Point[] = []) {

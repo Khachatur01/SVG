@@ -6,7 +6,7 @@ import {XSVG} from "../../../XSVG";
 import {Rect} from "../../../model/Rect";
 import {XResizeable} from "../resize/XResizeable";
 import {Size} from "../../../model/Size";
-import {XPath} from "../../../element/pointed/XPath";
+import {XPath} from "../../../element/shape/pointed/XPath";
 import {XGroup} from "../../../element/group/XGroup";
 import {Callback} from "../../../model/Callback";
 import {Matrix} from "../../math/Matrix";

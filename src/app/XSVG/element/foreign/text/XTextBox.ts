@@ -1,8 +1,8 @@
-import {XForeignObject} from "../foreign/XForeignObject";
-import {XSVG} from "../../XSVG";
-import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
-import {Rect} from "../../model/Rect";
-import {Callback} from "../../model/Callback";
+import {XForeignObject} from "../XForeignObject";
+import {XSVG} from "../../../XSVG";
+import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
+import {Rect} from "../../../model/Rect";
+import {Callback} from "../../../model/Callback";
 
 export class XTextBox extends XForeignObject implements MoveDrawable {
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {

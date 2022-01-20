@@ -1,6 +1,6 @@
 import {XTool} from "../XTool";
 import {XSVG} from "../../../XSVG";
-import {XPointed} from "../../../element/type/XPointed";
+import {XPointed} from "../../../element/shape/pointed/XPointed";
 import {XElement} from "../../../element/XElement";
 import {Point} from "../../../model/Point";
 import {XNode} from "./XNode";

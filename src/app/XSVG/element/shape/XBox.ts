@@ -3,9 +3,10 @@ import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
 import {XSVG} from "../../XSVG";
-import {XPath} from "../pointed/XPath";
+import {XPath} from "./pointed/XPath";
+import {XShape} from "../type/XShape";
 
-export class XBox extends XElement {
+export class XBox extends XShape {
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "rect");

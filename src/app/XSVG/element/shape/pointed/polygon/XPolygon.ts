@@ -1,9 +1,9 @@
-import {XElement} from "../XElement";
-import {Point} from "../../model/Point";
-import {XPointed} from "../type/XPointed";
-import {XSVG} from "../../XSVG";
-import {XPath} from "./XPath";
-import {Close} from "../../model/path/close/Close";
+import {XElement} from "../../../XElement";
+import {Point} from "../../../../model/Point";
+import {XPointed} from "../XPointed";
+import {XSVG} from "../../../../XSVG";
+import {XPath} from "../XPath";
+import {Close} from "../../../../model/path/close/Close";
 
 export class XPolygon extends XPointed {
   constructor(container: XSVG, points: Point[] = []) {

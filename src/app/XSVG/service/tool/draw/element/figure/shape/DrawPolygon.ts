@@ -1,6 +1,6 @@
 import {ClickDraw} from "../../../mode/ClickDraw";
-import {XPolygon} from "../../../../../../element/pointed/XPolygon";
-import {XPointed} from "../../../../../../element/type/XPointed";
+import {XPolygon} from "../../../../../../element/shape/pointed/polygon/XPolygon";
+import {XPointed} from "../../../../../../element/shape/pointed/XPointed";
 import {Point} from "../../../../../../model/Point";
 
 export class DrawPolygon extends ClickDraw {

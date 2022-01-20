@@ -2,7 +2,7 @@ import {XElement} from "../XElement";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
-import {XPath} from "../pointed/XPath";
+import {XPath} from "../shape/pointed/XPath";
 import {XSVG} from "../../XSVG";
 
 export class XGroup extends XElement {

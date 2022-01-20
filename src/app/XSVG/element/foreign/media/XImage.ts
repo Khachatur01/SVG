@@ -1,11 +1,12 @@
-import {XElement} from "../XElement";
-import {XPath} from "../pointed/XPath";
-import {Size} from "../../model/Size";
-import {Rect} from "../../model/Rect";
-import {Point} from "../../model/Point";
-import {XSVG} from "../../XSVG";
+import {XElement} from "../../XElement";
+import {XPath} from "../../shape/pointed/XPath";
+import {Size} from "../../../model/Size";
+import {Rect} from "../../../model/Rect";
+import {Point} from "../../../model/Point";
+import {XSVG} from "../../../XSVG";
+import {XForeign} from "../../type/XForeign";
 
-export class XImage extends XElement {
+export class XImage extends XForeign {
   constructor(container: XSVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(XElement.svgURI, "image");

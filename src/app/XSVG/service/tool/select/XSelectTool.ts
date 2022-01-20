@@ -1,6 +1,6 @@
 import {XTool} from "../XTool";
 import {XSVG} from "../../../XSVG";
-import {XRectangle} from "../../../element/shape/XRectangle";
+import {XRectangle} from "../../../element/shape/pointed/polygon/rectangle/XRectangle";
 import {Point} from "../../../model/Point";
 import {XDragTool} from "../drag/XDragTool";
 import {Callback} from "../../../model/Callback";

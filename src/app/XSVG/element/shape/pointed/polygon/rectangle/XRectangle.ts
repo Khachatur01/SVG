@@ -1,9 +1,9 @@
-import {Size} from "../../model/Size";
-import {XPolygon} from "../pointed/XPolygon";
-import {Rect} from "../../model/Rect";
-import {Point} from "../../model/Point";
-import {XSVG} from "../../XSVG";
-import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
+import {Size} from "../../../../../model/Size";
+import {XPolygon} from "../XPolygon";
+import {Rect} from "../../../../../model/Rect";
+import {Point} from "../../../../../model/Point";
+import {XSVG} from "../../../../../XSVG";
+import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 
 /*
 *  0_____1

@@ -1,7 +1,7 @@
 import {MoveDraw} from "../../mode/MoveDraw";
 import {Point} from "../../../../../model/Point";
 import {XElement} from "../../../../../element/XElement";
-import {XTextBox} from "../../../../../element/text/XTextBox";
+import {XTextBox} from "../../../../../element/foreign/text/XTextBox";
 
 export class DrawTextBox extends MoveDraw {
   onStart(position: Point): XElement {

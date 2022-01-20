@@ -1,10 +1,10 @@
 import {XTriangle} from "./XTriangle";
-import {XSVG} from "../../../XSVG";
-import {Rect} from "../../../model/Rect";
-import {Point} from "../../../model/Point";
-import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
+import {XSVG} from "../../../../../XSVG";
+import {Rect} from "../../../../../model/Rect";
+import {Point} from "../../../../../model/Point";
+import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 
-export class XIsoscelesTriangle extends XTriangle implements MoveDrawable {
+export class XRightTriangle extends XTriangle implements MoveDrawable {
   constructor(container: XSVG, rect: Rect | null = null) {
     if(rect) {
       let pointA: Point = {x: rect.x, y: rect.y};
@@ -15,18 +15,18 @@ export class XIsoscelesTriangle extends XTriangle implements MoveDrawable {
       super(container);
     }
   }
-  override get copy(): XIsoscelesTriangle {
-    return super.copy as XIsoscelesTriangle;
+  override get copy(): XRightTriangle {
+    return super.copy as XRightTriangle;
   }
 
-  drawSize(rect: Rect): void {
+  drawSize(rect: Rect) {
     let points: Point[] = [];
     points.push({ /* A */
       x: rect.x,
       y: rect.y
     });
     points.push({ /* B */
-      x: rect.x - rect.width,
+      x: rect.x,
       y: rect.y + rect.height
     });
     points.push({ /* C */

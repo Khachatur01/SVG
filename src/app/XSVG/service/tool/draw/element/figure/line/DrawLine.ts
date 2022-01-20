@@ -1,8 +1,8 @@
 import {MoveDraw} from "../../../mode/MoveDraw";
-import {XLine} from "../../../../../../element/pointed/XLine";
+import {XLine} from "../../../../../../element/shape/pointed/XLine";
 import {Point} from "../../../../../../model/Point";
 import {Angle} from "../../../../../math/Angle";
-import {XPointed} from "../../../../../../element/type/XPointed";
+import {XPointed} from "../../../../../../element/shape/pointed/XPointed";
 import {XElement} from "../../../../../../element/XElement";
 
 export class DrawLine extends MoveDraw {

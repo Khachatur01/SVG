@@ -8,7 +8,7 @@ import {Tool} from "./dataSource/Tool";
 import {XGrid} from "./service/grid/XGrid";
 import {Callback} from "./model/Callback";
 import {XGroup} from "./element/group/XGroup";
-import {XPointed} from "./element/type/XPointed";
+import {XPointed} from "./element/shape/pointed/XPointed";
 import {ElementsClipboard} from "./dataSource/ElementsClipboard";
 
 class GlobalStyle {

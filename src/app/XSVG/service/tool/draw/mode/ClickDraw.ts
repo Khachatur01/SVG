@@ -1,6 +1,6 @@
 import {XDrawable} from "../XDrawable";
 import {XSVG} from "../../../../XSVG";
-import {XPointed} from "../../../../element/type/XPointed";
+import {XPointed} from "../../../../element/shape/pointed/XPointed";
 import {Point} from "../../../../model/Point";
 import {Angle} from "../../../math/Angle";
 

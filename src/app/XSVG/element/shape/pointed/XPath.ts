@@ -1,14 +1,14 @@
-import {XElement} from "../XElement";
-import {Path} from "../../model/path/Path";
-import {Point} from "../../model/Point";
-import {Size} from "../../model/Size";
-import {XSVG} from "../../XSVG";
-import {Command} from "../../model/path/Command";
-import {Close} from "../../model/path/close/Close";
-import {XPointed} from "../type/XPointed";
-import {MoveTo} from "../../model/path/point/MoveTo";
-import {Rect} from "../../model/Rect";
-import {XRectangle} from "../shape/XRectangle";
+import {XElement} from "../../XElement";
+import {Path} from "../../../model/path/Path";
+import {Point} from "../../../model/Point";
+import {Size} from "../../../model/Size";
+import {XSVG} from "../../../XSVG";
+import {Command} from "../../../model/path/Command";
+import {Close} from "../../../model/path/close/Close";
+import {XPointed} from "./XPointed";
+import {MoveTo} from "../../../model/path/point/MoveTo";
+import {Rect} from "../../../model/Rect";
+import {XRectangle} from "./polygon/rectangle/XRectangle";
 
 export class XPath extends XPointed {
   protected _size: Size = {width: 0, height: 0};

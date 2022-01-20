@@ -3,10 +3,11 @@ import {XSVG} from "../../XSVG";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
-import {XPath} from "../pointed/XPath";
+import {XPath} from "../shape/pointed/XPath";
 import {Callback} from "../../model/Callback";
+import {XForeign} from "../type/XForeign";
 
-export class XForeignObject extends XElement {
+export class XForeignObject extends XForeign {
   protected _content: HTMLElement | null = null;
   private readonly outline: string = "thin solid #999";
 

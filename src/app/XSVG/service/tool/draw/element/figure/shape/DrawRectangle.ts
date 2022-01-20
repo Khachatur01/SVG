@@ -1,6 +1,6 @@
 import {MoveDraw} from "../../../mode/MoveDraw";
 import {XElement} from "../../../../../../element/XElement";
-import {XRectangle} from "../../../../../../element/shape/XRectangle";
+import {XRectangle} from "../../../../../../element/shape/pointed/polygon/rectangle/XRectangle";
 import {Point} from "../../../../../../model/Point";
 
 export class DrawRectangle extends MoveDraw {

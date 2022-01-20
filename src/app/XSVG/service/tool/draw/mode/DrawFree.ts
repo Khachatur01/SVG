@@ -1,5 +1,5 @@
 import {XDrawable} from "../XDrawable";
-import {XFree} from "../../../../element/pointed/XFree";
+import {XFree} from "../../../../element/shape/pointed/polyline/XFree";
 import {XSVG} from "../../../../XSVG";
 import {Point} from "../../../../model/Point";
 import {Angle} from "../../../math/Angle";

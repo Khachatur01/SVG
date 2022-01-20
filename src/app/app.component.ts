@@ -1,10 +1,10 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {XSVG} from "./XSVG/XSVG";
 import {Rect} from "./XSVG/model/Rect";
-import {XImage} from "./XSVG/element/media/XImage";
+import {XImage} from "./XSVG/element/foreign/media/XImage";
 import {XForeignObject} from "./XSVG/element/foreign/XForeignObject";
 import {Callback} from './XSVG/model/Callback';
-import {XVideo} from "./XSVG/element/media/XVideo";
+import {XVideo} from "./XSVG/element/foreign/media/XVideo";
 
 @Component({
   selector: 'app-root',

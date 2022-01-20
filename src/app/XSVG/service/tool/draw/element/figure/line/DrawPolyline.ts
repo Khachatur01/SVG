@@ -1,6 +1,6 @@
 import {ClickDraw} from "../../../mode/ClickDraw";
-import {XPolyline} from "../../../../../../element/pointed/XPolyline";
-import {XPointed} from "../../../../../../element/type/XPointed";
+import {XPolyline} from "../../../../../../element/shape/pointed/polyline/XPolyline";
+import {XPointed} from "../../../../../../element/shape/pointed/XPointed";
 import {Point} from "../../../../../../model/Point";
 
 export class DrawPolyline extends ClickDraw {

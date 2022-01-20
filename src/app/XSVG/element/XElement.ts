@@ -5,9 +5,8 @@ import {Rect} from "../model/Rect";
 import {XDraggable} from "../service/tool/drag/XDraggable";
 import {Matrix} from "../service/math/Matrix";
 import {XSVG} from "../XSVG";
-import {XPath} from "./pointed/XPath";
+import {XPath} from "./shape/pointed/XPath";
 import {XGroup} from "./group/XGroup";
-import {XEllipse} from "./shape/XEllipse";
 
 class Style {
   private element: XElement;

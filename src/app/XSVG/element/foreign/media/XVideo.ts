@@ -1,5 +1,5 @@
-import {XSVG} from "../../XSVG";
-import {XForeignObject} from "../foreign/XForeignObject";
+import {XSVG} from "../../../XSVG";
+import {XForeignObject} from "../XForeignObject";
 
 export class XVideo extends XForeignObject {
   private readonly source: HTMLSourceElement;

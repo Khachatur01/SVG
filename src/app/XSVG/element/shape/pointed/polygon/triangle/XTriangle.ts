@@ -1,6 +1,6 @@
-import {XPolygon} from "../../pointed/XPolygon";
-import {XSVG} from "../../../XSVG";
-import {Point} from "../../../model/Point";
+import {XPolygon} from "../XPolygon";
+import {XSVG} from "../../../../../XSVG";
+import {Point} from "../../../../../model/Point";
 
 export class XTriangle extends XPolygon {
   constructor(container: XSVG, pointA: Point | null = null, pointB: Point | null = null, pointC: Point | null = null) {
