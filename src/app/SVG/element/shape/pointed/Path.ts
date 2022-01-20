@@ -69,6 +69,15 @@ export class Path extends Pointed {
   override get points(): Point[] {
     return this._path.points;
   }
+  override set points(points: Point[]) {
+    let commands = this._path.getAll();
+    for(let i = 0; i < commands.length; i++)
+      commands[i].position = points[i];
+
+    this.setAttr({
+      d: this._path.toString()
+    });
+  }
 
   override get position(): Point {
     let commands = this._path.getAll();

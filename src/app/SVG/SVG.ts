@@ -283,6 +283,7 @@ export class SVG {
   }
 
   focusAll() {
+    this.selectTool.on();
     this._elements.forEach((element: Element) => {
       this.focus(element);
     });

@@ -231,10 +231,10 @@ export class AppComponent implements AfterViewInit {
     fillInput.value = this.svg.style.fillColor;
   }
   selectToolCallBack() {
-    this.switchActive("select")
+    this.switchActive("select");
   }
   editToolCallBack() {
-    this.switchActive("edit")
+    this.switchActive("edit");
   }
   focusChanged() {
     if(this.svg?.focused.canGroup)

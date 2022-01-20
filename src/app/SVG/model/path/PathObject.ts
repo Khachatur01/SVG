@@ -16,16 +16,14 @@ export class PathObject {
   get points(): Point[] {
     let points: Point[] = [];
     for(let command of this.commands)
-      if(!(command instanceof Close))
-        points.push(command.position);
+      points.push(command.position);
     return points;
   }
 
   get pointedCommands(): PathCommand[] {
     let commands: PathCommand[] = [];
     for(let command of this.commands)
-      if(!(command instanceof Close))
-        commands.push(command);
+      commands.push(command);
     return commands;
   }
   getAll(): PathCommand[] {

@@ -11,7 +11,10 @@ export abstract class PathCommand {
     return this._point
   }
   set position(position: Point) {
-
+    this._point = {
+      x: position.x,
+      y: position.y
+    }
   }
 
   abstract get command(): string;
