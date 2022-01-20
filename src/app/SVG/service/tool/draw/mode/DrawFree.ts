@@ -3,6 +3,8 @@ import {Free} from "../../../../element/shape/pointed/polyline/Free";
 import {SVG} from "../../../../SVG";
 import {Point} from "../../../../model/Point";
 import {Angle} from "../../../math/Angle";
+import {PathObject} from "../../../../model/path/PathObject";
+import {MoveTo} from "../../../../model/path/point/MoveTo";
 
 export class DrawFree implements Drawable {
   private container: SVG;
@@ -27,7 +29,9 @@ export class DrawFree implements Drawable {
 
     snapPoint = this.container.grid.getSnapPoint(snapPoint);
 
-    this.drawableElement = new Free(this.container, [snapPoint]);
+    let pathObject = new PathObject();
+    pathObject.add(new MoveTo(snapPoint));
+    this.drawableElement = new Free(this.container, pathObject);
 
     this.container?.add(this.drawableElement);
     this.container?.HTML.addEventListener('mousemove', this._onDraw);
@@ -67,9 +71,6 @@ export class DrawFree implements Drawable {
       this.container.remove(this.drawableElement);
     } else {
       this.drawableElement.refPoint = this.drawableElement.center;
-
-      // this.container.focus(this.drawableElement);
-      // this.container.focused.fixRect();
     }
   }
 

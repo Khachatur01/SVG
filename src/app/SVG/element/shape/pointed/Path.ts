@@ -6,8 +6,8 @@ import {SVG} from "../../../SVG";
 import {PathCommand} from "../../../model/path/PathCommand";
 import {Close} from "../../../model/path/close/Close";
 import {Pointed} from "./Pointed";
-import {MoveTo} from "../../../model/path/point/MoveTo";
 import {Rect} from "../../../model/Rect";
+import {LineTo} from "../../../model/path/line/LineTo";
 
 export class Path extends Pointed {
   protected _size: Size = {width: 0, height: 0};
@@ -183,7 +183,7 @@ export class Path extends Pointed {
   }
 
   pushPoint(point: Point): void {
-    this._path.add(new MoveTo(point));
+    this._path.add(new LineTo(point));
 
     this.setAttr({
       d: this._path.toString()
