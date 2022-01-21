@@ -99,6 +99,8 @@ export abstract class Element implements Resizeable, Draggable {
 
   private _group: Group | null = null;
 
+  protected readonly id: string;
+
   protected svgElement: SVGElement = document.createElementNS(Element.svgURI, "rect"); // default element
 
   private _highlight = this.highlight.bind(this);
@@ -107,6 +109,7 @@ export abstract class Element implements Resizeable, Draggable {
   constructor(container: SVG) {
     this._container = container;
     this.style = new ElementStyle(this);
+    this.id = container.nextId;
   }
 
   abstract get size(): Size;

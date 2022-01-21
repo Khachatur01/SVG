@@ -14,6 +14,7 @@ export class Ellipse extends Shape implements MoveDrawable {
   constructor(container: SVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "ellipse");
+    this.svgElement.id = this.id;
 
     this.position = {x: x, y: y};
     this.setSize({x: x, y: y, width: rx * 2, height: ry * 2});

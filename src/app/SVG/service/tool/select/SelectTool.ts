@@ -3,7 +3,7 @@ import {SVG} from "../../../SVG";
 import {Rectangle} from "../../../element/shape/pointed/polygon/rectangle/Rectangle";
 import {Point} from "../../../model/Point";
 import {DragTool} from "../drag/DragTool";
-import {Callback} from "../../../model/Callback";
+import {Callback} from "../../../dataSource/Callback";
 
 export class SelectTool extends Tool {
   private readonly boundingBox: Rectangle;
@@ -109,7 +109,7 @@ export class SelectTool extends Tool {
     this.dragTool.on();
     this.container.HTML.style.cursor = "default";
 
-    this.container.callCallBacks(Callback.SELECT_TOOl_ON);
+    this.container.call(Callback.SELECT_TOOl_ON);
   }
 
   off(): void {
@@ -117,7 +117,7 @@ export class SelectTool extends Tool {
     this._isOn = false;
     this.dragTool.off();
 
-    this.container.callCallBacks(Callback.SELECT_TOOl_OFF);
+    this.container.call(Callback.SELECT_TOOl_OFF);
   }
 
   isOn(): boolean {

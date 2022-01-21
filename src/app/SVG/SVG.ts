@@ -6,7 +6,7 @@ import {Tool} from "./service/tool/Tool";
 import {EditTool} from "./service/tool/edit/EditTool";
 import {DrawTools} from "./dataSource/DrawTools";
 import {Grid} from "./service/grid/Grid";
-import {Callback} from "./model/Callback";
+import {Callback} from "./dataSource/Callback";
 import {Group} from "./element/group/Group";
 import {Pointed} from "./element/shape/pointed/Pointed";
 import {ElementsClipboard} from "./dataSource/ElementsClipboard";
@@ -179,12 +179,17 @@ export class SVG {
 
   private _multiSelect: boolean = false;
 
-  constructor(containerId: string) {
+  private static idPrefix: string;
+  private static id: number = 0;
+
+  constructor(containerId: string, idPrefix: string = "element") {
     let container = document.getElementById(containerId);
     if(container)
       this.container = container;
     else
       throw new DOMException("Can't create container", "Container not found");
+
+    SVG.idPrefix = idPrefix;
 
     this.drawTool = new DrawTool(this);
     this.selectTool = new SelectTool(this);
@@ -210,12 +215,18 @@ export class SVG {
     this.container.appendChild(this.editTool.SVG);
   }
 
-  get callBacks(): Map<Callback, Function[]> {
-    return this._callBacks;
+  get id(): number {
+    return SVG.id;
+  }
+  set id(id: number) {
+    SVG.id = id;
+  }
+  get nextId(): string {
+    return SVG.idPrefix + SVG.id++;
   }
 
-  callCallBacks(name: Callback): void {
-    let callback = this.callBacks.get(name);
+  call(name: Callback): void {
+    let callback = this._callBacks.get(name);
     if(callback)
       callback.forEach((func: Function) => {
         func();

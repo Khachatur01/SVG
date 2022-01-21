@@ -16,6 +16,8 @@ export class Path extends Pointed {
   constructor(container: SVG, path: PathObject = new PathObject()) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "path");
+    this.svgElement.id = this.id;
+
     this._path = path;
     this._lastPath = path;
     this.setAttr({

@@ -4,7 +4,7 @@ import {Pointed} from "../../../element/shape/pointed/Pointed";
 import {Element} from "../../../element/Element";
 import {Point} from "../../../model/Point";
 import {Node} from "./Node";
-import {Callback} from "../../../model/Callback";
+import {Callback} from "../../../dataSource/Callback";
 
 export class EditTool extends Tool {
   private readonly nodesGroup: SVGGElement;
@@ -60,14 +60,14 @@ export class EditTool extends Tool {
     }
     this.container.blur();
 
-    this.container.callCallBacks(Callback.EDIT_TOOl_ON);
+    this.container.call(Callback.EDIT_TOOl_ON);
   }
 
   off(): void {
     this._isOn = false;
     this.removeEditableElement();
 
-    this.container.callCallBacks(Callback.EDIT_TOOl_OFF);
+    this.container.call(Callback.EDIT_TOOl_OFF);
   }
 
   isOn(): boolean {

@@ -7,6 +7,8 @@ export class Line extends Pointed {
   constructor(container: SVG, x1: number = 0, y1: number = 0, x2: number = 0, y2: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "line");
+    this.svgElement.id = this.id;
+
     this.setAttr({
       x1: x1,
       y1: y1,

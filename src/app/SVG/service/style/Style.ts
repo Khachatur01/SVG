@@ -1,4 +1,4 @@
-import {Callback} from "../../model/Callback";
+import {Callback} from "../../dataSource/Callback";
 
 export class Style {
   protected _styleCallBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();

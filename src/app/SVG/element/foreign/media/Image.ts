@@ -10,6 +10,7 @@ export class Image extends Foreign {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "image");
+    this.svgElement.id = this.id;
 
     this.svgElement.ondragstart = function () {
       return false;

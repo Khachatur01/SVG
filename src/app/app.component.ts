@@ -3,7 +3,7 @@ import {SVG} from "./SVG/SVG";
 import {Rect} from "./SVG/model/Rect";
 import {Image} from "./SVG/element/foreign/media/Image";
 import {ForeignObject} from "./SVG/element/foreign/ForeignObject";
-import {Callback} from './SVG/model/Callback';
+import {Callback} from './SVG/dataSource/Callback';
 import {Video} from "./SVG/element/foreign/media/Video";
 
 @Component({

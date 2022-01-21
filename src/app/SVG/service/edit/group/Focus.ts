@@ -8,7 +8,7 @@ import {Resizeable} from "../resize/Resizeable";
 import {Size} from "../../../model/Size";
 import {Path} from "../../../element/shape/pointed/Path";
 import {Group} from "../../../element/group/Group";
-import {Callback} from "../../../model/Callback";
+import {Callback} from "../../../dataSource/Callback";
 import {Matrix} from "../../math/Matrix";
 
 export class Focus implements Draggable, Resizeable {
@@ -378,7 +378,7 @@ export class Focus implements Draggable, Resizeable {
   }
 
   focus() {
-    this.container.callCallBacks(Callback.FOCUS_CHANGED);
+    this.container.call(Callback.FOCUS_CHANGED);
     if(this._children.size > 1) {
       this.boundingBox.multipleFocus();
     } else {
@@ -391,7 +391,7 @@ export class Focus implements Draggable, Resizeable {
     }
   }
   blur() {
-    this.container.callCallBacks(Callback.BLURED);
+    this.container.call(Callback.BLURED);
     this.boundingBox.blur();
   }
 

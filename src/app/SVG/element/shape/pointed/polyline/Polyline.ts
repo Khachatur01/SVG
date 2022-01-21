@@ -7,6 +7,7 @@ export class Polyline extends Pointed {
   constructor(container: SVG, points: Point[] = []) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "polyline");
+    this.svgElement.id = this.id;
 
     this.points = points;
     this.style.setDefaultStyle();

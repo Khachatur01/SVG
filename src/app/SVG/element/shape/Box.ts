@@ -10,6 +10,7 @@ export class Box extends Shape {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "rect");
+    this.svgElement.id = this.id;
 
     this.position = {x: x, y: y};
     this.setSize({

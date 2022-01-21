@@ -4,7 +4,7 @@ import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
 import {Path} from "../shape/pointed/Path";
-import {Callback} from "../../model/Callback";
+import {Callback} from "../../dataSource/Callback";
 import {Foreign} from "../type/Foreign";
 
 export class ForeignObject extends Foreign {
@@ -15,6 +15,7 @@ export class ForeignObject extends Foreign {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "foreignObject");
     this.svgElement.style.outline = this.outline;
+    this.svgElement.id = this.id;
 
     this.position = {x: x, y: y};
 

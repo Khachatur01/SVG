@@ -9,6 +9,7 @@ export class Polygon extends Pointed {
   constructor(container: SVG, points: Point[] = []) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "polygon");
+    this.svgElement.id = this.id;
 
     this.points = points;
 

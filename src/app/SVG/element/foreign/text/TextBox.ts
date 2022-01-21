@@ -2,7 +2,7 @@ import {ForeignObject} from "../ForeignObject";
 import {SVG} from "../../../SVG";
 import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
 import {Rect} from "../../../model/Rect";
-import {Callback} from "../../../model/Callback";
+import {Callback} from "../../../dataSource/Callback";
 
 export class TextBox extends ForeignObject implements MoveDrawable {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
