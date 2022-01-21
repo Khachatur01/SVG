@@ -8,7 +8,6 @@ import {MoveTo} from "../../../../model/path/point/MoveTo";
 
 export class DrawFree implements Drawable {
   private container: SVG;
-  private perfectMode: boolean = false;
   private drawableElement: Free | null = null;
   private _onStart = this.onStart.bind(this);
   private _onDraw = this.onDraw.bind(this);
@@ -52,10 +51,14 @@ export class DrawFree implements Drawable {
     if(this.container.grid.isSnap()) {
       snapPoint = this.container.grid.getSnapPoint(snapPoint);
       this.drawableElement.pushPoint(snapPoint);
-    } else if(this.perfectMode) {
-      let lastPoint: Point = this.drawableElement.getPoint(-2);
-      snapPoint = Angle.snapLineEnd(lastPoint.x, snapPoint.x, lastPoint.y, snapPoint.y) as Point;
-      this.drawableElement.replacePoint(-1, snapPoint);
+    } else if(this.container.perfect) {
+      try {
+        let lastPoint: Point = this.drawableElement.getPoint(-2);
+        snapPoint = Angle.snapLineEnd(lastPoint.x, snapPoint.x, lastPoint.y, snapPoint.y) as Point;
+        this.drawableElement.replacePoint(-1, snapPoint);
+      } catch (typeError) {
+        /* lastPoint may be undefined */
+      }
     } else {
       this.drawableElement.pushPoint(snapPoint);
     }
@@ -72,10 +75,6 @@ export class DrawFree implements Drawable {
     } else {
       this.drawableElement.refPoint = this.drawableElement.center;
     }
-  }
-
-  set perfect(mode: boolean) {
-    this.perfectMode = mode;
   }
 
   start(container: SVG): void {

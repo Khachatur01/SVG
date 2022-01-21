@@ -170,6 +170,7 @@ export class SVG {
   public readonly drawTool: DrawTool;
   public readonly selectTool: SelectTool;
   public readonly editTool: EditTool;
+  public perfect: boolean = false;
   public grid: Grid;
   public style: GlobalStyle = new GlobalStyle(this);
 

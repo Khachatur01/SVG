@@ -170,7 +170,7 @@ export class AppComponent implements AfterViewInit {
     }
 
     if(event.key == "Shift") {
-        this.svg.drawTool.perfect = true;
+        this.svg.perfect = true;
     }
     if(event.key == "Escape") {
       this.svg.selectTool.on();
@@ -182,7 +182,7 @@ export class AppComponent implements AfterViewInit {
   private keyUp(event: KeyboardEvent) {
     if(!this.svg) return;
     if(event.key == "Shift") {
-      this.svg.drawTool.perfect = false;
+      this.svg.perfect = false;
     }
     if(event.key == "Delete") {
       this.svg.focused?.remove();

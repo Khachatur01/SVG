@@ -34,13 +34,13 @@ export class PathObject {
   }
   get(index: number): PathCommand {
     if(index < 0)
-      index = this.commands.length - index;
+      index = this.commands.length + index;
 
     return this.commands[index];
   }
   set(index: number, command: PathCommand) {
     if(index < 0)
-      index = this.commands.length - index;
+      index = this.commands.length + index;
 
     this.commands[index] = command;
   }
@@ -50,7 +50,7 @@ export class PathObject {
   remove(index: number) {
     let pointedCommands = this.pointedCommands;
     if(index < 0)
-      index = pointedCommands.length - index;
+      index = pointedCommands.length + index;
 
     let command = pointedCommands[index];
     this.commands = this.commands.splice(this.commands.indexOf(command), 1);
@@ -58,7 +58,7 @@ export class PathObject {
   replace(index: number, point: Point) {
     let pointedCommands = this.pointedCommands;
     if(index < 0)
-      index = pointedCommands.length - index;
+      index = pointedCommands.length + index;
 
     this.pointedCommands[index].position = point;
   }

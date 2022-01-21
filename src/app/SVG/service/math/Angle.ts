@@ -15,6 +15,12 @@ export class Angle {
 
     return degree;
   }
+  static lineFromVector(startPoint: Point, angle: number, length: number): Point {
+    return coordsFromVector(startPoint.x, startPoint.y, angle, length) as Point;
+  }
+  static lineLength(startPoint: Point, endPoint: Point) {
+    return lengthFromCoords(startPoint.x, endPoint.x, startPoint.y, endPoint.y);
+  }
 }
 const ANGULAR_SNAP = 15;
 

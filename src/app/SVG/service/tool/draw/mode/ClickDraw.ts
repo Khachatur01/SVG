@@ -6,7 +6,6 @@ import {Angle} from "../../../math/Angle";
 
 export abstract class ClickDraw implements Drawable {
   protected container: SVG;
-  private perfectMode: boolean = false;
   protected drawableElement: Pointed | null = null;
   private click = this._click.bind(this);
   private move = this._move.bind(this);
@@ -39,7 +38,7 @@ export abstract class ClickDraw implements Drawable {
     let containerRect = this.container?.HTML.getBoundingClientRect();
     if(!containerRect) return;
 
-    this.onMove(containerRect, event, this.perfectMode);
+    this.onMove(containerRect, event, this.container.perfect);
   }
 
   abstract onClick(position: Point): Pointed | null;
@@ -84,9 +83,5 @@ export abstract class ClickDraw implements Drawable {
       this.container.remove(this.drawableElement);
     }
     this.drawableElement = null;
-  }
-
-  set perfect(mode: boolean) {
-    this.perfectMode = mode;
   }
 }

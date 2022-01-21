@@ -140,7 +140,6 @@ export abstract class Element implements Resizeable, Draggable {
       x: Math.round(rotatedRefPoint.x - lastRefPoint.x),
       y: Math.round(rotatedRefPoint.y - lastRefPoint.y)
     };
-
   }
 
   get group(): Group | null {

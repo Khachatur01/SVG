@@ -3,19 +3,20 @@ import {ForeignObject} from "../ForeignObject";
 
 export class Video extends ForeignObject {
   private readonly source: HTMLSourceElement;
+  private readonly _video: HTMLVideoElement;
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container, x, y, width, height);
-    let video = document.createElement("video");
-    video.style.width = "calc(100% - 20px)";
-    video.style.height = "calc(100% - 20px)";
-    video.style.marginLeft = "10px";
-    video.style.marginTop = "10px";
-    video.style.height = "calc(100% - 20px)";
-    video.style.cursor = "pointer";
-    video.setAttribute("controls", "");
+    this._video = document.createElement("video");
+    this._video.style.width = "calc(100% - 20px)";
+    this._video.style.height = "calc(100% - 20px)";
+    this._video.style.marginLeft = "10px";
+    this._video.style.marginTop = "10px";
+    this._video.style.height = "calc(100% - 20px)";
+    this._video.style.cursor = "pointer";
+    this._video.controls = true;
     this.source = document.createElement("source");
-    video.appendChild(this.source);
-    this.setContent(video, false);
+    this._video.appendChild(this.source);
+    this.setContent(this._video, false);
   }
 
   override get copy(): Video {
@@ -33,4 +34,9 @@ export class Video extends ForeignObject {
     let size = this.size;
     return size.width > 15 && size.height > 15;
   }
+
+  get video(): HTMLVideoElement {
+    return this._video;
+  }
+
 }

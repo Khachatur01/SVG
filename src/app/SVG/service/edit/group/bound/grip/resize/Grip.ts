@@ -3,6 +3,7 @@ import {SVG} from "../../../../../../SVG";
 import {Rect} from "../../../../../../model/Rect";
 import {Box} from "../../../../../../element/shape/Box";
 import {Matrix} from "../../../../../math/Matrix";
+import {Angle} from "../../../../../math/Angle";
 
 export abstract class Grip extends Box {
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};
@@ -46,17 +47,26 @@ export abstract class Grip extends Box {
 
   abstract setPosition(points: Point[]): void;
 
-  protected abstract onStart(): void;
+  protected abstract onStart(client: Point): void;
   protected abstract onMove(client: Point): void;
   protected abstract onEnd(): void;
 
-  private start() {
+  private start(event: MouseEvent) {
     this._container.activeTool.off();
     this._container.focused.fixRect();
     this._container.focused.fixRefPoint();
 
+    let containerRect = this._container.HTML.getBoundingClientRect();
+
+    let client: Point = Matrix.rotate(
+      [{x: event.clientX - containerRect.x, y: event.clientY - containerRect.y}],
+      this._container.focused.refPoint,
+      this._container.focused.angle
+    )[0];
+
     this._container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
+    this.onStart(client);
   }
   private move(event: MouseEvent) {
     let containerRect = this._container.HTML.getBoundingClientRect();
@@ -73,6 +83,8 @@ export abstract class Grip extends Box {
     this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
     this._container.activeTool.on();
+    this._container.focused.fixRect();
+    this.onEnd();
   }
 
   on() {

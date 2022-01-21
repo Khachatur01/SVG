@@ -34,11 +34,6 @@ export class DrawTool extends Tool {
     return this._isOn;
   }
 
-  set perfect(mode: boolean) {
-    if(this._drawTool)
-      this._drawTool.perfect = mode;
-  }
-
   drawing() {
     this._isDrawing = true;
   }

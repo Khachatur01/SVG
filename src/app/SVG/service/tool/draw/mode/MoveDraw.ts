@@ -6,7 +6,6 @@ import {MoveDrawable} from "../type/MoveDrawable";
 
 export abstract class MoveDraw implements Drawable {
   protected container: SVG;
-  private perfectMode: boolean = false;
   protected startPos: Point = {x: 0, y: 0}
 
   private drawStart = this._onStart.bind(this);
@@ -38,7 +37,7 @@ export abstract class MoveDraw implements Drawable {
     if(!this.container || !this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
-    this.onDraw(containerRect, event, this.drawableElement, this.perfectMode);
+    this.onDraw(containerRect, event, this.drawableElement, this.container.perfect);
   }
   private _onEnd() {
     if(!this.container || !this.drawableElement) return;
@@ -113,10 +112,6 @@ export abstract class MoveDraw implements Drawable {
 
   stop(): void {
     this.container?.HTML.removeEventListener('mousedown', this.drawStart);
-  }
-
-  set perfect(mode: boolean) {
-    this.perfectMode = mode;
   }
 
 }
