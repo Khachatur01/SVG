@@ -9,7 +9,7 @@ import {Path} from "./shape/pointed/Path";
 import {Group} from "./group/Group";
 import {Style} from "../service/style/Style";
 
-class ElementStyle extends Style {
+export class ElementStyle extends Style {
   private element: Element;
 
   constructor(element: Element) {
@@ -54,7 +54,7 @@ class ElementStyle extends Style {
   }
   override set fontSize(size: string) {
     super.fontSize = size;
-    this.element.SVG.style.fontSize = size + "px";
+    this.element.HTML.style.fontSize = size + "px";
   }
 
   override get fontColor(): string {
@@ -62,7 +62,7 @@ class ElementStyle extends Style {
   }
   override set fontColor(color: string) {
     super.fontColor = color;
-    this.element.SVG.style.color = color;
+    this.element.HTML.style.color = color;
   }
 
   override get backgroundColor(): string {
@@ -70,7 +70,7 @@ class ElementStyle extends Style {
   }
   override set backgroundColor(color: string) {
     super.backgroundColor = color;
-    this.element.SVG.style.backgroundColor = color;
+    this.element.HTML.style.backgroundColor = color;
   }
 
   setDefaultStyle(): void {
@@ -218,6 +218,9 @@ export abstract class Element implements Resizeable, Draggable {
   }
 
   get SVG(): SVGElement {
+    return this.svgElement;
+  }
+  get HTML(): SVGElement | HTMLElement {
     return this.svgElement;
   }
   getAttr(attribute: string): string {

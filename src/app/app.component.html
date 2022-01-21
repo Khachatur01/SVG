@@ -69,11 +69,11 @@
 
   <div class="d-flex flex-nowrap mb-3">
     <div class="row align-items-center g-0 me-2">
-      <div class="col-auto me-2">stroke</div>
+      <div class="col-auto me-2">Stroke</div>
       <div class="col"><input (change)="strokeWidthChange($event)" type="number" class="input form-control form-control-sm" id="stroke-width" value="5" step="1" min="1" max="99"></div>
     </div>
     <div class="row align-items-center g-0 me-2">
-      <div class="col-auto me-2">stroke color</div>
+      <div class="col-auto me-2">Stroke color</div>
       <div class="col">
         <div class="input-group">
           <input (change)="strokeColorChange($event)" type="color" id="stroke-color" class="form-control form-control-sm">
@@ -84,7 +84,7 @@
       </div>
     </div>
     <div class="row align-items-center g-0 me-2">
-      <div class="col-auto me-2">fill color</div>
+      <div class="col-auto me-2">Fill color</div>
       <div class="col">
         <div class="input-group">
           <input (change)="fillColorChange($event)" type="color" id="fill-color" class="form-control form-control-sm">
@@ -95,6 +95,29 @@
       </div>
     </div>
     <span id="coordinates" class="ms-auto"></span>
+  </div>
+
+  <div class="d-flex flex-nowrap mb-3">
+    <div class="row align-items-center g-0 me-2">
+      <div class="col-auto me-2">Font size</div>
+      <div class="col"><input id="font-size" (change)="fontSizeChange($event)" type="number" class="input form-control form-control-sm" value="16" step="1" min="1" max="99"></div>
+    </div>
+    <div class="row align-items-center g-0 me-2">
+      <div class="col-auto me-2">Font color</div>
+      <div class="col">
+        <div class="input-group">
+          <input (change)="fontColorChange($event)" type="color" id="font-color" class="form-control form-control-sm">
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center g-0 me-2">
+      <div class="col-auto me-2">Text background</div>
+      <div class="col">
+        <div class="input-group">
+          <input (change)="textBackgroundChange($event)" type="color" id="font-background" class="form-control form-control-sm">
+        </div>
+      </div>
+    </div>
   </div>
 
   <button class="btn btn-default" (click)="copyFocused()" title="Ctrl + C">Copy</button>

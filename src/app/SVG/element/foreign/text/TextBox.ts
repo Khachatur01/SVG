@@ -12,10 +12,7 @@ export class TextBox extends ForeignObject implements MoveDrawable {
     textarea.style.height = "100%";
     textarea.style.resize = "none";
     textarea.style.border = "none";
-    textarea.style.background = "transparent";
     textarea.style.overflow = "hidden";
-    textarea.style.lineHeight = container.grid.snapSide + 'px';
-    textarea.style.fontSize = "16px"
     this.setContent(textarea);
 
     this._container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
@@ -29,6 +26,7 @@ export class TextBox extends ForeignObject implements MoveDrawable {
         this._container.selectTool.on();
       }
     });
+    this.style.setDefaultStyle();
   }
 
   override get copy(): TextBox {

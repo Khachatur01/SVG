@@ -1,4 +1,4 @@
-import {Element} from "../Element";
+import {Element, ElementStyle} from "../Element";
 import {SVG} from "../../SVG";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
@@ -39,6 +39,13 @@ export class ForeignObject extends Foreign {
         this._content.style.userSelect = "unset";
       }
     });
+  }
+
+  override get HTML(): SVGElement | HTMLElement {
+    if(this._content)
+      return this._content;
+
+    return this.svgElement
   }
 
   get copy(): ForeignObject {

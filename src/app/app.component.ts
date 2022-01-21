@@ -16,7 +16,6 @@ export class AppComponent implements AfterViewInit {
   title = 'svg-board';
 
   private svg:SVG | null = null;
-
   private activeTool: HTMLElement | null = null;
 
   public select() {
@@ -180,6 +179,19 @@ export class AppComponent implements AfterViewInit {
       this.svg.multiSelect();
     }
   }
+  private keyUp(event: KeyboardEvent) {
+    if(!this.svg) return;
+    if(event.key == "Shift") {
+      this.svg.drawTool.perfect = false;
+    }
+    if(event.key == "Delete") {
+      this.svg.focused?.remove();
+    }
+    if(event.key == "Control") {
+      this.svg.singleSelect();
+    }
+  }
+
   showCoordinates(containerId: string, labelId: string, mask: string) { /* x: {x} y: {y} ... replace {x} to x coordinate and {y} to y*/
     let container = document.getElementById(containerId);
     let label = document.getElementById(labelId);
@@ -195,6 +207,7 @@ export class AppComponent implements AfterViewInit {
         label.innerHTML = text;
     });
   }
+
   switchActive(id: string) {
     if(this.activeTool)
       this.makePassive(this.activeTool.id);
@@ -203,7 +216,6 @@ export class AppComponent implements AfterViewInit {
     if(this.activeTool)
       this.makeActive(this.activeTool.id);
   }
-
   makeActive(id: string) {
     let element = document.getElementById(id);
     if(!element) return;
@@ -215,28 +227,13 @@ export class AppComponent implements AfterViewInit {
     element.classList.remove("active")
   }
 
-  strokeWidthCallBack() {
-    let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
-    if(!stokeWidthInput || !this.svg) return;
-    stokeWidthInput.value = this.svg.style.strokeWidth;
-  }
-  strokeColorCallBack() {
-    let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
-    if(!stokeColorInput || !this.svg) return;
-    stokeColorInput.value = this.svg.style.strokeColor;
-  }
-  fillCallBack() {
-    let fillInput = document.getElementById("fill-color") as HTMLInputElement;
-    if(!fillInput || !this.svg) return;
-    fillInput.value = this.svg.style.fillColor;
-  }
   selectToolCallBack() {
     this.switchActive("select");
   }
   editToolCallBack() {
     this.switchActive("edit");
   }
-  focusChanged() {
+  focusChangedCallBack() {
     if(this.svg?.focused.canGroup)
       document.getElementById("group")?.removeAttribute("disabled");
     else
@@ -247,74 +244,39 @@ export class AppComponent implements AfterViewInit {
     else
       document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
-  blured() {
+  bluredCallBack() {
     document.getElementById("group")?.setAttribute("disabled", "true");
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
-  ngAfterViewInit(): void {
-    this.svg = new SVG("svgContainer");
-    this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
-    this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolCallBack.bind(this));
-    this.svg.addCallBack(Callback.FOCUS_CHANGED, this.focusChanged.bind(this));
-    this.svg.addCallBack(Callback.BLURED, this.blured.bind(this));
-
-    this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
-    this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));
-    this.svg.style.addCallBack(Callback.FILL_COLOR_CHANGE, this.fillCallBack.bind(this));
-
-    this.select();
-    window.addEventListener("keydown", this.keyDown.bind(this));
-    window.addEventListener("keyup", this.keyUp.bind(this));
-
-    this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
+  strokeWidthCallBack(newWidth: string) {
+    let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
+    if(!stokeWidthInput || !this.svg) return;
+    stokeWidthInput.value = newWidth;
   }
-  private keyUp(event: KeyboardEvent) {
-    if(!this.svg) return;
-    if(event.key == "Shift") {
-      this.svg.drawTool.perfect = false;
-    }
-    if(event.key == "Delete") {
-      this.svg.focused?.remove();
-    }
-    if(event.key == "Control") {
-      this.svg.singleSelect();
-    }
+  strokeColorCallBack(newColor: string) {
+    let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
+    if(!stokeColorInput || !this.svg) return;
+    stokeColorInput.value = newColor;
   }
-  gridSideChange(event: Event) {
-    let gridSide = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let side = gridSide?.value;
-    if(this.svg && side)
-      this.svg.grid.snapSide = parseInt(side);
+  fillCallBack(newColor: string) {
+    let fillInput = document.getElementById("fill-color") as HTMLInputElement;
+    if(!fillInput || !this.svg) return;
+    fillInput.value = newColor;
   }
-
-
-  transparentStroke() {
-    if(this.svg)
-      this.svg.style.strokeColor = "none";
+  fontSizeCallBack(newSize: string) {
+    let fontSizeInput = document.getElementById("font-size") as HTMLInputElement;
+    if(!fontSizeInput || !this.svg) return;
+    fontSizeInput.value = newSize;
   }
-
-  transparentFill() {
-    if(this.svg)
-      this.svg.style.fillColor = "none";
+  fontColorCallBack(newColor: string) {
+    let fontColorInput = document.getElementById("font-color") as HTMLInputElement;
+    if(!fontColorInput || !this.svg) return;
+    fontColorInput.value = newColor;
   }
-  strokeWidthChange(event: Event) {
-    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let width = picker?.value;
-    if(this.svg && width)
-      this.svg.style.strokeWidth = width;
-  }
-
-  strokeColorChange(event: Event) {
-    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let color = picker?.value;
-    if(this.svg && color)
-      this.svg.style.strokeColor = color;
-  }
-  fillColorChange(event: Event) {
-    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let color = picker?.value;
-    if(this.svg && color)
-      this.svg.style.fillColor = color;
+  fontBackgroundCallBack(newColor: string) {
+    let backgroundColorInput = document.getElementById("font-background") as HTMLInputElement;
+    if(!backgroundColorInput || !this.svg) return;
+    backgroundColorInput.value = newColor;
   }
 
   demoVideo() {
@@ -333,7 +295,6 @@ export class AppComponent implements AfterViewInit {
 
     this.svg?.add(image);
   }
-
   demoAsset() {
     if(!this.svg) return;
 
@@ -574,6 +535,57 @@ export class AppComponent implements AfterViewInit {
     this.svg.add(element);
   }
 
+  gridSideChange(event: Event) {
+    let gridSide = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let side = gridSide?.value;
+    if(this.svg && side)
+      this.svg.grid.snapSide = parseInt(side);
+  }
+  strokeWidthChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let width = picker?.value;
+    if(this.svg && width)
+      this.svg.style.strokeWidth = width;
+  }
+  transparentStroke() {
+    if(this.svg)
+      this.svg.style.strokeColor = "none";
+  }
+  strokeColorChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let color = picker?.value;
+    if(this.svg && color)
+      this.svg.style.strokeColor = color;
+  }
+  transparentFill() {
+    if(this.svg)
+      this.svg.style.fillColor = "none";
+  }
+  fillColorChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let color = picker?.value;
+    if(this.svg && color)
+      this.svg.style.fillColor = color;
+  }
+  fontSizeChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let size = picker?.value;
+    if(this.svg && size)
+      this.svg.style.fontSize = size;
+  }
+  fontColorChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let color = picker?.value;
+    if(this.svg && color)
+      this.svg.style.fontColor = color;
+  }
+  textBackgroundChange(event: Event) {
+    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let color = picker?.value;
+    if(this.svg && color)
+      this.svg.style.backgroundColor = color;
+  }
+
   copyFocused() {
     if(!this.svg) return;
     this.svg.copyFocused();
@@ -606,5 +618,26 @@ export class AppComponent implements AfterViewInit {
   recenterRefPoint() {
     if(!this.svg) return;
     this.svg.focused.recenterRefPoint();
+  }
+
+  ngAfterViewInit(): void {
+    this.svg = new SVG("svgContainer");
+    this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
+    this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolCallBack.bind(this));
+    this.svg.addCallBack(Callback.FOCUS_CHANGED, this.focusChangedCallBack.bind(this));
+    this.svg.addCallBack(Callback.BLURED, this.bluredCallBack.bind(this));
+
+    this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.FILL_COLOR_CHANGE, this.fillCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.FONT_SIZE_CHANGE, this.fontSizeCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.FONT_COLOR_CHANGE, this.fontColorCallBack.bind(this));
+    this.svg.style.addCallBack(Callback.FONT_BACKGROUND_CHANGE, this.fontBackgroundCallBack.bind(this));
+
+    this.select();
+    window.addEventListener("keydown", this.keyDown.bind(this));
+    window.addEventListener("keyup", this.keyUp.bind(this));
+
+    this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
   }
 }

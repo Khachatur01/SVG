@@ -139,9 +139,24 @@ class GlobalStyle extends Style {
     super.fontColor = style.fontColor;
     super.backgroundColor = style.backgroundColor;
 
-    this._styleCallBacks.forEach((callback) => callback.forEach((func: Function) => {
-      func();
-    }));
+    this._styleCallBacks.get(Callback.STOKE_WIDTH_CHANGE)?.forEach((callBack: Function) => {
+      callBack(style.strokeWidth);
+    });
+    this._styleCallBacks.get(Callback.STROKE_COLOR_CHANGE)?.forEach((callBack: Function) => {
+      callBack(style.strokeColor);
+    });
+    this._styleCallBacks.get(Callback.FILL_COLOR_CHANGE)?.forEach((callBack: Function) => {
+      callBack(style.fillColor);
+    });
+    this._styleCallBacks.get(Callback.FONT_SIZE_CHANGE)?.forEach((callBack: Function) => {
+      callBack(style.fontSize);
+    });
+    this._styleCallBacks.get(Callback.FONT_COLOR_CHANGE)?.forEach((callBack: Function) => {
+      callBack(style.fontColor);
+    });
+    this._styleCallBacks.get(Callback.FONT_BACKGROUND_CHANGE)?.forEach((callBack: Function) => {
+      callBack(style.backgroundColor);
+    });
   }
 }
 
