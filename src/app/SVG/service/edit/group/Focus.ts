@@ -211,7 +211,7 @@ export class Focus implements Draggable, Resizeable {
   }
 
   get center(): Point {
-    let rect = this.rotatedBoundingRect;
+    let rect = this.boundingRect;
 
     return {
       x: rect.x + rect.width / 2,
@@ -341,7 +341,7 @@ export class Focus implements Draggable, Resizeable {
       this.refPoint = center;
       this.correct(center);
     } else {
-      center = this.center;
+      center = this.rotatedCenter;
       this.refPointView = center;
       this.refPoint = center;
       this.correct(center);
