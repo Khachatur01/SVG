@@ -9,7 +9,7 @@ import {Element} from "../../../element/Element";
 
 export class HighlightTool extends Tool {
   private _timeout: number = 3000;
-  private _color: string = "#7efca055";
+  private _color: string = "#7efca0AA";
   private _width: string = "20";
   private _isOn: boolean = false;
   private path: Path | null = null;
