@@ -12,6 +12,7 @@ import {Pointed} from "./element/shape/pointed/Pointed";
 import {ElementsClipboard} from "./dataSource/ElementsClipboard";
 import {Style} from "./service/style/Style";
 import {HighlightTool} from "./service/tool/highlighter/HighlightTool";
+import {PointerTool} from "./service/tool/pointer/PointerTool";
 
 class GlobalStyle extends Style {
   private readonly default: Style;
@@ -168,9 +169,10 @@ export class SVG {
   private _callBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
 
   public elementsGroup: SVGGElement;
-  public readonly drawTool: DrawTool;
-  public readonly highlightTool: HighlightTool;
   public readonly selectTool: SelectTool;
+  public readonly highlightTool: HighlightTool;
+  public readonly pointerTool: PointerTool;
+  public readonly drawTool: DrawTool;
   public readonly editTool: EditTool;
   public perfect: boolean = false;
   public grid: Grid;
@@ -181,7 +183,7 @@ export class SVG {
 
   private _multiSelect: boolean = false;
 
-  private static idPrefix: string;
+  private static idPrefix: string = "element";
   private static id: number = 0;
 
   constructor(containerId: string, idPrefix: string = "element") {
@@ -195,6 +197,7 @@ export class SVG {
 
     this.drawTool = new DrawTool(this);
     this.highlightTool = new HighlightTool(this);
+    this.pointerTool = new PointerTool(this);
     this.selectTool = new SelectTool(this);
     this.editTool = new EditTool(this);
     this.activeTool = this.selectTool;
@@ -212,11 +215,11 @@ export class SVG {
     this.elementsGroup.id = "elements";
     this._focus.SVG.style.cursor = "move";
 
-    this.container.appendChild(this.grid.group);
-    this.container.appendChild(this.elementsGroup);
-    this.container.appendChild(this.editTool.SVG);
-    this.container.appendChild(this.highlightTool.SVG);
-    this.container.appendChild(this._focus.SVG);
+    this.container.appendChild(this.grid.group); /* grid path */
+    this.container.appendChild(this.elementsGroup); /* all elements */
+    this.container.appendChild(this.highlightTool.SVG); /* highlight path */
+    this.container.appendChild(this.editTool.SVG); /* editing nodes */
+    this.container.appendChild(this._focus.SVG); /* bounding box, grips, rotation and reference point */
   }
 
   get id(): number {
@@ -285,8 +288,8 @@ export class SVG {
         element.SVG.style.cursor = "crosshair";
       } else if(this.drawTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
-      } else if(this.highlightTool.isOn()) {
-        element.SVG.style.cursor = "crosshair";
+      } else if(this.pointerTool.isOn()) {
+        element.SVG.style.cursor = this.pointerTool.cursor;
       }
     });
   }

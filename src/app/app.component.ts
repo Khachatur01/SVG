@@ -117,6 +117,11 @@ export class AppComponent implements AfterViewInit {
     this.svg.highlightTool.on();
     this.switchActive('highlighter');
   }
+  public pointer() {
+    if(!this.svg) return;
+    this.svg.pointerTool.on();
+    this.switchActive('pointer');
+  }
   textBox() {
     if(!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.textBox;
