@@ -13,6 +13,7 @@ import {ElementsClipboard} from "./dataSource/ElementsClipboard";
 import {Style} from "./service/style/Style";
 import {HighlightTool} from "./service/tool/highlighter/HighlightTool";
 import {PointerTool} from "./service/tool/pointer/PointerTool";
+import {Point} from "./model/Point";
 
 class GlobalStyle extends Style {
   private readonly default: Style;
@@ -191,6 +192,7 @@ export class SVG {
   public activeTool: Tool;
 
   private _multiSelect: boolean = false;
+  private lastCopyPosition: Point = {x: 0, y: 0};
 
   private static idPrefix: string = "element";
   private static id: number = 0;
@@ -370,7 +372,7 @@ export class SVG {
     for (let element of this._focus.children) {
       elements.push(element.copy);
     }
-
+    this.lastCopyPosition = this._focus.position;
     ElementsClipboard.save(elements);
   }
 
@@ -392,6 +394,12 @@ export class SVG {
           child.container = this;
         });
 
+      let oldPosition = element.position;
+      element.position = {
+        x: this.lastCopyPosition.x - oldPosition.x + 10,
+        y: this.lastCopyPosition.y - oldPosition.y + 10
+      };
+      this.lastCopyPosition = element.position;
       this.add(element);
       this.focus(element);
     });
