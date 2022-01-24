@@ -18,14 +18,13 @@ export class DragTool extends Tool {
   }
 
   private onDragStart(event: MouseEvent) {
-    if(event.target == this.container.HTML) return;
+    if (event.target == this.container.HTML) return;
     this.mouseStartPos.x = event.clientX;
-
     this.mouseStartPos.y = event.clientY;
-    this.elementStartPos = this.container.focused?.position as Point;
     this.container.focused.fixPosition();
-
     this.container.focused.fixRefPoint();
+    this.elementStartPos = this.container.focused.lastRect;
+
     this.container.focused?.children.forEach((child: Element) => {
       child.fixRect();
     });
@@ -34,12 +33,14 @@ export class DragTool extends Tool {
     this.container.HTML.addEventListener("mousemove", this.drag);
     document.addEventListener("mouseup", this.dragEnd);
   }
+
   private onDrag(event: MouseEvent) {
     this.container.focused.position = {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
   }
+
   private onDragEnd() {
     this.container.HTML.removeEventListener("mousemove", this.drag);
     document.removeEventListener("mouseup", this.dragEnd);

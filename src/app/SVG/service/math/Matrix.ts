@@ -9,7 +9,7 @@ export class Matrix {
     ];
 
     let pointsArr: number [][] = [[], []];
-    for(let point of points) {
+    for (let point of points) {
       pointsArr[0].push(point.x - refPoint.x);
       pointsArr[1].push(point.y - refPoint.y);
     }
@@ -18,7 +18,7 @@ export class Matrix {
 
     let result: Point[] = [];
 
-    for(let i = 0; i < pointsArr[0].length; i++) {
+    for (let i = 0; i < pointsArr[0].length; i++) {
       result.push({
         x: rotatedPointsArr[0][i] + refPoint.x,
         y: rotatedPointsArr[1][i] + refPoint.y
@@ -27,6 +27,7 @@ export class Matrix {
 
     return result;
   }
+
   static multiply(a: number[][], b: number[][]) {
     let aNumRows = a.length, aNumCols = a[0].length,
       bNumCols = b[0].length,

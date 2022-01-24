@@ -12,16 +12,22 @@ export class NWGrip extends Grip {
 
   protected onStart(client: Point): void {
     this._lastAngle = 180 - Angle.fromPoints(
-      {x: this._container.focused.lastRect.x + this._container.focused.lastRect.width, y: this._container.focused.lastRect.y + this._container.focused.lastRect.height},
+      {
+        x: this._container.focused.lastRect.x + this._container.focused.lastRect.width,
+        y: this._container.focused.lastRect.y + this._container.focused.lastRect.height
+      },
       client,
-      {x: this._container.focused.lastRect.x + this._container.focused.lastRect.width, y: this._container.focused.lastRect.y},
+      {
+        x: this._container.focused.lastRect.x + this._container.focused.lastRect.width,
+        y: this._container.focused.lastRect.y
+      },
     );
   }
 
   protected onMove(client: Point): void {
     let elementRect = this._container.focused.lastRect;
 
-    if(this._container.perfect) {
+    if (this._container.perfect) {
       let originPoint: Point = {
         x: elementRect.x + elementRect.width,
         y: elementRect.y + elementRect.height

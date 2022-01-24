@@ -41,6 +41,7 @@ export class Ellipse extends Shape implements MoveDrawable {
 
     return ellipse;
   }
+
   get points(): Point[] {
     let position: Point = this.position;
     let size: Size = this.size;
@@ -67,6 +68,7 @@ export class Ellipse extends Shape implements MoveDrawable {
       y: centerPos.y - radius.height
     };
   }
+
   set position(delta: Point) {
     this.setAttr({
       cx: this._lastPosition.x + this._lastSize.width / 2 + delta.x,
@@ -76,7 +78,7 @@ export class Ellipse extends Shape implements MoveDrawable {
 
   override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
-    if(delta.x == 0 && delta.y == 0) return;
+    if (delta.x == 0 && delta.y == 0) return;
 
     let position = this.position;
     let size = this.size;
@@ -99,7 +101,7 @@ export class Ellipse extends Shape implements MoveDrawable {
   }
 
   setSize(rect: Rect, delta: Point | null = null): void {
-    if(delta) {
+    if (delta) {
       rect.width = this._lastSize.width * delta.x;
       rect.height = this._lastSize.height * delta.y;
     }
@@ -108,11 +110,11 @@ export class Ellipse extends Shape implements MoveDrawable {
     let ry = rect.height / 2;
 
     /* calculate positive position and size if size is negative */
-    if(rect.width < 0) {
+    if (rect.width < 0) {
       rx = -rx;
       rect.x += rect.width;
     }
-    if(rect.height < 0) {
+    if (rect.height < 0) {
       ry = -ry;
       rect.y += rect.height;
     }
@@ -132,6 +134,7 @@ export class Ellipse extends Shape implements MoveDrawable {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
+
   get rotatedBoundingRect(): Rect {
     let containerRect: Rect = this._container.HTML.getBoundingClientRect();
     let stoke = parseInt(this.style.strokeWidth);

@@ -28,9 +28,11 @@ export class HighlightTool extends Tool {
   set timeout(milliseconds: number) {
     this._timeout = milliseconds;
   }
+
   set color(color: string) {
     this._color = color;
   }
+
   set width(width: number) {
     this._width = width + "";
   }
@@ -60,6 +62,7 @@ export class HighlightTool extends Tool {
     this.container.HTML.addEventListener("mousemove", this.highlight);
     document.addEventListener("mouseup", this.end);
   }
+
   private onHighlight(event: MouseEvent): void {
     let containerRect = this.container.HTML.getBoundingClientRect();
 
@@ -70,9 +73,12 @@ export class HighlightTool extends Tool {
       })
     );
   }
+
   private onEnd(): void {
     let path = this.path;
-    setTimeout(() => {if (path) this.group.removeChild(path.SVG)}, this._timeout);
+    setTimeout(() => {
+      if (path) this.group.removeChild(path.SVG)
+    }, this._timeout);
     this.container.HTML.removeEventListener("mousemove", this.highlight);
     document.removeEventListener("mouseup", this.end);
   }

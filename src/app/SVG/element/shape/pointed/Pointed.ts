@@ -9,16 +9,23 @@ import {Shape} from "../../type/Shape";
 
 export abstract class Pointed extends Shape {
   protected _lastPoints: Point[] = [];
-  override set points(points: Point[]) {};
+
+  override set points(points: Point[]) {
+  };
+
   abstract getPoint(index: number): Point;
+
   abstract pushPoint(point: Point): void;
+
   abstract removePoint(index: number): void;
+
   abstract replacePoint(index: number, point: Point): void;
 
   override fixRect() {
     super.fixRect();
     this.fixPoints();
   }
+
   override fixPosition() {
     super.fixPosition();
     this.fixPoints();
@@ -32,7 +39,7 @@ export abstract class Pointed extends Shape {
     let points = this.points;
     let leftTop: Point = points[0];
 
-    for(let i = 1; i < points.length; i++) {
+    for (let i = 1; i < points.length; i++) {
       if (points[i].x < leftTop.x)
         leftTop.x = points[i].x;
       if (points[i].y < leftTop.y)
@@ -40,11 +47,12 @@ export abstract class Pointed extends Shape {
     }
     return leftTop;
   }
+
   set position(delta: Point) {
     let points = this.points;
 
-    for(let i = 0; i < points.length; i++) {
-      if(!this._lastPoints[i])
+    for (let i = 0; i < points.length; i++) {
+      if (!this._lastPoints[i])
         this._lastPoints[i] = {x: points[i].x, y: points[i].y};
 
       points[i].x = (delta.x + this._lastPoints[i].x);
@@ -54,13 +62,13 @@ export abstract class Pointed extends Shape {
     this.points = points;
   }
 
-  override correct(refPoint:Point, lastRefPoint:Point) {
+  override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
-    if(delta.x == 0 && delta.y == 0) return;
+    if (delta.x == 0 && delta.y == 0) return;
 
     let points = this.points;
 
-    for(let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i++) {
       this._lastPoints[i] = {x: points[i].x, y: points[i].y};
 
       points[i].x = (delta.x + this._lastPoints[i].x);
@@ -69,6 +77,7 @@ export abstract class Pointed extends Shape {
 
     this.points = points;
   }
+
   get size(): Size {
     let points = this.points
     let maxX = points[0].x;
@@ -76,27 +85,28 @@ export abstract class Pointed extends Shape {
     let minX = points[0].x;
     let minY = points[0].y;
 
-    for(let i = 1; i < points.length; i++) {
-      if(points[i].x > maxX)
+    for (let i = 1; i < points.length; i++) {
+      if (points[i].x > maxX)
         maxX = points[i].x;
-      if(points[i].y > maxY)
+      if (points[i].y > maxY)
         maxY = points[i].y;
-      if(points[i].x < minX)
+      if (points[i].x < minX)
         minX = points[i].x;
-      if(points[i].y < minY)
+      if (points[i].y < minY)
         minY = points[i].y;
     }
 
-    return  {
+    return {
       width: maxX - minX,
       height: maxY - minY
     };
   }
+
   setSize(rect: Rect, delta: Point | null = null): void {
     let dw = 1;
     let dh = 1;
 
-    if(delta) {
+    if (delta) {
       dw = delta.x;
       dh = delta.y;
     } else {
@@ -107,9 +117,9 @@ export abstract class Pointed extends Shape {
     }
 
     let points = this.points;
-    for(let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i++) {
       /* points may not be fixed, and this._lastPoints[i] may be undefined */
-      if(!this._lastPoints[i]) this._lastPoints[i] = {x: 0, y: 0};
+      if (!this._lastPoints[i]) this._lastPoints[i] = {x: 0, y: 0};
 
       points[i].x = rect.x + Math.abs(this._lastPoints[i].x - rect.x) * dw;
       points[i].y = rect.y + Math.abs(this._lastPoints[i].y - rect.y) * dh;
@@ -123,6 +133,7 @@ export abstract class Pointed extends Shape {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
+
   get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);
@@ -133,7 +144,7 @@ export abstract class Pointed extends Shape {
     let path = new PathObject();
 
     path.add(new MoveTo(rotatedPoints[0]));
-    for(let i = 1; i < rotatedPoints.length; i++)
+    for (let i = 1; i < rotatedPoints.length; i++)
       path.add(new LineTo(rotatedPoints[i]));
 
     return new Path(this._container, path);

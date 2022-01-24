@@ -10,6 +10,7 @@ export abstract class PathCommand {
   get position(): Point {
     return this._point
   }
+
   set position(position: Point) {
     this._point = {
       x: position.x,
@@ -18,5 +19,6 @@ export abstract class PathCommand {
   }
 
   abstract get command(): string;
+
   abstract get copy(): PathCommand;
 }

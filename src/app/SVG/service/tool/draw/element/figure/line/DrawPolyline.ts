@@ -5,7 +5,7 @@ import {Point} from "../../../../../../model/Point";
 
 export class DrawPolyline extends ClickDraw {
   onClick(position: Point): Pointed | null {
-    if(!this.drawableElement) {
+    if (!this.drawableElement) {
       this.drawableElement = new Polyline(this.container, [
         position, position
       ]);

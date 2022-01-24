@@ -15,22 +15,24 @@ import {Video} from "./SVG/element/foreign/media/Video";
 export class AppComponent implements AfterViewInit {
   title = 'svg-board';
 
-  private svg:SVG | null = null;
+  private svg: SVG | null = null;
   private activeTool: HTMLElement | null = null;
 
   public select() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.selectTool.on();
     this.switchActive('select');
   }
+
   public edit() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.editTool.on();
     this.switchActive('edit');
   }
+
   public grid() {
-    if(!this.svg) return;
-    if(this.svg.grid.isGrid()) {
+    if (!this.svg) return;
+    if (this.svg.grid.isGrid()) {
       this.svg.grid.gridOff();
       this.makePassive('snap');
       this.makePassive('grid');
@@ -39,9 +41,10 @@ export class AppComponent implements AfterViewInit {
       this.makeActive('grid');
     }
   }
+
   public snap() {
-    if(!this.svg) return;
-    if(this.svg.grid.isSnap()) {
+    if (!this.svg) return;
+    if (this.svg.grid.isSnap()) {
       this.svg.grid.snapOff();
       this.makePassive('snap');
     } else {
@@ -51,153 +54,169 @@ export class AppComponent implements AfterViewInit {
       this.makeActive('snap');
     }
   }
+
   group() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focused.group();
   }
+
   ungroup() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focused.ungroup();
   }
+
   public toPath() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focused.toPath();
   }
 
   public rectangle() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.rectangle;
     this.svg.drawTool.on();
     this.switchActive('rect');
   }
+
   public ellipse() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.ellipse;
     this.svg.drawTool.on();
     this.switchActive('ellipse');
   }
+
   public triangle() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.isoscelesTriangle;
     this.svg.drawTool.on();
     this.switchActive('triangle');
   }
+
   public rightTriangle() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.rightTriangle;
     this.svg.drawTool.on();
     this.switchActive('right-triangle');
   }
+
   public line() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.line;
     this.svg.drawTool.on();
     this.switchActive('line');
   }
+
   public polyline() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.polyline;
     this.svg.drawTool.on();
     this.switchActive('polyline');
   }
+
   public polygon() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.polygon;
     this.svg.drawTool.on();
     this.switchActive('polygon');
   }
+
   public free() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.free;
     this.svg.drawTool.on();
     this.switchActive('free');
   }
+
   public highlighter() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.highlightTool.on();
     this.switchActive('highlighter');
   }
+
   public pointer() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.pointerTool.on();
     this.switchActive('pointer');
   }
+
   textBox() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.textBox;
     this.svg.drawTool.on();
     this.switchActive('text-box');
   }
 
   private keyDown(event: KeyboardEvent) {
-    if(!this.svg) return;
+    if (!this.svg) return;
 
-    if(event.ctrlKey && event.key === "c") {
+    if (event.ctrlKey && event.key === "c") {
       this.copyFocused();
     }
-    if(event.ctrlKey && event.key === "x") {
+    if (event.ctrlKey && event.key === "x") {
       this.cutFocused();
     }
-    if(event.ctrlKey && event.key === "v") {
+    if (event.ctrlKey && event.key === "v") {
       this.paste();
     }
-    if(event.ctrlKey && event.key === "a") {
+    if (event.ctrlKey && event.key === "a") {
       this.selectAll();
       event.preventDefault(); /* remove browser all selection */
     }
 
-    if(event.shiftKey && event.key == "PageUp") {
+    if (event.shiftKey && event.key == "PageUp") {
       this.orderTop();
       event.preventDefault(); /* disable window scrolling */
     }
-    if(event.shiftKey && event.key == "PageDown") {
+    if (event.shiftKey && event.key == "PageDown") {
       this.orderBottom();
       event.preventDefault(); /* disable window scrolling */
     }
-    if(event.key == "ArrowLeft") {
+    if (event.key == "ArrowLeft") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: -5, y: 0};
-      if(!this.svg.editTool.isOn())
+      if (!this.svg.editTool.isOn())
         event.preventDefault(); /* disable window scrolling */
     }
-    if(event.key == "ArrowRight") {
+    if (event.key == "ArrowRight") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: +5, y: 0};
-      if(!this.svg.editTool.isOn())
+      if (!this.svg.editTool.isOn())
         event.preventDefault(); /* disable window scrolling */
     }
-    if(event.key == "ArrowDown") {
+    if (event.key == "ArrowDown") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: +5};
-      if(!this.svg.editTool.isOn())
+      if (!this.svg.editTool.isOn())
         event.preventDefault(); /* disable window scrolling */
     }
-    if(event.key == "ArrowUp") {
+    if (event.key == "ArrowUp") {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: -5};
-      if(!this.svg.editTool.isOn())
+      if (!this.svg.editTool.isOn())
         event.preventDefault(); /* disable window scrolling */
     }
 
-    if(event.key == "Shift") {
-        this.svg.perfect = true;
+    if (event.key == "Shift") {
+      this.svg.perfect = true;
     }
-    if(event.key == "Escape") {
+    if (event.key == "Escape") {
       this.svg.selectTool.on();
     }
-    if(event.key == "Control") {
+    if (event.key == "Control") {
       this.svg.multiSelect();
     }
   }
+
   private keyUp(event: KeyboardEvent) {
-    if(!this.svg) return;
-    if(event.key == "Shift") {
+    if (!this.svg) return;
+    if (event.key == "Shift") {
       this.svg.perfect = false;
     }
-    if(event.key == "Delete") {
+    if (event.key == "Delete") {
+      let active = document.activeElement;
+      if (active instanceof HTMLInputElement && (active.type == "text" || active.type == "number")) return;
       this.svg.focused?.remove();
     }
-    if(event.key == "Control") {
+    if (event.key == "Control") {
       this.svg.singleSelect();
     }
   }
@@ -207,106 +226,119 @@ export class AppComponent implements AfterViewInit {
     let label = document.getElementById(labelId);
 
     container?.addEventListener("mousemove", (event) => {
-      if(!container) return;
+      if (!container) return;
       let containerRect: Rect = container.getBoundingClientRect();
       let text = mask
-          .replace("{x}", (event.clientX - containerRect.x) + "")
-          .replace("{y}", (event.clientY - containerRect.y) + "");
+        .replace("{x}", (event.clientX - containerRect.x) + "")
+        .replace("{y}", (event.clientY - containerRect.y) + "");
 
-      if(label)
+      if (label)
         label.innerHTML = text;
     });
   }
 
   switchActive(id: string) {
-    if(this.activeTool)
+    if (this.activeTool)
       this.makePassive(this.activeTool.id);
 
     this.activeTool = document.getElementById(id);
-    if(this.activeTool)
+    if (this.activeTool)
       this.makeActive(this.activeTool.id);
   }
+
   makeActive(id: string) {
     let element = document.getElementById(id);
-    if(!element) return;
+    if (!element) return;
     element.classList.add("active")
   }
+
   makePassive(id: string) {
     let element = document.getElementById(id);
-    if(!element) return;
+    if (!element) return;
     element.classList.remove("active")
   }
 
   selectToolCallBack() {
     this.switchActive("select");
   }
+
   editToolCallBack() {
     this.switchActive("edit");
   }
+
   focusChangedCallBack() {
-    if(this.svg?.focused.canGroup)
+    if (this.svg?.focused.canGroup)
       document.getElementById("group")?.removeAttribute("disabled");
     else
       document.getElementById("group")?.setAttribute("disabled", "true");
 
-    if(this.svg?.focused.canUngroup)
+    if (this.svg?.focused.canUngroup)
       document.getElementById("ungroup")?.removeAttribute("disabled");
     else
       document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
+
   bluredCallBack() {
     document.getElementById("group")?.setAttribute("disabled", "true");
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
+
   strokeWidthCallBack(newWidth: string) {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
-    if(!stokeWidthInput || !this.svg) return;
+    if (!stokeWidthInput || !this.svg) return;
     stokeWidthInput.value = newWidth;
   }
+
   strokeColorCallBack(newColor: string) {
     let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
-    if(!stokeColorInput || !this.svg) return;
+    if (!stokeColorInput || !this.svg) return;
     stokeColorInput.value = newColor;
   }
+
   fillCallBack(newColor: string) {
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
-    if(!fillInput || !this.svg) return;
+    if (!fillInput || !this.svg) return;
     fillInput.value = newColor;
   }
+
   fontSizeCallBack(newSize: string) {
     let fontSizeInput = document.getElementById("font-size") as HTMLInputElement;
-    if(!fontSizeInput || !this.svg) return;
+    if (!fontSizeInput || !this.svg) return;
     fontSizeInput.value = newSize;
   }
+
   fontColorCallBack(newColor: string) {
     let fontColorInput = document.getElementById("font-color") as HTMLInputElement;
-    if(!fontColorInput || !this.svg) return;
+    if (!fontColorInput || !this.svg) return;
     fontColorInput.value = newColor;
   }
+
   fontBackgroundCallBack(newColor: string) {
     let backgroundColorInput = document.getElementById("font-background") as HTMLInputElement;
-    if(!backgroundColorInput || !this.svg) return;
+    if (!backgroundColorInput || !this.svg) return;
     backgroundColorInput.value = newColor;
   }
 
   demoVideo() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     let video = new Video(this.svg, 0, 0, 340, 200);
     video.refPoint = {x: 170, y: 100};
     video.src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
     this.svg?.add(video);
   }
+
   demoImage() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     let image = new Image(this.svg, 0, 0, 340, 200);
     image.refPoint = {x: 170, y: 100};
     image.src = "/assets/test/img1.png";
 
     this.svg?.add(image);
   }
+
   demoAsset() {
-    if(!this.svg) return;
+    if (!this.svg) return;
 
     let htmlDiv = document.createElement("div");
     htmlDiv.innerHTML = "<div>For the given picture</div>\n" +
@@ -548,84 +580,99 @@ export class AppComponent implements AfterViewInit {
   gridSideChange(event: Event) {
     let gridSide = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let side = gridSide?.value;
-    if(this.svg && side)
+    if (this.svg && side)
       this.svg.grid.snapSide = parseInt(side);
   }
+
   strokeWidthChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let width = picker?.value;
-    if(this.svg && width)
+    if (this.svg && width)
       this.svg.style.strokeWidth = width;
   }
+
   transparentStroke() {
-    if(this.svg)
+    if (this.svg)
       this.svg.style.strokeColor = "none";
   }
+
   strokeColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
-    if(this.svg && color)
+    if (this.svg && color)
       this.svg.style.strokeColor = color;
   }
+
   transparentFill() {
-    if(this.svg)
+    if (this.svg)
       this.svg.style.fillColor = "none";
   }
+
   fillColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
-    if(this.svg && color)
+    if (this.svg && color)
       this.svg.style.fillColor = color;
   }
+
   fontSizeChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let size = picker?.value;
-    if(this.svg && size)
+    if (this.svg && size)
       this.svg.style.fontSize = size;
   }
+
   fontColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
-    if(this.svg && color)
+    if (this.svg && color)
       this.svg.style.fontColor = color;
   }
+
   textBackgroundChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
-    if(this.svg && color)
+    if (this.svg && color)
       this.svg.style.backgroundColor = color;
   }
 
   copyFocused() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.copyFocused();
   }
+
   cutFocused() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.cutFocused();
   }
+
   paste() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.paste();
   }
+
   selectAll() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focusAll();
   }
+
   delete() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focused.remove();
   }
+
   orderTop() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focused.orderTop();
   }
+
   orderBottom() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focused.orderBottom();
   }
+
   recenterRefPoint() {
-    if(!this.svg) return;
+    if (!this.svg) return;
     this.svg.focused.recenterRefPoint();
   }
 

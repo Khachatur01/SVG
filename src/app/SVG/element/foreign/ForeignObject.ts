@@ -1,4 +1,4 @@
-import {Element, ElementStyle} from "../Element";
+import {Element} from "../Element";
 import {SVG} from "../../SVG";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
@@ -30,20 +30,20 @@ export class ForeignObject extends Foreign {
     });
 
     this._container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
-      if(this._content) {
+      if (this._content) {
         this._content.style.userSelect = "none";
       }
     });
 
     this._container.addCallBack(Callback.EDIT_TOOl_ON, () => {
-      if(this._content) {
+      if (this._content) {
         this._content.style.userSelect = "unset";
       }
     });
   }
 
   override get HTML(): SVGElement | HTMLElement {
-    if(this._content)
+    if (this._content)
       return this._content;
 
     return this.svgElement
@@ -54,7 +54,7 @@ export class ForeignObject extends Foreign {
     let size = this.size;
 
     let foreignObject: ForeignObject = new ForeignObject(this._container);
-    if(this._content)
+    if (this._content)
       foreignObject.setContent(this._content.cloneNode(true) as HTMLElement);
 
     foreignObject.position = position;
@@ -106,7 +106,7 @@ export class ForeignObject extends Foreign {
 
   override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
-    if(delta.x == 0 && delta.y == 0) return;
+    if (delta.x == 0 && delta.y == 0) return;
     let position = this.position;
 
     this.setAttr({
@@ -123,11 +123,11 @@ export class ForeignObject extends Foreign {
   }
 
   setSize(rect: Rect): void {
-    if(rect.width < 0) {
+    if (rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;
     }
-    if(rect.height < 0) {
+    if (rect.height < 0) {
       rect.height = -rect.height;
       rect.y -= rect.height;
     }
@@ -143,13 +143,14 @@ export class ForeignObject extends Foreign {
   get content(): HTMLElement | null {
     return this._content;
   }
+
   setContent(div: HTMLElement, setListeners: boolean = true): void {
     this._content = div;
     div.style.userSelect = "none";
     div.contentEditable = "true";
     this.svgElement.appendChild(div);
 
-    if(setListeners) {
+    if (setListeners) {
       div.addEventListener("focus", () => {
         if (this._container.editTool.isOn()) {
           div.focus();
@@ -168,6 +169,7 @@ export class ForeignObject extends Foreign {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
+
   get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);

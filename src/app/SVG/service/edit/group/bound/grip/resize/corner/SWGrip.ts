@@ -12,7 +12,10 @@ export class SWGrip extends Grip {
 
   protected onStart(client: Point): void {
     this._lastAngle = Angle.fromPoints(
-      {x: this._container.focused.lastRect.x + this._container.focused.lastRect.width, y: this._container.focused.lastRect.y},
+      {
+        x: this._container.focused.lastRect.x + this._container.focused.lastRect.width,
+        y: this._container.focused.lastRect.y
+      },
       client,
       {x: 0, y: this._container.focused.lastRect.y + this._container.focused.lastRect.height}
     );
@@ -21,7 +24,7 @@ export class SWGrip extends Grip {
   protected onMove(client: Point): void {
     let elementRect = this._container.focused.lastRect;
 
-    if(this._container.perfect) {
+    if (this._container.perfect) {
       let originPoint: Point = {
         x: elementRect.x + elementRect.width,
         y: elementRect.y

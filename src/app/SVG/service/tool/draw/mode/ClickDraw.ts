@@ -15,7 +15,7 @@ export abstract class ClickDraw implements Drawable {
   }
 
   _click(event: MouseEvent) {
-    if(!this.container) return;
+    if (!this.container) return;
 
     this.container.drawTool.drawing();
 
@@ -29,30 +29,32 @@ export abstract class ClickDraw implements Drawable {
     snapPoint = this.container.grid.getSnapPoint(snapPoint);
 
     let element = this.onClick(snapPoint);
-    if(element) {
+    if (element) {
       this.drawableElement = element;
       this.container?.add(this.drawableElement);
     }
   }
+
   _move(event: MouseEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
-    if(!containerRect) return;
+    if (!containerRect) return;
 
     this.onMove(containerRect, event, this.container.perfect);
   }
 
   abstract onClick(position: Point): Pointed | null;
+
   onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
-    if(!this.drawableElement) return;
+    if (!this.drawableElement) return;
 
     let snapPoint = {
       x: event.clientX - containerRect.left,
       y: event.clientY - containerRect.top
     };
 
-    if(this.container.grid.isSnap())
+    if (this.container.grid.isSnap())
       snapPoint = this.container.grid.getSnapPoint(snapPoint);
-    else if(perfectMode) {
+    else if (perfectMode) {
       let lastPoint: Point = this.drawableElement.getPoint(-2);
       snapPoint = Angle.snapLineEnd(lastPoint.x, snapPoint.x, lastPoint.y, snapPoint.y) as Point;
     }
@@ -69,7 +71,7 @@ export abstract class ClickDraw implements Drawable {
   stop(): void {
     this.container?.HTML.removeEventListener('mousedown', this.click);
     document.removeEventListener('mousemove', this.move);
-    if(!this.drawableElement || !this.container) return;
+    if (!this.drawableElement || !this.container) return;
 
     if (this.drawableElement.isComplete()) {
       this.drawableElement.removePoint(-1);

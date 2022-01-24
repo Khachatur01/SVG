@@ -12,7 +12,10 @@ export class NEGrip extends Grip {
 
   protected onStart(client: Point): void {
     this._lastAngle = Angle.fromPoints(
-      {x: this._container.focused.lastRect.x, y: this._container.focused.lastRect.y + this._container.focused.lastRect.height},
+      {
+        x: this._container.focused.lastRect.x,
+        y: this._container.focused.lastRect.y + this._container.focused.lastRect.height
+      },
       client,
       {x: 0, y: this._container.focused.lastRect.y}
     );
@@ -21,7 +24,7 @@ export class NEGrip extends Grip {
   protected onMove(client: Point): void {
     let elementRect = this._container.focused.lastRect;
 
-    if(this._container.perfect) {
+    if (this._container.perfect) {
       let originPoint: Point = {
         x: elementRect.x,
         y: elementRect.y + elementRect.height

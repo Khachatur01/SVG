@@ -33,7 +33,7 @@ export class Polygon extends Pointed {
   override get points(): Point[] {
     let points: string[] = this.getAttr("points").split(" ");
     let pointsArray: Point[] = [];
-    for(let point of points) {
+    for (let point of points) {
       let pointSplit = point.split(",");
       pointsArray.push({
         x: parseInt(pointSplit[0]),
@@ -42,28 +42,32 @@ export class Polygon extends Pointed {
     }
     return pointsArray;
   }
+
   override getPoint(index: number): Point {
     let points = this.points;
-    if(index < 0)
+    if (index < 0)
       index = points.length + index;
     return points[index];
   }
+
   override set points(points: Point[]) {
     let pointsString = "";
-    for(let point of points) {
+    for (let point of points) {
       pointsString += point.x + "," + point.y + " "
     }
     pointsString = pointsString.trimEnd();
     this.setAttr({points: pointsString})
   }
+
   override pushPoint(point: Point) {
     this.setAttr({
-        "points": this.getAttr("points") + " " + point.x + "," + point.y
+      "points": this.getAttr("points") + " " + point.x + "," + point.y
     });
   }
+
   override removePoint(index: number): void {
     let pointsArr = this.getAttr("points").split(" ");
-    if(index < 0)
+    if (index < 0)
       index = pointsArr.length + index;
     pointsArr.splice(index, 1)
 
@@ -71,14 +75,16 @@ export class Polygon extends Pointed {
       "points": pointsArr.join(" ")
     });
   }
+
   override replacePoint(index: number, point: Point) {
     let points = this.points;
-    if(index < 0)
+    if (index < 0)
       index = points.length + index;
     points[index] = point;
 
     this.points = points;
   }
+
   override isComplete(): boolean {
     let pointsArr = this.getAttr("points").split(" ", 3);
     return pointsArr.length >= 3;

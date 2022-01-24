@@ -19,7 +19,7 @@ export class DrawFree implements Drawable {
 
   onStart(event: MouseEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
-    if(!containerRect) return;
+    if (!containerRect) return;
 
     let snapPoint = {
       x: event.clientX - containerRect.left,
@@ -39,19 +39,19 @@ export class DrawFree implements Drawable {
 
   onDraw(event: MouseEvent): void {
     let containerRect = this.container?.HTML.getBoundingClientRect();
-    if(!containerRect) return;
+    if (!containerRect) return;
 
-    if(!this.drawableElement) return;
+    if (!this.drawableElement) return;
 
     let snapPoint = {
       x: event.clientX - containerRect.left,
       y: event.clientY - containerRect.top
     };
 
-    if(this.container.grid.isSnap()) {
+    if (this.container.grid.isSnap()) {
       snapPoint = this.container.grid.getSnapPoint(snapPoint);
       this.drawableElement.pushPoint(snapPoint);
-    } else if(this.container.perfect) {
+    } else if (this.container.perfect) {
       try {
         let lastPoint: Point = this.drawableElement.getPoint(-2);
         snapPoint = Angle.snapLineEnd(lastPoint.x, snapPoint.x, lastPoint.y, snapPoint.y) as Point;

@@ -4,6 +4,7 @@ import {ForeignObject} from "../ForeignObject";
 export class Video extends ForeignObject {
   private readonly source: HTMLSourceElement;
   private readonly _video: HTMLVideoElement;
+
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container, x, y, width, height);
     this._video = document.createElement("video");
@@ -24,8 +25,9 @@ export class Video extends ForeignObject {
   }
 
   set src(URI: string | null) {
-    this.source.setAttribute("src", !URI ? "": URI);
+    this.source.setAttribute("src", !URI ? "" : URI);
   }
+
   get src(): string | null {
     return this.source.getAttribute("src");
   }

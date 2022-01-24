@@ -59,7 +59,7 @@ export class BoundingBox extends Box {
     this._boundingBoxGroup.id = "bounding-box";
     this._boundingBoxGroup.appendChild(this.svgElement);
     this._boundingBoxGroup.appendChild(this.xRotatePoint.SVG);
-    for(let grip of this._grips) {
+    for (let grip of this._grips) {
       this._boundingBoxGroup.appendChild(grip.SVG);
     }
 
@@ -83,6 +83,7 @@ export class BoundingBox extends Box {
   set lastRefPoint(refPoint: Point) {
     this.xRefPoint.lastRefPoint = refPoint;
   }
+
   get lastRefPoint(): Point {
     return this.xRefPoint.lastRefPoint;
   }
@@ -105,7 +106,7 @@ export class BoundingBox extends Box {
     // for(let i = 1; i < this._grips.length; i += 2) {
     //   this._grips[i].hide();
     // }
-    for(let grip of this._grips)
+    for (let grip of this._grips)
       grip.hide();
 
     this.xRefPoint.show();
@@ -148,8 +149,8 @@ export class BoundingBox extends Box {
     points[3].x = rect.x;
     points[3].y = rect.y + rect.height;
 
-    if(!points || !this._grips) return
-    for(let grip of this._grips)
+    if (!points || !this._grips) return
+    for (let grip of this._grips)
       grip.setPosition(points);
 
     this.xRotatePoint.position = {
@@ -159,7 +160,7 @@ export class BoundingBox extends Box {
   }
 
   correctByDelta(delta: Point) {
-    if(delta.x == 0 && delta.y == 0) return;
+    if (delta.x == 0 && delta.y == 0) return;
 
     this.position = delta;
     let position = this.position;

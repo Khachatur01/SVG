@@ -20,6 +20,7 @@ export class EditTool extends Tool {
   set refPoint(refPoint: Point) {
     this.nodesGroup.style.transformOrigin = refPoint.x + "px " + refPoint.y + "px";
   }
+
   rotate(angle: number) {
     this.nodesGroup.style.transform = "rotate(" + angle + "deg)";
   }
@@ -27,6 +28,7 @@ export class EditTool extends Tool {
   getContainer() {
     return this.container;
   }
+
   get SVG(): SVGGElement {
     return this.nodesGroup;
   }
@@ -34,17 +36,19 @@ export class EditTool extends Tool {
   get editableElement(): Pointed | null {
     return this._editableElement;
   }
+
   set editableElement(editableElement: Pointed | null) {
     this._editableElement = editableElement;
-    if(!editableElement) return;
+    if (!editableElement) return;
     let order = 0;
-    for(let point of editableElement.points) {
+    for (let point of editableElement.points) {
       let node: Node = new Node(this.container, this, point, order++);
       this.nodesGroup.appendChild(node.SVG);
     }
     this.refPoint = editableElement.refPoint;
     this.rotate(editableElement.angle);
   }
+
   removeEditableElement() {
     this._editableElement = null;
     this.nodesGroup.innerHTML = "";
@@ -52,14 +56,14 @@ export class EditTool extends Tool {
 
   _on(): void {
     this._isOn = true;
-    for(let child of this.container.focused.children) {
-      if(child instanceof Pointed) {
+    for (let child of this.container.focused.children) {
+      if (child instanceof Pointed) {
         this.editableElement = child;
         break;
       }
     }
     this.container.blur();
-
+    this.container.HTML.style.cursor = "default";
     this.container.call(Callback.EDIT_TOOl_ON);
   }
 

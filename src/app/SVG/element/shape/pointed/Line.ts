@@ -30,12 +30,14 @@ export class Line extends Pointed {
 
     return line;
   }
+
   override get points(): Point[] {
     return [
       {x: parseFloat(this.getAttr("x1")), y: parseFloat(this.getAttr("y1"))},
       {x: parseFloat(this.getAttr("x2")), y: parseFloat(this.getAttr("y2"))}
     ];
   }
+
   override set points(points: Point[]) {
     this.setAttr({
       x1: points[0].x,
@@ -59,11 +61,11 @@ export class Line extends Pointed {
   }
 
   override replacePoint(index: number, point: Point) {
-    if(index == 0) {
+    if (index == 0) {
       this.setAttr({x1: point.x});
       this.setAttr({y1: point.y});
     }
-    if(index == 1) {
+    if (index == 1) {
       this.setAttr({x2: point.x});
       this.setAttr({y2: point.y});
     }

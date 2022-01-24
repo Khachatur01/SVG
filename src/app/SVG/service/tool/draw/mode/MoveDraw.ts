@@ -19,7 +19,7 @@ export abstract class MoveDraw implements Drawable {
   }
 
   private _onStart(event: MouseEvent) {
-    if(!this.container) return;
+    if (!this.container) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
     this.startPos.x = event.clientX - containerRect.left; //x position within the element.
@@ -33,14 +33,16 @@ export abstract class MoveDraw implements Drawable {
     document.addEventListener('mouseup', this.drawEnd);
     this.container.drawTool.drawing();
   }
+
   private _onDraw(event: MouseEvent) {
-    if(!this.container || !this.drawableElement) return;
+    if (!this.container || !this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
     this.onDraw(containerRect, event, this.drawableElement, this.container.perfect);
   }
+
   private _onEnd() {
-    if(!this.container || !this.drawableElement) return;
+    if (!this.container || !this.drawableElement) return;
 
     this.container.HTML.removeEventListener('mousemove', this.draw);
     document.removeEventListener('mouseup', this.drawEnd);
@@ -70,19 +72,19 @@ export abstract class MoveDraw implements Drawable {
     let width = event.clientX - containerRect.left - this.startPos.x;
     let height = event.clientY - containerRect.top - this.startPos.y;
 
-    if(perfectMode) {
+    if (perfectMode) {
       let averageSize = (Math.abs(width) + Math.abs(height)) / 2
-      if(width < 0)
+      if (width < 0)
         width = -averageSize;
       else
         width = averageSize;
-      if(height < 0)
+      if (height < 0)
         height = -averageSize;
       else
         height = averageSize;
     }
 
-    if(this.container.grid.isSnap()) {
+    if (this.container.grid.isSnap()) {
       let snapPoint = this.container.grid.getSnapPoint({
         x: this.startPos.x + width,
         y: this.startPos.y + height
@@ -99,11 +101,14 @@ export abstract class MoveDraw implements Drawable {
       height: height
     });
   };
+
   onIsNotComplete() {
-    if(this.drawableElement)
+    if (this.drawableElement)
       this.container.remove(this.drawableElement);
   }
-  onEnd() {}
+
+  onEnd() {
+  }
 
   start(container: SVG): void {
     this.container = container;

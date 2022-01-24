@@ -9,7 +9,7 @@ export class DrawTextBox extends MoveDraw {
   }
 
   override onIsNotComplete() {
-    if(!this.drawableElement) return;
+    if (!this.drawableElement) return;
     this.drawableElement.setSize({
       x: this.startPos.x,
       y: this.startPos.y,

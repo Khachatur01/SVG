@@ -40,6 +40,7 @@ export class Box extends Shape {
 
     return box;
   }
+
   override isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;
@@ -63,6 +64,7 @@ export class Box extends Shape {
       y: parseInt(this.getAttr("y"))
     };
   }
+
   set position(delta: Point) {
     this.setAttr({
       x: this._lastPosition.x + delta.x,
@@ -71,11 +73,11 @@ export class Box extends Shape {
   }
 
   setSize(rect: Rect): void {
-    if(rect.width < 0) {
+    if (rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;
     }
-    if(rect.height < 0) {
+    if (rect.height < 0) {
       rect.height = -rect.height;
       rect.y -= rect.height;
     }
@@ -87,10 +89,12 @@ export class Box extends Shape {
       height: rect.height + ""
     });
   }
+
   get boundingRect(): Rect {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
+
   get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);

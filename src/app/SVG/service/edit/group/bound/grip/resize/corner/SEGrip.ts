@@ -21,7 +21,7 @@ export class SEGrip extends Grip {
   protected onMove(client: Point): void {
     let position = this._container.focused.lastRect;
 
-    if(this._container.perfect) {
+    if (this._container.perfect) {
       let angle = this._lastAngle;
       if (client.x < position.x && client.y < position.y) /* II */
         angle = 180 - (360 - angle);

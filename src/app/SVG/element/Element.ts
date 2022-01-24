@@ -20,6 +20,7 @@ export class ElementStyle extends Style {
   override get strokeWidth(): string {
     return super.strokeWidth;
   }
+
   override set strokeWidth(width: string) {
     super.strokeWidth = width;
     this.element.setAttr({"stroke-width": width});
@@ -28,6 +29,7 @@ export class ElementStyle extends Style {
   override get strokeColor(): string {
     return super.strokeColor;
   }
+
   override set strokeColor(color: string) {
     super.strokeColor = color;
     this.element.setAttr({"stroke": color});
@@ -36,6 +38,7 @@ export class ElementStyle extends Style {
   override get strokeDashArray(): string {
     return super.strokeDashArray;
   }
+
   override set strokeDashArray(array: string) {
     super.strokeDashArray = array;
     this.element.setAttr({"stroke-dasharray": array});
@@ -44,6 +47,7 @@ export class ElementStyle extends Style {
   override get fillColor(): string {
     return super.fillColor;
   }
+
   override set fillColor(color: string) {
     super.fillColor = color;
     this.element.setAttr({"fill": color});
@@ -52,6 +56,7 @@ export class ElementStyle extends Style {
   override get fontSize(): string {
     return super.fontSize;
   }
+
   override set fontSize(size: string) {
     super.fontSize = size;
     this.element.HTML.style.fontSize = size + "px";
@@ -60,6 +65,7 @@ export class ElementStyle extends Style {
   override get fontColor(): string {
     return super.fontColor;
   }
+
   override set fontColor(color: string) {
     super.fontColor = color;
     this.element.HTML.style.color = color;
@@ -68,6 +74,7 @@ export class ElementStyle extends Style {
   override get backgroundColor(): string {
     return super.backgroundColor;
   }
+
   override set backgroundColor(color: string) {
     super.backgroundColor = color;
     this.element.HTML.style.backgroundColor = color;
@@ -113,23 +120,34 @@ export abstract class Element implements Resizeable, Draggable {
   }
 
   abstract get size(): Size;
+
   abstract setSize(rect: Rect, delta: Point | null): void;
+
   abstract isComplete(): boolean;
+
   abstract get position(): Point;
   abstract set position(delta: Point);
+
   abstract get points(): Point[];
+
   abstract get boundingRect(): Rect;
+
   abstract get rotatedBoundingRect(): Rect;
+
   abstract toPath(): Path;
+
   abstract get copy(): Element;
 
   get container(): SVG {
     return this._container;
   }
+
   set container(container: SVG) {
     this._container = container;
   }
-  correct(refPoint: Point, lastRefPoint: Point): void {};
+
+  correct(refPoint: Point, lastRefPoint: Point): void {
+  };
 
   getCorrectionDelta(refPoint: Point, lastRefPoint: Point) {
     /* calculate delta */
@@ -167,15 +185,15 @@ export abstract class Element implements Resizeable, Draggable {
     let maxX = points[0].x;
     let maxY = points[0].y;
 
-    for(let i = 1; i < points.length; i++) {
-      if(points[i].x < minX)
+    for (let i = 1; i < points.length; i++) {
+      if (points[i].x < minX)
         minX = points[i].x;
       if (points[i].y < minY)
         minY = points[i].y;
 
-      if(points[i].x > maxX)
+      if (points[i].x > maxX)
         maxX = points[i].x;
-      if(points[i].y > maxY)
+      if (points[i].y > maxY)
         maxY = points[i].y;
     }
 
@@ -194,6 +212,7 @@ export abstract class Element implements Resizeable, Draggable {
       -this._angle
     )[0];
   }
+
   get center(): Point {
     let rect = this.boundingRect;
 
@@ -206,6 +225,7 @@ export abstract class Element implements Resizeable, Draggable {
   get refPoint(): Point {
     return this._refPoint;
   }
+
   set refPoint(refPoint: Point) {
     this.svgElement.style.transformOrigin = refPoint.x + "px " + refPoint.y + "px";
     this._refPoint = refPoint;
@@ -214,6 +234,7 @@ export abstract class Element implements Resizeable, Draggable {
   get angle(): number {
     return this._angle;
   }
+
   rotate(angle: number): void {
     this.svgElement.style.transform = "rotate(" + angle + "deg)";
     this._angle = angle;
@@ -222,15 +243,18 @@ export abstract class Element implements Resizeable, Draggable {
   get SVG(): SVGElement {
     return this.svgElement;
   }
+
   get HTML(): SVGElement | HTMLElement {
     return this.svgElement;
   }
+
   getAttr(attribute: string): string {
     let value = this.SVG.getAttribute(attribute);
     if (!value)
       return "0";
     return value;
   }
+
   setAttr(attributes: object): void {
     for (const [key, value] of Object.entries(attributes))
       if (key && value)
@@ -241,6 +265,7 @@ export abstract class Element implements Resizeable, Draggable {
     this.svgElement.addEventListener("mouseover", this._highlight);
     this.svgElement.addEventListener("mouseout", this._lowlight);
   }
+
   removeOverEvent(): void {
     this.svgElement.removeEventListener("mouseover", this._highlight);
     this.svgElement.removeEventListener("mouseout", this._lowlight);
@@ -251,7 +276,7 @@ export abstract class Element implements Resizeable, Draggable {
   }
 
   highlight(): void {
-    if(this._container.selectTool.isOn())
+    if (this._container.selectTool.isOn())
       this.svgElement.style.filter = "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.7))";
   }
 
@@ -263,15 +288,19 @@ export abstract class Element implements Resizeable, Draggable {
     this._lastPosition = this.position;
     this._lastSize = this.size;
   }
+
   fixPosition(): void {
     this._lastPosition = this.position;
   }
+
   fixSize(): void {
     this._lastSize = this.size;
   }
+
   fixAngle(): void {
     this._lastAngle = this._angle;
   }
+
   get lastRect(): Rect {
     return {
       x: this._lastPosition.x,
@@ -280,6 +309,7 @@ export abstract class Element implements Resizeable, Draggable {
       height: this._lastSize.height
     }
   }
+
   get lastAngle(): number {
     return this._lastAngle;
   }

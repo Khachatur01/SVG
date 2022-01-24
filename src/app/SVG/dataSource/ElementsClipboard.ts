@@ -6,9 +6,11 @@ export class ElementsClipboard {
   static save(xElements: Element[]): void {
     ElementsClipboard.xElements = xElements;
   }
+
   static get(): Element[] {
     return ElementsClipboard.xElements;
   }
+
   static clear(): void {
     ElementsClipboard.xElements = [];
   }

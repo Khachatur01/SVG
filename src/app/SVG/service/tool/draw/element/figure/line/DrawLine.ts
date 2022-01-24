@@ -16,14 +16,14 @@ export class DrawLine extends MoveDraw {
     let x2 = event.clientX - containerRect.left;
     let y2 = event.clientY - containerRect.top;
 
-    if(this.container.grid.isSnap()) {
+    if (this.container.grid.isSnap()) {
       let snapPoint = this.container.grid.getSnapPoint({
         x: x2,
         y: y2
       });
       x2 = snapPoint.x;
       y2 = snapPoint.y;
-    } else if(perfectMode) {
+    } else if (perfectMode) {
       let position: Point = Angle.snapLineEnd(this.startPos.x, x2, this.startPos.y, y2) as Point;
       x2 = position.x;
       y2 = position.y;

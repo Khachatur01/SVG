@@ -31,8 +31,9 @@ export class Node extends Ellipse {
     this.editTool.getContainer().HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
   };
+
   protected onMove(event: MouseEvent): void {
-    if(!this.editTool.editableElement) return;
+    if (!this.editTool.editableElement) return;
 
     let containerRect: Rect = this.editTool.getContainer().HTML.getBoundingClientRect();
 
@@ -50,6 +51,7 @@ export class Node extends Ellipse {
     this.editTool.editableElement.replacePoint(this.order, position);
     this.position = position;
   };
+
   protected onEnd(): void {
     this.editTool.getContainer().HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);

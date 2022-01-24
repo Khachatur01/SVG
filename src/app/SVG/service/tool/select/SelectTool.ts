@@ -29,7 +29,7 @@ export class SelectTool extends Tool {
   }
 
   private onStart(event: MouseEvent): void {
-    if(event.target != this.container.HTML) return;
+    if (event.target != this.container.HTML) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
     this.position.x = event.clientX - containerRect.left; // x position within the element.
@@ -45,6 +45,7 @@ export class SelectTool extends Tool {
     this.container.HTML.addEventListener("mousemove", this.select);
     document.addEventListener("mouseup", this.end);
   }
+
   private onSelect(event: MouseEvent): void {
     let containerRect = this.container.HTML.getBoundingClientRect();
     let width = event.clientX - containerRect.left - this.position.x;
@@ -57,6 +58,7 @@ export class SelectTool extends Tool {
       height: height
     });
   }
+
   private onEnd(event: MouseEvent): void {
     let containerRect = this.container.HTML.getBoundingClientRect();
     let width = event.clientX - containerRect.left - this.position.x;
@@ -75,29 +77,29 @@ export class SelectTool extends Tool {
     this.container.multiSelect();
 
     elementsLoop:
-    for(let element of this.container.elements) {
-      let elementPoints = element.rotatedPoints;
+      for (let element of this.container.elements) {
+        let elementPoints = element.rotatedPoints;
 
-      if(width > 0) {/* if select box drawn from right to left */
-        for(let point of elementPoints)
-          if(/* full match */
-            point.x < boxPoints.topLeft.x || point.x > boxPoints.bottomRight.x ||
-            point.y < boxPoints.topLeft.y || point.y > boxPoints.bottomRight.y
-          )
-            continue elementsLoop;
+        if (width > 0) {/* if select box drawn from right to left */
+          for (let point of elementPoints)
+            if (/* full match */
+              point.x < boxPoints.topLeft.x || point.x > boxPoints.bottomRight.x ||
+              point.y < boxPoints.topLeft.y || point.y > boxPoints.bottomRight.y
+            )
+              continue elementsLoop;
 
-        this.container.focus(element);
-      } else {/* if select box drawn from left to right */
-        for(let point of elementPoints)
-          if(/* one point match */
-            point.x > boxPoints.topLeft.x && point.x < boxPoints.bottomRight.x &&
-            point.y > boxPoints.topLeft.y && point.y < boxPoints.bottomRight.y
-          ) {
-            this.container.focus(element);
-            break;
-          }
+          this.container.focus(element);
+        } else {/* if select box drawn from left to right */
+          for (let point of elementPoints)
+            if (/* one point match */
+              point.x > boxPoints.topLeft.x && point.x < boxPoints.bottomRight.x &&
+              point.y > boxPoints.topLeft.y && point.y < boxPoints.bottomRight.y
+            ) {
+              this.container.focus(element);
+              break;
+            }
+        }
       }
-    }
     this.container.singleSelect();
     this.container.HTML.removeEventListener("mousemove", this.select);
     document.removeEventListener("mouseup", this.end);

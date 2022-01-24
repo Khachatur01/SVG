@@ -15,8 +15,8 @@ export class Rectangle extends Polygon implements MoveDrawable {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container, [
       /* 0 */                                             /* 1 */
-      {x: x, y: y},                          {x: width + x, y: y},
-      {x: width + x, y: height + y},        {x: x, y: height + y}
+      {x: x, y: y}, {x: width + x, y: y},
+      {x: width + x, y: height + y}, {x: x, y: height + y}
       /* 2 */                                             /* 3 */
 
     ]);
@@ -24,6 +24,7 @@ export class Rectangle extends Polygon implements MoveDrawable {
     this.setOverEvent();
     this.style.setDefaultStyle();
   }
+
   override get copy(): Rectangle {
     return super.copy as Rectangle;
   }

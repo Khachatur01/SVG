@@ -5,7 +5,7 @@ import {Point} from "../../../../../../model/Point";
 
 export class DrawPolygon extends ClickDraw {
   onClick(position: Point): Pointed | null {
-    if(!this.drawableElement) {
+    if (!this.drawableElement) {
       this.drawableElement = new Polygon(this.container, [
         position, position
       ]);

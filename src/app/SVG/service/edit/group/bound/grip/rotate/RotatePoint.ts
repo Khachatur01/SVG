@@ -65,6 +65,7 @@ export class RotatePoint extends Path {
   show() {
     this.svgElement.style.display = "block";
   }
+
   hide() {
     this.svgElement.style.display = "none";
   }
@@ -81,7 +82,7 @@ export class RotatePoint extends Path {
 
     angle -= this.dAngle;
 
-    if(angle < 0)
+    if (angle < 0)
       angle += 360;
 
     return angle;
@@ -107,14 +108,16 @@ export class RotatePoint extends Path {
     });
     this._container.focused.lastAngle = this.getAngle(containerRect, event);
   }
+
   private move(event: MouseEvent) {
     let angle = this.getAngle(this._container.HTML.getBoundingClientRect(), event);
 
-    if(this._container.grid.isSnap())
+    if (this._container.grid.isSnap())
       angle = Math.round(angle / 15) * 15;
 
     this._container.focused.rotate(angle);
   }
+
   private end() {
     this._container.selectTool.on();
     this._container.HTML.removeEventListener("mousemove", this._move);
@@ -124,6 +127,7 @@ export class RotatePoint extends Path {
   on() {
     this.svgElement.addEventListener("mousedown", this._start);
   }
+
   off() {
     this.svgElement.removeEventListener("mousedown", this._start);
   }

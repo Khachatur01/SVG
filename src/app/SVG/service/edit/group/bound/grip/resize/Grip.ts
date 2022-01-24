@@ -3,7 +3,6 @@ import {SVG} from "../../../../../../SVG";
 import {Rect} from "../../../../../../model/Rect";
 import {Box} from "../../../../../../element/shape/Box";
 import {Matrix} from "../../../../../math/Matrix";
-import {Angle} from "../../../../../math/Angle";
 
 export abstract class Grip extends Box {
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};
@@ -32,6 +31,7 @@ export abstract class Grip extends Box {
       stroke: "#00ff00"
     });
   }
+
   override lowlight() {
     this.setAttr({
       stroke: "#002fff"
@@ -41,6 +41,7 @@ export abstract class Grip extends Box {
   show() {
     this.svgElement.style.display = "block";
   }
+
   hide() {
     this.svgElement.style.display = "none";
   }
@@ -48,7 +49,9 @@ export abstract class Grip extends Box {
   abstract setPosition(points: Point[]): void;
 
   protected abstract onStart(client: Point): void;
+
   protected abstract onMove(client: Point): void;
+
   protected abstract onEnd(): void;
 
   private start(event: MouseEvent) {
@@ -68,6 +71,7 @@ export abstract class Grip extends Box {
     document.addEventListener("mouseup", this._end);
     this.onStart(client);
   }
+
   private move(event: MouseEvent) {
     let containerRect = this._container.HTML.getBoundingClientRect();
 
@@ -79,6 +83,7 @@ export abstract class Grip extends Box {
 
     this.onMove(client);
   }
+
   private end() {
     this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
@@ -90,6 +95,7 @@ export abstract class Grip extends Box {
   on() {
     this.svgElement.addEventListener("mousedown", this._start);
   }
+
   off() {
     this.svgElement.removeEventListener("mousedown", this._start);
   }

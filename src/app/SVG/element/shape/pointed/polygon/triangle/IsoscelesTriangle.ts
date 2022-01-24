@@ -6,7 +6,7 @@ import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 
 export class IsoscelesTriangle extends Triangle implements MoveDrawable {
   constructor(container: SVG, rect: Rect | null = null) {
-    if(rect) {
+    if (rect) {
       let pointA: Point = {x: rect.x, y: rect.y};
       let pointB: Point = {x: rect.x, y: rect.y + rect.width};
       let pointC: Point = {x: rect.x, y: rect.y};
@@ -15,6 +15,7 @@ export class IsoscelesTriangle extends Triangle implements MoveDrawable {
       super(container);
     }
   }
+
   override get copy(): IsoscelesTriangle {
     return super.copy as IsoscelesTriangle;
   }

@@ -19,6 +19,7 @@ export class Grid {
     this._group = document.createElementNS(Element.svgURI, "g");
     this._group.id = "grid";
   }
+
   get group(): SVGGElement {
     return this._group;
   }
@@ -26,10 +27,12 @@ export class Grid {
   isSnap(): boolean {
     return this._isSnap;
   }
+
   snapOn() {
-    if(this._isGrid)
+    if (this._isGrid)
       this._isSnap = true;
   }
+
   snapOff() {
     this._isSnap = false;
   }
@@ -51,11 +54,11 @@ export class Grid {
 
     let path = new PathObject();
 
-    for(let i = this.squareSide; i < width; i += this.squareSide) {
+    for (let i = this.squareSide; i < width; i += this.squareSide) {
       path.add(new MoveTo({x: i + 0.5, y: 0}));
       path.add(new LineTo({x: i + 0.5, y: height}));
     }
-    for(let i = this.squareSide; i < height; i += this.squareSide) {
+    for (let i = this.squareSide; i < height; i += this.squareSide) {
       path.add(new MoveTo({x: 0, y: i + 0.5}));
       path.add(new LineTo({x: width, y: i + 0.5}));
     }
@@ -63,6 +66,7 @@ export class Grid {
     grid.setAttribute("d", path.toString());
     this._group.appendChild(grid);
   }
+
   gridOff() {
     this._group.innerHTML = "";
     this._isGrid = false;
@@ -70,7 +74,7 @@ export class Grid {
   }
 
   getSnapPoint(point: Point) {
-    if(!this._isSnap)
+    if (!this._isSnap)
       return point;
 
     let x = Math.round(point.x / this.squareSide) * this.squareSide;
@@ -80,11 +84,12 @@ export class Grid {
 
   set snapSide(squareSide: number) {
     this.squareSide = squareSide;
-    if(this._isGrid) {
+    if (this._isGrid) {
       this.gridOff();
       this.gridOn();
     }
   }
+
   get snapSide(): number {
     return this.squareSide;
   }

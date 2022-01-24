@@ -13,6 +13,7 @@ export class Path extends Pointed {
   protected _size: Size = {width: 0, height: 0};
   protected _path: PathObject;
   protected _lastPath: PathObject;
+
   constructor(container: SVG, path: PathObject = new PathObject()) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "path");
@@ -26,12 +27,14 @@ export class Path extends Pointed {
     this.setOverEvent();
     try {
       this.style.setDefaultStyle();
-    } catch (error: any) {}
+    } catch (error: any) {
+    }
   }
 
   get path(): PathObject {
     return this._path;
   }
+
   set path(path: PathObject) {
     this._path = path;
     this.setAttr({
@@ -50,11 +53,13 @@ export class Path extends Pointed {
 
     return path;
   }
+
   override fixRect() {
     super.fixRect();
     this.fixPath();
     this._lastPoints = this._lastPath.points;
   }
+
   fixPath() {
     this._lastPath = this._path.copy;
   }
@@ -71,9 +76,10 @@ export class Path extends Pointed {
   override get points(): Point[] {
     return this._path.points;
   }
+
   override set points(points: Point[]) {
     let commands = this._path.getAll();
-    for(let i = 0; i < commands.length; i++)
+    for (let i = 0; i < commands.length; i++)
       commands[i].position = points[i];
 
     this.setAttr({
@@ -85,21 +91,22 @@ export class Path extends Pointed {
     let commands = this._path.getAll();
     let leftTop: Point = Object.assign({}, commands[0].position);
 
-    for(let i = 1; i < commands.length; i++) {
-      if(commands[i] instanceof Close) continue;
+    for (let i = 1; i < commands.length; i++) {
+      if (commands[i] instanceof Close) continue;
 
-      if(commands[i].position.x < leftTop.x)
+      if (commands[i].position.x < leftTop.x)
         leftTop.x = commands[i].position.x;
-      if(commands[i].position.y < leftTop.y)
+      if (commands[i].position.y < leftTop.y)
         leftTop.y = commands[i].position.y;
     }
     return leftTop;
   }
+
   override set position(delta: Point) {
     let lastCommands = this._lastPath.getAll();
     let thisCommands = this._path.getAll();
 
-    for(let i = 0; i < lastCommands.length; i++) {
+    for (let i = 0; i < lastCommands.length; i++) {
       thisCommands[i].position = {
         x: lastCommands[i].position.x + delta.x,
         y: lastCommands[i].position.y + delta.y
@@ -119,17 +126,17 @@ export class Path extends Pointed {
     let min = Object.assign({}, commands[0].position);
     let max = Object.assign({}, commands[0].position);
 
-    for(let i = 1; i < commands.length; i++) {
-      if(commands[i] instanceof Close) continue;
+    for (let i = 1; i < commands.length; i++) {
+      if (commands[i] instanceof Close) continue;
 
-      if(commands[i].position.x < min.x)
+      if (commands[i].position.x < min.x)
         min.x = commands[i].position.x
-      if(commands[i].position.y < min.y)
+      if (commands[i].position.y < min.y)
         min.y = commands[i].position.y
 
-      if(commands[i].position.x > max.x)
+      if (commands[i].position.x > max.x)
         max.x = commands[i].position.x
-      if(commands[i].position.y > max.y)
+      if (commands[i].position.y > max.y)
         max.y = commands[i].position.y
     }
 
@@ -140,20 +147,21 @@ export class Path extends Pointed {
 
     return this._size;
   }
+
   override setSize(rect: Rect) { //FIXME
     let dw = 1;
     let dh = 1;
 
-    if(this._lastSize.width != 0)
+    if (this._lastSize.width != 0)
       dw = rect.width / this._lastSize.width;
-    if(this._lastSize.height != 0)
+    if (this._lastSize.height != 0)
       dh = rect.height / this._lastSize.height;
 
 
     let commands = this.commands;
-    for(let i = 0; i < commands.length; i++) {
+    for (let i = 0; i < commands.length; i++) {
       /* points may not be fixed, and this._lastPoints[i] may be undefined */
-      if(!this._lastPoints[i])
+      if (!this._lastPoints[i])
         this._lastPoints[i] = {x: 0, y: 0};
 
       commands[i].position.x = rect.x + Math.abs(this._lastPoints[i].x - rect.x) * dw;
@@ -177,6 +185,7 @@ export class Path extends Pointed {
       d: this._path.toString()
     });
   }
+
   addCommand(command: PathCommand) {
     this._path.add(command);
 
@@ -184,6 +193,7 @@ export class Path extends Pointed {
       d: this._path.toString()
     });
   }
+
   override toPath(): Path {
     return this;
   }

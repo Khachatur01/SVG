@@ -27,9 +27,10 @@ class GlobalStyle extends Style {
   override get strokeWidth(): string {
     return super.strokeWidth;
   }
+
   override set strokeWidth(width: string) {
     super.strokeWidth = width;
-    if(this.container.focused.children.size == 0) {
+    if (this.container.focused.children.size == 0) {
       this.default.strokeWidth = width;
       return;
     }
@@ -41,9 +42,10 @@ class GlobalStyle extends Style {
   override get strokeDashArray(): string {
     return super.strokeDashArray;
   }
+
   override set strokeDashArray(array: string) {
     super.strokeDashArray = array;
-    if(this.container.focused.children.size == 0) {
+    if (this.container.focused.children.size == 0) {
       this.default.strokeDashArray = array;
       return;
     }
@@ -55,9 +57,10 @@ class GlobalStyle extends Style {
   override get strokeColor(): string {
     return super.strokeColor;
   }
+
   override set strokeColor(color: string) {
     super.strokeColor = color;
-    if(this.container.focused.children.size == 0) {
+    if (this.container.focused.children.size == 0) {
       this.default.strokeColor = color;
       return;
     }
@@ -69,9 +72,10 @@ class GlobalStyle extends Style {
   override get fillColor(): string {
     return super.fillColor;
   }
+
   override set fillColor(color: string) {
     super.fillColor = color;
-    if(this.container.focused.children.size == 0) {
+    if (this.container.focused.children.size == 0) {
       this.default.fillColor = color;
       return;
     }
@@ -83,9 +87,10 @@ class GlobalStyle extends Style {
   override get fontSize(): string {
     return super.fontSize;
   }
+
   override set fontSize(size: string) {
     super.fontSize = size;
-    if(this.container.focused.children.size == 0) {
+    if (this.container.focused.children.size == 0) {
       this.default.fontSize = size;
       return;
     }
@@ -97,9 +102,10 @@ class GlobalStyle extends Style {
   override get fontColor(): string {
     return super.fontColor;
   }
+
   override set fontColor(color: string) {
     super.fontColor = color;
-    if(this.container.focused.children.size == 0) {
+    if (this.container.focused.children.size == 0) {
       this.default.fontColor = color;
       return;
     }
@@ -111,9 +117,10 @@ class GlobalStyle extends Style {
   override get backgroundColor(): string {
     return super.backgroundColor;
   }
+
   override set backgroundColor(color: string) {
     super.backgroundColor = color;
-    if(this.container.focused.children.size == 0) {
+    if (this.container.focused.children.size == 0) {
       this.default.backgroundColor = color;
       return;
     }
@@ -125,14 +132,16 @@ class GlobalStyle extends Style {
   recoverGlobalStyle() {
     this.setGlobalStyle(this.default);
   }
+
   fixGlobalStyle() {
     this.default.strokeWidth = this.strokeWidth;
     this.default.strokeColor = this.strokeColor;
-    this.default.fillColor =  this.fillColor;
-    this.default.fontSize =  this.fontSize;
-    this.default.fontColor =  this.fontColor;
-    this.default.backgroundColor =  this.backgroundColor;
+    this.default.fillColor = this.fillColor;
+    this.default.fontSize = this.fontSize;
+    this.default.fontColor = this.fontColor;
+    this.default.backgroundColor = this.backgroundColor;
   }
+
   setGlobalStyle(style: Style) {
     super.strokeWidth = style.strokeWidth;
     super.strokeColor = style.strokeColor;
@@ -188,7 +197,7 @@ export class SVG {
 
   constructor(containerId: string, idPrefix: string = "element") {
     let container = document.getElementById(containerId);
-    if(container)
+    if (container)
       this.container = container;
     else
       throw new DOMException("Can't create container", "Container not found");
@@ -205,7 +214,7 @@ export class SVG {
     this.style = new GlobalStyle(this);
 
     this.container.addEventListener("mousedown", event => {
-      if(event.target == this.container) {
+      if (event.target == this.container) {
         this.blur();
         this.editTool.removeEditableElement();
       }
@@ -225,55 +234,59 @@ export class SVG {
   get id(): number {
     return SVG.id;
   }
+
   set id(id: number) {
     SVG.id = id;
   }
+
   get nextId(): string {
     return SVG.idPrefix + SVG.id++;
   }
 
   call(name: Callback): void {
     let callback = this._callBacks.get(name);
-    if(callback)
+    if (callback)
       callback.forEach((func: Function) => {
         func();
       });
   }
+
   addCallBack(name: Callback, callback: Function) {
     let functions = this._callBacks.get(name);
-    if(!functions) {
+    if (!functions)
       this._callBacks.set(name, []);
-    }
+
     this._callBacks.get(name)?.push(callback)
   }
+
   removeCallBack(name: Callback, callback: Function) {
     let functions = this._callBacks.get(name);
-    if(functions)
+    if (functions)
       functions.splice(functions.indexOf(callback), 1);
   }
 
   setElementActivity(element: Element) {
-    if(element instanceof Group) return;
+    if (element instanceof Group) return;
     element.SVG.addEventListener("mousedown", () => {
-      if(!this.selectTool.isOn() && !this.editTool.isOn())
+      if (!this.selectTool.isOn() && !this.editTool.isOn())
         return;
 
       this.editTool.removeEditableElement();
 
-      if(this.editTool.isOn()) {
-        if(element instanceof Pointed)
+      if (this.editTool.isOn()) {
+        if (element instanceof Pointed)
           this.editTool.editableElement = element;
       } else {
-        if(element.group) /* if element has grouped, then select group */
+        if (element.group) /* if element has grouped, then select group */
           element = element.group;
 
         let hasChild = this._focus.hasChild(element);
-        if(!this._multiSelect && hasChild) return;
+        if (!this._multiSelect && hasChild) return;
 
-        if(!this._multiSelect && !hasChild) {
+        if (!this._multiSelect && !hasChild) {
           this.blur();
           this.focus(element);
-        } else if(hasChild) {
+        } else if (hasChild) {
           this.blur(element);
         } else {
           this.focus(element);
@@ -282,15 +295,15 @@ export class SVG {
     });
 
     element.SVG.addEventListener("mousemove", () => {
-      if(this.selectTool.isOn()) {
+      if (this.selectTool.isOn()) {
         element.SVG.style.cursor = "move";
-      } else if(this.editTool.isOn()) {
+      } else if (this.editTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
-      } else if(this.drawTool.isOn()) {
+      } else if (this.drawTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
-      } else if(this.highlightTool.isOn()) {
+      } else if (this.highlightTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
-      } else if(this.pointerTool.isOn()) {
+      } else if (this.pointerTool.isOn()) {
         element.SVG.style.cursor = this.pointerTool.cursor;
       }
     });
@@ -299,8 +312,9 @@ export class SVG {
   get elements(): Set<Element> {
     return this._elements;
   }
+
   add(xElement: Element) {
-    if(!xElement) return;
+    if (!xElement) return;
     xElement.group = null;
     this.elementsGroup.appendChild(xElement.SVG);
     this._elements.add(xElement);
@@ -311,6 +325,7 @@ export class SVG {
     this._elements.delete(xElement);
     xElement.remove();
   }
+
   clear() {
     this._elements.clear();
     this.elementsGroup.innerHTML = "";
@@ -326,11 +341,13 @@ export class SVG {
       this.focus(element);
     });
   }
+
   focus(xElement: Element) {
     this._focus.appendChild(xElement);
   }
+
   blur(xElement: Element | null = null) {
-    if(xElement)
+    if (xElement)
       this._focus.removeChild(xElement);
     else
       this._focus.clear();
@@ -343,22 +360,25 @@ export class SVG {
   multiSelect(): void {
     this._multiSelect = true;
   }
+
   singleSelect(): void {
     this._multiSelect = false;
   }
 
   copyFocused(): void {
     let elements: Element[] = [];
-    for(let element of this._focus.children) {
+    for (let element of this._focus.children) {
       elements.push(element.copy);
     }
 
     ElementsClipboard.save(elements);
   }
+
   cutFocused(): void {
     this.copyFocused();
     this._focus.remove();
   }
+
   paste(): void {
     let elements: Element[] = ElementsClipboard.get();
 
@@ -366,7 +386,7 @@ export class SVG {
     elements.forEach((element: Element) => {
       element = element.copy;
       element.container = this;
-      if(element instanceof Group)
+      if (element instanceof Group)
         element.elements.forEach((child: Element) => {
           this.setElementActivity(child);
           child.container = this;

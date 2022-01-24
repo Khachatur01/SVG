@@ -24,6 +24,7 @@ export class DrawTool extends Tool {
     this.container.HTML.style.cursor = "crosshair";
     this.container.blur();
   }
+
   off() {
     this._isOn = false;
     this._drawTool?.stop();
@@ -37,6 +38,7 @@ export class DrawTool extends Tool {
   drawing() {
     this._isDrawing = true;
   }
+
   drawingEnd() {
     this._isDrawing = false;
   }

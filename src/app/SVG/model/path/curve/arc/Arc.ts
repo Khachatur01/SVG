@@ -65,13 +65,16 @@ export class Arc extends PathCommand {
   set sweepFlag(sweepFlag: number) {
     this._sweep_flag = sweepFlag;
   }
+
   override get position(): Point {
     return super.position;
   }
+
   override set position(position: Point) {
     this._point.x = position.x;
     this._point.y = position.y;
   }
+
   get copy(): Arc {
     return new Arc(this._rx, this._ry, this._x_axis_rotation, this._large_arc_flag, this._sweep_flag, {
       x: this._point.x,

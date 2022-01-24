@@ -28,6 +28,7 @@ export class Image extends Foreign {
       preserveAspectRatio: "none"
     });
   }
+
   isComplete(): boolean {
     return true;
   }
@@ -82,7 +83,7 @@ export class Image extends Foreign {
 
   override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
-    if(delta.x == 0 && delta.y == 0) return;
+    if (delta.x == 0 && delta.y == 0) return;
     let position = this.position;
 
     this.setAttr({
@@ -99,11 +100,11 @@ export class Image extends Foreign {
   }
 
   setSize(rect: Rect): void {
-    if(rect.width < 0) {
+    if (rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;
     }
-    if(rect.height < 0) {
+    if (rect.height < 0) {
       rect.height = -rect.height;
       rect.y -= rect.height;
     }
@@ -120,6 +121,7 @@ export class Image extends Foreign {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
+
   get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);
@@ -128,6 +130,7 @@ export class Image extends Foreign {
   get src(): string {
     return this.getAttr("href");
   }
+
   set src(URI: string) {
     this.setAttr({href: URI});
   }
