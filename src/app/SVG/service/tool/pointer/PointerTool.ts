@@ -3,7 +3,7 @@ import {SVG} from "../../../SVG";
 import {Callback} from "../../../dataSource/Callback";
 export class PointerTool extends Tool {
   private _isOn: boolean = false;
-  private _cursor: string = "../assets/img/pointer.png";
+  private _cursor: string = "../assets/img/pointer.svg";
 
   constructor(container: SVG) {
     super(container);

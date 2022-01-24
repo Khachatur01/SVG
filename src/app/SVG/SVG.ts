@@ -288,6 +288,8 @@ export class SVG {
         element.SVG.style.cursor = "crosshair";
       } else if(this.drawTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
+      } else if(this.highlightTool.isOn()) {
+        element.SVG.style.cursor = "crosshair";
       } else if(this.pointerTool.isOn()) {
         element.SVG.style.cursor = this.pointerTool.cursor;
       }
