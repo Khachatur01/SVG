@@ -11,6 +11,7 @@ import {Group} from "./element/group/Group";
 import {Pointed} from "./element/shape/pointed/Pointed";
 import {ElementsClipboard} from "./dataSource/ElementsClipboard";
 import {Style} from "./service/style/Style";
+import {HighlightTool} from "./service/tool/highlighter/HighlightTool";
 
 class GlobalStyle extends Style {
   private readonly default: Style;
@@ -168,6 +169,7 @@ export class SVG {
 
   public elementsGroup: SVGGElement;
   public readonly drawTool: DrawTool;
+  public readonly highlightTool: HighlightTool;
   public readonly selectTool: SelectTool;
   public readonly editTool: EditTool;
   public perfect: boolean = false;
@@ -192,6 +194,7 @@ export class SVG {
     SVG.idPrefix = idPrefix;
 
     this.drawTool = new DrawTool(this);
+    this.highlightTool = new HighlightTool(this);
     this.selectTool = new SelectTool(this);
     this.editTool = new EditTool(this);
     this.activeTool = this.selectTool;
@@ -211,8 +214,9 @@ export class SVG {
 
     this.container.appendChild(this.grid.group);
     this.container.appendChild(this.elementsGroup);
-    this.container.appendChild(this._focus.SVG);
     this.container.appendChild(this.editTool.SVG);
+    this.container.appendChild(this.highlightTool.SVG);
+    this.container.appendChild(this._focus.SVG);
   }
 
   get id(): number {
@@ -280,6 +284,8 @@ export class SVG {
       } else if(this.editTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
       } else if(this.drawTool.isOn()) {
+        element.SVG.style.cursor = "crosshair";
+      } else if(this.highlightTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
       }
     });

@@ -8,6 +8,8 @@ export enum Callback {
 
   SELECT_TOOl_ON,
   SELECT_TOOl_OFF,
+  HIGHLIGHT_TOOl_ON,
+  HIGHLIGHT_TOOl_OFF,
   EDIT_TOOl_ON,
   EDIT_TOOl_OFF,
   FOCUS_CHANGED,
