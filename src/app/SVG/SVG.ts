@@ -14,6 +14,7 @@ import {Style} from "./service/style/Style";
 import {HighlightTool} from "./service/tool/highlighter/HighlightTool";
 import {PointerTool} from "./service/tool/pointer/PointerTool";
 import {Point} from "./model/Point";
+import {TextBox} from "./element/foreign/text/TextBox";
 
 class GlobalStyle extends Style {
   private readonly default: Style;
@@ -278,6 +279,8 @@ export class SVG {
       if (this.editTool.isOn()) {
         if (element instanceof Pointed)
           this.editTool.editableElement = element;
+        else if (element instanceof TextBox)
+          this.focus(element, false);
       } else {
         if (element.group) /* if element has grouped, then select group */
           element = element.group;

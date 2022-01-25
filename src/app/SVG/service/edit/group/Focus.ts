@@ -186,10 +186,10 @@ export class Focus implements Draggable, Resizeable {
 
   set translate(delta: Point) {
     this._children.forEach((child: Element) => {
-      child.SVG.style.transform = /*child.SVG.style.transform +TODO*/
+      child.SVG.style.transform =
         "translate(" + delta.x + "px, " + delta.y + "px) rotate(" + child.angle + "deg)";
     });
-    this.svgGroup.style.transform = /*child.SVG.style.transform +TODO*/
+    this.svgGroup.style.transform =
         " translate(" + delta.x + "px, " + delta.y + "px)";
   }
   set position(delta: Point) {
