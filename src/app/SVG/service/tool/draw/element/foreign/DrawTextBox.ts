@@ -21,5 +21,7 @@ export class DrawTextBox extends MoveDraw {
 
   override onEnd() {
     this.container.editTool.on();
+    if(this.drawableElement instanceof TextBox)
+      this.drawableElement.content?.focus();
   }
 }

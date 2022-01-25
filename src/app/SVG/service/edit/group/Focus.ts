@@ -43,7 +43,7 @@ export class Focus implements Draggable, Resizeable {
     return this.boundingBox.SVG;
   }
 
-  appendChild(xElement: Element): void {
+  appendChild(xElement: Element, showBounding: boolean = true): void {
     this._children.add(xElement);
 
     if (this._children.size == 1) {
@@ -65,7 +65,8 @@ export class Focus implements Draggable, Resizeable {
       this.container.style.recoverGlobalStyle();
     }
     this.fit();
-    this.focus();
+    if(showBounding)
+      this.focus();
   }
 
   removeChild(xElement: Element): void {
@@ -183,6 +184,14 @@ export class Focus implements Draggable, Resizeable {
     return this.boundingBox.position;
   }
 
+  set translate(delta: Point) {
+    this._children.forEach((child: Element) => {
+      child.SVG.style.transform = /*child.SVG.style.transform +TODO*/
+        "translate(" + delta.x + "px, " + delta.y + "px) rotate(" + child.angle + "deg)";
+    });
+    this.svgGroup.style.transform = /*child.SVG.style.transform +TODO*/
+        " translate(" + delta.x + "px, " + delta.y + "px)";
+  }
   set position(delta: Point) {
     this._children.forEach((child: Element) => child.position = delta);
 

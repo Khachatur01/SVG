@@ -344,8 +344,8 @@ export class SVG {
     });
   }
 
-  focus(xElement: Element) {
-    this._focus.appendChild(xElement);
+  focus(xElement: Element, showBounding: boolean = true) {
+    this._focus.appendChild(xElement, showBounding);
   }
 
   blur(xElement: Element | null = null) {

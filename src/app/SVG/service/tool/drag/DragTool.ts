@@ -35,13 +35,22 @@ export class DragTool extends Tool {
   }
 
   private onDrag(event: MouseEvent) {
-    this.container.focused.position = {
+    this.container.focused.translate = {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
   }
 
-  private onDragEnd() {
+  private onDragEnd(event: MouseEvent) {
+    this.container.focused.translate = {
+      x: 0,
+      y: 0
+    };
+    this.container.focused.position = {
+      x: event.clientX - this.mouseStartPos.x,
+      y: event.clientY - this.mouseStartPos.y
+    };
+
     this.container.HTML.removeEventListener("mousemove", this.drag);
     document.removeEventListener("mouseup", this.dragEnd);
     this.container.focused.lowlight();

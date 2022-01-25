@@ -20,7 +20,7 @@ export class TextBox extends ForeignObject implements MoveDrawable {
         this._container.remove(this);
     });
 
-    textarea.addEventListener('blur', (event) => {
+    textarea.addEventListener('blur', () => {
       if (textarea.value == "") {
         this._container.remove(this);
         this._container.selectTool.on();

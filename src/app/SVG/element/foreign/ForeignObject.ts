@@ -178,5 +178,4 @@ export class ForeignObject extends Foreign {
   toPath(): Path {
     return new Path(this._container);
   }
-
 }

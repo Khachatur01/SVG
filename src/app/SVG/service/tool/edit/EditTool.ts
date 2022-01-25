@@ -38,8 +38,9 @@ export class EditTool extends Tool {
   }
 
   set editableElement(editableElement: Pointed | null) {
-    this._editableElement = editableElement;
     if (!editableElement) return;
+    this.container.focus(editableElement, false);
+    this._editableElement = editableElement;
     let order = 0;
     for (let point of editableElement.points) {
       let node: Node = new Node(this.container, this, point, order++);
@@ -63,6 +64,9 @@ export class EditTool extends Tool {
       }
     }
     this.container.blur();
+    if(this._editableElement)
+      this.container.focus(this._editableElement, false);
+
     this.container.HTML.style.cursor = "default";
     this.container.call(Callback.EDIT_TOOl_ON);
   }
