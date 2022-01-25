@@ -18,19 +18,17 @@ export class AppComponent implements AfterViewInit {
   private svg: SVG | null = null;
   private activeTool: HTMLElement | null = null;
 
-  public select() {
+  select() {
     if (!this.svg) return;
     this.svg.selectTool.on();
     this.switchActive('select');
   }
-
-  public edit() {
+  edit() {
     if (!this.svg) return;
     this.svg.editTool.on();
     this.switchActive('edit');
   }
-
-  public grid() {
+  grid() {
     if (!this.svg) return;
     if (this.svg.grid.isGrid()) {
       this.svg.grid.gridOff();
@@ -41,8 +39,7 @@ export class AppComponent implements AfterViewInit {
       this.makeActive('grid');
     }
   }
-
-  public snap() {
+  snap() {
     if (!this.svg) return;
     if (this.svg.grid.isSnap()) {
       this.svg.grid.snapOff();
@@ -59,85 +56,73 @@ export class AppComponent implements AfterViewInit {
     if (!this.svg) return;
     this.svg.focused.group();
   }
-
   ungroup() {
     if (!this.svg) return;
     this.svg.focused.ungroup();
   }
 
-  public toPath() {
+  toPath() {
     if (!this.svg) return;
     this.svg.focused.toPath();
   }
-
-  public rectangle() {
+  rectangle() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.rectangle;
     this.svg.drawTool.on();
     this.switchActive('rect');
   }
-
-  public ellipse() {
+  ellipse() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.ellipse;
     this.svg.drawTool.on();
     this.switchActive('ellipse');
   }
-
-  public triangle() {
+  triangle() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.isoscelesTriangle;
     this.svg.drawTool.on();
     this.switchActive('triangle');
   }
-
-  public rightTriangle() {
+  rightTriangle() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.rightTriangle;
     this.svg.drawTool.on();
     this.switchActive('right-triangle');
   }
-
-  public line() {
+  line() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.line;
     this.svg.drawTool.on();
     this.switchActive('line');
   }
-
-  public polyline() {
+  polyline() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.polyline;
     this.svg.drawTool.on();
     this.switchActive('polyline');
   }
-
-  public polygon() {
+  polygon() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.polygon;
     this.svg.drawTool.on();
     this.switchActive('polygon');
   }
-
-  public free() {
+  free() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.free;
     this.svg.drawTool.on();
     this.switchActive('free');
   }
-
-  public highlighter() {
+  highlighter() {
     if (!this.svg) return;
     this.svg.highlightTool.on();
     this.switchActive('highlighter');
   }
-
-  public pointer() {
+  pointer() {
     if (!this.svg) return;
     this.svg.pointerTool.on();
     this.switchActive('pointer');
   }
-
   textBox() {
     if (!this.svg) return;
     this.svg.drawTool.tool = this.svg.drawTools.textBox;
@@ -205,7 +190,6 @@ export class AppComponent implements AfterViewInit {
       this.svg.multiSelect();
     }
   }
-
   private keyUp(event: KeyboardEvent) {
     if (!this.svg) return;
     if (event.key == "Shift") {
@@ -245,13 +229,11 @@ export class AppComponent implements AfterViewInit {
     if (this.activeTool)
       this.makeActive(this.activeTool.id);
   }
-
   makeActive(id: string) {
     let element = document.getElementById(id);
     if (!element) return;
     element.classList.add("active")
   }
-
   makePassive(id: string) {
     let element = document.getElementById(id);
     if (!element) return;
@@ -261,11 +243,9 @@ export class AppComponent implements AfterViewInit {
   selectToolCallBack() {
     this.switchActive("select");
   }
-
   editToolCallBack() {
     this.switchActive("edit");
   }
-
   focusChangedCallBack() {
     if (this.svg?.focused.canGroup)
       document.getElementById("group")?.removeAttribute("disabled");
@@ -277,42 +257,35 @@ export class AppComponent implements AfterViewInit {
     else
       document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
-
   bluredCallBack() {
     document.getElementById("group")?.setAttribute("disabled", "true");
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
-
   strokeWidthCallBack(newWidth: string) {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
     if (!stokeWidthInput || !this.svg) return;
     stokeWidthInput.value = newWidth;
   }
-
   strokeColorCallBack(newColor: string) {
     let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
     if (!stokeColorInput || !this.svg) return;
     stokeColorInput.value = newColor;
   }
-
   fillCallBack(newColor: string) {
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
     if (!fillInput || !this.svg) return;
     fillInput.value = newColor;
   }
-
   fontSizeCallBack(newSize: string) {
     let fontSizeInput = document.getElementById("font-size") as HTMLInputElement;
     if (!fontSizeInput || !this.svg) return;
     fontSizeInput.value = newSize;
   }
-
   fontColorCallBack(newColor: string) {
     let fontColorInput = document.getElementById("font-color") as HTMLInputElement;
     if (!fontColorInput || !this.svg) return;
     fontColorInput.value = newColor;
   }
-
   fontBackgroundCallBack(newColor: string) {
     let backgroundColorInput = document.getElementById("font-background") as HTMLInputElement;
     if (!backgroundColorInput || !this.svg) return;
@@ -327,7 +300,6 @@ export class AppComponent implements AfterViewInit {
 
     this.svg?.add(video);
   }
-
   demoImage() {
     if (!this.svg) return;
     let image = new Image(this.svg, 0, 0, 340, 200);
@@ -336,7 +308,6 @@ export class AppComponent implements AfterViewInit {
 
     this.svg?.add(image);
   }
-
   demoAsset() {
     if (!this.svg) return;
 
@@ -576,6 +547,9 @@ export class AppComponent implements AfterViewInit {
 
     this.svg.add(element);
   }
+  demoGraphic() {
+    
+  }
 
   gridSideChange(event: Event) {
     let gridSide = document.getElementById((event.target as Element).id) as HTMLInputElement;
@@ -583,52 +557,44 @@ export class AppComponent implements AfterViewInit {
     if (this.svg && side)
       this.svg.grid.snapSide = parseInt(side);
   }
-
   strokeWidthChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let width = picker?.value;
     if (this.svg && width)
       this.svg.style.strokeWidth = width;
   }
-
   transparentStroke() {
     if (this.svg)
       this.svg.style.strokeColor = "none";
   }
-
   strokeColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
     if (this.svg && color)
       this.svg.style.strokeColor = color;
   }
-
   transparentFill() {
     if (this.svg)
       this.svg.style.fillColor = "none";
   }
-
   fillColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
     if (this.svg && color)
       this.svg.style.fillColor = color;
   }
-
   fontSizeChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let size = picker?.value;
     if (this.svg && size)
       this.svg.style.fontSize = size;
   }
-
   fontColorChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
     if (this.svg && color)
       this.svg.style.fontColor = color;
   }
-
   textBackgroundChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let color = picker?.value;
@@ -640,32 +606,26 @@ export class AppComponent implements AfterViewInit {
     if (!this.svg) return;
     this.svg.copyFocused();
   }
-
   cutFocused() {
     if (!this.svg) return;
     this.svg.cutFocused();
   }
-
   paste() {
     if (!this.svg) return;
     this.svg.paste();
   }
-
   selectAll() {
     if (!this.svg) return;
     this.svg.focusAll();
   }
-
   delete() {
     if (!this.svg) return;
     this.svg.focused.remove();
   }
-
   orderTop() {
     if (!this.svg) return;
     this.svg.focused.orderTop();
   }
-
   orderBottom() {
     if (!this.svg) return;
     this.svg.focused.orderBottom();

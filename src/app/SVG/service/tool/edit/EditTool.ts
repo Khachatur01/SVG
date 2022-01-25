@@ -74,7 +74,7 @@ export class EditTool extends Tool {
   off(): void {
     this._isOn = false;
     this.removeEditableElement();
-
+    this.container.blur();
     this.container.call(Callback.EDIT_TOOl_OFF);
   }
 
