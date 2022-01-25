@@ -18,6 +18,7 @@ export class Polyline extends Pointed {
   get copy(): Polyline {
     let polyline: Polyline = new Polyline(this._container);
     polyline.points = this.points;
+    polyline.fixRect();
 
     polyline.refPoint = Object.assign({}, this.refPoint);
     polyline.rotate(this._angle);

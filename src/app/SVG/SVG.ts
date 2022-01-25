@@ -389,7 +389,7 @@ export class SVG {
 
     this.blur();
     elements.forEach((element: Element) => {
-      element = element.copy;
+      element = element.copy; /* may paste many times */
       element.container = this;
       if (element instanceof Group)
         element.elements.forEach((child: Element) => {

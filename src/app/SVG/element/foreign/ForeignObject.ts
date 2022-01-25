@@ -9,12 +9,12 @@ import {Foreign} from "../type/Foreign";
 
 export class ForeignObject extends Foreign {
   protected _content: HTMLElement | null = null;
-  private readonly outline: string = "thin solid #999";
+  public readonly outline: string = "thin solid #999";
 
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(Element.svgURI, "foreignObject");
-    this.svgElement.style.outline = this.outline;
+    this.svgElement.style.outline = "none";
     this.svgElement.id = this.id;
 
     this.position = {x: x, y: y};
@@ -64,6 +64,7 @@ export class ForeignObject extends Foreign {
       width: size.width,
       height: size.height
     });
+    foreignObject.fixRect();
 
     foreignObject.refPoint = Object.assign({}, this.refPoint);
     foreignObject.rotate(this._angle);
@@ -78,18 +79,6 @@ export class ForeignObject extends Foreign {
     return size.width > 0 && size.height > 0;
   }
 
-  get points(): Point[] {
-    let position: Point = this.position;
-    let size: Size = this.size;
-
-    return [
-      position,
-      {x: position.x, y: position.y + size.height},
-      {x: position.x + size.width, y: position.y + size.height},
-      {x: position.x + size.width, y: position.y},
-    ];
-  }
-
   get position(): Point {
     return {
       x: parseInt(this.getAttr("x")),
@@ -97,7 +86,7 @@ export class ForeignObject extends Foreign {
     };
   }
 
-  override set position(delta: Point) {
+  set position(delta: Point) {
     this.setAttr({
       x: this._lastPosition.x + delta.x,
       y: this._lastPosition.y + delta.y

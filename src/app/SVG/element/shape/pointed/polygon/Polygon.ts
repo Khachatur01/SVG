@@ -20,6 +20,7 @@ export class Polygon extends Pointed {
   get copy(): Polygon {
     let polygon: Polygon = new Polygon(this._container);
     polygon.points = this.points;
+    polygon.fixRect();
 
     polygon.refPoint = Object.assign({}, this.refPoint);
     polygon.rotate(this._angle);

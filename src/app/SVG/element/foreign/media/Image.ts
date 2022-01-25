@@ -55,18 +55,6 @@ export class Image extends Foreign {
     return image;
   }
 
-  get points(): Point[] {
-    let position: Point = this.position;
-    let size: Size = this.size;
-
-    return [
-      position,
-      {x: position.x, y: position.y + size.height},
-      {x: position.x + size.width, y: position.y + size.height},
-      {x: position.x + size.width, y: position.y},
-    ];
-  }
-
   get position(): Point {
     return {
       x: parseInt(this.getAttr("x")),

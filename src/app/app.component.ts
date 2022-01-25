@@ -548,7 +548,9 @@ export class AppComponent implements AfterViewInit {
     this.svg.add(element);
   }
   demoGraphic() {
-    
+    if (!this.svg) return;
+    this.svg.drawTool.tool = this.svg.drawTools.graphic;
+    this.svg.drawTool.on();
   }
 
   gridSideChange(event: Event) {

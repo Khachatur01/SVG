@@ -8,6 +8,7 @@ import {SVG} from "../SVG";
 import {DrawIsoscelesTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawIsoscelesTriangle";
 import {DrawRightTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawRightTriangle";
 import {DrawTextBox} from "../service/tool/draw/element/foreign/DrawTextBox";
+import {DrawGraphic} from "../service/tool/draw/element/foreign/DrawGraphic";
 
 export class DrawTools {
   private container: SVG;
@@ -20,6 +21,7 @@ export class DrawTools {
   private readonly _isoscelesTriangle: DrawIsoscelesTriangle;
   private readonly _rightTriangle: DrawRightTriangle;
   private readonly _textBox: DrawTextBox;
+  private readonly _graphic: DrawGraphic;
 
   constructor(container: SVG) {
     this.container = container;
@@ -33,6 +35,7 @@ export class DrawTools {
     this._isoscelesTriangle = new DrawIsoscelesTriangle(container);
     this._rightTriangle = new DrawRightTriangle(container);
     this._textBox = new DrawTextBox(container);
+    this._graphic = new DrawGraphic(container);
   }
 
   get free(): DrawFree {
@@ -69,5 +72,9 @@ export class DrawTools {
 
   get textBox(): DrawTextBox {
     return this._textBox;
+  }
+
+  get graphic(): DrawGraphic {
+    return this._graphic;
   }
 }

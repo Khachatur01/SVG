@@ -1,5 +1,6 @@
 import {PathCommand} from "./PathCommand";
 import {Point} from "../Point";
+import {MoveTo} from "./point/MoveTo";
 
 export class PathObject {
   private commands: PathCommand[] = [];
@@ -68,7 +69,12 @@ export class PathObject {
 
     this.pointedCommands[index].position = point;
   }
+  replaceCommand(index: number, command: PathCommand) {
+    if (index < 0)
+      index = this.commands.length + index;
 
+    this.commands[index] = command;
+  }
 
   toString(close: boolean = false): string {
     let result = "";

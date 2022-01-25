@@ -45,6 +45,7 @@ export class Path extends Pointed {
   get copy(): Path {
     let path: Path = new Path(this._container);
     path.path = this._path.copy;
+    path.fixRect();
 
     path.refPoint = Object.assign({}, this.refPoint);
     path.rotate(this._angle);

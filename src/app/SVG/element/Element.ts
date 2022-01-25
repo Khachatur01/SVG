@@ -120,22 +120,14 @@ export abstract class Element implements Resizeable, Draggable {
   }
 
   abstract get size(): Size;
-
   abstract setSize(rect: Rect, delta: Point | null): void;
-
   abstract isComplete(): boolean;
-
   abstract get position(): Point;
   abstract set position(delta: Point);
-
   abstract get points(): Point[];
-
   abstract get boundingRect(): Rect;
-
   abstract get rotatedBoundingRect(): Rect;
-
   abstract toPath(): Path;
-
   abstract get copy(): Element;
 
   get container(): SVG {

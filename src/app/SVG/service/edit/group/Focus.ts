@@ -10,6 +10,8 @@ import {Path} from "../../../element/shape/pointed/Path";
 import {Group} from "../../../element/group/Group";
 import {Callback} from "../../../dataSource/Callback";
 import {Matrix} from "../../math/Matrix";
+import {ForeignObject} from "../../../element/foreign/ForeignObject";
+import {first} from "rxjs";
 
 export class Focus implements Draggable, Resizeable {
   private readonly _children: Set<Element> = new Set<Element>();

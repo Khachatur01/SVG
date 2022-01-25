@@ -5,7 +5,9 @@ import {TextBox} from "../../../../../element/foreign/text/TextBox";
 
 export class DrawTextBox extends MoveDraw {
   onStart(position: Point): Element {
-    return new TextBox(this.container, position.x, position.y);
+    let textBox = new TextBox(this.container, position.x, position.y);
+    textBox.SVG.style.outline = textBox.outline;
+    return textBox
   }
 
   override onIsNotComplete() {
