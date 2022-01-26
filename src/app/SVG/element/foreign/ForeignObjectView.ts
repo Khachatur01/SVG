@@ -1,19 +1,19 @@
-import {Element} from "../Element";
+import {ElementView} from "../ElementView";
 import {SVG} from "../../SVG";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
-import {Path} from "../shape/pointed/Path";
+import {PathView} from "../shape/pointed/PathView";
 import {Callback} from "../../dataSource/Callback";
 import {Foreign} from "../type/Foreign";
 
-export class ForeignObject extends Foreign {
+export class ForeignObjectView extends Foreign {
   protected _content: HTMLElement | null = null;
   public readonly outline: string = "thin solid #999";
 
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "foreignObject");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "foreignObject");
     this.svgElement.style.outline = "none";
     this.svgElement.id = this.id;
 
@@ -49,11 +49,11 @@ export class ForeignObject extends Foreign {
     return this.svgElement
   }
 
-  get copy(): ForeignObject {
+  get copy(): ForeignObjectView {
     let position = this.position;
     let size = this.size;
 
-    let foreignObject: ForeignObject = new ForeignObject(this._container);
+    let foreignObject: ForeignObjectView = new ForeignObjectView(this._container);
     if (this._content)
       foreignObject.setContent(this._content.cloneNode(true) as HTMLElement);
 
@@ -164,7 +164,7 @@ export class ForeignObject extends Foreign {
     return this.calculateBoundingBox(points);
   }
 
-  toPath(): Path {
-    return new Path(this._container);
+  toPath(): PathView {
+    return new PathView(this._container);
   }
 }

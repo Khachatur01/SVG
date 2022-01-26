@@ -1,5 +1,5 @@
-import {Element} from "../Element";
+import {ElementView} from "../ElementView";
 
-export abstract class Shape extends Element {
+export abstract class Shape extends ElementView {
 
 }

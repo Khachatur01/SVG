@@ -1,18 +1,18 @@
 import {MoveDraw} from "../../../mode/MoveDraw";
-import {Line} from "../../../../../../element/shape/pointed/Line";
+import {LineView} from "../../../../../../element/shape/pointed/LineView";
 import {Point} from "../../../../../../model/Point";
 import {Angle} from "../../../../../math/Angle";
-import {Pointed} from "../../../../../../element/shape/pointed/Pointed";
-import {Element} from "../../../../../../element/Element";
+import {PointedView} from "../../../../../../element/shape/pointed/PointedView";
+import {ElementView} from "../../../../../../element/ElementView";
 
 export class DrawLine extends MoveDraw {
-  onStart(position: Point): Element {
-    let element = new Line(this.container, position.x, position.y, position.x, position.y);
+  onStart(position: Point): ElementView {
+    let element = new LineView(this.container, position.x, position.y, position.x, position.y);
     element.fixPosition();
     return element;
   }
 
-  override onDraw(containerRect: DOMRect, event: MouseEvent, xPointed: Pointed, perfectMode: boolean): void {
+  override onDraw(containerRect: DOMRect, event: MouseEvent, xPointed: PointedView, perfectMode: boolean): void {
     let x2 = event.clientX - containerRect.left;
     let y2 = event.clientY - containerRect.top;
 

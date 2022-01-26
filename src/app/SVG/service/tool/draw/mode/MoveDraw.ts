@@ -1,5 +1,5 @@
 import {Drawable} from "../Drawable";
-import {Element} from "../../../../element/Element";
+import {ElementView} from "../../../../element/ElementView";
 import {SVG} from "../../../../SVG";
 import {Point} from "../../../../model/Point";
 import {MoveDrawable} from "../type/MoveDrawable";
@@ -12,7 +12,7 @@ export abstract class MoveDraw implements Drawable {
   private draw = this._onDraw.bind(this);
   private drawEnd = this._onEnd.bind(this);
 
-  protected drawableElement: Element | null = null;
+  protected drawableElement: ElementView | null = null;
 
   constructor(container: SVG) {
     this.container = container;
@@ -66,9 +66,9 @@ export abstract class MoveDraw implements Drawable {
     this.drawableElement = null;
   }
 
-  abstract onStart(position: Point): Element;
+  abstract onStart(position: Point): ElementView;
 
-  onDraw(containerRect: DOMRect, event: MouseEvent, xElement: Element, perfectMode: boolean): void {
+  onDraw(containerRect: DOMRect, event: MouseEvent, xElement: ElementView, perfectMode: boolean): void {
     let width = event.clientX - containerRect.left - this.startPos.x;
     let height = event.clientY - containerRect.top - this.startPos.y;
 

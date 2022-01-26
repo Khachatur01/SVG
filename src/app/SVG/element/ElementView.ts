@@ -5,14 +5,14 @@ import {Rect} from "../model/Rect";
 import {Draggable} from "../service/tool/drag/Draggable";
 import {Matrix} from "../service/math/Matrix";
 import {SVG} from "../SVG";
-import {Path} from "./shape/pointed/Path";
-import {Group} from "./group/Group";
+import {PathView} from "./shape/pointed/PathView";
+import {GroupView} from "./group/GroupView";
 import {Style} from "../service/style/Style";
 
 export class ElementStyle extends Style {
-  private element: Element;
+  private element: ElementView;
 
-  constructor(element: Element) {
+  constructor(element: ElementView) {
     super();
     this.element = element;
   }
@@ -92,7 +92,7 @@ export class ElementStyle extends Style {
   }
 }
 
-export abstract class Element implements Resizeable, Draggable {
+export abstract class ElementView implements Resizeable, Draggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
 
   public readonly style;
@@ -104,11 +104,11 @@ export abstract class Element implements Resizeable, Draggable {
   protected _angle: number = 0;
   protected _refPoint: Point = {x: 0, y: 0};
 
-  private _group: Group | null = null;
+  private _group: GroupView | null = null;
 
   protected readonly id: string;
 
-  protected svgElement: SVGElement = document.createElementNS(Element.svgURI, "rect"); // default element
+  protected svgElement: SVGElement = document.createElementNS(ElementView.svgURI, "rect"); // default element
 
   private _highlight = this.highlight.bind(this);
   private _lowlight = this.lowlight.bind(this);
@@ -127,8 +127,8 @@ export abstract class Element implements Resizeable, Draggable {
   abstract get points(): Point[];
   abstract get boundingRect(): Rect;
   abstract get rotatedBoundingRect(): Rect;
-  abstract toPath(): Path;
-  abstract get copy(): Element;
+  abstract toPath(): PathView;
+  abstract get copy(): ElementView;
 
   get container(): SVG {
     return this._container;
@@ -155,11 +155,11 @@ export abstract class Element implements Resizeable, Draggable {
     };
   }
 
-  get group(): Group | null {
+  get group(): GroupView | null {
     return this._group;
   }
 
-  set group(group: Group | null) {
+  set group(group: GroupView | null) {
     this._group = group;
   }
 

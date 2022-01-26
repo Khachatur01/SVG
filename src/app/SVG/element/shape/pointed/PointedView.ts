@@ -1,13 +1,13 @@
 import {Point} from "../../../model/Point";
 import {Size} from "../../../model/Size";
 import {Rect} from "../../../model/Rect";
-import {Path} from "./Path";
-import {PathObject} from "../../../model/path/PathObject";
+import {PathView} from "./PathView";
+import {Path} from "../../../model/path/Path";
 import {MoveTo} from "../../../model/path/point/MoveTo";
 import {LineTo} from "../../../model/path/line/LineTo";
 import {Shape} from "../../type/Shape";
 
-export abstract class Pointed extends Shape {
+export abstract class PointedView extends Shape {
   protected _lastPoints: Point[] = [];
 
   override set points(points: Point[]) {
@@ -139,14 +139,14 @@ export abstract class Pointed extends Shape {
     return this.calculateBoundingBox(points);
   }
 
-  override toPath(): Path {
+  override toPath(): PathView {
     let rotatedPoints = this.rotatedPoints;
-    let path = new PathObject();
+    let path = new Path();
 
     path.add(new MoveTo(rotatedPoints[0]));
     for (let i = 1; i < rotatedPoints.length; i++)
       path.add(new LineTo(rotatedPoints[i]));
 
-    return new Path(this._container, path);
+    return new PathView(this._container, path);
   }
 }

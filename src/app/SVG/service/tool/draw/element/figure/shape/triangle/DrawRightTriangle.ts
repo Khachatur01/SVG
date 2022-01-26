@@ -1,10 +1,10 @@
 import {Point} from "../../../../../../../model/Point";
-import {Element} from "../../../../../../../element/Element";
+import {ElementView} from "../../../../../../../element/ElementView";
 import {MoveDraw} from "../../../../mode/MoveDraw";
-import {RightTriangle} from "../../../../../../../element/shape/pointed/polygon/triangle/RightTriangle";
+import {RightTriangleView} from "../../../../../../../element/shape/pointed/polygon/triangle/RightTriangleView";
 
 export class DrawRightTriangle extends MoveDraw {
-  onStart(position: Point): Element {
-    return new RightTriangle(this.container);
+  onStart(position: Point): ElementView {
+    return new RightTriangleView(this.container);
   }
 }

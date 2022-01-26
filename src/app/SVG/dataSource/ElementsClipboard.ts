@@ -1,13 +1,13 @@
-import {Element} from "../element/Element";
+import {ElementView} from "../element/ElementView";
 
 export class ElementsClipboard {
-  private static xElements: Element[];
+  private static xElements: ElementView[];
 
-  static save(xElements: Element[]): void {
+  static save(xElements: ElementView[]): void {
     ElementsClipboard.xElements = xElements;
   }
 
-  static get(): Element[] {
+  static get(): ElementView[] {
     return ElementsClipboard.xElements;
   }
 

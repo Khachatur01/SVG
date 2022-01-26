@@ -2,33 +2,45 @@ import {Foreign} from "../../type/Foreign";
 import {Rect} from "../../../model/Rect";
 import {Point} from "../../../model/Point";
 import {Size} from "../../../model/Size";
-import {Path} from "../../shape/pointed/Path";
+import {PathView} from "../../shape/pointed/PathView";
 import {SVG} from "../../../SVG";
-import {Element} from "../../Element";
-import {PathObject} from "../../../model/path/PathObject";
+import {ElementView} from "../../ElementView";
+import {Path} from "../../../model/path/Path";
 import {MoveTo} from "../../../model/path/point/MoveTo";
 import {LineTo} from "../../../model/path/line/LineTo";
 import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
 import {Matrix} from "../../../service/math/Matrix";
 
-export class Graphic extends Foreign implements MoveDrawable {
+interface Graphic {
+  path: PathView;
+  color: string;
+  width: number;
+}
+export class GraphicView extends Foreign implements MoveDrawable {
   public readonly outline: string = "thin solid #999";
 
   private _center: Point = {x: 0, y: 0};
   private _size: Size = {width: 0, height: 0};
   private _unit: number = 20;
   private _showSteps: boolean = true;
-  private readonly _f: Function;
-  private autoCreate: boolean = true;
+  private graphics: Map<Function, Graphic> = new Map<Function, Graphic>();
+  private _xAxisPathView: PathView;
+  private _yAxisPathView: PathView;
 
-  constructor(container: SVG, f: Function, center: Point = {x: 0, y: 0}, size: Size = {width: 1, height: 1}) {
+  constructor(container: SVG, center: Point = {x: 0, y: 0}, size: Size = {width: 1, height: 1}) {
     super(container);
 
-    this.svgElement = document.createElementNS(Element.svgURI, "svg");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "svg");
     this.svgElement.style.outline = this.outline;
-    this._f = f;
 
-    this.autoCreate = false;
+    this._xAxisPathView = new PathView(this._container);
+    this._xAxisPathView.SVG.style.shapeRendering = "optimizeSpeed";
+    this._xAxisPathView.SVG.style.strokeLinecap = "butt";
+
+    this._yAxisPathView = new PathView(this._container);
+    this._yAxisPathView.SVG.style.shapeRendering = "optimizeSpeed";
+    this._yAxisPathView.SVG.style.strokeLinecap = "butt";
+
     center = {
       x: center.x - size.width / 2,
       y: center.y - size.height / 2
@@ -40,32 +52,54 @@ export class Graphic extends Foreign implements MoveDrawable {
       width: size.width,
       height: size.height
     });
-    this.autoCreate = true;
-    this.recreateGraphic();
+    this.drawAxis();
   }
 
+  set unitPixels(pixel: number) {
+    this._unit = pixel;
+    this.recreateGraphic()
+  }
   showSteps() {
-    this._showSteps = true;
-    this.recreateGraphic();
+    this._showSteps = true; /* TODO */
+    this.drawAxis();
   }
   hideSteps() {
-    this._showSteps = false;
-    this.recreateGraphic();
+    this._showSteps = false; /* TODO */
+    this.drawAxis();
   }
 
-  private makeGraphic(): Path {
-    let graphic = new Path(this._container);
-    graphic.style.strokeWidth = "1";
-    let graphicPathObject = new PathObject();
+  addFunction(f: Function, color: string = "#000", width: number = 2) {
+    let graphic = {
+      path: new PathView(this._container),
+      width: width,
+      color: color
+    }
+    this.setPath(f, graphic);
+    this.graphics.set(f, graphic);
+    this.svgElement.appendChild(graphic.path.SVG);
+  }
+  removeFunction(f: Function) {
+    let graphicPath = this.graphics.get(f);
+    if(graphicPath) {
+      this.svgElement.removeChild(graphicPath.path.SVG);
+    }
+    this.graphics.delete(f);
+  }
+
+  private setPath(f: Function, graphic: Graphic) {
+    let graphicPath = new PathView(this._container);
+    graphicPath.style.strokeWidth = graphic.width + "";
+    graphicPath.style.strokeColor = graphic.color;
+    let graphicPathObject = new Path();
 
     let maxX = (this._size.width / 2) / this._unit;
     let x = -maxX;
 
-    let step = 0.1;
+    let step = 0.01;
 
     for(; x < maxX; x += step) {
       let visibleX = (this._size.width / 2) + x * this._unit;
-      let visibleY = (this._size.height / 2) - (this._f(x) * this._unit);
+      let visibleY = (this._size.height / 2) - (f(x) * this._unit);
 
       graphicPathObject.add(new LineTo({
         x: visibleX,
@@ -79,85 +113,92 @@ export class Graphic extends Foreign implements MoveDrawable {
     } catch (e) {
 
     }
-    graphic.path = graphicPathObject;
-    return graphic;
+    graphicPath.path = graphicPathObject;
+
+    graphic.path = graphicPath;
   }
-  private recreateGraphic() {
-    this.svgElement.innerHTML = "";
+  private drawAxis() {
+    // let unit = 10;
+    let unit = this._unit;
     let localCenter = {
       x: this._size.width / 2,
       y: this._size.height / 2
     }
 
-    let xAxis = new Path(this._container);
-    xAxis.style.strokeWidth = "1";
-    xAxis.style.strokeColor = "red";
-    let xAxisPathObject = new PathObject();
+    this._xAxisPathView.style.strokeWidth = "1";
+    this._xAxisPathView.style.strokeColor = "red";
+    let xAxisPathObject = new Path();
     xAxisPathObject.add(new MoveTo({x: 0, y: localCenter.y}));
     xAxisPathObject.add(new LineTo({x: this._size.width, y: localCenter.y}));
 
-    let yAxis = new Path(this._container);
-    yAxis.style.strokeWidth = "1";
-    yAxis.style.strokeColor = "blue";
-    let yAxisPathObject = new PathObject();
+    this._yAxisPathView.style.strokeWidth = "1";
+    this._yAxisPathView.style.strokeColor = "blue";
+    let yAxisPathObject = new Path();
     yAxisPathObject.add(new MoveTo({x: localCenter.x, y: 0}));
     yAxisPathObject.add(new LineTo({x: localCenter.x, y: this._size.height}));
 
     if(this._showSteps) {
-      for (let i = localCenter.x - this._unit; i >= 0; i -= this._unit) {
+      for (let i = localCenter.x - unit; i >= 0; i -= unit) {
         xAxisPathObject.add(new MoveTo({
           x: i,
-          y: localCenter.y - this._unit / 2
+          y: localCenter.y - 3.5
         }));
         xAxisPathObject.add(new LineTo({
           x: i,
-          y: localCenter.y + this._unit / 2
+          y: localCenter.y + 3.5
         }));
       }
-      for (let i = localCenter.x + this._unit; i <= this._size.width; i += this._unit) {
+      for (let i = localCenter.x + unit; i <= this._size.width; i += unit) {
         xAxisPathObject.add(new MoveTo({
           x: i,
-          y: localCenter.y - this._unit / 2
+          y: localCenter.y - 3.5
         }));
         xAxisPathObject.add(new LineTo({
           x: i,
-          y: localCenter.y + this._unit / 2
+          y: localCenter.y + 3.5
         }));
       }
 
 
-      for (let i = localCenter.y - this._unit; i >= 0; i -= this._unit) {
+      for (let i = localCenter.y - unit; i >= 0; i -= unit) {
         yAxisPathObject.add(new MoveTo({
-          x: localCenter.x - this._unit / 2,
+          x: localCenter.x - 3.5,
           y: i
         }));
         yAxisPathObject.add(new LineTo({
-          x: localCenter.x + this._unit / 2,
+          x: localCenter.x + 3.5,
           y: i
         }));
       }
-      for (let i = localCenter.y + this._unit; i <= this._size.height; i += this._unit) {
+      for (let i = localCenter.y + unit; i <= this._size.height; i += unit) {
         yAxisPathObject.add(new MoveTo({
-          x: localCenter.x - this._unit / 2,
+          x: localCenter.x - 3.5,
           y: i
         }));
         yAxisPathObject.add(new LineTo({
-          x: localCenter.x + this._unit / 2,
+          x: localCenter.x + 3.5,
           y: i
         }));
       }
     }
 
-    xAxis.path = xAxisPathObject;
-    yAxis.path = yAxisPathObject;
+    this._xAxisPathView.path = xAxisPathObject;
+    this._yAxisPathView.path = yAxisPathObject;
 
-    this.svgElement.appendChild(xAxis.SVG);
-    this.svgElement.appendChild(yAxis.SVG);
-    this.svgElement.appendChild(this.makeGraphic().SVG);
+    this.svgElement.appendChild(this._xAxisPathView.SVG);
+    this.svgElement.appendChild(this._yAxisPathView.SVG);
+  }
+  private recreateGraphic() {
+    this.svgElement.innerHTML = "";
+    this.drawAxis();
+    this.graphics.forEach((graphic: Graphic, f: Function) => {
+      this.setPath(f, graphic);
+      this.svgElement.appendChild(graphic.path.SVG);
+    });
   }
 
-  get copy(): Graphic {
-    return new Graphic(this._container, this._f);
+  get copy(): GraphicView { /* TODO */
+    return new GraphicView(this._container);
   }
 
   get position(): Point {
@@ -175,9 +216,6 @@ export class Graphic extends Foreign implements MoveDrawable {
       x: position.x,
       y: position.y
     });
-
-    if(this.autoCreate)
-      this.recreateGraphic();
   }
   override get center(): Point {
     return this._center;
@@ -189,7 +227,6 @@ export class Graphic extends Foreign implements MoveDrawable {
   drawSize(rect: Rect) {
     this.setSize(rect);
   }
-
   setSize(rect: Rect): void {
     if (rect.width < 0) {
       rect.width = -rect.width;
@@ -212,8 +249,7 @@ export class Graphic extends Foreign implements MoveDrawable {
       height: rect.height
     });
 
-    if(this.autoCreate)
-      this.recreateGraphic();
+    this.recreateGraphic();
   }
 
   override correct(refPoint: Point, lastRefPoint: Point) {
@@ -268,8 +304,8 @@ export class Graphic extends Foreign implements MoveDrawable {
     };
   }
 
-  toPath(): Path {
-    return new Path(this._container);
+  toPath(): PathView { /* TODO */
+    return new PathView(this._container);
   }
 
   isComplete(): boolean {

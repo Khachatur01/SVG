@@ -1,14 +1,14 @@
 import {Point} from "../../../../../../model/Point";
 import {SVG} from "../../../../../../SVG";
 import {Angle} from "../../../../../math/Angle";
-import {Path} from "../../../../../../element/shape/pointed/Path";
+import {PathView} from "../../../../../../element/shape/pointed/PathView";
 import {MoveTo} from "../../../../../../model/path/point/MoveTo";
 import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
-import {Element} from "../../../../../../element/Element";
+import {ElementView} from "../../../../../../element/ElementView";
 import {Rect} from "../../../../../../model/Rect";
 
-export class RotatePoint extends Path {
+export class RotatePoint extends PathView {
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
@@ -103,7 +103,7 @@ export class RotatePoint extends Path {
       {x: x, y: y}
     ) - this._container.focused.angle;
 
-    this._container.focused.children.forEach((child: Element) => {
+    this._container.focused.children.forEach((child: ElementView) => {
       child.fixAngle();
     });
     this._container.focused.lastAngle = this.getAngle(containerRect, event);

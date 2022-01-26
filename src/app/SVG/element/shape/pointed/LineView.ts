@@ -1,12 +1,12 @@
-import {Element} from "../../Element";
-import {Pointed} from "./Pointed";
+import {ElementView} from "../../ElementView";
+import {PointedView} from "./PointedView";
 import {Point} from "../../../model/Point";
 import {SVG} from "../../../SVG";
 
-export class Line extends Pointed {
+export class LineView extends PointedView {
   constructor(container: SVG, x1: number = 0, y1: number = 0, x2: number = 0, y2: number = 0) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "line");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "line");
     this.svgElement.id = this.id;
 
     this.setAttr({
@@ -19,8 +19,8 @@ export class Line extends Pointed {
     this.style.setDefaultStyle();
   }
 
-  get copy(): Line {
-    let line: Line = new Line(this._container);
+  get copy(): LineView {
+    let line: LineView = new LineView(this._container);
     line.points = this.points;
 
     line.refPoint = Object.assign({}, this.refPoint);

@@ -71,6 +71,7 @@
     <button class="btn btn-default" (click)="demoImage()" title="Place Demo Image">Demo Image</button>
     <button class="btn btn-default" (click)="demoAsset()" title="Place Demo Problem">Demo Problem</button>
     <button class="btn btn-default" (click)="demoGraphic()" title="Place Demo Graphic">Demo Graphic</button>
+    <input (change)="graphicUnit($event)" id="unit_range" title="Grid size" type="number" class="input form-control form-control-sm" value="20" step="1" min="5" max="1000">
 
   </div>
 

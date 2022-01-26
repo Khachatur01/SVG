@@ -1,15 +1,15 @@
-import {Element} from "../../Element";
-import {Path} from "../../shape/pointed/Path";
+import {ElementView} from "../../ElementView";
+import {PathView} from "../../shape/pointed/PathView";
 import {Size} from "../../../model/Size";
 import {Rect} from "../../../model/Rect";
 import {Point} from "../../../model/Point";
 import {SVG} from "../../../SVG";
 import {Foreign} from "../../type/Foreign";
 
-export class Image extends Foreign {
+export class ImageView extends Foreign {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "image");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "image");
     this.svgElement.id = this.id;
 
     this.svgElement.ondragstart = function () {
@@ -33,11 +33,11 @@ export class Image extends Foreign {
     return true;
   }
 
-  get copy(): Image {
+  get copy(): ImageView {
     let position = this.position;
     let size = this.size;
 
-    let image: Image = new Image(this._container);
+    let image: ImageView = new ImageView(this._container);
     image.src = this.src;
     image.position = position;
     image.setSize({
@@ -123,8 +123,8 @@ export class Image extends Foreign {
     this.setAttr({href: URI});
   }
 
-  toPath(): Path {
-    return new Path(this._container);
+  toPath(): PathView {
+    return new PathView(this._container);
   }
 
 }

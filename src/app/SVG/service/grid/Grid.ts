@@ -1,7 +1,7 @@
 import {SVG} from "../../SVG";
-import {Element} from "../../element/Element";
+import {ElementView} from "../../element/ElementView";
 import {Point} from "../../model/Point";
-import {PathObject} from "../../model/path/PathObject";
+import {Path} from "../../model/path/Path";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {LineTo} from "../../model/path/line/LineTo";
 
@@ -16,7 +16,7 @@ export class Grid {
 
   constructor(container: SVG) {
     this.container = container;
-    this._group = document.createElementNS(Element.svgURI, "g");
+    this._group = document.createElementNS(ElementView.svgURI, "g");
     this._group.id = "grid";
   }
 
@@ -48,19 +48,20 @@ export class Grid {
     let width: number = this.container.HTML.clientWidth;
     let height: number = this.container.HTML.clientHeight;
 
-    let grid = document.createElementNS(Element.svgURI, "path");
+    let grid = document.createElementNS(ElementView.svgURI, "path");
+    grid.style.shapeRendering = "optimizeSpeed";
     grid.style.strokeWidth = this.strokeWidth + "";
     grid.style.stroke = this.strokeColor;
 
-    let path = new PathObject();
+    let path = new Path();
 
     for (let i = this.squareSide; i < width; i += this.squareSide) {
-      path.add(new MoveTo({x: i + 0.5, y: 0}));
-      path.add(new LineTo({x: i + 0.5, y: height}));
+      path.add(new MoveTo({x: i, y: 0}));
+      path.add(new LineTo({x: i, y: height}));
     }
     for (let i = this.squareSide; i < height; i += this.squareSide) {
-      path.add(new MoveTo({x: 0, y: i + 0.5}));
-      path.add(new LineTo({x: width, y: i + 0.5}));
+      path.add(new MoveTo({x: 0, y: i}));
+      path.add(new LineTo({x: width, y: i}));
     }
 
     grid.setAttribute("d", path.toString());

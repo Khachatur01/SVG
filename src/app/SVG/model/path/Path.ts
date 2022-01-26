@@ -2,11 +2,11 @@ import {PathCommand} from "./PathCommand";
 import {Point} from "../Point";
 import {MoveTo} from "./point/MoveTo";
 
-export class PathObject {
+export class Path {
   private commands: PathCommand[] = [];
 
-  get copy(): PathObject {
-    let path: PathObject = new PathObject();
+  get copy(): Path {
+    let path: Path = new Path();
     this.commands.forEach(
       (command: PathCommand) => path.add(command.copy)
     );

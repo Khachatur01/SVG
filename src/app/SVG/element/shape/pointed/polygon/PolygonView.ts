@@ -1,14 +1,14 @@
-import {Element} from "../../../Element";
+import {ElementView} from "../../../ElementView";
 import {Point} from "../../../../model/Point";
-import {Pointed} from "../Pointed";
+import {PointedView} from "../PointedView";
 import {SVG} from "../../../../SVG";
-import {Path} from "../Path";
+import {PathView} from "../PathView";
 import {Close} from "../../../../model/path/close/Close";
 
-export class Polygon extends Pointed {
+export class PolygonView extends PointedView {
   constructor(container: SVG, points: Point[] = []) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "polygon");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "polygon");
     this.svgElement.id = this.id;
 
     this.points = points;
@@ -17,8 +17,8 @@ export class Polygon extends Pointed {
     this.style.setDefaultStyle();
   }
 
-  get copy(): Polygon {
-    let polygon: Polygon = new Polygon(this._container);
+  get copy(): PolygonView {
+    let polygon: PolygonView = new PolygonView(this._container);
     polygon.points = this.points;
     polygon.fixRect();
 
@@ -91,7 +91,7 @@ export class Polygon extends Pointed {
     return pointsArr.length >= 3;
   }
 
-  override toPath(): Path {
+  override toPath(): PathView {
     let path = super.toPath();
     path.addCommand(new Close());
     return path;

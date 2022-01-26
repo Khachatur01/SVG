@@ -1,7 +1,7 @@
 import {Tool} from "../Tool";
 import {SVG} from "../../../SVG";
-import {Pointed} from "../../../element/shape/pointed/Pointed";
-import {Element} from "../../../element/Element";
+import {PointedView} from "../../../element/shape/pointed/PointedView";
+import {ElementView} from "../../../element/ElementView";
 import {Point} from "../../../model/Point";
 import {Node} from "./Node";
 import {Callback} from "../../../dataSource/Callback";
@@ -9,11 +9,11 @@ import {Callback} from "../../../dataSource/Callback";
 export class EditTool extends Tool {
   private readonly nodesGroup: SVGGElement;
   private _isOn: boolean = false;
-  private _editableElement: Pointed | null = null;
+  private _editableElement: PointedView | null = null;
 
   constructor(container: SVG) {
     super(container);
-    this.nodesGroup = document.createElementNS(Element.svgURI, "g");
+    this.nodesGroup = document.createElementNS(ElementView.svgURI, "g");
     this.nodesGroup.id = "nodes";
   }
 
@@ -33,11 +33,11 @@ export class EditTool extends Tool {
     return this.nodesGroup;
   }
 
-  get editableElement(): Pointed | null {
+  get editableElement(): PointedView | null {
     return this._editableElement;
   }
 
-  set editableElement(editableElement: Pointed | null) {
+  set editableElement(editableElement: PointedView | null) {
     if (!editableElement) return;
     this.container.focus(editableElement, false);
     this._editableElement = editableElement;
@@ -58,7 +58,7 @@ export class EditTool extends Tool {
   _on(): void {
     this._isOn = true;
     for (let child of this.container.focused.children) {
-      if (child instanceof Pointed) {
+      if (child instanceof PointedView) {
         this.editableElement = child;
         break;
       }

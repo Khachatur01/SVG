@@ -1,12 +1,12 @@
-import {Element} from "../../../Element";
+import {ElementView} from "../../../ElementView";
 import {Point} from "../../../../model/Point";
-import {Pointed} from "../Pointed";
+import {PointedView} from "../PointedView";
 import {SVG} from "../../../../SVG";
 
-export class Polyline extends Pointed {
+export class PolylineView extends PointedView {
   constructor(container: SVG, points: Point[] = []) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "polyline");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "polyline");
     this.svgElement.id = this.id;
 
     this.points = points;
@@ -15,8 +15,8 @@ export class Polyline extends Pointed {
     this.setOverEvent();
   }
 
-  get copy(): Polyline {
-    let polyline: Polyline = new Polyline(this._container);
+  get copy(): PolylineView {
+    let polyline: PolylineView = new PolylineView(this._container);
     polyline.points = this.points;
     polyline.fixRect();
 

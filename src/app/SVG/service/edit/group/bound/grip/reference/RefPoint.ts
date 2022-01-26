@@ -2,10 +2,10 @@ import {SVG} from "../../../../../../SVG";
 import {MoveTo} from "../../../../../../model/path/point/MoveTo";
 import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
-import {Path} from "../../../../../../element/shape/pointed/Path";
+import {PathView} from "../../../../../../element/shape/pointed/PathView";
 import {Point} from "../../../../../../model/Point";
 
-export class RefPoint extends Path {
+export class RefPoint extends PathView {
   private readonly _r: number = 5; /* radius */
   private _center: Point = {x: 0, y: 0};
 

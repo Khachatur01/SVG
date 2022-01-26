@@ -12,10 +12,10 @@ import {Point} from "../../../../model/Point";
 import {SVG} from "../../../../SVG";
 import {RefPoint} from "./grip/reference/RefPoint";
 import {RotatePoint} from "./grip/rotate/RotatePoint";
-import {Element} from "../../../../element/Element";
-import {Box} from "../../../../element/shape/Box";
+import {ElementView} from "../../../../element/ElementView";
+import {BoxView} from "../../../../element/shape/BoxView";
 
-export class BoundingBox extends Box {
+export class BoundingBox extends BoxView {
   private _grips: Grip[] = [];
   private xRefPoint: RefPoint;
   private xRotatePoint: RotatePoint;
@@ -55,7 +55,7 @@ export class BoundingBox extends Box {
     );
 
     /* create svg group */
-    this._boundingBoxGroup = document.createElementNS(Element.svgURI, "g");
+    this._boundingBoxGroup = document.createElementNS(ElementView.svgURI, "g");
     this._boundingBoxGroup.id = "bounding-box";
     this._boundingBoxGroup.appendChild(this.svgElement);
     this._boundingBoxGroup.appendChild(this.xRotatePoint.SVG);
@@ -63,7 +63,7 @@ export class BoundingBox extends Box {
       this._boundingBoxGroup.appendChild(grip.SVG);
     }
 
-    this._refPointGroup = document.createElementNS(Element.svgURI, "g");
+    this._refPointGroup = document.createElementNS(ElementView.svgURI, "g");
     this._refPointGroup.id = "reference-point";
     this._refPointGroup.appendChild(this.xRefPoint.SVG);
   }

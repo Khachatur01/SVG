@@ -1,18 +1,18 @@
 import {Tool} from "../Tool";
 import {SVG} from "../../../SVG";
 import {Callback} from "../../../dataSource/Callback";
-import {Path} from "../../../element/shape/pointed/Path";
-import {PathObject} from "../../../model/path/PathObject";
+import {PathView} from "../../../element/shape/pointed/PathView";
+import {Path} from "../../../model/path/Path";
 import {MoveTo} from "../../../model/path/point/MoveTo";
 import {LineTo} from "../../../model/path/line/LineTo";
-import {Element} from "../../../element/Element";
+import {ElementView} from "../../../element/ElementView";
 
 export class HighlightTool extends Tool {
   private _timeout: number = 3000;
   private _color: string = "#7efca0AA";
   private _width: string = "20";
   private _isOn: boolean = false;
-  private path: Path | null = null;
+  private path: PathView | null = null;
   private readonly group: SVGGElement;
 
   private start = this.onStart.bind(this);
@@ -21,7 +21,7 @@ export class HighlightTool extends Tool {
 
   constructor(container: SVG) {
     super(container);
-    this.group = document.createElementNS(Element.svgURI, "g");
+    this.group = document.createElementNS(ElementView.svgURI, "g");
     this.group.id = "highlight";
   }
 
@@ -44,7 +44,7 @@ export class HighlightTool extends Tool {
   private onStart(event: MouseEvent): void {
     let containerRect = this.container.HTML.getBoundingClientRect();
 
-    let start = new PathObject();
+    let start = new Path();
     start.add(
       new MoveTo({
         x: event.clientX - containerRect.left,
@@ -52,7 +52,7 @@ export class HighlightTool extends Tool {
       })
     );
 
-    this.path = new Path(this.container, start);
+    this.path = new PathView(this.container, start);
     this.path.removeOverEvent();
     this.path.style.strokeWidth = this._width;
     this.path.style.strokeColor = this._color;

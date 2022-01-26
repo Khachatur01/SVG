@@ -1,12 +1,12 @@
 import {ClickDraw} from "../../../mode/ClickDraw";
-import {Polyline} from "../../../../../../element/shape/pointed/polyline/Polyline";
-import {Pointed} from "../../../../../../element/shape/pointed/Pointed";
+import {PolylineView} from "../../../../../../element/shape/pointed/polyline/PolylineView";
+import {PointedView} from "../../../../../../element/shape/pointed/PointedView";
 import {Point} from "../../../../../../model/Point";
 
 export class DrawPolyline extends ClickDraw {
-  onClick(position: Point): Pointed | null {
+  onClick(position: Point): PointedView | null {
     if (!this.drawableElement) {
-      this.drawableElement = new Polyline(this.container, [
+      this.drawableElement = new PolylineView(this.container, [
         position, position
       ]);
       return this.drawableElement;

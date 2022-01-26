@@ -1,22 +1,22 @@
-import {Element} from "../../Element";
-import {PathObject} from "../../../model/path/PathObject";
+import {ElementView} from "../../ElementView";
+import {Path} from "../../../model/path/Path";
 import {Point} from "../../../model/Point";
 import {Size} from "../../../model/Size";
 import {SVG} from "../../../SVG";
 import {PathCommand} from "../../../model/path/PathCommand";
 import {Close} from "../../../model/path/close/Close";
-import {Pointed} from "./Pointed";
+import {PointedView} from "./PointedView";
 import {Rect} from "../../../model/Rect";
 import {LineTo} from "../../../model/path/line/LineTo";
 
-export class Path extends Pointed {
+export class PathView extends PointedView {
   protected _size: Size = {width: 0, height: 0};
-  protected _path: PathObject;
-  protected _lastPath: PathObject;
+  protected _path: Path;
+  protected _lastPath: Path;
 
-  constructor(container: SVG, path: PathObject = new PathObject()) {
+  constructor(container: SVG, path: Path = new Path()) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "path");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "path");
     this.svgElement.id = this.id;
 
     this._path = path;
@@ -31,19 +31,19 @@ export class Path extends Pointed {
     }
   }
 
-  get path(): PathObject {
+  get path(): Path {
     return this._path;
   }
 
-  set path(path: PathObject) {
+  set path(path: Path) {
     this._path = path;
     this.setAttr({
       d: path.toString()
     })
   }
 
-  get copy(): Path {
-    let path: Path = new Path(this._container);
+  get copy(): PathView {
+    let path: PathView = new PathView(this._container);
     path.path = this._path.copy;
     path.fixRect();
 
@@ -169,7 +169,7 @@ export class Path extends Pointed {
       commands[i].position.y = rect.y + Math.abs(this._lastPoints[i].y - rect.y) * dh;
     }
 
-    this._path = new PathObject();
+    this._path = new Path();
     this._path.setAll(commands);
 
     this.setAttr({
@@ -177,7 +177,7 @@ export class Path extends Pointed {
     });
   }
 
-  add(path: Path) {
+  add(path: PathView) {
     path.commands.forEach((command: PathCommand) => {
       this._path.add(command);
     });
@@ -195,7 +195,7 @@ export class Path extends Pointed {
     });
   }
 
-  override toPath(): Path {
+  override toPath(): PathView {
     return this;
   }
 

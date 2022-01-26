@@ -1,11 +1,11 @@
 import {MoveDraw} from "../../mode/MoveDraw";
 import {Point} from "../../../../../model/Point";
-import {Element} from "../../../../../element/Element";
-import {TextBox} from "../../../../../element/foreign/text/TextBox";
+import {ElementView} from "../../../../../element/ElementView";
+import {TextBoxView} from "../../../../../element/foreign/text/TextBoxView";
 
 export class DrawTextBox extends MoveDraw {
-  onStart(position: Point): Element {
-    let textBox = new TextBox(this.container, position.x, position.y);
+  onStart(position: Point): ElementView {
+    let textBox = new TextBoxView(this.container, position.x, position.y);
     textBox.SVG.style.outline = textBox.outline;
     return textBox
   }
@@ -23,7 +23,7 @@ export class DrawTextBox extends MoveDraw {
 
   override onEnd() {
     this.container.editTool.on();
-    if(this.drawableElement instanceof TextBox)
+    if(this.drawableElement instanceof TextBoxView)
       this.drawableElement.content?.focus();
   }
 }

@@ -1,10 +1,10 @@
 import {MoveDraw} from "../../../../mode/MoveDraw";
-import {Element} from "../../../../../../../element/Element";
+import {ElementView} from "../../../../../../../element/ElementView";
 import {Point} from "../../../../../../../model/Point";
-import {IsoscelesTriangle} from "../../../../../../../element/shape/pointed/polygon/triangle/IsoscelesTriangle";
+import {IsoscelesTriangleView} from "../../../../../../../element/shape/pointed/polygon/triangle/IsoscelesTriangleView";
 
 export class DrawIsoscelesTriangle extends MoveDraw {
-  onStart(position: Point): Element {
-    return new IsoscelesTriangle(this.container);
+  onStart(position: Point): ElementView {
+    return new IsoscelesTriangleView(this.container);
   }
 }

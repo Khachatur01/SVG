@@ -1,14 +1,14 @@
 import {Drawable} from "../Drawable";
-import {Free} from "../../../../element/shape/pointed/polyline/Free";
+import {FreeView} from "../../../../element/shape/pointed/polyline/FreeView";
 import {SVG} from "../../../../SVG";
 import {Point} from "../../../../model/Point";
 import {Angle} from "../../../math/Angle";
-import {PathObject} from "../../../../model/path/PathObject";
+import {Path} from "../../../../model/path/Path";
 import {MoveTo} from "../../../../model/path/point/MoveTo";
 
 export class DrawFree implements Drawable {
   private container: SVG;
-  private drawableElement: Free | null = null;
+  private drawableElement: FreeView | null = null;
   private _onStart = this.onStart.bind(this);
   private _onDraw = this.onDraw.bind(this);
   private _onEnd = this.onEnd.bind(this);
@@ -28,9 +28,9 @@ export class DrawFree implements Drawable {
 
     snapPoint = this.container.grid.getSnapPoint(snapPoint);
 
-    let pathObject = new PathObject();
+    let pathObject = new Path();
     pathObject.add(new MoveTo(snapPoint));
-    this.drawableElement = new Free(this.container, pathObject);
+    this.drawableElement = new FreeView(this.container, pathObject);
 
     this.container?.add(this.drawableElement);
     this.container?.HTML.addEventListener('mousemove', this._onDraw);

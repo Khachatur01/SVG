@@ -1,11 +1,11 @@
-import {Ellipse} from "../../../element/shape/Ellipse";
+import {EllipseView} from "../../../element/shape/EllipseView";
 import {Point} from "../../../model/Point";
 import {EditTool} from "./EditTool";
 import {Rect} from "../../../model/Rect";
 import {Matrix} from "../../math/Matrix";
 import {SVG} from "../../../SVG";
 
-export class Node extends Ellipse {
+export class Node extends EllipseView {
   private readonly editTool: EditTool;
   private readonly order: number;
 

@@ -1,6 +1,6 @@
 import {SVG} from "../../../SVG";
 import {Point} from "../../../model/Point";
-import {Element} from "../../../element/Element";
+import {ElementView} from "../../../element/ElementView";
 import {Tool} from "../Tool";
 
 export class DragTool extends Tool {
@@ -25,7 +25,7 @@ export class DragTool extends Tool {
     this.container.focused.fixRefPoint();
     this.elementStartPos = this.container.focused.lastRect;
 
-    this.container.focused?.children.forEach((child: Element) => {
+    this.container.focused?.children.forEach((child: ElementView) => {
       child.fixRect();
     });
     this.container.focused.highlight();

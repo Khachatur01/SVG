@@ -1,21 +1,21 @@
-import {Element} from "../Element";
+import {ElementView} from "../ElementView";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
-import {Path} from "../shape/pointed/Path";
+import {PathView} from "../shape/pointed/PathView";
 import {SVG} from "../../SVG";
 
-export class Group extends Element {
-  private _elements: Element[] = [];
+export class GroupView extends ElementView {
+  private _elements: ElementView[] = [];
 
   constructor(container: SVG) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "g");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "g");
   }
 
-  get copy(): Group {
-    let group: Group = new Group(this._container);
-    this._elements.forEach((element: Element) => {
+  get copy(): GroupView {
+    let group: GroupView = new GroupView(this._container);
+    this._elements.forEach((element: ElementView) => {
       let copy = element.copy;
       copy.group = group;
       group.addElement(copy);
@@ -29,23 +29,23 @@ export class Group extends Element {
     return group;
   }
 
-  get elements(): Element[] {
+  get elements(): ElementView[] {
     return this._elements;
   }
 
-  addElement(element: Element) {
+  addElement(element: ElementView) {
     this._elements.push(element);
     this.svgElement.appendChild(element.SVG);
   }
 
-  removeElement(element: Element) {
+  removeElement(element: ElementView) {
     this._elements.splice(this._elements.indexOf(element), 1);
     this.svgElement.removeChild(element.SVG);
   }
 
   get points(): Point[] {
     let points: Point[] = [];
-    this._elements.forEach((element: Element) => {
+    this._elements.forEach((element: ElementView) => {
       element.points.forEach((point: Point) => {
         points.push(Object.assign({}, point));
       });
@@ -55,7 +55,7 @@ export class Group extends Element {
 
   override get rotatedPoints(): Point[] {
     let points: Point[] = [];
-    this._elements.forEach((element: Element) => {
+    this._elements.forEach((element: ElementView) => {
       let elementPoints = element.rotatedPoints;
       elementPoints.forEach((point: Point) => {
         points.push(Object.assign({}, point));
@@ -74,13 +74,13 @@ export class Group extends Element {
   }
 
   set position(delta: Point) {
-    this._elements.forEach((element: Element) => {
+    this._elements.forEach((element: ElementView) => {
       element.position = delta;
     });
   }
 
   override correct(refPoint: Point, lastRefPoint: Point) {
-    this._elements.forEach((child: Element) => {
+    this._elements.forEach((child: ElementView) => {
       child.correct(refPoint, lastRefPoint)
     });
   }
@@ -99,7 +99,7 @@ export class Group extends Element {
       x: rect.width / this._lastSize.width,
       y: rect.height / this._lastSize.height
     }
-    this._elements.forEach((element: Element) => {
+    this._elements.forEach((element: ElementView) => {
       element.setSize(rect, delta);
     });
   }
@@ -183,26 +183,26 @@ export class Group extends Element {
 
   override fixRect(): void {
     super.fixRect();
-    this._elements.forEach((element: Element) => element.fixRect());
+    this._elements.forEach((element: ElementView) => element.fixRect());
   }
 
   override fixPosition(): void {
     super.fixPosition();
-    this._elements.forEach((element: Element) => element.fixPosition());
+    this._elements.forEach((element: ElementView) => element.fixPosition());
   }
 
   override fixSize(): void {
     super.fixSize();
-    this._elements.forEach((element: Element) => element.fixSize());
+    this._elements.forEach((element: ElementView) => element.fixSize());
   }
 
   override fixAngle(): void {
     super.fixAngle();
-    this._elements.forEach((element: Element) => element.fixAngle());
+    this._elements.forEach((element: ElementView) => element.fixAngle());
   }
 
-  toPath(): Path {
-    return new Path(this._container);
+  toPath(): PathView {
+    return new PathView(this._container);
   }
 
   isComplete(): boolean {

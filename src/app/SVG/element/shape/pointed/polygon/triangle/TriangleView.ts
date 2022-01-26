@@ -1,8 +1,8 @@
-import {Polygon} from "../Polygon";
+import {PolygonView} from "../PolygonView";
 import {SVG} from "../../../../../SVG";
 import {Point} from "../../../../../model/Point";
 
-export class Triangle extends Polygon {
+export class TriangleView extends PolygonView {
   constructor(container: SVG, pointA: Point | null = null, pointB: Point | null = null, pointC: Point | null = null) {
     super(container, (pointA && pointB && pointC) ? [pointA, pointB, pointC] : []);
 
@@ -10,7 +10,7 @@ export class Triangle extends Polygon {
     this.style.setDefaultStyle();
   }
 
-  override get copy(): Triangle {
-    return super.copy as Triangle;
+  override get copy(): TriangleView {
+    return super.copy as TriangleView;
   }
 }

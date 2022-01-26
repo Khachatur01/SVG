@@ -1,15 +1,15 @@
-import {Element} from "../Element";
+import {ElementView} from "../ElementView";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
 import {SVG} from "../../SVG";
-import {Path} from "./pointed/Path";
+import {PathView} from "./pointed/PathView";
 import {Shape} from "../type/Shape";
 
-export class Box extends Shape {
+export class BoxView extends Shape {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "rect");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "rect");
     this.svgElement.id = this.id;
 
     this.position = {x: x, y: y};
@@ -22,10 +22,10 @@ export class Box extends Shape {
     // this.style.setDefaultStyle();
   }
 
-  get copy(): Box {
+  get copy(): BoxView {
     let position = this.position;
     let size = this.size;
-    let box: Box = new Box(this._container);
+    let box: BoxView = new BoxView(this._container);
     box.position = position;
     box.setSize({
       x: position.x,
@@ -107,7 +107,7 @@ export class Box extends Shape {
     };
   }
 
-  override toPath(): Path {
-    return new Path(this._container);
+  override toPath(): PathView {
+    return new PathView(this._container);
   }
 }

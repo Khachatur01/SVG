@@ -1,19 +1,19 @@
 import {Size} from "../../model/Size";
 import {Point} from "../../model/Point";
 import {Rect} from "../../model/Rect";
-import {Element} from "../Element";
+import {ElementView} from "../ElementView";
 import {SVG} from "../../SVG";
 import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
-import {Path} from "./pointed/Path";
-import {PathObject} from "../../model/path/PathObject";
+import {PathView} from "./pointed/PathView";
+import {Path} from "../../model/path/Path";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {Shape} from "../type/Shape";
 
-export class Ellipse extends Shape implements MoveDrawable {
+export class EllipseView extends Shape implements MoveDrawable {
   constructor(container: SVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
     super(container);
-    this.svgElement = document.createElementNS(Element.svgURI, "ellipse");
+    this.svgElement = document.createElementNS(ElementView.svgURI, "ellipse");
     this.svgElement.id = this.id;
 
     this.position = {x: x, y: y};
@@ -23,10 +23,10 @@ export class Ellipse extends Shape implements MoveDrawable {
     this.style.setDefaultStyle();
   }
 
-  get copy(): Ellipse {
+  get copy(): EllipseView {
     let position = this.position;
     let size = this.size;
-    let ellipse: Ellipse = new Ellipse(this._container);
+    let ellipse: EllipseView = new EllipseView(this._container);
     ellipse.position = position;
     ellipse.setSize({
       x: position.x,
@@ -153,8 +153,8 @@ export class Ellipse extends Shape implements MoveDrawable {
     return size.width > 0 && size.height > 0;
   }
 
-  override toPath(): Path {
-    let path: PathObject = new PathObject();
+  override toPath(): PathView {
+    let path: Path = new Path();
     let size = this.size;
     let rx = size.width / 2;
     let ry = size.height / 2;
@@ -170,6 +170,6 @@ export class Ellipse extends Shape implements MoveDrawable {
       d: path.toString()
     })
 
-    return new Path(this._container, path);
+    return new PathView(this._container, path);
   }
 }

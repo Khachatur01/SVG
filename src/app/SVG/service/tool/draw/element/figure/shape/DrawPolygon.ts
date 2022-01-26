@@ -1,12 +1,12 @@
 import {ClickDraw} from "../../../mode/ClickDraw";
-import {Polygon} from "../../../../../../element/shape/pointed/polygon/Polygon";
-import {Pointed} from "../../../../../../element/shape/pointed/Pointed";
+import {PolygonView} from "../../../../../../element/shape/pointed/polygon/PolygonView";
+import {PointedView} from "../../../../../../element/shape/pointed/PointedView";
 import {Point} from "../../../../../../model/Point";
 
 export class DrawPolygon extends ClickDraw {
-  onClick(position: Point): Pointed | null {
+  onClick(position: Point): PointedView | null {
     if (!this.drawableElement) {
-      this.drawableElement = new Polygon(this.container, [
+      this.drawableElement = new PolygonView(this.container, [
         position, position
       ]);
       return this.drawableElement;

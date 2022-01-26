@@ -1,12 +1,12 @@
 import {Drawable} from "../Drawable";
 import {SVG} from "../../../../SVG";
-import {Pointed} from "../../../../element/shape/pointed/Pointed";
+import {PointedView} from "../../../../element/shape/pointed/PointedView";
 import {Point} from "../../../../model/Point";
 import {Angle} from "../../../math/Angle";
 
 export abstract class ClickDraw implements Drawable {
   protected container: SVG;
-  protected drawableElement: Pointed | null = null;
+  protected drawableElement: PointedView | null = null;
   private click = this._click.bind(this);
   private move = this._move.bind(this);
 
@@ -42,7 +42,7 @@ export abstract class ClickDraw implements Drawable {
     this.onMove(containerRect, event, this.container.perfect);
   }
 
-  abstract onClick(position: Point): Pointed | null;
+  abstract onClick(position: Point): PointedView | null;
 
   onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
     if (!this.drawableElement) return;

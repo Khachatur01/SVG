@@ -1,10 +1,10 @@
-import {Triangle} from "./Triangle";
+import {TriangleView} from "./TriangleView";
 import {SVG} from "../../../../../SVG";
 import {Rect} from "../../../../../model/Rect";
 import {Point} from "../../../../../model/Point";
 import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 
-export class IsoscelesTriangle extends Triangle implements MoveDrawable {
+export class IsoscelesTriangleView extends TriangleView implements MoveDrawable {
   constructor(container: SVG, rect: Rect | null = null) {
     if (rect) {
       let pointA: Point = {x: rect.x, y: rect.y};
@@ -16,8 +16,8 @@ export class IsoscelesTriangle extends Triangle implements MoveDrawable {
     }
   }
 
-  override get copy(): IsoscelesTriangle {
-    return super.copy as IsoscelesTriangle;
+  override get copy(): IsoscelesTriangleView {
+    return super.copy as IsoscelesTriangleView;
   }
 
   drawSize(rect: Rect): void {

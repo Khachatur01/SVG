@@ -1,10 +1,11 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {SVG} from "./SVG/SVG";
 import {Rect} from "./SVG/model/Rect";
-import {Image} from "./SVG/element/foreign/media/Image";
-import {ForeignObject} from "./SVG/element/foreign/ForeignObject";
+import {ImageView} from "./SVG/element/foreign/media/ImageView";
+import {ForeignObjectView} from "./SVG/element/foreign/ForeignObjectView";
 import {Callback} from './SVG/dataSource/Callback';
-import {Video} from "./SVG/element/foreign/media/Video";
+import {VideoView} from "./SVG/element/foreign/media/VideoView";
+import {GraphicView} from "./SVG/element/foreign/graphic/GraphicView";
 
 @Component({
   selector: 'app-root',
@@ -294,7 +295,7 @@ export class AppComponent implements AfterViewInit {
 
   demoVideo() {
     if (!this.svg) return;
-    let video = new Video(this.svg, 0, 0, 340, 200);
+    let video = new VideoView(this.svg, 0, 0, 340, 200);
     video.refPoint = {x: 170, y: 100};
     video.src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
@@ -302,7 +303,7 @@ export class AppComponent implements AfterViewInit {
   }
   demoImage() {
     if (!this.svg) return;
-    let image = new Image(this.svg, 0, 0, 340, 200);
+    let image = new ImageView(this.svg, 0, 0, 340, 200);
     image.refPoint = {x: 170, y: 100};
     image.src = "/assets/test/img1.png";
 
@@ -541,7 +542,7 @@ export class AppComponent implements AfterViewInit {
       "  </div>\n" +
       "</div>\n"
 
-    let element = new ForeignObject(this.svg, 0, 0, 600, 200);
+    let element = new ForeignObjectView(this.svg, 0, 0, 600, 200);
     element.refPoint = {x: 300, y: 100};
     element.setContent(htmlDiv);
 
@@ -657,5 +658,15 @@ export class AppComponent implements AfterViewInit {
     window.addEventListener("keyup", this.keyUp.bind(this));
 
     this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
+  }
+
+  graphicUnit(event: Event) {
+    if(!this.svg) return;
+    let range = document.getElementById((event.target as Element).id) as HTMLInputElement;
+    let unit = range.value;
+    let [first] = this.svg?.focused.children;
+    if(first instanceof GraphicView) {
+      first.unitPixels = parseInt(unit);
+    }
   }
 }

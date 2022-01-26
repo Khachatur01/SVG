@@ -1,12 +1,12 @@
 import {Tool} from "../Tool";
 import {SVG} from "../../../SVG";
-import {Rectangle} from "../../../element/shape/pointed/polygon/rectangle/Rectangle";
+import {RectangleView} from "../../../element/shape/pointed/polygon/rectangle/RectangleView";
 import {Point} from "../../../model/Point";
 import {DragTool} from "../drag/DragTool";
 import {Callback} from "../../../dataSource/Callback";
 
 export class SelectTool extends Tool {
-  private readonly boundingBox: Rectangle;
+  private readonly boundingBox: RectangleView;
   public readonly dragTool: DragTool;
   private position: Point = {x: 0, y: 0};
   private _isOn: boolean = false;
@@ -17,7 +17,7 @@ export class SelectTool extends Tool {
 
   constructor(container: SVG) {
     super(container);
-    this.boundingBox = new Rectangle(container);
+    this.boundingBox = new RectangleView(container);
     this.dragTool = new DragTool(container);
 
     this.boundingBox.style.fillColor = "none";

@@ -1,7 +1,7 @@
 import {SVG} from "../../../SVG";
-import {ForeignObject} from "../ForeignObject";
+import {ForeignObjectView} from "../ForeignObjectView";
 
-export class Video extends ForeignObject {
+export class VideoView extends ForeignObjectView {
   private readonly source: HTMLSourceElement;
   private readonly _video: HTMLVideoElement;
 
@@ -20,8 +20,8 @@ export class Video extends ForeignObject {
     this.setContent(this._video, false);
   }
 
-  override get copy(): Video {
-    return super.copy as Video;
+  override get copy(): VideoView {
+    return super.copy as VideoView;
   }
 
   set src(URI: string | null) {

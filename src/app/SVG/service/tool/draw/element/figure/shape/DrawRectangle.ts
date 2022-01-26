@@ -1,10 +1,10 @@
 import {MoveDraw} from "../../../mode/MoveDraw";
-import {Element} from "../../../../../../element/Element";
-import {Rectangle} from "../../../../../../element/shape/pointed/polygon/rectangle/Rectangle";
+import {ElementView} from "../../../../../../element/ElementView";
+import {RectangleView} from "../../../../../../element/shape/pointed/polygon/rectangle/RectangleView";
 import {Point} from "../../../../../../model/Point";
 
 export class DrawRectangle extends MoveDraw {
-  onStart(position: Point): Element {
-    return new Rectangle(this.container, position.x, position.y);
+  onStart(position: Point): ElementView {
+    return new RectangleView(this.container, position.x, position.y);
   }
 }

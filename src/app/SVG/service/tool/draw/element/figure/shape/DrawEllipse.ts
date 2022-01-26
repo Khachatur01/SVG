@@ -1,11 +1,11 @@
 import {MoveDraw} from "../../../mode/MoveDraw";
-import {Element} from "../../../../../../element/Element";
-import {Ellipse} from "../../../../../../element/shape/Ellipse";
+import {ElementView} from "../../../../../../element/ElementView";
+import {EllipseView} from "../../../../../../element/shape/EllipseView";
 import {Point} from "../../../../../../model/Point";
 
 export class DrawEllipse extends MoveDraw {
-  onStart(position: Point): Element {
-    let element = new Ellipse(this.container, position.x, position.y);
+  onStart(position: Point): ElementView {
+    let element = new EllipseView(this.container, position.x, position.y);
     element.fixPosition();
     return element;
   }

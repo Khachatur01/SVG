@@ -1,10 +1,10 @@
-import {ForeignObject} from "../ForeignObject";
+import {ForeignObjectView} from "../ForeignObjectView";
 import {SVG} from "../../../SVG";
 import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
 import {Rect} from "../../../model/Rect";
 import {Callback} from "../../../dataSource/Callback";
 
-export class TextBox extends ForeignObject implements MoveDrawable {
+export class TextBoxView extends ForeignObjectView implements MoveDrawable {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     let textarea = document.createElement("textarea");
@@ -29,8 +29,8 @@ export class TextBox extends ForeignObject implements MoveDrawable {
     this.style.setDefaultStyle();
   }
 
-  override get copy(): TextBox {
-    return super.copy as TextBox;
+  override get copy(): TextBoxView {
+    return super.copy as TextBoxView;
   }
 
   drawSize(rect: Rect): void {

@@ -1,5 +1,5 @@
 import {Size} from "../../../../../model/Size";
-import {Polygon} from "../Polygon";
+import {PolygonView} from "../PolygonView";
 import {Rect} from "../../../../../model/Rect";
 import {Point} from "../../../../../model/Point";
 import {SVG} from "../../../../../SVG";
@@ -11,7 +11,7 @@ import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 * 3|_____|2
 * */
 
-export class Rectangle extends Polygon implements MoveDrawable {
+export class RectangleView extends PolygonView implements MoveDrawable {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container, [
       /* 0 */                                             /* 1 */
@@ -25,8 +25,8 @@ export class Rectangle extends Polygon implements MoveDrawable {
     this.style.setDefaultStyle();
   }
 
-  override get copy(): Rectangle {
-    return super.copy as Rectangle;
+  override get copy(): RectangleView {
+    return super.copy as RectangleView;
   }
 
   override get size(): Size {

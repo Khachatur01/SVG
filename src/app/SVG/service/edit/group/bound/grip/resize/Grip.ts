@@ -1,10 +1,10 @@
 import {Point} from "../../../../../../model/Point";
 import {SVG} from "../../../../../../SVG";
 import {Rect} from "../../../../../../model/Rect";
-import {Box} from "../../../../../../element/shape/Box";
+import {BoxView} from "../../../../../../element/shape/BoxView";
 import {Matrix} from "../../../../../math/Matrix";
 
-export abstract class Grip extends Box {
+export abstract class Grip extends BoxView {
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);

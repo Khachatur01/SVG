@@ -1,5 +1,5 @@
 import {DrawTool} from "./service/tool/draw/DrawTool";
-import {Element} from "./element/Element";
+import {ElementView} from "./element/ElementView";
 import {Focus} from "./service/edit/group/Focus";
 import {SelectTool} from "./service/tool/select/SelectTool";
 import {Tool} from "./service/tool/Tool";
@@ -7,14 +7,14 @@ import {EditTool} from "./service/tool/edit/EditTool";
 import {DrawTools} from "./dataSource/DrawTools";
 import {Grid} from "./service/grid/Grid";
 import {Callback} from "./dataSource/Callback";
-import {Group} from "./element/group/Group";
-import {Pointed} from "./element/shape/pointed/Pointed";
+import {GroupView} from "./element/group/GroupView";
+import {PointedView} from "./element/shape/pointed/PointedView";
 import {ElementsClipboard} from "./dataSource/ElementsClipboard";
 import {Style} from "./service/style/Style";
 import {HighlightTool} from "./service/tool/highlighter/HighlightTool";
 import {PointerTool} from "./service/tool/pointer/PointerTool";
 import {Point} from "./model/Point";
-import {TextBox} from "./element/foreign/text/TextBox";
+import {TextBoxView} from "./element/foreign/text/TextBoxView";
 
 class GlobalStyle extends Style {
   private readonly default: Style;
@@ -36,7 +36,7 @@ class GlobalStyle extends Style {
       this.default.strokeWidth = width;
       return;
     }
-    this.container.focused.children.forEach((child: Element) => {
+    this.container.focused.children.forEach((child: ElementView) => {
       child.style.strokeWidth = width;
     });
   }
@@ -51,7 +51,7 @@ class GlobalStyle extends Style {
       this.default.strokeDashArray = array;
       return;
     }
-    this.container.focused.children.forEach((child: Element) => {
+    this.container.focused.children.forEach((child: ElementView) => {
       child.style.strokeDashArray = array;
     });
   }
@@ -66,7 +66,7 @@ class GlobalStyle extends Style {
       this.default.strokeColor = color;
       return;
     }
-    this.container.focused.children.forEach((child: Element) => {
+    this.container.focused.children.forEach((child: ElementView) => {
       child.style.strokeColor = color;
     });
   }
@@ -81,7 +81,7 @@ class GlobalStyle extends Style {
       this.default.fillColor = color;
       return;
     }
-    this.container.focused.children.forEach((child: Element) => {
+    this.container.focused.children.forEach((child: ElementView) => {
       child.style.fillColor = color;
     });
   }
@@ -96,7 +96,7 @@ class GlobalStyle extends Style {
       this.default.fontSize = size;
       return;
     }
-    this.container.focused.children.forEach((child: Element) => {
+    this.container.focused.children.forEach((child: ElementView) => {
       child.style.fontSize = size;
     });
   }
@@ -111,7 +111,7 @@ class GlobalStyle extends Style {
       this.default.fontColor = color;
       return;
     }
-    this.container.focused.children.forEach((child: Element) => {
+    this.container.focused.children.forEach((child: ElementView) => {
       child.style.fontColor = color;
     });
   }
@@ -126,7 +126,7 @@ class GlobalStyle extends Style {
       this.default.backgroundColor = color;
       return;
     }
-    this.container.focused.children.forEach((child: Element) => {
+    this.container.focused.children.forEach((child: ElementView) => {
       child.style.backgroundColor = color;
     });
   }
@@ -176,7 +176,7 @@ class GlobalStyle extends Style {
 export class SVG {
   private readonly container: HTMLElement;
   private _focus: Focus = new Focus(this);
-  private _elements: Set<Element> = new Set<Element>();
+  private _elements: Set<ElementView> = new Set<ElementView>();
   private _callBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
 
   public elementsGroup: SVGGElement;
@@ -223,7 +223,7 @@ export class SVG {
       }
     });
 
-    this.elementsGroup = document.createElementNS(Element.svgURI, "g");
+    this.elementsGroup = document.createElementNS(ElementView.svgURI, "g");
     this.elementsGroup.id = "elements";
     this._focus.SVG.style.cursor = "move";
 
@@ -268,8 +268,8 @@ export class SVG {
       functions.splice(functions.indexOf(callback), 1);
   }
 
-  setElementActivity(element: Element) {
-    if (element instanceof Group) return;
+  setElementActivity(element: ElementView) {
+    if (element instanceof GroupView) return;
     element.SVG.addEventListener("mousedown", () => {
       if (!this.selectTool.isOn() && !this.editTool.isOn())
         return;
@@ -277,9 +277,9 @@ export class SVG {
       this.editTool.removeEditableElement();
 
       if (this.editTool.isOn()) {
-        if (element instanceof Pointed)
+        if (element instanceof PointedView)
           this.editTool.editableElement = element;
-        else if (element instanceof TextBox)
+        else if (element instanceof TextBoxView)
           this.focus(element, false);
       } else {
         if (element.group) /* if element has grouped, then select group */
@@ -314,11 +314,11 @@ export class SVG {
     });
   }
 
-  get elements(): Set<Element> {
+  get elements(): Set<ElementView> {
     return this._elements;
   }
 
-  add(xElement: Element) {
+  add(xElement: ElementView) {
     if (!xElement) return;
     xElement.group = null;
     this.elementsGroup.appendChild(xElement.SVG);
@@ -326,7 +326,7 @@ export class SVG {
     this.setElementActivity(xElement);
   }
 
-  remove(xElement: Element) {
+  remove(xElement: ElementView) {
     this._elements.delete(xElement);
     xElement.remove();
   }
@@ -342,16 +342,16 @@ export class SVG {
 
   focusAll() {
     this.selectTool.on();
-    this._elements.forEach((element: Element) => {
+    this._elements.forEach((element: ElementView) => {
       this.focus(element);
     });
   }
 
-  focus(xElement: Element, showBounding: boolean = true) {
+  focus(xElement: ElementView, showBounding: boolean = true) {
     this._focus.appendChild(xElement, showBounding);
   }
 
-  blur(xElement: Element | null = null) {
+  blur(xElement: ElementView | null = null) {
     if (xElement)
       this._focus.removeChild(xElement);
     else
@@ -371,7 +371,7 @@ export class SVG {
   }
 
   copyFocused(): void {
-    let elements: Element[] = [];
+    let elements: ElementView[] = [];
     for (let element of this._focus.children) {
       elements.push(element.copy);
     }
@@ -385,14 +385,14 @@ export class SVG {
   }
 
   paste(): void {
-    let elements: Element[] = ElementsClipboard.get();
+    let elements: ElementView[] = ElementsClipboard.get();
 
     this.blur();
-    elements.forEach((element: Element) => {
+    elements.forEach((element: ElementView) => {
       element = element.copy; /* may paste many times */
       element.container = this;
-      if (element instanceof Group)
-        element.elements.forEach((child: Element) => {
+      if (element instanceof GroupView)
+        element.elements.forEach((child: ElementView) => {
           this.setElementActivity(child);
           child.container = this;
         });
