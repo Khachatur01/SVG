@@ -666,7 +666,7 @@ export class AppComponent implements AfterViewInit {
     let unit = range.value;
     let [first] = this.svg?.focused.children;
     if(first instanceof GraphicView) {
-      first.unitPixels = parseInt(unit);
+      first.logicalUnitSize = parseFloat(unit);
     }
   }
 }

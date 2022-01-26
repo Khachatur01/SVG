@@ -18,9 +18,12 @@ interface Graphic {
 }
 export class GraphicView extends Foreign implements MoveDrawable {
   public readonly outline: string = "thin solid #999";
-
   private _center: Point = {x: 0, y: 0};
   private _size: Size = {width: 0, height: 0};
+  private _logicalUnitSize: number = 1;
+  private _minPhysicalUnitSize: number = 15;
+  private _physicalUnitSize: number = 20;
+  private _maxPhysicalUnitSize: number = 30;
   private _unit: number = 20;
   private _showSteps: boolean = true;
   private graphics: Map<Function, Graphic> = new Map<Function, Graphic>();
@@ -55,16 +58,18 @@ export class GraphicView extends Foreign implements MoveDrawable {
     this.drawAxis();
   }
 
-  set unitPixels(pixel: number) {
-    this._unit = pixel;
+  set logicalUnitSize(size: number) {
+    if(size <= 0) size = 0.1;
+    this._logicalUnitSize = size;
+    this._unit = size * this._physicalUnitSize;
     this.recreateGraphic()
   }
   showSteps() {
-    this._showSteps = true; /* TODO */
+    this._showSteps = true;
     this.drawAxis();
   }
   hideSteps() {
-    this._showSteps = false; /* TODO */
+    this._showSteps = false;
     this.drawAxis();
   }
 
@@ -117,13 +122,36 @@ export class GraphicView extends Foreign implements MoveDrawable {
 
     graphic.path = graphicPath;
   }
+
+  private setXStep(pathObject: Path, x: number, y: number, length: number) {
+    pathObject.add(new MoveTo({
+      x: x,
+      y: y - length
+    }));
+    pathObject.add(new LineTo({
+      x: x,
+      y: y + length
+    }));
+  }
+  private setYStep(pathObject: Path, x: number, y: number, length: number) {
+    pathObject.add(new MoveTo({
+      x: x - length,
+      y: y
+    }));
+    pathObject.add(new LineTo({
+      x: x + length,
+      y: y
+    }));
+  }
   private drawAxis() {
-    // let unit = 10;
     let unit = this._unit;
     let localCenter = {
       x: this._size.width / 2,
       y: this._size.height / 2
     }
+
+    let stepSize = 3.5;
+    let subStepSize = 1.5;
 
     this._xAxisPathView.style.strokeWidth = "1";
     this._xAxisPathView.style.strokeColor = "red";
@@ -138,47 +166,34 @@ export class GraphicView extends Foreign implements MoveDrawable {
     yAxisPathObject.add(new LineTo({x: localCenter.x, y: this._size.height}));
 
     if(this._showSteps) {
-      for (let i = localCenter.x - unit; i >= 0; i -= unit) {
-        xAxisPathObject.add(new MoveTo({
-          x: i,
-          y: localCenter.y - 3.5
-        }));
-        xAxisPathObject.add(new LineTo({
-          x: i,
-          y: localCenter.y + 3.5
-        }));
+      /* negative x axis */
+      for (let i = localCenter.x - unit; i >= -unit; i -= unit) {
+        this.setXStep(xAxisPathObject, i, localCenter.y, stepSize);
+        for(let j = i + unit; j > i; j -= unit / 5) {
+          this.setXStep(xAxisPathObject, j, localCenter.y, subStepSize);
+        }
       }
-      for (let i = localCenter.x + unit; i <= this._size.width; i += unit) {
-        xAxisPathObject.add(new MoveTo({
-          x: i,
-          y: localCenter.y - 3.5
-        }));
-        xAxisPathObject.add(new LineTo({
-          x: i,
-          y: localCenter.y + 3.5
-        }));
+      /* positive x axis */
+      for (let i = localCenter.x + unit; i <= this._size.width + unit; i += unit) {
+        this.setXStep(xAxisPathObject, i, localCenter.y, stepSize);
+        for(let j = i - unit; j < i; j += unit / 5) {
+          this.setXStep(xAxisPathObject, j, localCenter.y, subStepSize);
+        }
       }
 
-
-      for (let i = localCenter.y - unit; i >= 0; i -= unit) {
-        yAxisPathObject.add(new MoveTo({
-          x: localCenter.x - 3.5,
-          y: i
-        }));
-        yAxisPathObject.add(new LineTo({
-          x: localCenter.x + 3.5,
-          y: i
-        }));
+      /* negative y axis */
+      for (let i = localCenter.y - unit; i >= -unit; i -= unit) {
+        this.setYStep(yAxisPathObject, localCenter.x, i, stepSize);
+        for(let j = i + unit; j > i; j -= unit / 5) {
+          this.setYStep(yAxisPathObject, localCenter.x, j, subStepSize);
+        }
       }
-      for (let i = localCenter.y + unit; i <= this._size.height; i += unit) {
-        yAxisPathObject.add(new MoveTo({
-          x: localCenter.x - 3.5,
-          y: i
-        }));
-        yAxisPathObject.add(new LineTo({
-          x: localCenter.x + 3.5,
-          y: i
-        }));
+      /* positive y axis */
+      for (let i = localCenter.y + unit; i <= this._size.height + unit; i += unit) {
+        this.setYStep(yAxisPathObject, localCenter.x, i, stepSize);
+        for(let j = i - unit; j < i; j += unit / 5) {
+          this.setYStep(yAxisPathObject, localCenter.x, j, subStepSize);
+        }
       }
     }
 
