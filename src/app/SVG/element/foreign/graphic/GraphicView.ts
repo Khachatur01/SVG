@@ -221,6 +221,12 @@ export class GraphicView extends Foreign implements MoveDrawable {
     return new GraphicView(this._container);
   }
 
+  override get points(): Point[] {
+    let points = super.points;
+    points.push(this.center)
+    return points;
+  }
+
   get position(): Point {
     return {
       x: this._center.x - this._size.width / 2,

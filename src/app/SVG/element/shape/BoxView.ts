@@ -19,7 +19,6 @@ export class BoxView extends Shape {
     });
 
     this.setOverEvent();
-    // this.style.setDefaultStyle();
   }
 
   get copy(): BoxView {
@@ -67,8 +66,8 @@ export class BoxView extends Shape {
 
   set position(delta: Point) {
     this.setAttr({
-      x: this._lastPosition.x + delta.x,
-      y: this._lastPosition.y + delta.y
+      x: this._lastPosition.x + delta.x + "",
+      y: this._lastPosition.y + delta.y + ""
     });
   }
 

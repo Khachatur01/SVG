@@ -174,8 +174,6 @@ export class BoundingBox extends BoxView {
   }
 
   correctByDelta(delta: Point) {
-    if (delta.x == 0 && delta.y == 0) return;
-
     this.position = delta;
     let position = this.position;
     let size = this.size;
