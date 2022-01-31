@@ -364,10 +364,12 @@ export class SVG {
 
   multiSelect(): void {
     this._multiSelect = true;
+    this._focus.boundingBox.transparentClick = true;
   }
 
   singleSelect(): void {
     this._multiSelect = false;
+    this._focus.boundingBox.transparentClick = false;
   }
 
   copyFocused(): void {

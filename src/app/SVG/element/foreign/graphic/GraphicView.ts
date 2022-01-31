@@ -20,30 +20,29 @@ export class GraphicView extends Foreign implements MoveDrawable {
   public readonly outline: string = "thin solid #999";
   private _center: Point = {x: 0, y: 0};
   private _size: Size = {width: 0, height: 0};
-  private _logicalUnitSize: number = 1;
-  private _minPhysicalUnitSize: number = 15;
-  private _physicalUnitSize: number = 20;
-  private _maxPhysicalUnitSize: number = 30;
-  private _unit: number = 20;
-  private _showSteps: boolean = true;
+  private _physicalUnitSize: number = 20;               // px - CHANGING on zoom
+  private _rulerStep: number = 1;                       // CHANGING by handler
+  private readonly _minRulerStepSize: number = 15;      // px
+  private readonly _maxRulerStepSize: number = 50;      // px
   private graphics: Map<Function, Graphic> = new Map<Function, Graphic>();
   private _xAxisPathView: PathView;
   private _yAxisPathView: PathView;
+  override rotatable: boolean = false;
 
   constructor(container: SVG, center: Point = {x: 0, y: 0}, size: Size = {width: 1, height: 1}) {
     super(container);
 
     this.svgElement = document.createElementNS(ElementView.svgURI, "svg");
-    this.svgElement.style.outline = this.outline;
 
+    this.svgElement.style.outline = this.outline;
     this._xAxisPathView = new PathView(this._container);
     this._xAxisPathView.SVG.style.shapeRendering = "optimizeSpeed";
-    this._xAxisPathView.SVG.style.strokeLinecap = "butt";
 
+    this._xAxisPathView.SVG.style.strokeLinecap = "butt";
     this._yAxisPathView = new PathView(this._container);
     this._yAxisPathView.SVG.style.shapeRendering = "optimizeSpeed";
-    this._yAxisPathView.SVG.style.strokeLinecap = "butt";
 
+    this._yAxisPathView.SVG.style.strokeLinecap = "butt";
     center = {
       x: center.x - size.width / 2,
       y: center.y - size.height / 2
@@ -58,19 +57,19 @@ export class GraphicView extends Foreign implements MoveDrawable {
     this.drawAxis();
   }
 
-  set logicalUnitSize(size: number) {
-    if(size <= 0) size = 0.1;
-    this._logicalUnitSize = size;
-    this._unit = size * this._physicalUnitSize;
-    this.recreateGraphic()
+  zoomIn() {
+    this._physicalUnitSize += this._physicalUnitSize / 2;
+    this.recreateGraphic();
+  }
+  zoomOut() {
+    this._physicalUnitSize -= this._physicalUnitSize / 2;
+    this.recreateGraphic();
   }
   showSteps() {
-    this._showSteps = true;
     this.drawAxis();
   }
   hideSteps() {
-    this._showSteps = false;
-    this.drawAxis();
+    this.drawAxis(false);
   }
 
   addFunction(f: Function, color: string = "#000", width: number = 2) {
@@ -92,19 +91,20 @@ export class GraphicView extends Foreign implements MoveDrawable {
   }
 
   private setPath(f: Function, graphic: Graphic) {
+    let unit = this._physicalUnitSize;
     let graphicPath = new PathView(this._container);
     graphicPath.style.strokeWidth = graphic.width + "";
     graphicPath.style.strokeColor = graphic.color;
     let graphicPathObject = new Path();
 
-    let maxX = (this._size.width / 2) / this._unit;
+    let maxX = (this._size.width / 2) / unit + 1;
     let x = -maxX;
 
     let step = 0.01;
 
     for(; x < maxX; x += step) {
-      let visibleX = (this._size.width / 2) + x * this._unit;
-      let visibleY = (this._size.height / 2) - (f(x) * this._unit);
+      let visibleX = (this._size.width / 2) + x * unit;
+      let visibleY = (this._size.height / 2) - (f(x) * unit);
 
       graphicPathObject.add(new LineTo({
         x: visibleX,
@@ -143,8 +143,13 @@ export class GraphicView extends Foreign implements MoveDrawable {
       y: y
     }));
   }
-  private drawAxis() {
-    let unit = this._unit;
+
+  private drawAxis(showSteps: boolean = true) {
+
+    // TODO - calculate step according min/max ruler size and set unit
+
+    let unit = this._rulerStep * this._physicalUnitSize;
+
     let localCenter = {
       x: this._size.width / 2,
       y: this._size.height / 2
@@ -165,35 +170,35 @@ export class GraphicView extends Foreign implements MoveDrawable {
     yAxisPathObject.add(new MoveTo({x: localCenter.x, y: 0}));
     yAxisPathObject.add(new LineTo({x: localCenter.x, y: this._size.height}));
 
-    if(this._showSteps) {
+    if(showSteps) {
       /* negative x axis */
       for (let i = localCenter.x - unit; i >= -unit; i -= unit) {
         this.setXStep(xAxisPathObject, i, localCenter.y, stepSize);
-        for(let j = i + unit; j > i; j -= unit / 5) {
-          this.setXStep(xAxisPathObject, j, localCenter.y, subStepSize);
-        }
+        // for(let j = i + unit; j > i; j -= unit / 5) {
+        //   this.setXStep(xAxisPathObject, j, localCenter.y, subStepSize);
+        // }
       }
       /* positive x axis */
       for (let i = localCenter.x + unit; i <= this._size.width + unit; i += unit) {
         this.setXStep(xAxisPathObject, i, localCenter.y, stepSize);
-        for(let j = i - unit; j < i; j += unit / 5) {
-          this.setXStep(xAxisPathObject, j, localCenter.y, subStepSize);
-        }
+        // for(let j = i - unit; j < i; j += unit / 5) {
+        //   this.setXStep(xAxisPathObject, j, localCenter.y, subStepSize);
+        // }
       }
 
       /* negative y axis */
       for (let i = localCenter.y - unit; i >= -unit; i -= unit) {
         this.setYStep(yAxisPathObject, localCenter.x, i, stepSize);
-        for(let j = i + unit; j > i; j -= unit / 5) {
-          this.setYStep(yAxisPathObject, localCenter.x, j, subStepSize);
-        }
+        // for(let j = i + unit; j > i; j -= unit / 5) {
+        //   this.setYStep(yAxisPathObject, localCenter.x, j, subStepSize);
+        // }
       }
       /* positive y axis */
       for (let i = localCenter.y + unit; i <= this._size.height + unit; i += unit) {
         this.setYStep(yAxisPathObject, localCenter.x, i, stepSize);
-        for(let j = i - unit; j < i; j += unit / 5) {
-          this.setYStep(yAxisPathObject, localCenter.x, j, subStepSize);
-        }
+        // for(let j = i - unit; j < i; j += unit / 5) {
+        //   this.setYStep(yAxisPathObject, localCenter.x, j, subStepSize);
+        // }
       }
     }
 

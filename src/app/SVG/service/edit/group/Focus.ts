@@ -68,7 +68,7 @@ export class Focus implements Draggable, Resizeable {
     }
     this.fit();
     if(showBounding)
-      this.focus();
+      this.focus(xElement.rotatable);
   }
 
   removeChild(xElement: ElementView): void {
@@ -76,21 +76,27 @@ export class Focus implements Draggable, Resizeable {
 
     this.container.editTool.removeEditableElement();
     if (this._children.size == 0) {
+      /* no element */
       this.container.style.recoverGlobalStyle();
       this.blur();
     } else if (this._children.size == 1) {
-      this.refPoint = Object.assign({}, xElement.refPoint);
-      this.refPointView = Object.assign({}, xElement.refPoint);
-      this.rotate(xElement.angle);
-      this.focus();
       /* one element */
       this.container.style.fixGlobalStyle();
       this._children.forEach((child: ElementView) => {
         this.container.style.setGlobalStyle(child.style);
         this.rotate(child.angle);
+        this.focus(child.rotatable);
       });
     } else {
-      this.focus();
+      /* multiple elements */
+      let rotatable: boolean = true;
+      for (let child of this._children) {
+        if (!child.rotatable) {
+          rotatable = false;
+          break;
+        }
+      }
+      this.focus(rotatable);
     }
 
     this.fit();
@@ -112,14 +118,8 @@ export class Focus implements Draggable, Resizeable {
       this.container.elementsGroup.appendChild(child.SVG);
     });
   }
-
-  orderUp(): void {
-  }
-
-  orderDown(): void {
-
-  }
-
+  orderUp(): void {}
+  orderDown(): void {}
   orderBottom(): void {
     let firstChild = this.container.elementsGroup.firstChild;
     this._children.forEach((child: ElementView) => {
@@ -164,7 +164,6 @@ export class Focus implements Draggable, Resizeable {
     this.boundingBox.rotate(0);
     this.focus();
   }
-
   ungroup() {
     if (this._children.size > 1) return;
     let [group] = this._children;
@@ -413,17 +412,18 @@ export class Focus implements Draggable, Resizeable {
     this.boundingBox.positionGrips();
   }
 
-  focus() {
+  focus(rotatable: boolean = true) {
     this.container.call(Callback.FOCUS_CHANGED);
     if (this._children.size > 1) {
-      this.boundingBox.multipleFocus();
+      this.boundingBox.multipleFocus(rotatable);
     } else {
       let [singleElement] = this._children;
 
-      if (singleElement instanceof GroupView)
-        this.boundingBox.multipleFocus();
-      else
-        this.boundingBox.singleFocus();
+      if (singleElement instanceof GroupView) {
+        this.boundingBox.multipleFocus(rotatable);
+      } else {
+        this.boundingBox.singleFocus(rotatable);
+      }
     }
   }
 

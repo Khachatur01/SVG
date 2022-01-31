@@ -71,7 +71,12 @@
     <button class="btn btn-default" (click)="demoImage()" title="Place Demo Image">Demo Image</button>
     <button class="btn btn-default" (click)="demoAsset()" title="Place Demo Problem">Demo Problem</button>
     <button class="btn btn-default" (click)="demoGraphic()" title="Place Demo Graphic">Demo Graphic</button>
-    <input (change)="graphicUnit($event)" id="unit_range" title="Grid size" type="number" class="input form-control form-control-sm" value="1" step="0.5" min="0.5" max="100">
+    <button class="btn btn-default" (click)="zoomIn()" title="Zoom In">
+      <img src="../assets/img/zoom-in.svg" height="17" alt="">
+    </button>
+    <button class="btn btn-default" (click)="zoomOut()" title="Zoom Out">
+      <img src="../assets/img/zoom-out.svg" height="17" alt="">
+    </button>
 
   </div>
 

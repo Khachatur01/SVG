@@ -6,11 +6,12 @@ import {MoveDraw} from "../../mode/MoveDraw";
 export class DrawGraphic extends MoveDraw {
   onStart(position: Point): ElementView {
     let graphicView = new GraphicView(this.container, position);
-    // graphicView.addFunction((x: number) => Math.pow(2, x + 1), "#486fff");
-    // graphicView.addFunction((x: number) => x * x * x, "#b700ff");
-    // graphicView.addFunction((x: number) => x, "#007d16");
-    graphicView.addFunction((x: number) => x * x, "#000", 3);
+    // graphicView.addFunction((x: number) => Math.sin(Math.pow(Math.E, x)), "#ff7f3f");
+    graphicView.addFunction((x: number) => Math.pow(2, x + 1), "#486fff");
+    graphicView.addFunction((x: number) => x * x * x, "#b700ff");
+    graphicView.addFunction((x: number) => x, "#007d16");
     graphicView.addFunction((x: number) => Math.sin(x), "#ff7f3f");
+    graphicView.addFunction((x: number) => x * x, "#000", 2.5);
     return graphicView;
   }
 

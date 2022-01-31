@@ -68,6 +68,10 @@ export class BoundingBox extends BoxView {
     this._refPointGroup.appendChild(this.xRefPoint.SVG);
   }
 
+  set transparentClick(transparent: boolean) {
+    this.style.fillColor = transparent ? "none" : "transparent";
+  }
+
   get svgGroup(): SVGGElement {
     return this._boundingBoxGroup;
   }
@@ -88,16 +92,21 @@ export class BoundingBox extends BoxView {
     return this.xRefPoint.lastRefPoint;
   }
 
-  singleFocus() {
+  singleFocus(rotatable: boolean = true) {
     this.svgElement.style.display = "block";
-    for (let grip of this._grips) {
+    for (let grip of this._grips)
       grip.show();
+
+    if (rotatable) {
+      this.xRefPoint.show();
+      this.xRotatePoint.show();
+    } else {
+      this.xRefPoint.hide();
+      this.xRotatePoint.hide();
     }
-    this.xRefPoint.show();
-    this.xRotatePoint.show();
   }
 
-  multipleFocus() {
+  multipleFocus(rotatable: boolean = true) {
     this.svgElement.style.display = "block";
     /* more effective than with one loop and condition */
     // for(let i = 0; i < this._grips.length; i += 2) {
@@ -109,8 +118,13 @@ export class BoundingBox extends BoxView {
     for (let grip of this._grips)
       grip.hide();
 
-    this.xRefPoint.show();
-    this.xRotatePoint.show();
+    if (rotatable) {
+      this.xRefPoint.show();
+      this.xRotatePoint.show();
+    } else {
+      this.xRefPoint.hide();
+      this.xRotatePoint.hide();
+    }
   }
 
   blur() {

@@ -105,6 +105,7 @@ export abstract class ElementView implements Resizeable, Draggable {
   protected _refPoint: Point = {x: 0, y: 0};
 
   private _group: GroupView | null = null;
+  public readonly rotatable: boolean = true;
 
   protected readonly id: string;
 

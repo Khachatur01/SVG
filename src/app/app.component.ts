@@ -639,6 +639,19 @@ export class AppComponent implements AfterViewInit {
     this.svg.focused.recenterRefPoint();
   }
 
+  zoomIn() {
+    if(!this.svg) return;
+    let [first] = this.svg?.focused.children;
+    if(first instanceof GraphicView)
+      first.zoomIn();
+  }
+  zoomOut() {
+    if(!this.svg) return;
+    let [first] = this.svg?.focused.children;
+    if(first instanceof GraphicView)
+      first.zoomOut();
+    }
+
   ngAfterViewInit(): void {
     this.svg = new SVG("svgContainer");
     this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
@@ -658,15 +671,5 @@ export class AppComponent implements AfterViewInit {
     window.addEventListener("keyup", this.keyUp.bind(this));
 
     this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
-  }
-
-  graphicUnit(event: Event) {
-    if(!this.svg) return;
-    let range = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let unit = range.value;
-    let [first] = this.svg?.focused.children;
-    if(first instanceof GraphicView) {
-      first.logicalUnitSize = parseFloat(unit);
-    }
   }
 }
