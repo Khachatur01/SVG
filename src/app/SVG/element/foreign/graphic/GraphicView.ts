@@ -18,21 +18,35 @@ interface Graphic {
 }
 export class GraphicView extends Foreign implements MoveDrawable {
   public readonly outline: string = "thin solid #999";
+  private graphics: Map<Function, Graphic> = new Map<Function, Graphic>();
+  private _xAxisPathView: PathView;
+  private _yAxisPathView: PathView;
+  private readonly _axisGroup: SVGGElement;
+  private readonly _graphicGroup: SVGGElement;
+
   private _center: Point = {x: 0, y: 0};
   private _size: Size = {width: 0, height: 0};
   private _physicalUnitSize: number = 20;               // px - CHANGING on zoom
   private _rulerStep: number = 1;                       // CHANGING by handler
   private readonly _minRulerStepSize: number = 15;      // px
   private readonly _maxRulerStepSize: number = 50;      // px
-  private graphics: Map<Function, Graphic> = new Map<Function, Graphic>();
-  private _xAxisPathView: PathView;
-  private _yAxisPathView: PathView;
   override rotatable: boolean = false;
 
   constructor(container: SVG, center: Point = {x: 0, y: 0}, size: Size = {width: 1, height: 1}) {
     super(container);
 
     this.svgElement = document.createElementNS(ElementView.svgURI, "svg");
+    this._axisGroup = document.createElementNS(ElementView.svgURI, "g");
+    this._graphicGroup = document.createElementNS(ElementView.svgURI, "g");
+
+    let background = document.createElementNS(ElementView.svgURI, "rect")
+    background.setAttribute("width", "100%");
+    background.setAttribute("height", "100%");
+    background.setAttribute("fill", "transparent");
+
+    this.svgElement.appendChild(background);
+    this.svgElement.appendChild(this._axisGroup);
+    this.svgElement.appendChild(this._graphicGroup);
 
     this.svgElement.style.outline = this.outline;
     this._xAxisPathView = new PathView(this._container);
@@ -80,47 +94,14 @@ export class GraphicView extends Foreign implements MoveDrawable {
     }
     this.setPath(f, graphic);
     this.graphics.set(f, graphic);
-    this.svgElement.appendChild(graphic.path.SVG);
+    this._graphicGroup.appendChild(graphic.path.SVG);
   }
   removeFunction(f: Function) {
     let graphicPath = this.graphics.get(f);
     if(graphicPath) {
-      this.svgElement.removeChild(graphicPath.path.SVG);
+      this._graphicGroup.removeChild(graphicPath.path.SVG);
     }
     this.graphics.delete(f);
-  }
-
-  private setPath(f: Function, graphic: Graphic) {
-    let unit = this._physicalUnitSize;
-    let graphicPath = new PathView(this._container);
-    graphicPath.style.strokeWidth = graphic.width + "";
-    graphicPath.style.strokeColor = graphic.color;
-    let graphicPathObject = new Path();
-
-    let maxX = (this._size.width / 2) / unit + 1;
-    let x = -maxX;
-
-    let step = 0.01;
-
-    for(; x < maxX; x += step) {
-      let visibleX = (this._size.width / 2) + x * unit;
-      let visibleY = (this._size.height / 2) - (f(x) * unit);
-
-      graphicPathObject.add(new LineTo({
-        x: visibleX,
-        y: visibleY
-      }));
-    }
-
-    try {
-      let firstPoint = graphicPathObject.get(0).position;
-      graphicPathObject.replaceCommand(0, new MoveTo(firstPoint));
-    } catch (e) {
-
-    }
-    graphicPath.path = graphicPathObject;
-
-    graphic.path = graphicPath;
   }
 
   private setXStep(pathObject: Path, x: number, y: number, length: number) {
@@ -205,15 +186,48 @@ export class GraphicView extends Foreign implements MoveDrawable {
     this._xAxisPathView.path = xAxisPathObject;
     this._yAxisPathView.path = yAxisPathObject;
 
-    this.svgElement.appendChild(this._xAxisPathView.SVG);
-    this.svgElement.appendChild(this._yAxisPathView.SVG);
+    this._axisGroup.appendChild(this._xAxisPathView.SVG);
+    this._axisGroup.appendChild(this._yAxisPathView.SVG);
+  }
+
+  private setPath(f: Function, graphic: Graphic) {
+    let unit = this._physicalUnitSize;
+    let graphicPath = new PathView(this._container);
+    graphicPath.style.strokeWidth = graphic.width + "";
+    graphicPath.style.strokeColor = graphic.color;
+    let graphicPathObject = new Path();
+
+    let maxX = (this._size.width / 2) / unit + 1;
+    let x = -maxX;
+
+    let step = 0.01;
+
+    for(; x < maxX; x += step) {
+      let visibleX = (this._size.width / 2) + x * unit;
+      let visibleY = (this._size.height / 2) - (f(x) * unit);
+
+      graphicPathObject.add(new LineTo({
+        x: visibleX,
+        y: visibleY
+      }));
+    }
+
+    try {
+      let firstPoint = graphicPathObject.get(0).position;
+      graphicPathObject.replaceCommand(0, new MoveTo(firstPoint));
+    } catch (e) {
+
+    }
+    graphicPath.path = graphicPathObject;
+
+    graphic.path = graphicPath;
   }
   private recreateGraphic() {
-    this.svgElement.innerHTML = "";
+    this._graphicGroup.innerHTML = "";
     this.drawAxis();
     this.graphics.forEach((graphic: Graphic, f: Function) => {
       this.setPath(f, graphic);
-      this.svgElement.appendChild(graphic.path.SVG);
+      this._graphicGroup.appendChild(graphic.path.SVG);
     });
   }
 

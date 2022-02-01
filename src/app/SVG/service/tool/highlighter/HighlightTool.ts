@@ -88,6 +88,7 @@ export class HighlightTool extends Tool {
     this._isOn = true;
     this.container.HTML.style.cursor = "crosshair";
     this.container.blur();
+
     this.container.call(Callback.HIGHLIGHT_TOOl_ON);
   }
 

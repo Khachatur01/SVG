@@ -10,27 +10,20 @@ import {Shape} from "../../type/Shape";
 export abstract class PointedView extends Shape {
   protected _lastPoints: Point[] = [];
 
-  override set points(points: Point[]) {
-  };
+  override set points(points: Point[]) {};
 
   abstract getPoint(index: number): Point;
-
   abstract pushPoint(point: Point): void;
-
   abstract removePoint(index: number): void;
-
   abstract replacePoint(index: number, point: Point): void;
-
   override fixRect() {
     super.fixRect();
     this.fixPoints();
   }
-
   override fixPosition() {
     super.fixPosition();
     this.fixPoints();
   }
-
   fixPoints() {
     this._lastPoints = this.points.slice();
   }
@@ -47,7 +40,6 @@ export abstract class PointedView extends Shape {
     }
     return leftTop;
   }
-
   set position(delta: Point) {
     let points = this.points;
 
@@ -61,7 +53,6 @@ export abstract class PointedView extends Shape {
 
     this.points = points;
   }
-
   override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if (delta.x == 0 && delta.y == 0) return;
@@ -101,7 +92,6 @@ export abstract class PointedView extends Shape {
       height: maxY - minY
     };
   }
-
   setSize(rect: Rect, delta: Point | null = null): void {
     let dw = 1;
     let dh = 1;
@@ -133,7 +123,6 @@ export abstract class PointedView extends Shape {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
-
   get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);

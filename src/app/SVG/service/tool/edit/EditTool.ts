@@ -64,10 +64,10 @@ export class EditTool extends Tool {
       }
     }
     this.container.blur();
-    if(this._editableElement)
+    if (this._editableElement)
       this.container.focus(this._editableElement, false);
-
     this.container.HTML.style.cursor = "default";
+
     this.container.call(Callback.EDIT_TOOl_ON);
   }
 
@@ -75,6 +75,7 @@ export class EditTool extends Tool {
     this._isOn = false;
     this.removeEditableElement();
     this.container.blur();
+
     this.container.call(Callback.EDIT_TOOl_OFF);
   }
 

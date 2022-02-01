@@ -5,8 +5,9 @@ import {Rect} from "../../../model/Rect";
 import {Point} from "../../../model/Point";
 import {SVG} from "../../../SVG";
 import {Foreign} from "../../type/Foreign";
+import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
 
-export class ImageView extends Foreign {
+export class ImageView extends Foreign implements MoveDrawable{
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "image");
@@ -30,7 +31,8 @@ export class ImageView extends Foreign {
   }
 
   isComplete(): boolean {
-    return true;
+    let size = this.size;
+    return size.width > 0 && size.height > 0;
   }
 
   get copy(): ImageView {
@@ -85,6 +87,9 @@ export class ImageView extends Foreign {
       width: parseInt(this.getAttr("width")),
       height: parseInt(this.getAttr("height"))
     };
+  }
+  drawSize(rect: Rect) {
+    this.setSize(rect);
   }
 
   setSize(rect: Rect): void {

@@ -3,6 +3,7 @@ import {SVG} from "../../../../SVG";
 import {PointedView} from "../../../../element/shape/pointed/PointedView";
 import {Point} from "../../../../model/Point";
 import {Angle} from "../../../math/Angle";
+import {Callback} from "../../../../dataSource/Callback";
 
 export abstract class ClickDraw implements Drawable {
   protected container: SVG;
@@ -15,12 +16,8 @@ export abstract class ClickDraw implements Drawable {
   }
 
   _click(event: MouseEvent) {
-    if (!this.container) return;
-
     this.container.drawTool.drawing();
-
     let containerRect = this.container?.HTML.getBoundingClientRect();
-
     let snapPoint = {
       x: event.clientX - containerRect.left,
       y: event.clientY - containerRect.top
@@ -28,24 +25,17 @@ export abstract class ClickDraw implements Drawable {
 
     snapPoint = this.container.grid.getSnapPoint(snapPoint);
 
-    let element = this.onClick(snapPoint);
-    if (element) {
-      this.drawableElement = element;
-      this.container?.add(this.drawableElement);
+    if (!this.drawableElement) {
+      this.drawableElement = this.getDrawableElement(snapPoint);
+      this.container.add(this.drawableElement);
+    } else {
+      this.drawableElement?.pushPoint(snapPoint);
     }
+    this.container.call(Callback.DRAW_CLICK);
   }
-
   _move(event: MouseEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
-    if (!containerRect) return;
-
-    this.onMove(containerRect, event, this.container.perfect);
-  }
-
-  abstract onClick(position: Point): PointedView | null;
-
-  onMove(containerRect: DOMRect, event: MouseEvent, perfectMode: boolean): void {
-    if (!this.drawableElement) return;
+    if (!containerRect || !this.drawableElement) return;
 
     let snapPoint = {
       x: event.clientX - containerRect.left,
@@ -54,20 +44,22 @@ export abstract class ClickDraw implements Drawable {
 
     if (this.container.grid.isSnap())
       snapPoint = this.container.grid.getSnapPoint(snapPoint);
-    else if (perfectMode) {
+    else if (this.container.perfect) {
       let lastPoint: Point = this.drawableElement.getPoint(-2);
       snapPoint = Angle.snapLineEnd(lastPoint.x, snapPoint.x, lastPoint.y, snapPoint.y) as Point;
     }
 
     this.drawableElement.replacePoint(-1, snapPoint);
-  };
+    this.container.call(Callback.DRAW_MOVE);
+  }
+
+  abstract getDrawableElement(position: Point): PointedView;
 
   start(container: SVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this.click);
     document.addEventListener("mousemove", this.move);
   }
-
   stop(): void {
     this.container?.HTML.removeEventListener('mousedown', this.click);
     document.removeEventListener('mousemove', this.move);

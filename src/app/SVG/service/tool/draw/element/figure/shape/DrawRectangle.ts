@@ -2,9 +2,20 @@ import {MoveDraw} from "../../../mode/MoveDraw";
 import {ElementView} from "../../../../../../element/ElementView";
 import {RectangleView} from "../../../../../../element/shape/pointed/polygon/rectangle/RectangleView";
 import {Point} from "../../../../../../model/Point";
+import {SVG} from "../../../../../../SVG";
+import {Callback} from "../../../../../../dataSource/Callback";
 
 export class DrawRectangle extends MoveDraw {
-  onStart(position: Point): ElementView {
+  getDrawableElement(position: Point): ElementView {
     return new RectangleView(this.container, position.x, position.y);
+  }
+  override start(container: SVG) {
+    super.start(container);
+    container.call(Callback.RECTANGLE_TOOL_ON);
+  }
+
+  override stop() {
+    super.stop();
+    this.container.call(Callback.RECTANGLE_TOOL_OFF);
   }
 }

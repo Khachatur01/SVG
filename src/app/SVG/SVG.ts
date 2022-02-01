@@ -29,7 +29,6 @@ class GlobalStyle extends Style {
   override get strokeWidth(): string {
     return super.strokeWidth;
   }
-
   override set strokeWidth(width: string) {
     super.strokeWidth = width;
     if (this.container.focused.children.size == 0) {
@@ -44,7 +43,6 @@ class GlobalStyle extends Style {
   override get strokeDashArray(): string {
     return super.strokeDashArray;
   }
-
   override set strokeDashArray(array: string) {
     super.strokeDashArray = array;
     if (this.container.focused.children.size == 0) {
@@ -59,7 +57,6 @@ class GlobalStyle extends Style {
   override get strokeColor(): string {
     return super.strokeColor;
   }
-
   override set strokeColor(color: string) {
     super.strokeColor = color;
     if (this.container.focused.children.size == 0) {
@@ -74,7 +71,6 @@ class GlobalStyle extends Style {
   override get fillColor(): string {
     return super.fillColor;
   }
-
   override set fillColor(color: string) {
     super.fillColor = color;
     if (this.container.focused.children.size == 0) {
@@ -89,7 +85,6 @@ class GlobalStyle extends Style {
   override get fontSize(): string {
     return super.fontSize;
   }
-
   override set fontSize(size: string) {
     super.fontSize = size;
     if (this.container.focused.children.size == 0) {
@@ -104,7 +99,6 @@ class GlobalStyle extends Style {
   override get fontColor(): string {
     return super.fontColor;
   }
-
   override set fontColor(color: string) {
     super.fontColor = color;
     if (this.container.focused.children.size == 0) {
@@ -119,7 +113,6 @@ class GlobalStyle extends Style {
   override get backgroundColor(): string {
     return super.backgroundColor;
   }
-
   override set backgroundColor(color: string) {
     super.backgroundColor = color;
     if (this.container.focused.children.size == 0) {
@@ -152,24 +145,12 @@ class GlobalStyle extends Style {
     super.fontColor = style.fontColor;
     super.backgroundColor = style.backgroundColor;
 
-    this._styleCallBacks.get(Callback.STOKE_WIDTH_CHANGE)?.forEach((callBack: Function) => {
-      callBack(style.strokeWidth);
-    });
-    this._styleCallBacks.get(Callback.STROKE_COLOR_CHANGE)?.forEach((callBack: Function) => {
-      callBack(style.strokeColor);
-    });
-    this._styleCallBacks.get(Callback.FILL_COLOR_CHANGE)?.forEach((callBack: Function) => {
-      callBack(style.fillColor);
-    });
-    this._styleCallBacks.get(Callback.FONT_SIZE_CHANGE)?.forEach((callBack: Function) => {
-      callBack(style.fontSize);
-    });
-    this._styleCallBacks.get(Callback.FONT_COLOR_CHANGE)?.forEach((callBack: Function) => {
-      callBack(style.fontColor);
-    });
-    this._styleCallBacks.get(Callback.FONT_BACKGROUND_CHANGE)?.forEach((callBack: Function) => {
-      callBack(style.backgroundColor);
-    });
+    this.call(Callback.STOKE_WIDTH_CHANGE);
+    this.call(Callback.STROKE_COLOR_CHANGE);
+    this.call(Callback.FILL_COLOR_CHANGE);
+    this.call(Callback.FONT_SIZE_CHANGE);
+    this.call(Callback.FONT_COLOR_CHANGE);
+    this.call(Callback.FONT_BACKGROUND_CHANGE);
   }
 }
 
@@ -185,7 +166,7 @@ export class SVG {
   public readonly pointerTool: PointerTool;
   public readonly drawTool: DrawTool;
   public readonly editTool: EditTool;
-  public perfect: boolean = false;
+  private _perfect: boolean = false;
   public grid: Grid;
   public style: GlobalStyle = new GlobalStyle(this);
 
@@ -237,11 +218,9 @@ export class SVG {
   get id(): number {
     return SVG.id;
   }
-
   set id(id: number) {
     SVG.id = id;
   }
-
   get nextId(): string {
     return SVG.idPrefix + SVG.id++;
   }
@@ -253,7 +232,6 @@ export class SVG {
         func();
       });
   }
-
   addCallBack(name: Callback, callback: Function) {
     let functions = this._callBacks.get(name);
     if (!functions)
@@ -261,7 +239,6 @@ export class SVG {
 
     this._callBacks.get(name)?.push(callback)
   }
-
   removeCallBack(name: Callback, callback: Function) {
     let functions = this._callBacks.get(name);
     if (functions)
@@ -325,12 +302,10 @@ export class SVG {
     this._elements.add(xElement);
     this.setElementActivity(xElement);
   }
-
   remove(xElement: ElementView) {
     this._elements.delete(xElement);
     xElement.remove();
   }
-
   clear() {
     this._elements.clear();
     this.elementsGroup.innerHTML = "";
@@ -346,18 +321,15 @@ export class SVG {
       this.focus(element);
     });
   }
-
   focus(xElement: ElementView, showBounding: boolean = true) {
     this._focus.appendChild(xElement, showBounding);
   }
-
   blur(xElement: ElementView | null = null) {
     if (xElement)
       this._focus.removeChild(xElement);
     else
       this._focus.clear();
   }
-
   get focused(): Focus {
     return this._focus;
   }
@@ -366,12 +338,10 @@ export class SVG {
     this._multiSelect = true;
     this._focus.boundingBox.transparentClick = true;
   }
-
   singleSelect(): void {
     this._multiSelect = false;
     this._focus.boundingBox.transparentClick = false;
   }
-
   copyFocused(): void {
     let elements: ElementView[] = [];
     for (let element of this._focus.children) {
@@ -380,12 +350,10 @@ export class SVG {
     this.lastCopyPosition = this._focus.position;
     ElementsClipboard.save(elements);
   }
-
   cutFocused(): void {
     this.copyFocused();
     this._focus.remove();
   }
-
   paste(): void {
     let elements: ElementView[] = ElementsClipboard.get();
 
@@ -408,5 +376,16 @@ export class SVG {
       this.add(element);
       this.focus(element);
     });
+  }
+
+  get perfect(): boolean {
+    return this._perfect;
+  }
+  set perfect(perfect: boolean) {
+    this._perfect = perfect;
+    if (perfect)
+      this.call(Callback.PERFECT_MODE_ON);
+    else
+      this.call(Callback.PERFECT_MODE_OFF);
   }
 }

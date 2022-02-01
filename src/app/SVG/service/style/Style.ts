@@ -96,7 +96,7 @@ export class Style {
     this.backgroundColor = style.backgroundColor;
   }
 
-  callCallBacks(name: Callback): void {
+  call(name: Callback): void {
     let callback = this._styleCallBacks.get(name);
     if (callback)
       callback.forEach((func: Function) => {

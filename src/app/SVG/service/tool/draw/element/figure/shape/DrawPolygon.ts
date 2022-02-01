@@ -1,19 +1,24 @@
 import {ClickDraw} from "../../../mode/ClickDraw";
-import {PolygonView} from "../../../../../../element/shape/pointed/polygon/PolygonView";
 import {PointedView} from "../../../../../../element/shape/pointed/PointedView";
 import {Point} from "../../../../../../model/Point";
+import {SVG} from "../../../../../../SVG";
+import {Callback} from "../../../../../../dataSource/Callback";
+import {PolygonView} from "../../../../../../element/shape/pointed/polygon/PolygonView";
 
 export class DrawPolygon extends ClickDraw {
-  onClick(position: Point): PointedView | null {
-    if (!this.drawableElement) {
-      this.drawableElement = new PolygonView(this.container, [
-        position, position
-      ]);
-      return this.drawableElement;
-    }
+  getDrawableElement(position: Point): PointedView {
+    return new PolygonView(this.container, [
+      position, position
+    ]);
+  }
 
-    this.drawableElement?.pushPoint(position);
+  override start(container: SVG) {
+    super.start(container);
+    container.call(Callback.POLYGON_TOOL_ON);
+  }
 
-    return null;
+  override stop() {
+    super.stop();
+    this.container.call(Callback.POLYGON_TOOL_OFF);
   }
 }

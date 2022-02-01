@@ -9,6 +9,9 @@ import {DrawIsoscelesTriangle} from "../service/tool/draw/element/figure/shape/t
 import {DrawRightTriangle} from "../service/tool/draw/element/figure/shape/triangle/DrawRightTriangle";
 import {DrawTextBox} from "../service/tool/draw/element/foreign/DrawTextBox";
 import {DrawGraphic} from "../service/tool/draw/element/foreign/DrawGraphic";
+import {DrawVideo} from "../service/tool/draw/element/foreign/DrawVideo";
+import {DrawImage} from "../service/tool/draw/element/foreign/DrawImage";
+import {DrawAsset} from "../service/tool/draw/element/foreign/DrawAsset";
 
 export class DrawTools {
   private container: SVG;
@@ -21,6 +24,9 @@ export class DrawTools {
   private readonly _isoscelesTriangle: DrawIsoscelesTriangle;
   private readonly _rightTriangle: DrawRightTriangle;
   private readonly _textBox: DrawTextBox;
+  private readonly _video: DrawVideo;
+  private readonly _image: DrawImage;
+  private readonly _asset: DrawAsset;
   private readonly _graphic: DrawGraphic;
 
   constructor(container: SVG) {
@@ -35,6 +41,9 @@ export class DrawTools {
     this._isoscelesTriangle = new DrawIsoscelesTriangle(container);
     this._rightTriangle = new DrawRightTriangle(container);
     this._textBox = new DrawTextBox(container);
+    this._video = new DrawVideo(container);
+    this._image = new DrawImage(container);
+    this._asset = new DrawAsset(container);
     this._graphic = new DrawGraphic(container);
   }
 
@@ -72,6 +81,18 @@ export class DrawTools {
 
   get textBox(): DrawTextBox {
     return this._textBox;
+  }
+
+  get video(): DrawVideo {
+    return this._video;
+  }
+
+  get image(): DrawImage {
+    return this._image;
+  }
+
+  get asset(): DrawAsset {
+    return this._asset;
   }
 
   get graphic(): DrawGraphic {

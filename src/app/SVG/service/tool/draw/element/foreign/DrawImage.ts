@@ -1,41 +1,42 @@
 import {MoveDraw} from "../../mode/MoveDraw";
 import {Point} from "../../../../../model/Point";
 import {ElementView} from "../../../../../element/ElementView";
-import {TextBoxView} from "../../../../../element/foreign/text/TextBoxView";
 import {SVG} from "../../../../../SVG";
 import {Callback} from "../../../../../dataSource/Callback";
+import {ImageView} from "../../../../../element/foreign/media/ImageView";
 
-export class DrawTextBox extends MoveDraw {
+export class DrawImage extends MoveDraw {
+  public src: string = "";
   getDrawableElement(position: Point): ElementView {
-    let textBox = new TextBoxView(this.container, position.x, position.y);
-    textBox.SVG.style.outline = textBox.outline;
-    return textBox
+    let imageView = new ImageView(this.container, position.x, position.y);
+    imageView.src = this.src;
+    return imageView;
   }
 
   override onIsNotComplete() {
     if (!this.drawableElement) return;
     this.drawableElement.setSize({
-      x: this.startPos.x,
-      y: this.startPos.y,
-      width: 200,
-      height: 100
+      x: this.startPos.x - 150,
+      y: this.startPos.y - 100,
+      width: 300,
+      height: 200
     }, null);
     this.drawableElement.refPoint = this.drawableElement?.center;
   }
 
   override onEnd() {
-    this.container.editTool.on();
-    if(this.drawableElement instanceof TextBoxView)
-      this.drawableElement.content?.focus();
+    this.container.selectTool.on();
+    if (this.drawableElement)
+      this.container.focus(this.drawableElement);
   }
 
   override start(container: SVG) {
     super.start(container);
-    container.call(Callback.TEXT_TOOL_ON);
+    container.call(Callback.IMAGE_TOOL_ON);
   }
 
   override stop() {
     super.stop();
-    this.container.call(Callback.TEXT_TOOL_OFF);
+    this.container.call(Callback.IMAGE_TOOL_OFF);
   }
 }

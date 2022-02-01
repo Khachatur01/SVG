@@ -2,9 +2,11 @@ import {Point} from "../../../../../model/Point";
 import {GraphicView} from "../../../../../element/foreign/graphic/GraphicView";
 import {ElementView} from "../../../../../element/ElementView";
 import {MoveDraw} from "../../mode/MoveDraw";
+import {SVG} from "../../../../../SVG";
+import {Callback} from "../../../../../dataSource/Callback";
 
 export class DrawGraphic extends MoveDraw {
-  onStart(position: Point): ElementView {
+  getDrawableElement(position: Point): ElementView {
     let graphicView = new GraphicView(this.container, position);
     // graphicView.addFunction((x: number) => Math.sin(Math.pow(Math.E, x)), "#ff7f3f");
     graphicView.addFunction((x: number) => Math.pow(2, x + 1), "#486fff");
@@ -26,5 +28,14 @@ export class DrawGraphic extends MoveDraw {
     this.drawableElement.refPoint = this.drawableElement.center;
     this.container.focus(this.drawableElement);
     this.container.selectTool.on();
+  }
+  override start(container: SVG) {
+    super.start(container);
+    container.call(Callback.GRAPHIC_TOOL_ON);
+  }
+
+  override stop() {
+    super.stop();
+    this.container.call(Callback.GRAPHIC_TOOL_OFF);
   }
 }

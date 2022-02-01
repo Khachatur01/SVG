@@ -4,16 +4,16 @@ import {Point} from "../../../model/Point";
 import {SVG} from "../../../SVG";
 
 export class LineView extends PointedView {
-  constructor(container: SVG, x1: number = 0, y1: number = 0, x2: number = 0, y2: number = 0) {
+  constructor(container: SVG, startPoint: Point = {x: 0, y: 0}, endPoint: Point = {x: 0, y: 0}) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "line");
     this.svgElement.id = this.id;
 
     this.setAttr({
-      x1: x1,
-      y1: y1,
-      x2: x2,
-      y2: y2
+      x1: startPoint.x,
+      y1: startPoint.y,
+      x2: endPoint.x,
+      y2: endPoint.y
     });
     this.setOverEvent();
     this.style.setDefaultStyle();

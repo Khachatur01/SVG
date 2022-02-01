@@ -3,6 +3,7 @@ import {ElementView} from "../../../../element/ElementView";
 import {SVG} from "../../../../SVG";
 import {Point} from "../../../../model/Point";
 import {MoveDrawable} from "../type/MoveDrawable";
+import {Callback} from "../../../../dataSource/Callback";
 
 export abstract class MoveDraw implements Drawable {
   protected container: SVG;
@@ -18,7 +19,9 @@ export abstract class MoveDraw implements Drawable {
     this.container = container;
   }
 
-  private _onStart(event: MouseEvent) {
+  abstract getDrawableElement(position: Point): ElementView;
+
+  protected _onStart(event: MouseEvent) {
     if (!this.container) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
@@ -27,20 +30,51 @@ export abstract class MoveDraw implements Drawable {
 
     this.startPos = this.container.grid.getSnapPoint(this.startPos);
 
-    this.drawableElement = this.onStart(this.startPos);
+    this.drawableElement = this.getDrawableElement(this.startPos);
     this.container.add(this.drawableElement);
     this.container.HTML.addEventListener('mousemove', this.draw);
     document.addEventListener('mouseup', this.drawEnd);
     this.container.drawTool.drawing();
+    this.container.call(Callback.DRAW_CLICK);
   }
-
-  private _onDraw(event: MouseEvent) {
+  protected _onDraw(event: MouseEvent) {
     if (!this.container || !this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
-    this.onDraw(containerRect, event, this.drawableElement, this.container.perfect);
-  }
 
+    let width = event.clientX - containerRect.left - this.startPos.x;
+    let height = event.clientY - containerRect.top - this.startPos.y;
+
+    if (this.container.perfect) {
+      let averageSize = (Math.abs(width) + Math.abs(height)) / 2
+      if (width < 0)
+        width = -averageSize;
+      else
+        width = averageSize;
+      if (height < 0)
+        height = -averageSize;
+      else
+        height = averageSize;
+    }
+
+    if (this.container.grid.isSnap()) {
+      let snapPoint = this.container.grid.getSnapPoint({
+        x: this.startPos.x + width,
+        y: this.startPos.y + height
+      });
+      width = snapPoint.x - this.startPos.x;
+      height = snapPoint.y - this.startPos.y;
+    }
+
+    /* if xElement instance of MoveDrawable, set drawSize */
+    (this.drawableElement as unknown as MoveDrawable)?.drawSize({
+      x: this.startPos.x,
+      y: this.startPos.y,
+      width: width,
+      height: height
+    });
+    this.container.call(Callback.DRAW_MOVE);
+  }
   private _onEnd() {
     if (!this.container || !this.drawableElement) return;
 
@@ -64,59 +98,20 @@ export abstract class MoveDraw implements Drawable {
     this.onEnd();
     this.container.drawTool.drawingEnd();
     this.drawableElement = null;
+    this.container.call(Callback.DRAW_END);
   }
 
-  abstract onStart(position: Point): ElementView;
-
-  onDraw(containerRect: DOMRect, event: MouseEvent, xElement: ElementView, perfectMode: boolean): void {
-    let width = event.clientX - containerRect.left - this.startPos.x;
-    let height = event.clientY - containerRect.top - this.startPos.y;
-
-    if (perfectMode) {
-      let averageSize = (Math.abs(width) + Math.abs(height)) / 2
-      if (width < 0)
-        width = -averageSize;
-      else
-        width = averageSize;
-      if (height < 0)
-        height = -averageSize;
-      else
-        height = averageSize;
-    }
-
-    if (this.container.grid.isSnap()) {
-      let snapPoint = this.container.grid.getSnapPoint({
-        x: this.startPos.x + width,
-        y: this.startPos.y + height
-      });
-      width = snapPoint.x - this.startPos.x;
-      height = snapPoint.y - this.startPos.y;
-    }
-
-    /* if xElement instance of MoveDrawable, set drawSize */
-    (xElement as unknown as MoveDrawable)?.drawSize({
-      x: this.startPos.x,
-      y: this.startPos.y,
-      width: width,
-      height: height
-    });
-  };
-
+  onEnd() {}
   onIsNotComplete() {
     if (this.drawableElement)
       this.container.remove(this.drawableElement);
-  }
-
-  onEnd() {
   }
 
   start(container: SVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this.drawStart);
   }
-
   stop(): void {
     this.container?.HTML.removeEventListener('mousedown', this.drawStart);
   }
-
 }

@@ -2,6 +2,7 @@ import {SVG} from "../../../SVG";
 import {Point} from "../../../model/Point";
 import {ElementView} from "../../../element/ElementView";
 import {Tool} from "../Tool";
+import {Callback} from "../../../dataSource/Callback";
 
 export class DragTool extends Tool {
   private isDrag: boolean = false;
@@ -32,6 +33,8 @@ export class DragTool extends Tool {
 
     this.container.HTML.addEventListener("mousemove", this.drag);
     document.addEventListener("mouseup", this.dragEnd);
+
+    this.container.call(Callback.DRAG_START);
   }
 
   private onDrag(event: MouseEvent) {
@@ -39,6 +42,8 @@ export class DragTool extends Tool {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
+
+    this.container.call(Callback.DRAG);
   }
 
   private onDragEnd(event: MouseEvent) {
@@ -54,6 +59,8 @@ export class DragTool extends Tool {
     this.container.HTML.removeEventListener("mousemove", this.drag);
     document.removeEventListener("mouseup", this.dragEnd);
     this.container.focused.lowlight();
+
+    this.container.call(Callback.DRAG_END);
   }
 
   override on() {
@@ -63,11 +70,15 @@ export class DragTool extends Tool {
   public _on(): void {
     this.container.HTML.addEventListener("mousedown", this.dragStart);
     this.isDrag = true;
+
+    this.container.call(Callback.DRAG_TOOL_ON);
   }
 
   public off(): void {
     this.container.HTML.removeEventListener("mousedown", this.dragStart);
     this.isDrag = false;
+
+    this.container.call(Callback.DRAG_TOOL_OFF);
   }
 
   public isOn(): boolean {
