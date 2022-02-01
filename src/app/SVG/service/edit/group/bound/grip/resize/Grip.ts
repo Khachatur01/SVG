@@ -82,8 +82,6 @@ export abstract class Grip extends BoxView {
     )[0];
 
     this.onMove(client);
-
-    this._container.call(Callback.RESIZE);
   }
   private end() {
     this._container.HTML.removeEventListener("mousemove", this._move);

@@ -117,8 +117,6 @@ export class RotatePoint extends PathView {
     if (this._container.grid.isSnap())
       angle = Math.round(angle / 15) * 15;
     this._container.focused.rotate(angle);
-
-    this._container.call(Callback.ROTATE);
   }
 
   private end() {

@@ -1,10 +1,10 @@
 export enum Callback {
-  STOKE_WIDTH_CHANGE,
-  STROKE_COLOR_CHANGE,
-  FILL_COLOR_CHANGE,
-  FONT_SIZE_CHANGE,
-  FONT_COLOR_CHANGE,
-  FONT_BACKGROUND_CHANGE,
+  STOKE_WIDTH_CHANGE, /* TODO add callback parameter (strokeWidth) */
+  STROKE_COLOR_CHANGE, /* TODO add callback parameter (strokeColor) */
+  FILL_COLOR_CHANGE, /* TODO add callback parameter (fillColor) */
+  FONT_SIZE_CHANGE, /* TODO add callback parameter (fontSize) */
+  FONT_COLOR_CHANGE, // TODO add callback parameter (fontColor) */
+  FONT_BACKGROUND_CHANGE, // TODO add callback parameter (fontBackground) */
 
   SELECT_TOOl_ON,
   SELECT_TOOl_OFF,
@@ -31,7 +31,8 @@ export enum Callback {
   FREE_HAND_TOOL_ON,
   FREE_HAND_TOOL_OFF,
   TEXT_TOOL_ON,
-  ASSET_EDIT, // TODO add callback parameter (asset content)
+  ASSET_EDIT, // callback parameter (asset content)
+  TEXT_TYPING, // callback parameter (text)
   TEXT_TOOL_OFF,
   VIDEO_TOOL_ON,
   VIDEO_TOOL_OFF,
@@ -45,29 +46,33 @@ export enum Callback {
   GRID_ON,
   GRID_OFF,
   SNAP_ON,
-  SNAP_SIDE_CHANGE, // TODO add callback parameter (side)
+  SNAP_SIDE_CHANGE, /* callback parameter (side) */
   SNAP_OFF,
   GROUP,
   UNGROUP,
 
-  ELEMENT_FOCUSED, // TODO add callback parameter (element id)
-  ELEMENT_BLURED, // TODO add callback parameter (element id)
+  ELEMENT_FOCUSED, /* callback parameter (element id) */
+  ELEMENT_BLURED, /* callback parameter (element id) */
   BLURED,
   PERFECT_MODE_ON,
   PERFECT_MODE_OFF,
-  DRAW_CLICK, // TODO add callback parameter (position)
-  DRAW_MOVE, // TODO add callback parameter (position)
+  DRAW_CLICK, /* callback parameter (position) */
+  DRAW_MOVE, /* callback parameter (position) */
   DRAW_END,
   DRAG_TOOL_ON,
   DRAG_START,
-  DRAG, // TODO add callback parameter (delta)
-  DRAG_END,
+  DRAG, /* callback parameter (delta) for translation */
+  DRAG_END, /* callback parameter (delta) for drag */
   DRAG_TOOL_OFF,
+  REF_POINT_VIEW_CHANGE_START,
+  REF_POINT_VIEW_CHANGE, /* callback parameter (position) */
+  REF_POINT_VIEW_CHANGE_END,
+  REF_POINT_CHANGE, /* callback parameter (position) */
   ROTATE_START,
-  ROTATE, // TODO add callback parameter (angle)
+  ROTATE,
   ROTATE_END,
   RESIZE_START,
-  RESIZE, // TODO add callback parameter (rect)
+  RESIZE, /* callback parameter (rect) */
   RESIZE_END,
   COPY,
   CUT,

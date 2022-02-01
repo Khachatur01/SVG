@@ -121,7 +121,7 @@ export abstract class ElementView implements Resizeable, Draggable {
   }
 
   abstract get size(): Size;
-  abstract setSize(rect: Rect, delta: Point | null): void;
+  abstract setSize(rect: Rect, delta: Point | null): void; /* if delta set, calculate rect width and height by delta */
   abstract isComplete(): boolean;
   abstract get position(): Point;
   abstract set position(delta: Point);

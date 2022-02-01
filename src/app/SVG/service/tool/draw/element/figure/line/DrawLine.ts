@@ -35,6 +35,10 @@ export class DrawLine extends MoveDraw {
     }
 
     (this.drawableElement as PointedView).replacePoint(1, {x: x2, y: y2});
+
+    this.container.call(Callback.DRAW_MOVE,
+      {position: {x: x2, y: y2}}
+    );
   }
 
   override start(container: SVG) {

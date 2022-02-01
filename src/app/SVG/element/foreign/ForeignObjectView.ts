@@ -137,6 +137,13 @@ export class ForeignObjectView extends Foreign implements MoveDrawable {
     return this._content;
   }
 
+  addEditCallBack() {
+    this._content?.addEventListener("input", () => {
+      this.container.call(Callback.ASSET_EDIT,
+        {content: this._content});
+    });
+  }
+
   setContent(content: HTMLElement, setListeners: boolean = true): void {
     this._content = content;
     content.style.userSelect = "none";
@@ -155,9 +162,7 @@ export class ForeignObjectView extends Foreign implements MoveDrawable {
       content.addEventListener("blur", () => {
         this.svgElement.style.outline = "unset";
       });
-      content.addEventListener("input", () => {
-        this.container.call(Callback.ASSET_EDIT);
-      })
+      this.addEditCallBack();
     }
   }
 

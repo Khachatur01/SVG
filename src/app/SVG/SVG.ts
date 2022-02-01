@@ -226,11 +226,11 @@ export class SVG {
     return SVG.idPrefix + SVG.id++;
   }
 
-  call(name: Callback): void {
+  call(name: Callback, parameters: any = {}): void {
     let callback = this._callBacks.get(name);
     if (callback)
       callback.forEach((func: Function) => {
-        func();
+        func(parameters);
       });
   }
   addCallBack(name: Callback, callback: Function) {

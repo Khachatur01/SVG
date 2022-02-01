@@ -97,7 +97,9 @@ export class Grid {
       this.gridOff();
       this.gridOn();
     }
-    this.container.call(Callback.SNAP_SIDE_CHANGE);
+    this.container.call(Callback.SNAP_SIDE_CHANGE,
+      {snapSide: squareSide}
+    );
   }
 
   get snapSide(): number {

@@ -38,12 +38,13 @@ export class DragTool extends Tool {
   }
 
   private onDrag(event: MouseEvent) {
-    this.container.focused.translate = {
+    let delta = {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
+    this.container.focused.translate = delta;
 
-    this.container.call(Callback.DRAG);
+    this.container.call(Callback.DRAG, {delta: delta});
   }
 
   private onDragEnd(event: MouseEvent) {
@@ -51,16 +52,17 @@ export class DragTool extends Tool {
       x: 0,
       y: 0
     };
-    this.container.focused.position = {
+    let delta = {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
+    this.container.focused.position = delta;
 
     this.container.HTML.removeEventListener("mousemove", this.drag);
     document.removeEventListener("mouseup", this.dragEnd);
     this.container.focused.lowlight();
 
-    this.container.call(Callback.DRAG_END);
+    this.container.call(Callback.DRAG_END, {delta: delta});
   }
 
   override on() {

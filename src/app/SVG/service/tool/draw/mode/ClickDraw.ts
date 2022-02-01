@@ -31,7 +31,7 @@ export abstract class ClickDraw implements Drawable {
     } else {
       this.drawableElement?.pushPoint(snapPoint);
     }
-    this.container.call(Callback.DRAW_CLICK);
+    this.container.call(Callback.DRAW_CLICK, {position: snapPoint});
   }
   _move(event: MouseEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
@@ -50,7 +50,9 @@ export abstract class ClickDraw implements Drawable {
     }
 
     this.drawableElement.replacePoint(-1, snapPoint);
-    this.container.call(Callback.DRAW_MOVE);
+    this.container.call(Callback.DRAW_MOVE,
+      {position: snapPoint}
+    );
   }
 
   abstract getDrawableElement(position: Point): PointedView;

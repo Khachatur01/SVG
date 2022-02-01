@@ -34,7 +34,7 @@ export class DrawFree implements Drawable {
     this.container.add(this.drawableElement);
     this.container.HTML.addEventListener('mousemove', this.onDraw);
     document.addEventListener('mouseup', this.onEnd);
-    this.container.call(Callback.DRAW_CLICK);
+    this.container.call(Callback.DRAW_CLICK, {position: snapPoint});
   }
 
   _onDraw(event: MouseEvent): void {
@@ -60,7 +60,9 @@ export class DrawFree implements Drawable {
     } else {
       this.drawableElement.pushPoint(snapPoint);
     }
-    this.container.call(Callback.DRAW_MOVE);
+    this.container.call(Callback.DRAW_MOVE,
+      {position: snapPoint}
+    );
   }
 
   _onEnd() {

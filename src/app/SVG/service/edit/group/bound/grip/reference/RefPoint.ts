@@ -4,6 +4,7 @@ import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
 import {PathView} from "../../../../../../element/shape/pointed/PathView";
 import {Point} from "../../../../../../model/Point";
+import {Callback} from "../../../../../../dataSource/Callback";
 
 export class RefPoint extends PathView {
   private readonly _r: number = 5; /* radius */
@@ -98,24 +99,31 @@ export class RefPoint extends PathView {
 
     this._container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
+    this._container.call(Callback.REF_POINT_VIEW_CHANGE_START);
   }
 
   private move(event: MouseEvent) {
     this.initLastPoint(event);
     this._lastPoint = this._container.grid.getSnapPoint(this._lastPoint);
-    this._container.focused.refPointView = Object.assign({}, this._lastPoint);
+
+    let refPoint = Object.assign({}, this._lastPoint);
+    this._container.focused.refPointView = refPoint;
+    this._container.call(Callback.REF_POINT_VIEW_CHANGE, {refPoint: refPoint});
   }
 
   private end() {
     if (!this.moving) return;
 
-    this._container.focused.refPoint = Object.assign({}, this._lastPoint);
-    this._container.focused.correct(Object.assign({}, this._lastPoint));
+    let refPoint = Object.assign({}, this._lastPoint);
+    this._container.focused.refPoint = refPoint;
+    this._container.focused.correct(refPoint);
 
     this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
     this._container.activeTool.on();
     this.moving = false;
+    this._container.call(Callback.REF_POINT_VIEW_CHANGE_END);
+    this._container.call(Callback.REF_POINT_CHANGE, {refPoint: refPoint});
   }
 
   on() {

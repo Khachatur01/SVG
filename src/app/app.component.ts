@@ -258,6 +258,48 @@ export class AppComponent implements AfterViewInit {
     document.getElementById("group")?.setAttribute("disabled", "true");
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
+  snapSideChangeCallBack(parameters: any) {
+    // console.log(parameters.snapSide);
+  }
+  elementFocusedCallBack(parameters: any) {
+    // console.log(parameters.element);
+  }
+  elementBluredCallBack(parameters: any) {
+    // console.log(parameters.element);
+  }
+  drawClickCallBack(parameters: any) {
+    // console.log(parameters.position);
+  }
+  drawMoveCallBack(parameters: any) {
+    // console.log(parameters.position);
+  }
+  dragCallBack(parameters: any) {
+    // console.log(parameters.delta); // translate
+  }
+  dragEndCallBack(parameters: any) {
+    // console.log(parameters.delta); // drag
+  }
+  rotateCallBack(parameters: any) {
+    // console.log(parameters.angle);
+  }
+  resizeCallBack(parameters: any) {
+    // console.log(parameters.rect);
+    // console.log(parameters.delta);
+    // console.log();
+  }
+  textTypingCallBack(parameters: any) {
+    // console.log(parameters.text);
+  }
+  assetEditCallBack(parameters: any) {
+    // console.log(parameters.content);
+  }
+  refPointViewChangeCallBack(parameters: any) {
+    // console.log(parameters.refPoint);
+  }
+  refPointChangeCallBack(parameters: any) {
+    // console.log(parameters.refPoint);
+  }
+
   strokeWidthCallBack() {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
     if (!stokeWidthInput || !this.svg) return;
@@ -426,6 +468,19 @@ export class AppComponent implements AfterViewInit {
     this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolOnCallBack.bind(this));
     this.svg.addCallBack(Callback.ELEMENT_FOCUSED, this.focusChangedCallBack.bind(this));
     this.svg.addCallBack(Callback.BLURED, this.bluredCallBack.bind(this));
+    this.svg.addCallBack(Callback.SNAP_SIDE_CHANGE, this.snapSideChangeCallBack.bind(this));
+    this.svg.addCallBack(Callback.ELEMENT_FOCUSED, this.elementFocusedCallBack.bind(this));
+    this.svg.addCallBack(Callback.ELEMENT_BLURED, this.elementBluredCallBack.bind(this));
+    this.svg.addCallBack(Callback.DRAW_CLICK, this.drawClickCallBack.bind(this));
+    this.svg.addCallBack(Callback.DRAW_MOVE, this.drawMoveCallBack.bind(this));
+    this.svg.addCallBack(Callback.DRAG, this.dragCallBack.bind(this));
+    this.svg.addCallBack(Callback.DRAG_END, this.dragEndCallBack.bind(this));
+    this.svg.addCallBack(Callback.ROTATE, this.rotateCallBack.bind(this));
+    this.svg.addCallBack(Callback.RESIZE, this.resizeCallBack.bind(this));
+    this.svg.addCallBack(Callback.TEXT_TYPING, this.textTypingCallBack.bind(this));
+    this.svg.addCallBack(Callback.ASSET_EDIT, this.assetEditCallBack.bind(this));
+    this.svg.addCallBack(Callback.REF_POINT_VIEW_CHANGE, this.refPointViewChangeCallBack.bind(this));
+    this.svg.addCallBack(Callback.REF_POINT_CHANGE, this.refPointChangeCallBack.bind(this));
 
     this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
     this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));

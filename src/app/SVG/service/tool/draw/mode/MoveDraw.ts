@@ -33,15 +33,19 @@ export abstract class MoveDraw implements Drawable {
     this.container.HTML.addEventListener('mousemove', this.draw);
     document.addEventListener('mouseup', this.drawEnd);
     this.container.drawTool.drawing();
-    this.container.call(Callback.DRAW_CLICK);
+    this.container.call(Callback.DRAW_CLICK, {position: this.startPos});
   }
   protected _onDraw(event: MouseEvent) {
     if (!this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
 
-    let width = event.clientX - containerRect.left - this.startPos.x;
-    let height = event.clientY - containerRect.top - this.startPos.y;
+    let position = {
+      x: event.clientX - containerRect.left,
+      y: event.clientY - containerRect.top
+    }
+    let width = position.x - this.startPos.x;
+    let height = position.y - this.startPos.y;
 
     if (this.container.perfect) {
       let averageSize = (Math.abs(width) + Math.abs(height)) / 2
@@ -71,7 +75,9 @@ export abstract class MoveDraw implements Drawable {
       width: width,
       height: height
     });
-    this.container.call(Callback.DRAW_MOVE);
+    this.container.call(Callback.DRAW_MOVE,
+      {position: position}
+    );
   }
   private _onEnd() {
     if (!this.drawableElement) return;

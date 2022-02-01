@@ -70,7 +70,9 @@ export class Focus implements Draggable, Resizeable {
     if(showBounding)
       this.focus(xElement.rotatable);
 
-    this.container.call(Callback.ELEMENT_FOCUSED);
+    this.container.call(Callback.ELEMENT_FOCUSED,
+      {element: xElement}
+    );
   }
   removeChild(xElement: ElementView): void {
     this._children.delete(xElement);
@@ -88,7 +90,9 @@ export class Focus implements Draggable, Resizeable {
         this.rotate(child.angle);
         this.focus(child.rotatable);
       });
-      this.container.call(Callback.ELEMENT_BLURED);
+      this.container.call(Callback.ELEMENT_BLURED,
+        {element: xElement}
+      );
     } else {
       /* multiple elements */
       let rotatable: boolean = true;
@@ -99,7 +103,9 @@ export class Focus implements Draggable, Resizeable {
         }
       }
       this.focus(rotatable);
-      this.container.call(Callback.ELEMENT_BLURED);
+      this.container.call(Callback.ELEMENT_BLURED,
+        {element: xElement}
+      );
     }
 
     this.fit();
@@ -168,7 +174,9 @@ export class Focus implements Draggable, Resizeable {
     this.focus();
 
     this.container.call(Callback.GROUP);
-    this.container.call(Callback.ELEMENT_FOCUSED);
+    this.container.call(Callback.ELEMENT_FOCUSED,
+      {element: group}
+    );
   }
   ungroup() {
     if (this._children.size > 1) return;
@@ -244,6 +252,7 @@ export class Focus implements Draggable, Resizeable {
       /* TODO */
     }
     this.fit();
+    this.container.call(Callback.RESIZE, {rect: rect, delta: delta});
   }
 
   private calculateBoundingRect(rotated: boolean): Rect {
@@ -381,6 +390,7 @@ export class Focus implements Draggable, Resizeable {
       this._children.forEach(child =>
         child.rotate((angle + child.lastAngle - this._lastAngle) % 360));
     this.boundingBox.rotate(angle);
+    this.container.call(Callback.ROTATE, {angle: angle});
   }
 
   fit(): void {
