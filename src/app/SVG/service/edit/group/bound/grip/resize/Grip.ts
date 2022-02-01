@@ -3,6 +3,7 @@ import {SVG} from "../../../../../../SVG";
 import {Rect} from "../../../../../../model/Rect";
 import {BoxView} from "../../../../../../element/shape/BoxView";
 import {Matrix} from "../../../../../math/Matrix";
+import {Callback} from "../../../../../../dataSource/Callback";
 
 export abstract class Grip extends BoxView {
   protected _lastResize: Rect = {x: 0, y: 0, width: 0, height: 0};
@@ -49,9 +50,7 @@ export abstract class Grip extends BoxView {
   abstract setPosition(points: Point[]): void;
 
   protected abstract onStart(client: Point): void;
-
   protected abstract onMove(client: Point): void;
-
   protected abstract onEnd(): void;
 
   private start(event: MouseEvent) {
@@ -70,8 +69,9 @@ export abstract class Grip extends BoxView {
     this._container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
     this.onStart(client);
-  }
 
+    this._container.call(Callback.RESIZE_START);
+  }
   private move(event: MouseEvent) {
     let containerRect = this._container.HTML.getBoundingClientRect();
 
@@ -82,14 +82,17 @@ export abstract class Grip extends BoxView {
     )[0];
 
     this.onMove(client);
-  }
 
+    this._container.call(Callback.RESIZE);
+  }
   private end() {
     this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
     this._container.activeTool.on();
     this._container.focused.fixRect();
     this.onEnd();
+
+    this._container.call(Callback.RESIZE_END);
   }
 
   on() {

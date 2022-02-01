@@ -1,10 +1,7 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {SVG} from "./SVG/SVG";
 import {Rect} from "./SVG/model/Rect";
-import {ImageView} from "./SVG/element/foreign/media/ImageView";
-import {ForeignObjectView} from "./SVG/element/foreign/ForeignObjectView";
 import {Callback} from './SVG/dataSource/Callback';
-import {VideoView} from "./SVG/element/foreign/media/VideoView";
 import {GraphicView} from "./SVG/element/foreign/graphic/GraphicView";
 import {DemoAsset} from "./SVG/dataSource/DemoAsset";
 
@@ -46,8 +43,8 @@ export class AppComponent implements AfterViewInit {
       this.makePassive('snap');
     } else {
       this.svg.grid.gridOn();
-      this.makeActive('grid');
       this.svg.grid.snapOn();
+      this.makeActive('grid');
       this.makeActive('snap');
     }
   }
@@ -240,10 +237,10 @@ export class AppComponent implements AfterViewInit {
     element.classList.remove("active")
   }
 
-  selectToolCallBack() {
+  selectToolOnCallBack() {
     this.switchActive("select");
   }
-  editToolCallBack() {
+  editToolOnCallBack() {
     this.switchActive("edit");
   }
   focusChangedCallBack() {
@@ -425,8 +422,8 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.svg = new SVG("svgContainer");
-    this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolCallBack.bind(this));
-    this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolCallBack.bind(this));
+    this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolOnCallBack.bind(this));
+    this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolOnCallBack.bind(this));
     this.svg.addCallBack(Callback.ELEMENT_FOCUSED, this.focusChangedCallBack.bind(this));
     this.svg.addCallBack(Callback.BLURED, this.bluredCallBack.bind(this));
 

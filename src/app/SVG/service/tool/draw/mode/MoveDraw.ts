@@ -22,8 +22,6 @@ export abstract class MoveDraw implements Drawable {
   abstract getDrawableElement(position: Point): ElementView;
 
   protected _onStart(event: MouseEvent) {
-    if (!this.container) return;
-
     let containerRect = this.container.HTML.getBoundingClientRect();
     this.startPos.x = event.clientX - containerRect.left; //x position within the element.
     this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
@@ -38,7 +36,7 @@ export abstract class MoveDraw implements Drawable {
     this.container.call(Callback.DRAW_CLICK);
   }
   protected _onDraw(event: MouseEvent) {
-    if (!this.container || !this.drawableElement) return;
+    if (!this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
 
@@ -76,7 +74,7 @@ export abstract class MoveDraw implements Drawable {
     this.container.call(Callback.DRAW_MOVE);
   }
   private _onEnd() {
-    if (!this.container || !this.drawableElement) return;
+    if (!this.drawableElement) return;
 
     this.container.HTML.removeEventListener('mousemove', this.draw);
     document.removeEventListener('mouseup', this.drawEnd);

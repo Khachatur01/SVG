@@ -4,6 +4,7 @@ import {Point} from "../../model/Point";
 import {Path} from "../../model/path/Path";
 import {MoveTo} from "../../model/path/point/MoveTo";
 import {LineTo} from "../../model/path/line/LineTo";
+import {Callback} from "../../dataSource/Callback";
 
 export class Grid {
   private readonly container: SVG;
@@ -29,12 +30,15 @@ export class Grid {
   }
 
   snapOn() {
-    if (this._isGrid)
+    if (this._isGrid) {
       this._isSnap = true;
+      this.container.call(Callback.SNAP_ON);
+    }
   }
 
   snapOff() {
     this._isSnap = false;
+    this.container.call(Callback.SNAP_OFF);
   }
 
   isGrid(): boolean {
@@ -66,12 +70,16 @@ export class Grid {
 
     grid.setAttribute("d", path.toString());
     this._group.appendChild(grid);
+
+    this.container.call(Callback.GRID_ON);
   }
 
   gridOff() {
     this._group.innerHTML = "";
     this._isGrid = false;
     this._isSnap = false;
+    this.container.call(Callback.GRID_OFF);
+    this.container.call(Callback.SNAP_OFF);
   }
 
   getSnapPoint(point: Point) {
@@ -89,6 +97,7 @@ export class Grid {
       this.gridOff();
       this.gridOn();
     }
+    this.container.call(Callback.SNAP_SIDE_CHANGE);
   }
 
   get snapSide(): number {

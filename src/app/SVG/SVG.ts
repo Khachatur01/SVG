@@ -15,6 +15,7 @@ import {HighlightTool} from "./service/tool/highlighter/HighlightTool";
 import {PointerTool} from "./service/tool/pointer/PointerTool";
 import {Point} from "./model/Point";
 import {TextBoxView} from "./element/foreign/text/TextBoxView";
+import {ForeignObjectView} from "./element/foreign/ForeignObjectView";
 
 class GlobalStyle extends Style {
   private readonly default: Style;
@@ -280,7 +281,10 @@ export class SVG {
       if (this.selectTool.isOn()) {
         element.SVG.style.cursor = "move";
       } else if (this.editTool.isOn()) {
-        element.SVG.style.cursor = "crosshair";
+        if (element instanceof ForeignObjectView)
+          element.SVG.style.cursor = "text";
+        else
+          element.SVG.style.cursor = "crosshair";
       } else if (this.drawTool.isOn()) {
         element.SVG.style.cursor = "crosshair";
       } else if (this.highlightTool.isOn()) {
@@ -349,10 +353,12 @@ export class SVG {
     }
     this.lastCopyPosition = this._focus.position;
     ElementsClipboard.save(elements);
+    this.call(Callback.COPY);
   }
   cutFocused(): void {
     this.copyFocused();
     this._focus.remove();
+    this.call(Callback.CUT);
   }
   paste(): void {
     let elements: ElementView[] = ElementsClipboard.get();
@@ -376,6 +382,7 @@ export class SVG {
       this.add(element);
       this.focus(element);
     });
+    this.call(Callback.PASTE);
   }
 
   get perfect(): boolean {

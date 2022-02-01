@@ -5,22 +5,21 @@ import {Point} from "../../../../model/Point";
 import {Angle} from "../../../math/Angle";
 import {Path} from "../../../../model/path/Path";
 import {MoveTo} from "../../../../model/path/point/MoveTo";
+import {Callback} from "../../../../dataSource/Callback";
 
 export class DrawFree implements Drawable {
   private container: SVG;
   private drawableElement: FreeView | null = null;
-  private _onStart = this.onStart.bind(this);
-  private _onDraw = this.onDraw.bind(this);
-  private _onEnd = this.onEnd.bind(this);
+  private onStart = this._onStart.bind(this);
+  private onDraw = this._onDraw.bind(this);
+  private onEnd = this._onEnd.bind(this);
 
   constructor(container: SVG) {
     this.container = container;
   }
 
-  onStart(event: MouseEvent) {
-    let containerRect = this.container?.HTML.getBoundingClientRect();
-    if (!containerRect) return;
-
+  _onStart(event: MouseEvent) {
+    let containerRect = this.container.HTML.getBoundingClientRect();
     let snapPoint = {
       x: event.clientX - containerRect.left,
       y: event.clientY - containerRect.top
@@ -32,15 +31,14 @@ export class DrawFree implements Drawable {
     pathObject.add(new MoveTo(snapPoint));
     this.drawableElement = new FreeView(this.container, pathObject);
 
-    this.container?.add(this.drawableElement);
-    this.container?.HTML.addEventListener('mousemove', this._onDraw);
-    document.addEventListener('mouseup', this._onEnd);
+    this.container.add(this.drawableElement);
+    this.container.HTML.addEventListener('mousemove', this.onDraw);
+    document.addEventListener('mouseup', this.onEnd);
+    this.container.call(Callback.DRAW_CLICK);
   }
 
-  onDraw(event: MouseEvent): void {
-    let containerRect = this.container?.HTML.getBoundingClientRect();
-    if (!containerRect) return;
-
+  _onDraw(event: MouseEvent): void {
+    let containerRect = this.container.HTML.getBoundingClientRect();
     if (!this.drawableElement) return;
 
     let snapPoint = {
@@ -62,28 +60,32 @@ export class DrawFree implements Drawable {
     } else {
       this.drawableElement.pushPoint(snapPoint);
     }
+    this.container.call(Callback.DRAW_MOVE);
   }
 
-  onEnd() {
-    if (!this.drawableElement || !this.container) return;
+  _onEnd() {
+    if (!this.drawableElement) return;
 
-    this.container.HTML.removeEventListener('mousemove', this._onDraw);
-    document.removeEventListener('mouseup', this._onEnd);
+    this.container.HTML.removeEventListener('mousemove', this.onDraw);
+    document.removeEventListener('mouseup', this.onEnd);
 
     if (this.drawableElement.getAttr("points").split(" ").length == 2) {
       this.container.remove(this.drawableElement);
     } else {
       this.drawableElement.refPoint = this.drawableElement.center;
     }
+    this.container.call(Callback.DRAW_END);
   }
 
   start(container: SVG): void {
     this.container = container;
-    this.container.HTML.addEventListener('mousedown', this._onStart);
+    this.container.HTML.addEventListener('mousedown', this.onStart);
+    container.call(Callback.FREE_HAND_TOOL_ON);
   }
 
   stop(): void {
-    this.container?.HTML.removeEventListener('mousedown', this._onStart);
+    this.container.HTML.removeEventListener('mousedown', this.onStart);
+    this.container.call(Callback.FREE_HAND_TOOL_OFF);
   }
 
 }

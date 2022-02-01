@@ -137,24 +137,27 @@ export class ForeignObjectView extends Foreign implements MoveDrawable {
     return this._content;
   }
 
-  setContent(div: HTMLElement, setListeners: boolean = true): void {
-    this._content = div;
-    div.style.userSelect = "none";
-    div.contentEditable = "true";
-    this.svgElement.appendChild(div);
+  setContent(content: HTMLElement, setListeners: boolean = true): void {
+    this._content = content;
+    content.style.userSelect = "none";
+    content.contentEditable = "true";
+    this.svgElement.appendChild(content);
 
     if (setListeners) {
-      div.addEventListener("focus", () => {
+      content.addEventListener("focus", () => {
         if (this._container.editTool.isOn()) {
-          div.focus();
+          content.focus();
           this.svgElement.style.outline = this.outline;
         } else {
-          div.blur();
+          content.blur();
         }
       });
-      div.addEventListener("blur", () => {
+      content.addEventListener("blur", () => {
         this.svgElement.style.outline = "unset";
       });
+      content.addEventListener("input", () => {
+        this.container.call(Callback.ASSET_EDIT);
+      })
     }
   }
 

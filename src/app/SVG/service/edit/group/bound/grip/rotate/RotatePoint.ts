@@ -7,6 +7,7 @@ import {Arc} from "../../../../../../model/path/curve/arc/Arc";
 import {LineTo} from "../../../../../../model/path/line/LineTo";
 import {ElementView} from "../../../../../../element/ElementView";
 import {Rect} from "../../../../../../model/Rect";
+import {Callback} from "../../../../../../dataSource/Callback";
 
 export class RotatePoint extends PathView {
   private _start = this.start.bind(this);
@@ -107,21 +108,25 @@ export class RotatePoint extends PathView {
       child.fixAngle();
     });
     this._container.focused.lastAngle = this.getAngle(containerRect, event);
+
+    this._container.call(Callback.ROTATE_START);
   }
 
   private move(event: MouseEvent) {
     let angle = this.getAngle(this._container.HTML.getBoundingClientRect(), event);
-
     if (this._container.grid.isSnap())
       angle = Math.round(angle / 15) * 15;
-
     this._container.focused.rotate(angle);
+
+    this._container.call(Callback.ROTATE);
   }
 
   private end() {
     this._container.selectTool.on();
     this._container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
+
+    this._container.call(Callback.ROTATE_END);
   }
 
   on() {
