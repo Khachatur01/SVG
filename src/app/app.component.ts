@@ -4,6 +4,7 @@ import {Rect} from "./SVG/model/Rect";
 import {Callback} from './SVG/dataSource/Callback';
 import {GraphicView} from "./SVG/element/foreign/graphic/GraphicView";
 import {DemoAsset} from "./SVG/dataSource/DemoAsset";
+import {TextBoxView} from "./SVG/element/foreign/text/TextBoxView";
 
 @Component({
   selector: 'app-root',
@@ -301,6 +302,9 @@ export class AppComponent implements AfterViewInit {
   refPointChangeCallBack(parameters: any) {
     // console.log(parameters.refPoint);
   }
+  nodeEditCallBack(parameters: any) {
+    // console.log(parameters.position);
+  }
 
   strokeWidthCallBack(parameters: any) {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
@@ -337,7 +341,7 @@ export class AppComponent implements AfterViewInit {
   demoVideo() {
     if (!this.svg) return;
 
-    this.svg.drawTools.video.src = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+    this.svg.drawTools.video.src = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     this.svg.drawTool.tool = this.svg.drawTools.video;
     this.svg.drawTool.on();
     this.switchActive('video');
@@ -484,6 +488,7 @@ export class AppComponent implements AfterViewInit {
     this.svg.addCallBack(Callback.ASSET_EDIT, this.assetEditCallBack.bind(this));
     this.svg.addCallBack(Callback.REF_POINT_VIEW_CHANGE, this.refPointViewChangeCallBack.bind(this));
     this.svg.addCallBack(Callback.REF_POINT_CHANGE, this.refPointChangeCallBack.bind(this));
+    this.svg.addCallBack(Callback.NODE_EDIT, this.nodeEditCallBack.bind(this));
 
     this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
     this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));

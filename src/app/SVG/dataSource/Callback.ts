@@ -13,6 +13,9 @@ export enum Callback {
   POINTER_TOOl_ON,
   POINTER_TOOl_OFF,
   EDIT_TOOl_ON,
+  NODE_EDIT_START,
+  NODE_EDIT, /* callback parameter (position) */
+  NODE_EDIT_END,
   EDIT_TOOl_OFF,
   CIRCLE_TOOL_ON,
   CIRCLE_TOOL_OFF,

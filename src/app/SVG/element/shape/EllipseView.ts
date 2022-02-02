@@ -8,9 +8,9 @@ import {PathView} from "./pointed/PathView";
 import {Path} from "../../model/path/Path";
 import {Arc} from "../../model/path/curve/arc/Arc";
 import {MoveTo} from "../../model/path/point/MoveTo";
-import {Shape} from "../type/Shape";
+import {ShapeView} from "../type/ShapeView";
 
-export class EllipseView extends Shape implements MoveDrawable {
+export class EllipseView extends ShapeView implements MoveDrawable {
   constructor(container: SVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "ellipse");

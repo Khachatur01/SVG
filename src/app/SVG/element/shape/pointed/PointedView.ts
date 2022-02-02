@@ -5,9 +5,9 @@ import {PathView} from "./PathView";
 import {Path} from "../../../model/path/Path";
 import {MoveTo} from "../../../model/path/point/MoveTo";
 import {LineTo} from "../../../model/path/line/LineTo";
-import {Shape} from "../../type/Shape";
+import {ShapeView} from "../../type/ShapeView";
 
-export abstract class PointedView extends Shape {
+export abstract class PointedView extends ShapeView {
   protected _lastPoints: Point[] = [];
 
   override set points(points: Point[]) {};

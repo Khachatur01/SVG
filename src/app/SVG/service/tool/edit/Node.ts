@@ -4,6 +4,7 @@ import {EditTool} from "./EditTool";
 import {Rect} from "../../../model/Rect";
 import {Matrix} from "../../math/Matrix";
 import {SVG} from "../../../SVG";
+import {Callback} from "../../../dataSource/Callback";
 
 export class Node extends EllipseView {
   private readonly editTool: EditTool;
@@ -16,20 +17,19 @@ export class Node extends EllipseView {
   constructor(container: SVG, editTool: EditTool, position: Point, order: number) {
     super(container, position.x - 8, position.y - 8, 8, 8);
     this.removeOverEvent();
-    this.setAttr({
-      fill: "white",
-      stroke: "black",
-      "stroke-width": "1",
-    });
-    this.on();
+    this.style.fillColor = "white";
+    this.style.strokeColor = "black";
+    this.style.strokeWidth = "1";
     this.svgElement.style.cursor = "move";
     this.editTool = editTool;
     this.order = order;
+    this.on();
   }
 
   protected onStart(): void {
     this.editTool.getContainer().HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
+    this._container.call(Callback.NODE_EDIT_START);
   };
 
   protected onMove(event: MouseEvent): void {
@@ -50,11 +50,13 @@ export class Node extends EllipseView {
 
     this.editTool.editableElement.replacePoint(this.order, position);
     this.position = position;
+    this._container.call(Callback.NODE_EDIT, {position: position});
   };
 
   protected onEnd(): void {
     this.editTool.getContainer().HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
+    this._container.call(Callback.NODE_EDIT_END);
   };
 
   private on() {

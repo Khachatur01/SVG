@@ -1,4 +1,4 @@
-import {Foreign} from "../../type/Foreign";
+import {ForeignView} from "../../type/ForeignView";
 import {Rect} from "../../../model/Rect";
 import {Point} from "../../../model/Point";
 import {Size} from "../../../model/Size";
@@ -16,7 +16,7 @@ interface Graphic {
   color: string;
   width: number;
 }
-export class GraphicView extends Foreign implements MoveDrawable {
+export class GraphicView extends ForeignView implements MoveDrawable {
   public readonly outline: string = "thin solid #999";
   private graphics: Map<Function, Graphic> = new Map<Function, Graphic>();
   private _xAxisPathView: PathView;

@@ -2,7 +2,7 @@ import {ElementView} from "../ElementView";
 import {Point} from "../../model/Point";
 import {Size} from "../../model/Size";
 
-export abstract class Foreign extends ElementView {
+export abstract class ForeignView extends ElementView {
   get points(): Point[] {
     let position: Point = this.position;
     let size: Size = this.size;

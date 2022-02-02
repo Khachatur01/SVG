@@ -4,10 +4,10 @@ import {Size} from "../../../model/Size";
 import {Rect} from "../../../model/Rect";
 import {Point} from "../../../model/Point";
 import {SVG} from "../../../SVG";
-import {Foreign} from "../../type/Foreign";
+import {ForeignView} from "../../type/ForeignView";
 import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
 
-export class ImageView extends Foreign implements MoveDrawable{
+export class ImageView extends ForeignView implements MoveDrawable{
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "image");

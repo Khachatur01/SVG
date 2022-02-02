@@ -4,9 +4,9 @@ import {Rect} from "../../model/Rect";
 import {Size} from "../../model/Size";
 import {SVG} from "../../SVG";
 import {PathView} from "./pointed/PathView";
-import {Shape} from "../type/Shape";
+import {ShapeView} from "../type/ShapeView";
 
-export class BoxView extends Shape {
+export class BoxView extends ShapeView {
   constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "rect");

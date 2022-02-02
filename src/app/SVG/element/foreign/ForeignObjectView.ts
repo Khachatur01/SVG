@@ -5,10 +5,10 @@ import {Size} from "../../model/Size";
 import {Rect} from "../../model/Rect";
 import {PathView} from "../shape/pointed/PathView";
 import {Callback} from "../../dataSource/Callback";
-import {Foreign} from "../type/Foreign";
+import {ForeignView} from "../type/ForeignView";
 import {MoveDrawable} from "../../service/tool/draw/type/MoveDrawable";
 
-export class ForeignObjectView extends Foreign implements MoveDrawable {
+export class ForeignObjectView extends ForeignView implements MoveDrawable {
   protected _content: HTMLElement | null = null;
   public readonly outline: string = "thin solid #999";
 

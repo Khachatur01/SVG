@@ -29,6 +29,11 @@ export class TextBoxView extends ForeignObjectView {
     this.style.setDefaultStyle();
   }
 
+  set text(text: string) {
+    if(this._content)
+      this._content.innerText = text;
+  }
+
   override addEditCallBack() {
     this._content?.addEventListener("input", () => {
       this.container.call(Callback.TEXT_TYPING,
