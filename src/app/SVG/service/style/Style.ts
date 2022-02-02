@@ -96,11 +96,11 @@ export class Style {
     this.backgroundColor = style.backgroundColor;
   }
 
-  call(name: Callback): void {
+  call(name: Callback, parameters: any = {}): void {
     let callback = this._styleCallBacks.get(name);
     if (callback)
       callback.forEach((func: Function) => {
-        func();
+        func(parameters);
       });
   }
 

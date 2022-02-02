@@ -237,6 +237,7 @@ export class AppComponent implements AfterViewInit {
     element.classList.remove("active")
   }
 
+  /* callbacks */
   selectToolOnCallBack() {
     this.switchActive("select");
   }
@@ -258,6 +259,7 @@ export class AppComponent implements AfterViewInit {
     document.getElementById("group")?.setAttribute("disabled", "true");
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
+
   snapSideChangeCallBack(parameters: any) {
     // console.log(parameters.snapSide);
   }
@@ -300,36 +302,37 @@ export class AppComponent implements AfterViewInit {
     // console.log(parameters.refPoint);
   }
 
-  strokeWidthCallBack() {
+  strokeWidthCallBack(parameters: any) {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
     if (!stokeWidthInput || !this.svg) return;
-    stokeWidthInput.value = this.svg.style.strokeWidth;
+    stokeWidthInput.value = parameters.strokeWidth;
   }
-  strokeColorCallBack() {
+  strokeColorCallBack(parameters: any) {
     let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
     if (!stokeColorInput || !this.svg) return;
-    stokeColorInput.value = this.svg.style.strokeColor;
+    stokeColorInput.value = parameters.strokeColor;
   }
-  fillCallBack() {
+  fillCallBack(parameters: any) {
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
     if (!fillInput || !this.svg) return;
-    fillInput.value = this.svg.style.fillColor;
+    fillInput.value = parameters.fillColor;
   }
-  fontSizeCallBack() {
+  fontSizeCallBack(parameters: any) {
     let fontSizeInput = document.getElementById("font-size") as HTMLInputElement;
     if (!fontSizeInput || !this.svg) return;
-    fontSizeInput.value = this.svg.style.fontSize;
+    fontSizeInput.value = parameters.fontSize;
   }
-  fontColorCallBack() {
+  fontColorCallBack(parameters: any) {
     let fontColorInput = document.getElementById("font-color") as HTMLInputElement;
     if (!fontColorInput || !this.svg) return;
-    fontColorInput.value = this.svg.style.fontColor;
+    fontColorInput.value = parameters.fontColor;
   }
-  fontBackgroundCallBack() {
+  fontBackgroundCallBack(parameters: any) {
     let backgroundColorInput = document.getElementById("font-background") as HTMLInputElement;
     if (!backgroundColorInput || !this.svg) return;
-    backgroundColorInput.value = this.svg.style.backgroundColor;
+    backgroundColorInput.value = parameters.backgroundColor;
   }
+  /* callbacks */
 
   demoVideo() {
     if (!this.svg) return;

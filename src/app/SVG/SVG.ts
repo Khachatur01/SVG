@@ -146,12 +146,24 @@ class GlobalStyle extends Style {
     super.fontColor = style.fontColor;
     super.backgroundColor = style.backgroundColor;
 
-    this.call(Callback.STOKE_WIDTH_CHANGE);
-    this.call(Callback.STROKE_COLOR_CHANGE);
-    this.call(Callback.FILL_COLOR_CHANGE);
-    this.call(Callback.FONT_SIZE_CHANGE);
-    this.call(Callback.FONT_COLOR_CHANGE);
-    this.call(Callback.FONT_BACKGROUND_CHANGE);
+    this.call(Callback.STOKE_WIDTH_CHANGE,
+      {strokeWidth: style.strokeWidth}
+    );
+    this.call(Callback.STROKE_COLOR_CHANGE,
+      {strokeColor: style.strokeColor}
+    );
+    this.call(Callback.FILL_COLOR_CHANGE,
+      {fillColor: style.fillColor}
+    );
+    this.call(Callback.FONT_SIZE_CHANGE,
+      {fontSize: style.fontSize}
+    );
+    this.call(Callback.FONT_COLOR_CHANGE,
+      {fontColor: style.fontColor}
+    );
+    this.call(Callback.FONT_BACKGROUND_CHANGE,
+      {backgroundColor: style.backgroundColor}
+    );
   }
 }
 

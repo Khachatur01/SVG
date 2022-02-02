@@ -1,10 +1,10 @@
 export enum Callback {
-  STOKE_WIDTH_CHANGE, /* TODO add callback parameter (strokeWidth) */
-  STROKE_COLOR_CHANGE, /* TODO add callback parameter (strokeColor) */
-  FILL_COLOR_CHANGE, /* TODO add callback parameter (fillColor) */
-  FONT_SIZE_CHANGE, /* TODO add callback parameter (fontSize) */
-  FONT_COLOR_CHANGE, // TODO add callback parameter (fontColor) */
-  FONT_BACKGROUND_CHANGE, // TODO add callback parameter (fontBackground) */
+  STOKE_WIDTH_CHANGE, /* callback parameter (strokeWidth) */
+  STROKE_COLOR_CHANGE, /* callback parameter (strokeColor) */
+  FILL_COLOR_CHANGE, /* callback parameter (fillColor) */
+  FONT_SIZE_CHANGE, /* callback parameter (fontSize) */
+  FONT_COLOR_CHANGE, /* callback parameter (fontColor) */
+  FONT_BACKGROUND_CHANGE, /* callback parameter (fontBackground) */
 
   SELECT_TOOl_ON,
   SELECT_TOOl_OFF,
@@ -51,8 +51,8 @@ export enum Callback {
   GROUP,
   UNGROUP,
 
-  ELEMENT_FOCUSED, /* callback parameter (element id) */
-  ELEMENT_BLURED, /* callback parameter (element id) */
+  ELEMENT_FOCUSED, /* callback parameter (element) */
+  ELEMENT_BLURED, /* callback parameter (element) */
   BLURED,
   PERFECT_MODE_ON,
   PERFECT_MODE_OFF,
