@@ -21,4 +21,7 @@ export class DrawPolygon extends ClickDraw {
     super.stop();
     this.container.call(Callback.POLYGON_TOOL_OFF);
   }
+  _new(): DrawPolygon {
+    return new DrawPolygon(this.container);
+  }
 }

@@ -14,7 +14,7 @@ import {DrawImage} from "../service/tool/draw/element/foreign/DrawImage";
 import {DrawAsset} from "../service/tool/draw/element/foreign/DrawAsset";
 
 export class DrawTools {
-  private container: SVG;
+  private readonly container: SVG;
   private readonly _free: DrawFree;
   private readonly _line: DrawLine;
   private readonly _polyline: DrawPolyline;

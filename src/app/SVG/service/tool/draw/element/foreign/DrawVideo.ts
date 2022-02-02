@@ -41,4 +41,7 @@ export class DrawVideo extends MoveDraw {
     super.stop();
     this.container.call(Callback.VIDEO_TOOL_OFF);
   }
+  _new(): DrawVideo {
+    return new DrawVideo(this.container);
+  }
 }

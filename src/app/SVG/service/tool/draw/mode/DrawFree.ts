@@ -18,6 +18,10 @@ export class DrawFree implements Drawable {
     this.container = container;
   }
 
+  _new(): DrawFree {
+    return new DrawFree(this.container);
+  }
+
   _onStart(event: MouseEvent) {
     let containerRect = this.container.HTML.getBoundingClientRect();
     let snapPoint = {

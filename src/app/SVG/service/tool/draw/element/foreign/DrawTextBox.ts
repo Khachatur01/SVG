@@ -38,4 +38,7 @@ export class DrawTextBox extends MoveDraw {
     super.stop();
     this.container.call(Callback.TEXT_TOOL_OFF);
   }
+  _new(): DrawTextBox {
+    return new DrawTextBox(this.container);
+  }
 }

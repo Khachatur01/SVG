@@ -21,4 +21,7 @@ export class DrawPolyline extends ClickDraw {
     super.stop();
     this.container.call(Callback.POLYLINE_TOOL_OFF);
   }
+  _new(): DrawPolyline {
+    return new DrawPolyline(this.container);
+  }
 }

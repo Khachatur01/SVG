@@ -14,7 +14,7 @@ export class DrawLine extends MoveDraw {
     return element;
   }
 
-  protected override _onDraw(event: MouseEvent) {
+  protected override draw(event: MouseEvent) {
     if (!this.container || !this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
@@ -49,5 +49,8 @@ export class DrawLine extends MoveDraw {
   override stop() {
     super.stop();
     this.container.call(Callback.LINE_TOOL_OFF);
+  }
+  _new(): DrawLine {
+    return new DrawLine(this.container);
   }
 }

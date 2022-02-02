@@ -39,4 +39,7 @@ export class DrawImage extends MoveDraw {
     super.stop();
     this.container.call(Callback.IMAGE_TOOL_OFF);
   }
+  _new(): DrawImage {
+    return new DrawImage(this.container);
+  }
 }

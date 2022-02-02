@@ -9,9 +9,9 @@ export abstract class MoveDraw implements Drawable {
   protected container: SVG;
   protected startPos: Point = {x: 0, y: 0}
 
-  private drawStart = this._onStart.bind(this);
-  private draw = this._onDraw.bind(this);
-  private drawEnd = this._onEnd.bind(this);
+  private _drawStart = this.drawStart.bind(this);
+  private _draw = this.draw.bind(this);
+  private _drawEnd = this.drawEnd.bind(this);
 
   protected drawableElement: ElementView | null = null;
 
@@ -19,11 +19,12 @@ export abstract class MoveDraw implements Drawable {
     this.container = container;
   }
 
+  abstract _new(): MoveDraw;
   abstract getDrawableElement(position: Point): ElementView;
 
-  protected _onStart(event: MouseEvent) {
-    this.container.HTML.addEventListener('mousemove', this.draw);
-    document.addEventListener('mouseup', this.drawEnd);
+  protected drawStart(event: MouseEvent) {
+    this.container.HTML.addEventListener('mousemove', this._draw);
+    document.addEventListener('mouseup', this._drawEnd);
 
     let containerRect = this.container.HTML.getBoundingClientRect();
     this.startPos.x = event.clientX - containerRect.left; //x position within the element.
@@ -36,7 +37,7 @@ export abstract class MoveDraw implements Drawable {
     this.container.drawTool.drawing();
     this.container.call(Callback.DRAW_CLICK, {position: this.startPos});
   }
-  protected _onDraw(event: MouseEvent) {
+  protected draw(event: MouseEvent) {
     if (!this.drawableElement) return;
 
     let containerRect = this.container.HTML.getBoundingClientRect();
@@ -80,11 +81,11 @@ export abstract class MoveDraw implements Drawable {
       {position: position}
     );
   }
-  private _onEnd() {
+  private drawEnd() {
     if (!this.drawableElement) return;
 
-    this.container.HTML.removeEventListener('mousemove', this.draw);
-    document.removeEventListener('mouseup', this.drawEnd);
+    this.container.HTML.removeEventListener('mousemove', this._draw);
+    document.removeEventListener('mouseup', this._drawEnd);
 
     /* if element isn't drawn */
     if (this.drawableElement.isComplete()) {
@@ -114,9 +115,9 @@ export abstract class MoveDraw implements Drawable {
 
   start(container: SVG): void {
     this.container = container;
-    this.container.HTML.addEventListener('mousedown', this.drawStart);
+    this.container.HTML.addEventListener('mousedown', this._drawStart);
   }
   stop(): void {
-    this.container?.HTML.removeEventListener('mousedown', this.drawStart);
+    this.container?.HTML.removeEventListener('mousedown', this._drawStart);
   }
 }

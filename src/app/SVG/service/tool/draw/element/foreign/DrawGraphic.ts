@@ -38,4 +38,7 @@ export class DrawGraphic extends MoveDraw {
     super.stop();
     this.container.call(Callback.GRAPHIC_TOOL_OFF);
   }
+  _new(): DrawGraphic {
+    return new DrawGraphic(this.container);
+  }
 }

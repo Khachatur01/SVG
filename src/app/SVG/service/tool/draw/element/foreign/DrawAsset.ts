@@ -42,4 +42,7 @@ export class DrawAsset extends MoveDraw {
     super.stop();
     this.container.call(Callback.ASSET_TOOL_OFF);
   }
+  _new(): DrawAsset {
+    return new DrawAsset(this.container);
+  }
 }

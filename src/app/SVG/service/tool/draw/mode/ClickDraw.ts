@@ -15,6 +15,9 @@ export abstract class ClickDraw implements Drawable {
     this.container = container;
   }
 
+  abstract _new(): ClickDraw;
+  abstract getDrawableElement(position: Point): PointedView;
+
   _click(event: MouseEvent) {
     this.container.drawTool.drawing();
     let containerRect = this.container?.HTML.getBoundingClientRect();
@@ -54,8 +57,6 @@ export abstract class ClickDraw implements Drawable {
       {position: snapPoint}
     );
   }
-
-  abstract getDrawableElement(position: Point): PointedView;
 
   start(container: SVG): void {
     this.container = container;

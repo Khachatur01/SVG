@@ -18,4 +18,7 @@ export class DrawIsoscelesTriangle extends MoveDraw {
     super.stop();
     this.container.call(Callback.ISOSCELES_TRIANGLE_TOOL_OFF);
   }
+  _new(): DrawIsoscelesTriangle {
+    return new DrawIsoscelesTriangle(this.container);
+  }
 }

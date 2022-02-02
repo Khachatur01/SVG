@@ -4,7 +4,7 @@ import {Rect} from "./SVG/model/Rect";
 import {Callback} from './SVG/dataSource/Callback';
 import {GraphicView} from "./SVG/element/foreign/graphic/GraphicView";
 import {DemoAsset} from "./SVG/dataSource/DemoAsset";
-import {TextBoxView} from "./SVG/element/foreign/text/TextBoxView";
+import Picker from 'vanilla-picker';
 
 @Component({
   selector: 'app-root',
@@ -314,12 +314,12 @@ export class AppComponent implements AfterViewInit {
   strokeColorCallBack(parameters: any) {
     let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
     if (!stokeColorInput || !this.svg) return;
-    stokeColorInput.value = parameters.strokeColor;
+    stokeColorInput.style.backgroundColor = parameters.strokeColor;
   }
   fillCallBack(parameters: any) {
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
     if (!fillInput || !this.svg) return;
-    fillInput.value = parameters.fillColor;
+    fillInput.style.backgroundColor = parameters.fillColor;
   }
   fontSizeCallBack(parameters: any) {
     let fontSizeInput = document.getElementById("font-size") as HTMLInputElement;
@@ -329,12 +329,12 @@ export class AppComponent implements AfterViewInit {
   fontColorCallBack(parameters: any) {
     let fontColorInput = document.getElementById("font-color") as HTMLInputElement;
     if (!fontColorInput || !this.svg) return;
-    fontColorInput.value = parameters.fontColor;
+    fontColorInput.style.backgroundColor = parameters.fontColor;
   }
   fontBackgroundCallBack(parameters: any) {
     let backgroundColorInput = document.getElementById("font-background") as HTMLInputElement;
     if (!backgroundColorInput || !this.svg) return;
-    backgroundColorInput.value = parameters.backgroundColor;
+    backgroundColorInput.style.backgroundColor = parameters.backgroundColor;
   }
   /* callbacks */
 
@@ -383,43 +383,11 @@ export class AppComponent implements AfterViewInit {
     if (this.svg && width)
       this.svg.style.strokeWidth = width;
   }
-  transparentStroke() {
-    if (this.svg)
-      this.svg.style.strokeColor = "none";
-  }
-  strokeColorChange(event: Event) {
-    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let color = picker?.value;
-    if (this.svg && color)
-      this.svg.style.strokeColor = color;
-  }
-  transparentFill() {
-    if (this.svg)
-      this.svg.style.fillColor = "none";
-  }
-  fillColorChange(event: Event) {
-    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let color = picker?.value;
-    if (this.svg && color)
-      this.svg.style.fillColor = color;
-  }
   fontSizeChange(event: Event) {
     let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
     let size = picker?.value;
     if (this.svg && size)
       this.svg.style.fontSize = size;
-  }
-  fontColorChange(event: Event) {
-    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let color = picker?.value;
-    if (this.svg && color)
-      this.svg.style.fontColor = color;
-  }
-  textBackgroundChange(event: Event) {
-    let picker = document.getElementById((event.target as Element).id) as HTMLInputElement;
-    let color = picker?.value;
-    if (this.svg && color)
-      this.svg.style.backgroundColor = color;
   }
 
   copyFocused() {
@@ -469,6 +437,42 @@ export class AppComponent implements AfterViewInit {
       first.zoomOut();
     }
 
+  setColorPickers() {
+    if (!this.svg) return;
+    let strokeColorDIV = document.querySelector('#stroke-color') as HTMLElement;
+    let strokeColorPicker = new Picker(strokeColorDIV);
+    strokeColorPicker.setColor(this.svg.style.strokeColor, false);
+    strokeColorPicker.onChange = (color) => {
+      if (!this.svg) return;
+      strokeColorDIV.style.backgroundColor = color.hex;
+      this.svg.style.strokeColor = color.hex;
+    };
+    let fillColorDIV = document.querySelector('#fill-color') as HTMLElement;
+    let fillColorPicker = new Picker(fillColorDIV);
+    fillColorPicker.setColor("#FFFFFF", false);
+    fillColorPicker.onChange = (color) => {
+      if (!this.svg) return;
+      fillColorDIV.style.backgroundColor = color.hex;
+      this.svg.style.fillColor = color.hex;
+    };
+    let fontColorDIV = document.querySelector('#font-color') as HTMLElement;
+    let fontColorPicker = new Picker(fontColorDIV);
+    fontColorPicker.setColor(this.svg.style.fontColor, false);
+    fontColorPicker.onChange = (color) => {
+      if (!this.svg) return;
+      fontColorDIV.style.backgroundColor = color.hex;
+      this.svg.style.fontColor = color.hex;
+    };
+    let backgroundColorDIV = document.querySelector('#font-background') as HTMLElement;
+    let backgroundColorPicker = new Picker(backgroundColorDIV);
+    backgroundColorPicker.setColor("#FFFFFF", false);
+    backgroundColorPicker.onChange = (color) => {
+      if (!this.svg) return;
+      backgroundColorDIV.style.backgroundColor = color.hex;
+      this.svg.style.backgroundColor = color.hex;
+    };
+  }
+
   ngAfterViewInit(): void {
     this.svg = new SVG("svgContainer");
     this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolOnCallBack.bind(this));
@@ -498,6 +502,7 @@ export class AppComponent implements AfterViewInit {
     this.svg.style.addCallBack(Callback.FONT_BACKGROUND_CHANGE, this.fontBackgroundCallBack.bind(this));
 
     this.select();
+    this.setColorPickers();
     window.addEventListener("keydown", this.keyDown.bind(this));
     window.addEventListener("keyup", this.keyUp.bind(this));
 

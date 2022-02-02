@@ -18,4 +18,7 @@ export class DrawRightTriangle extends MoveDraw {
     super.stop();
     this.container.call(Callback.RIGHT_TRIANGLE_TOOL_OFF);
   }
+  _new(): DrawRightTriangle {
+    return new DrawRightTriangle(this.container);
+  }
 }

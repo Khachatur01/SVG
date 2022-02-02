@@ -21,4 +21,7 @@ export class DrawEllipse extends MoveDraw {
     super.stop();
     this.container.call(Callback.CIRCLE_TOOL_OFF);
   }
+  _new(): DrawEllipse {
+    return new DrawEllipse(this.container);
+  }
 }

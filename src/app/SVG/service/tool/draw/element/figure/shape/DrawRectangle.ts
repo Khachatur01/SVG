@@ -18,4 +18,7 @@ export class DrawRectangle extends MoveDraw {
     super.stop();
     this.container.call(Callback.RECTANGLE_TOOL_OFF);
   }
+  _new(): DrawRectangle {
+    return new DrawRectangle(this.container);
+  }
 }
