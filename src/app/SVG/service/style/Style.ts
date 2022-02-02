@@ -10,7 +10,6 @@ export class Style {
       width = "5";
     return width;
   }
-
   set strokeWidth(width: string) {
     this.style.set("stroke-width", width);
   }
@@ -22,7 +21,6 @@ export class Style {
 
     return color;
   }
-
   set strokeColor(color: string) {
     this.style.set("stroke", color);
   }
@@ -34,7 +32,6 @@ export class Style {
 
     return array;
   }
-
   set strokeDashArray(array: string) {
     this.style.set("stroke-dasharray", array);
   }
@@ -46,7 +43,6 @@ export class Style {
 
     return color;
   }
-
   set fillColor(color: string) {
     this.style.set("fill", color);
   }
@@ -58,7 +54,6 @@ export class Style {
 
     return fontSize;
   }
-
   set fontSize(size: string) {
     this.style.set("font-size", size);
   }
@@ -70,7 +65,6 @@ export class Style {
 
     return color;
   }
-
   set fontColor(color: string) {
     this.style.set("color", color);
   }
@@ -82,7 +76,6 @@ export class Style {
 
     return color;
   }
-
   set backgroundColor(color: string) {
     this.style.set("background-color", color);
   }
@@ -103,7 +96,6 @@ export class Style {
         func(parameters);
       });
   }
-
   addCallBack(name: Callback, callback: Function) {
     let functions = this._styleCallBacks.get(name);
     if (!functions) {
@@ -111,7 +103,6 @@ export class Style {
     }
     this._styleCallBacks.get(name)?.push(callback)
   }
-
   removeCallBack(name: Callback, callback: Function) {
     let functions = this._styleCallBacks.get(name);
     if (functions)

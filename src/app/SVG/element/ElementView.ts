@@ -50,6 +50,9 @@ export class ElementStyle extends Style {
 
   override set fillColor(color: string) {
     super.fillColor = color;
+    if(color.length == 9 && color.slice(-2) === "00")
+      color = "none";
+
     this.element.setAttr({"fill": color});
   }
 
@@ -68,6 +71,7 @@ export class ElementStyle extends Style {
 
   override set fontColor(color: string) {
     super.fontColor = color;
+
     this.element.HTML.style.color = color;
   }
 
@@ -77,6 +81,7 @@ export class ElementStyle extends Style {
 
   override set backgroundColor(color: string) {
     super.backgroundColor = color;
+
     this.element.HTML.style.backgroundColor = color;
   }
 
