@@ -5,6 +5,7 @@ import {Callback} from './SVG/dataSource/Callback';
 import {GraphicView} from "./SVG/element/foreign/graphic/GraphicView";
 import {DemoAsset} from "./SVG/dataSource/DemoAsset";
 import Picker from 'vanilla-picker';
+import {ColorPicker} from "./SVG/colorPicker/ColorPicker";
 
 @Component({
   selector: 'app-root',
@@ -439,37 +440,29 @@ export class AppComponent implements AfterViewInit {
 
   setColorPickers() {
     if (!this.svg) return;
-    let strokeColorDIV = document.querySelector('#stroke-color') as HTMLElement;
-    let strokeColorPicker = new Picker(strokeColorDIV);
-    strokeColorPicker.setColor(this.svg.style.strokeColor, false);
-    strokeColorPicker.onChange = (color) => {
+    let strokeColorPicker = new ColorPicker(document.getElementById("stroke-color") as HTMLDivElement);
+    strokeColorPicker.color = this.svg.style.strokeColor;
+    strokeColorPicker.onChange = (color: string) => {
       if (!this.svg) return;
-      strokeColorDIV.style.backgroundColor = color.hex;
-      this.svg.style.strokeColor = color.hex;
+      this.svg.style.strokeColor = color;
     };
-    let fillColorDIV = document.querySelector('#fill-color') as HTMLElement;
-    let fillColorPicker = new Picker(fillColorDIV);
-    fillColorPicker.setColor("#FFFFFF", false);
-    fillColorPicker.onChange = (color) => {
+    let fillColorPicker = new ColorPicker(document.getElementById("fill-color") as HTMLDivElement);
+    fillColorPicker.color = this.svg.style.fillColor;
+    fillColorPicker.onChange = (color: string) => {
       if (!this.svg) return;
-      fillColorDIV.style.backgroundColor = color.hex;
-      this.svg.style.fillColor = color.hex;
+      this.svg.style.fillColor = color;
     };
-    let fontColorDIV = document.querySelector('#font-color') as HTMLElement;
-    let fontColorPicker = new Picker(fontColorDIV);
-    fontColorPicker.setColor(this.svg.style.fontColor, false);
-    fontColorPicker.onChange = (color) => {
+    let fontColorPicker = new ColorPicker(document.getElementById("font-color") as HTMLDivElement);
+    fontColorPicker.color = this.svg.style.fontColor;
+    fontColorPicker.onChange = (color: string) => {
       if (!this.svg) return;
-      fontColorDIV.style.backgroundColor = color.hex;
-      this.svg.style.fontColor = color.hex;
+      this.svg.style.fontColor = color;
     };
-    let backgroundColorDIV = document.querySelector('#font-background') as HTMLElement;
-    let backgroundColorPicker = new Picker(backgroundColorDIV);
-    backgroundColorPicker.setColor("#FFFFFF", false);
-    backgroundColorPicker.onChange = (color) => {
+    let backgroundColorPicker = new ColorPicker(document.getElementById("font-background") as HTMLDivElement);
+    backgroundColorPicker.color = this.svg.style.backgroundColor;
+    backgroundColorPicker.onChange = (color: string) => {
       if (!this.svg) return;
-      backgroundColorDIV.style.backgroundColor = color.hex;
-      this.svg.style.backgroundColor = color.hex;
+      this.svg.style.backgroundColor = color;
     };
   }
 
