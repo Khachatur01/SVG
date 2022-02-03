@@ -26,14 +26,7 @@ export class EllipseView extends ShapeView implements MoveDrawable {
   get copy(): EllipseView {
     let position = this.position;
     let size = this.size;
-    let ellipse: EllipseView = new EllipseView(this._container);
-    ellipse.position = position;
-    ellipse.setSize({
-      x: position.x,
-      y: position.y,
-      width: size.width,
-      height: size.height
-    });
+    let ellipse: EllipseView = new EllipseView(this._container, position.x, position.y, size.width / 2, size.height / 2);
     ellipse.refPoint = Object.assign({}, this.refPoint);
     ellipse.rotate(this._angle);
 
@@ -68,14 +61,12 @@ export class EllipseView extends ShapeView implements MoveDrawable {
       y: centerPos.y - radius.height
     };
   }
-
   set position(delta: Point) {
     this.setAttr({
       cx: this._lastPosition.x + this._lastSize.width / 2 + delta.x,
       cy: this._lastPosition.y + this._lastSize.height / 2 + delta.y
     });
   }
-
   override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if (delta.x == 0 && delta.y == 0) return;
@@ -89,17 +80,15 @@ export class EllipseView extends ShapeView implements MoveDrawable {
     });
   }
 
-  drawSize(rect: Rect) {
-    this.setSize(rect);
-  }
-
   get size(): Size {
     return {
       width: parseInt(this.getAttr("rx")) * 2,
       height: parseInt(this.getAttr("ry")) * 2
     };
   }
-
+  drawSize(rect: Rect) {
+    this.setSize(rect);
+  }
   setSize(rect: Rect, delta: Point | null = null): void {
     if (delta) {
       rect.width = this._lastSize.width * delta.x;
@@ -134,7 +123,6 @@ export class EllipseView extends ShapeView implements MoveDrawable {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
-
   get rotatedBoundingRect(): Rect {
     let containerRect: Rect = this._container.HTML.getBoundingClientRect();
     let stoke = parseInt(this.style.strokeWidth);

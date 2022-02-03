@@ -45,17 +45,11 @@ export class ElementStyle extends Style {
   }
 
   override get fillColor(): string {
-    let color = super.fillColor;
-    if(color == "none" || color == "transparent")
-      color = "#FFFFFF00";
-    return color;
+    return super.fillColor;
   }
 
   override set fillColor(color: string) {
     super.fillColor = color;
-    if(color.length == 9 && color.slice(-2) === "00")
-      color = "none";
-
     this.element.setAttr({"fill": color});
   }
 

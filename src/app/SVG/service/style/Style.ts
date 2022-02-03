@@ -44,6 +44,8 @@ export class Style {
     return color;
   }
   set fillColor(color: string) {
+    if(color.length == 9 && color.slice(-2) === "00")
+      color = "none";
     this.style.set("fill", color);
   }
 

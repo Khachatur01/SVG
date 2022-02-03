@@ -128,7 +128,6 @@ class GlobalStyle extends Style {
   recoverGlobalStyle() {
     this.setGlobalStyle(this.default);
   }
-
   fixGlobalStyle() {
     this.default.strokeWidth = this.strokeWidth;
     this.default.strokeColor = this.strokeColor;
@@ -360,9 +359,9 @@ export class SVG {
   }
   copyFocused(): void {
     let elements: ElementView[] = [];
-    for (let element of this._focus.children) {
-      elements.push(element.copy);
-    }
+    for (let element of this._focus.children)
+      elements.push(element);
+
     this.lastCopyPosition = this._focus.position;
     ElementsClipboard.save(elements);
     this.call(Callback.COPY);
@@ -379,6 +378,7 @@ export class SVG {
     elements.forEach((element: ElementView) => {
       element = element.copy; /* may paste many times */
       element.container = this;
+      element.fixRect();
       if (element instanceof GroupView)
         element.elements.forEach((child: ElementView) => {
           this.setElementActivity(child);

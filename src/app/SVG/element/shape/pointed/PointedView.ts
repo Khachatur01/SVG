@@ -118,7 +118,6 @@ export abstract class PointedView extends ShapeView {
     this.points = points;
   }
 
-
   get boundingRect(): Rect {
     let points = this.points;
     return this.calculateBoundingBox(points);
