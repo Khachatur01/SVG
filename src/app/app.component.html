@@ -91,7 +91,7 @@
       <div class="col-auto me-2">Stroke color</div>
       <div class="col">
         <div class="input-group">
-          <div id="stroke-color" style="width: 31px; background-color: black" class="form-control form-control-sm color-picker"></div>
+          <div id="stroke-color" style="width: 31px; color: black" class="form-control form-control-sm color-picker"></div>
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@
       <div class="col-auto me-2">Fill color</div>
       <div class="col">
         <div class="input-group">
-          <div id="fill-color" style="width: 31px; background-color: #FFFFFF" class="form-control form-control-sm color-picker"></div>
+          <div id="fill-color" style="width: 31px; color: #FFFFFF00" class="form-control form-control-sm color-picker"></div>
         </div>
       </div>
     </div>
@@ -117,7 +117,7 @@
       <div class="col-auto me-2">Font color</div>
       <div class="col">
         <div class="input-group">
-          <div id="font-color" style="width: 31px; background-color: black" class="form-control form-control-sm color-picker"></div>
+          <div id="font-color" style="width: 31px; color: black" class="form-control form-control-sm color-picker"></div>
         </div>
       </div>
     </div>
@@ -125,22 +125,32 @@
       <div class="col-auto me-2">Text background</div>
       <div class="col">
         <div class="input-group">
-          <div id="font-background" style="width: 31px; background-color: #FFFFFF" class="form-control form-control-sm color-picker"></div>
+          <div id="font-background" style="width: 31px; color: #FFFFFF00" class="form-control form-control-sm color-picker"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <button class="btn btn-default" (click)="copyFocused()" title="Ctrl + C">Copy</button>
-  <button class="btn btn-default" (click)="cutFocused()" title="Ctrl + X">Cut</button>
-  <button class="btn btn-default" (click)="paste()" title="Ctrl + V">Paste</button>
-  <button class="btn btn-default" (click)="selectAll()" title="Ctrl + A">Select All</button>
-  <button class="btn btn-default" (click)="delete()" title="Del">Delete</button>
+  <button class="btn btn-default" (click)="copyFocused()" title="Ctrl + C">
+    <img src="../assets/img/copy.svg" height="17" alt="">
+  </button>
+  <button class="btn btn-default" (click)="cutFocused()" title="Ctrl + X">
+    <img src="../assets/img/cut.svg" height="17" alt="">
+  </button>
+  <button class="btn btn-default" (click)="paste()" title="Ctrl + V">
+    <img src="../assets/img/paste.svg" height="17" alt="">
+  </button>
+  <button class="btn btn-default" (click)="selectAll()" title="Ctrl + A">
+    <img src="../assets/img/select-all.svg" height="17" alt="">
+  </button>
+  <button class="btn btn-default" (click)="delete()" title="Del">
+    <img src="../assets/img/delete.svg" height="17" alt="">
+  </button>
   <button class="btn btn-default" (click)="orderTop()" title="To Top (Shift + PageUp)">
-    <img src="../assets/img/order-top.svg" height="17" alt="">
+    <img src="../assets/img/to-top.svg" height="17" alt="">
   </button>
   <button class="btn btn-default" (click)="orderBottom()" title="To Bottom (Shift + PageDown)">
-    <img src="../assets/img/order-bottom.svg" height="17" alt="">
+    <img src="../assets/img/to-back.svg" height="17" alt="">
   </button>
   <button class="btn btn-default" (click)="recenterRefPoint()" title="Recenter Reference Point">
     <img src="../assets/img/recenter-reference-point.svg" height="17" alt="">

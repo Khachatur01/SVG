@@ -20,7 +20,33 @@ export class ColorPicker {
   private advancedPicker: Picker;
   private onChangeCallBack: Function | null = null;
 
+  private static styleFileAdded = false;
+
   constructor(parent: HTMLElement) {
+    if (!ColorPicker.styleFileAdded) {
+      document.head.innerHTML +=
+        '<style>' +
+        '.colorPickerParent {\n' +
+        '  background:\n' +
+        '    linear-gradient(45deg, lightgrey 25%, transparent 25%, transparent 75%, lightgrey 75%) 0 0/2em 2em,\n' +
+        '    linear-gradient(45deg, lightgrey 25%, white 25%, white 75%, lightgrey 75%) 1em 1em/2em 2em;\n' +
+        '}\n' +
+        '.colorPickerParent::before {\n' +
+        '  content: "";\n' +
+        '  position: absolute;\n' +
+        '  left: 0;\n' +
+        '  top: 0;\n' +
+        '  display: block;\n' +
+        '  width: 100%;\n' +
+        '  height: 100%;' +
+        '  background: currentColor;\n' +
+        '}\n' +
+        '</style>';
+      ColorPicker.styleFileAdded = true;
+    }
+
+    parent.classList.add("colorPickerParent");
+
     this.parent = parent;
     this.palette = this.createPalette();
     this.fillPalette();
@@ -67,7 +93,7 @@ export class ColorPicker {
   }
 
   changeCallBack(color: string) {
-    this.parent.style.backgroundColor = color;
+    this.parent.style.color = color;
     if (this.onChangeCallBack)
       this.onChangeCallBack(color);
   }

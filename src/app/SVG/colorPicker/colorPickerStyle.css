@@ -1,0 +1,8 @@
+.colorPickerParent {
+  background:
+    linear-gradient(45deg, lightgrey 25%, transparent 25%, transparent 75%, lightgrey 75%) 0 0/2em 2em,
+    linear-gradient(45deg, lightgrey 25%, white 25%, white 75%, lightgrey 75%) 1em 1em/2em 2em;
+}
+.colorPickerParent::before {
+  background: currentColor;
+}
