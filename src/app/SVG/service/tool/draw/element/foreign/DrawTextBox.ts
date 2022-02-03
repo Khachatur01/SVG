@@ -25,8 +25,9 @@ export class DrawTextBox extends MoveDraw {
 
   override onEnd() {
     this.container.editTool.on();
-    if(this.drawableElement instanceof TextBoxView)
-      this.drawableElement.content?.focus();
+    let textBox = (this.drawableElement as TextBoxView);
+    textBox.content?.focus();
+    textBox.onFocus();
   }
 
   override start(container: SVG) {

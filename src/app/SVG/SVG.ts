@@ -289,20 +289,24 @@ export class SVG {
     });
 
     element.SVG.addEventListener("mousemove", () => {
-      if (this.selectTool.isOn()) {
-        element.SVG.style.cursor = "move";
-      } else if (this.editTool.isOn()) {
-        if (element instanceof ForeignObjectView)
-          element.SVG.style.cursor = "text";
-        else
-          element.SVG.style.cursor = "crosshair";
-      } else if (this.drawTool.isOn()) {
-        element.SVG.style.cursor = "crosshair";
-      } else if (this.highlightTool.isOn()) {
-        element.SVG.style.cursor = "crosshair";
-      } else if (this.pointerTool.isOn()) {
-        element.SVG.style.cursor = this.pointerTool.cursor;
-      }
+      // if (this.selectTool.isOn()) {
+      //   element.SVG.style.cursor = "move";
+      // } else if (this.editTool.isOn()) {
+      //   if (element instanceof ForeignObjectView)
+      //     element.SVG.style.cursor = "text";
+      //   else
+      //     element.SVG.style.cursor = "crosshair";
+      // } else if (this.drawTool.isOn()) {
+      //   element.SVG.style.cursor = "crosshair";
+      // } else if (this.highlightTool.isOn()) {
+      //   element.SVG.style.cursor = "crosshair";
+      // } else if (this.pointerTool.isOn()) {
+      //   element.SVG.style.cursor = this.pointerTool.cursor;
+      // }
+      if (this.selectTool.isOn())
+        element.SVG.style.cursor = element.style.cursor.select;
+      else if (this.editTool.isOn())
+        element.SVG.style.cursor = element.style.cursor.edit;
     });
   }
 

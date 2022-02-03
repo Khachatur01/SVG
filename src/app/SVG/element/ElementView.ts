@@ -9,8 +9,17 @@ import {PathView} from "./shape/pointed/PathView";
 import {GroupView} from "./group/GroupView";
 import {Style} from "../service/style/Style";
 
+interface CursorStyle {
+  select: string,
+  edit: string
+}
 export class ElementStyle extends Style {
   private element: ElementView;
+
+  public readonly cursor: CursorStyle = {
+    select: "move",
+    edit: "crosshair"
+  };
 
   constructor(element: ElementView) {
     super();
@@ -132,6 +141,9 @@ export abstract class ElementView implements Resizeable, Draggable {
   abstract get rotatedBoundingRect(): Rect;
   abstract toPath(): PathView;
   abstract get copy(): ElementView;
+
+  abstract onFocus(): void;
+  abstract onBlur(): void;
 
   get container(): SVG {
     return this._container;

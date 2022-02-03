@@ -45,6 +45,7 @@ export class Focus implements Draggable, Resizeable {
 
   appendChild(xElement: ElementView, showBounding: boolean = true): void {
     this._children.add(xElement);
+    xElement.onFocus();
 
     if (this._children.size == 1) {
       this.refPointView = Object.assign({}, xElement.refPoint);
@@ -74,7 +75,7 @@ export class Focus implements Draggable, Resizeable {
   }
   removeChild(xElement: ElementView): void {
     this._children.delete(xElement);
-
+    xElement.onBlur();
     this.container.editTool.removeEditableElement();
     if (this._children.size == 0) {
       /* no element */
@@ -110,6 +111,9 @@ export class Focus implements Draggable, Resizeable {
   }
   clear(): void {
     this.container.style.recoverGlobalStyle();
+    this._children.forEach((child: ElementView) => {
+      child.onBlur();
+    });
     this._children.clear();
     this.blur();
   }

@@ -144,6 +144,14 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
     });
   }
 
+  override onFocus() {
+    this.svgElement.style.outline = this.outline;
+  }
+
+  override onBlur() {
+    this.svgElement.style.outline = "unset";
+  }
+
   setContent(content: HTMLElement, setListeners: boolean = true): void {
     this._content = content;
     content.style.userSelect = "none";
@@ -154,13 +162,9 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
       content.addEventListener("focus", () => {
         if (this._container.editTool.isOn()) {
           content.focus();
-          this.svgElement.style.outline = this.outline;
         } else {
           content.blur();
         }
-      });
-      content.addEventListener("blur", () => {
-        this.svgElement.style.outline = "unset";
       });
       this.addEditCallBack();
     }

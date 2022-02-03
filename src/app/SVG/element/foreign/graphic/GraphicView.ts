@@ -1,4 +1,4 @@
-import {ForeignView} from "../../type/ForeignView";
+ import {ForeignView} from "../../type/ForeignView";
 import {Rect} from "../../../model/Rect";
 import {Point} from "../../../model/Point";
 import {Size} from "../../../model/Size";

@@ -14,4 +14,10 @@ export abstract class ForeignView extends ElementView {
       {x: position.x + size.width, y: position.y},
     ];
   }
+
+  override onFocus() {
+  }
+
+  override onBlur() {
+  }
 }

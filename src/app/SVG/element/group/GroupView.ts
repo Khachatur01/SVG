@@ -208,4 +208,10 @@ export class GroupView extends ElementView {
   isComplete(): boolean {
     return true;
   }
+
+  override onFocus() {
+  }
+
+  override onBlur() {
+  }
 }

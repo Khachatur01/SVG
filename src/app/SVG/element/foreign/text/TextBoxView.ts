@@ -11,6 +11,7 @@ export class TextBoxView extends ForeignObjectView {
     textarea.style.resize = "none";
     textarea.style.border = "none";
     textarea.style.overflow = "hidden";
+    textarea.spellcheck = false;
     this.setContent(textarea);
 
     this._container.addCallBack(Callback.EDIT_TOOl_OFF, () => {
