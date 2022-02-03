@@ -1,6 +1,5 @@
 import {SVG} from "../../../SVG";
 import {ForeignObjectView} from "../ForeignObjectView";
-import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
 
 export class VideoView extends ForeignObjectView {
   private readonly source: HTMLSourceElement;

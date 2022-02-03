@@ -1,6 +1,5 @@
 import {PathCommand} from "./PathCommand";
 import {Point} from "../Point";
-import {MoveTo} from "./point/MoveTo";
 
 export class Path {
   private commands: PathCommand[] = [];

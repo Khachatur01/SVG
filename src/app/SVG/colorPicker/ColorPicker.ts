@@ -1,5 +1,5 @@
 import Picker from "vanilla-picker";
-import {SVG} from "../SVG";
+
 namespace ColorPicker {
   export interface Color {
     hex: string,

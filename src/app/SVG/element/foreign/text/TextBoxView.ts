@@ -1,7 +1,5 @@
 import {ForeignObjectView} from "../ForeignObjectView";
 import {SVG} from "../../../SVG";
-import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
-import {Rect} from "../../../model/Rect";
 import {Callback} from "../../../dataSource/Callback";
 
 export class TextBoxView extends ForeignObjectView {

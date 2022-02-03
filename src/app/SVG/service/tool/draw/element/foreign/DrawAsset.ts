@@ -2,11 +2,8 @@ import {MoveDraw} from "../../mode/MoveDraw";
 import {Point} from "../../../../../model/Point";
 import {ElementView} from "../../../../../element/ElementView";
 import {ForeignObjectView} from "../../../../../element/foreign/ForeignObjectView";
-import {TextBoxView} from "../../../../../element/foreign/text/TextBoxView";
 import {SVG} from "../../../../../SVG";
 import {Callback} from "../../../../../dataSource/Callback";
-import {ImageView} from "../../../../../element/foreign/media/ImageView";
-import {VideoView} from "../../../../../element/foreign/media/VideoView";
 
 export class DrawAsset extends MoveDraw {
   public content: HTMLDivElement = document.createElement("div");

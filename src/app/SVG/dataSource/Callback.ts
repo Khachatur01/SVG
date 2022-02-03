@@ -34,8 +34,8 @@ export enum Callback {
   FREE_HAND_TOOL_ON,
   FREE_HAND_TOOL_OFF,
   TEXT_TOOL_ON,
-  ASSET_EDIT, // callback parameter (asset content)
-  TEXT_TYPING, // callback parameter (text)
+  ASSET_EDIT, /* callback parameter (asset content) */
+  TEXT_TYPING, /* callback parameter (text) */
   TEXT_TOOL_OFF,
   VIDEO_TOOL_ON,
   VIDEO_TOOL_OFF,

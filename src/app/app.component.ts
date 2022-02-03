@@ -1,10 +1,8 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {SVG} from "./SVG/SVG";
-import {Rect} from "./SVG/model/Rect";
 import {Callback} from './SVG/dataSource/Callback';
 import {GraphicView} from "./SVG/element/foreign/graphic/GraphicView";
 import {DemoAsset} from "./SVG/dataSource/DemoAsset";
-import Picker from 'vanilla-picker';
 import {ColorPicker} from "./SVG/colorPicker/ColorPicker";
 
 @Component({
@@ -210,7 +208,7 @@ export class AppComponent implements AfterViewInit {
 
     container?.addEventListener("mousemove", (event) => {
       if (!container) return;
-      let containerRect: Rect = container.getBoundingClientRect();
+      let containerRect = container.getBoundingClientRect();
       let text = mask
         .replace("{x}", (event.clientX - containerRect.x) + "")
         .replace("{y}", (event.clientY - containerRect.y) + "");
@@ -320,6 +318,8 @@ export class AppComponent implements AfterViewInit {
   fillCallBack(parameters: any) {
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
     if (!fillInput || !this.svg) return;
+    // if (parameters.fillColor == "none" || parameters.fillColor == "transparent")
+    //   parameters.fillColor = "#FFFFFF00";
     fillInput.style.backgroundColor = parameters.fillColor;
   }
   fontSizeCallBack(parameters: any) {

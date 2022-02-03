@@ -38,8 +38,8 @@ export class Style {
 
   get fillColor(): string {
     let color = this.style.get("fill");
-    if (!color)
-      color = "none";
+    if(!color || color == "none" || color == "transparent")
+      color = "#FFFFFF00";
 
     return color;
   }
