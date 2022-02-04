@@ -8,7 +8,7 @@ import {ForeignView} from "../../type/ForeignView";
 import {MoveDrawable} from "../../../service/tool/draw/type/MoveDrawable";
 
 export class ImageView extends ForeignView implements MoveDrawable{
-  constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+  public constructor(container: SVG, position: Point = {x: 0, y: 0}, size: Size = {width: 0, height: 0}) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "image");
     this.svgElement.id = this.id;
@@ -17,11 +17,11 @@ export class ImageView extends ForeignView implements MoveDrawable{
       return false;
     }
 
-    this.position = {x: x, y: y};
+    this.position = position;
 
     this.setSize({
-      x: x, y: y,
-      width: width, height: height
+      x: position.x, y: position.y,
+      width: size.width, height: size.height
     });
     this.setOverEvent();
 
@@ -30,12 +30,7 @@ export class ImageView extends ForeignView implements MoveDrawable{
     });
   }
 
-  isComplete(): boolean {
-    let size = this.size;
-    return size.width > 0 && size.height > 0;
-  }
-
-  get copy(): ImageView {
+  public get copy(): ImageView {
     let position = this.position;
     let size = this.size;
 
@@ -57,21 +52,20 @@ export class ImageView extends ForeignView implements MoveDrawable{
     return image;
   }
 
-  get position(): Point {
+  public get position(): Point {
     return {
       x: parseInt(this.getAttr("x")),
       y: parseInt(this.getAttr("y"))
     };
   }
-
-  override set position(delta: Point) {
+  public set position(delta: Point) {
     this.setAttr({
       x: this._lastPosition.x + delta.x,
       y: this._lastPosition.y + delta.y
     });
   }
 
-  override correct(refPoint: Point, lastRefPoint: Point) {
+  public override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if (delta.x == 0 && delta.y == 0) return;
     let position = this.position;
@@ -82,17 +76,16 @@ export class ImageView extends ForeignView implements MoveDrawable{
     });
   }
 
-  get size(): Size {
+  public get size(): Size {
     return {
       width: parseInt(this.getAttr("width")),
       height: parseInt(this.getAttr("height"))
     };
   }
-  drawSize(rect: Rect) {
+  public drawSize(rect: Rect) {
     this.setSize(rect);
   }
-
-  setSize(rect: Rect): void {
+  public setSize(rect: Rect): void {
     if (rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;
@@ -110,26 +103,28 @@ export class ImageView extends ForeignView implements MoveDrawable{
     });
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
-
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);
   }
 
-  get src(): string {
+  public get src(): string {
     return this.getAttr("href");
   }
-
-  set src(URI: string) {
+  public set src(URI: string) {
     this.setAttr({href: URI});
   }
 
-  toPath(): PathView {
-    return new PathView(this._container);
+  public isComplete(): boolean {
+    let size = this.size;
+    return size.width > 0 && size.height > 0;
   }
 
+  public toPath(): PathView {
+    return new PathView(this._container);
+  }
 }

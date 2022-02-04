@@ -21,16 +21,16 @@ class GlobalStyle extends Style {
   private readonly default: Style;
   private container: SVG;
 
-  constructor(container: SVG) {
+  public constructor(container: SVG) {
     super();
     this.container = container;
     this.default = new Style();
   }
 
-  override get strokeWidth(): string {
+  public override get strokeWidth(): string {
     return super.strokeWidth;
   }
-  override set strokeWidth(width: string) {
+  public override set strokeWidth(width: string) {
     super.strokeWidth = width;
     if (this.container.focused.children.size == 0) {
       this.default.strokeWidth = width;
@@ -41,10 +41,10 @@ class GlobalStyle extends Style {
     });
   }
 
-  override get strokeDashArray(): string {
+  public override get strokeDashArray(): string {
     return super.strokeDashArray;
   }
-  override set strokeDashArray(array: string) {
+  public override set strokeDashArray(array: string) {
     super.strokeDashArray = array;
     if (this.container.focused.children.size == 0) {
       this.default.strokeDashArray = array;
@@ -55,10 +55,10 @@ class GlobalStyle extends Style {
     });
   }
 
-  override get strokeColor(): string {
+  public override get strokeColor(): string {
     return super.strokeColor;
   }
-  override set strokeColor(color: string) {
+  public override set strokeColor(color: string) {
     super.strokeColor = color;
     if (this.container.focused.children.size == 0) {
       this.default.strokeColor = color;
@@ -69,10 +69,10 @@ class GlobalStyle extends Style {
     });
   }
 
-  override get fillColor(): string {
+  public override get fillColor(): string {
     return super.fillColor;
   }
-  override set fillColor(color: string) {
+  public override set fillColor(color: string) {
     super.fillColor = color;
     if (this.container.focused.children.size == 0) {
       this.default.fillColor = color;
@@ -83,10 +83,10 @@ class GlobalStyle extends Style {
     });
   }
 
-  override get fontSize(): string {
+  public override get fontSize(): string {
     return super.fontSize;
   }
-  override set fontSize(size: string) {
+  public override set fontSize(size: string) {
     super.fontSize = size;
     if (this.container.focused.children.size == 0) {
       this.default.fontSize = size;
@@ -97,10 +97,10 @@ class GlobalStyle extends Style {
     });
   }
 
-  override get fontColor(): string {
+  public override get fontColor(): string {
     return super.fontColor;
   }
-  override set fontColor(color: string) {
+  public override set fontColor(color: string) {
     super.fontColor = color;
     if (this.container.focused.children.size == 0) {
       this.default.fontColor = color;
@@ -111,10 +111,10 @@ class GlobalStyle extends Style {
     });
   }
 
-  override get backgroundColor(): string {
+  public override get backgroundColor(): string {
     return super.backgroundColor;
   }
-  override set backgroundColor(color: string) {
+  public override set backgroundColor(color: string) {
     super.backgroundColor = color;
     if (this.container.focused.children.size == 0) {
       this.default.backgroundColor = color;
@@ -125,10 +125,10 @@ class GlobalStyle extends Style {
     });
   }
 
-  recoverGlobalStyle() {
+  public recoverGlobalStyle() {
     this.setGlobalStyle(this.default);
   }
-  fixGlobalStyle() {
+  public fixGlobalStyle() {
     this.default.strokeWidth = this.strokeWidth;
     this.default.strokeColor = this.strokeColor;
     this.default.fillColor = this.fillColor;
@@ -137,7 +137,7 @@ class GlobalStyle extends Style {
     this.default.backgroundColor = this.backgroundColor;
   }
 
-  setGlobalStyle(style: Style) {
+  public setGlobalStyle(style: Style) {
     super.strokeWidth = style.strokeWidth;
     super.strokeColor = style.strokeColor;
     super.fillColor = style.fillColor;
@@ -171,34 +171,31 @@ export class SVG {
   private _focus: Focus = new Focus(this);
   private _elements: Set<ElementView> = new Set<ElementView>();
   private _callBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
+  private _multiSelect: boolean = false;
+  private lastCopyPosition: Point = {x: 0, y: 0};
+  private readonly idPrefix: string;
+  private static id: number = 0;
+  private _perfect: boolean = false;
 
-  public elementsGroup: SVGGElement;
+  public readonly elementsGroup: SVGGElement;
   public readonly selectTool: SelectTool;
   public readonly highlightTool: HighlightTool;
   public readonly pointerTool: PointerTool;
   public readonly drawTool: DrawTool;
   public readonly editTool: EditTool;
-  private _perfect: boolean = false;
-  public grid: Grid;
-  public style: GlobalStyle = new GlobalStyle(this);
-
+  public readonly grid: Grid;
+  public readonly style: GlobalStyle = new GlobalStyle(this);
   public readonly drawTools: DrawTools = new DrawTools(this);
   public activeTool: Tool;
 
-  private _multiSelect: boolean = false;
-  private lastCopyPosition: Point = {x: 0, y: 0};
-
-  private static idPrefix: string = "element";
-  private static id: number = 0;
-
-  constructor(containerId: string, idPrefix: string = "element") {
+  public constructor(containerId: string, idPrefix: string = "element") {
     let container = document.getElementById(containerId);
     if (container)
       this.container = container;
     else
       throw new DOMException("Can't create container", "Container not found");
 
-    SVG.idPrefix = idPrefix;
+    this.idPrefix = idPrefix;
 
     this.drawTool = new DrawTool(this);
     this.highlightTool = new HighlightTool(this);
@@ -227,37 +224,37 @@ export class SVG {
     this.container.appendChild(this._focus.SVG); /* bounding box, grips, rotation and reference point */
   }
 
-  get id(): number {
+  public get id(): number {
     return SVG.id;
   }
-  set id(id: number) {
+  public set id(id: number) {
     SVG.id = id;
   }
-  get nextId(): string {
-    return SVG.idPrefix + SVG.id++;
+  public get nextId(): string {
+    return this.idPrefix + SVG.id++;
   }
 
-  call(name: Callback, parameters: any = {}): void {
+  public call(name: Callback, parameters: any = {}): void {
     let callback = this._callBacks.get(name);
     if (callback)
       callback.forEach((func: Function) => {
         func(parameters);
       });
   }
-  addCallBack(name: Callback, callback: Function) {
+  public addCallBack(name: Callback, callback: Function) {
     let functions = this._callBacks.get(name);
     if (!functions)
       this._callBacks.set(name, []);
 
     this._callBacks.get(name)?.push(callback)
   }
-  removeCallBack(name: Callback, callback: Function) {
+  public removeCallBack(name: Callback, callback: Function) {
     let functions = this._callBacks.get(name);
     if (functions)
       functions.splice(functions.indexOf(callback), 1);
   }
 
-  setElementActivity(element: ElementView) {
+  private setElementActivity(element: ElementView) {
     if (element instanceof GroupView) return;
     element.SVG.addEventListener("mousedown", () => {
       if (!this.selectTool.isOn() && !this.editTool.isOn())
@@ -289,20 +286,6 @@ export class SVG {
     });
 
     element.SVG.addEventListener("mousemove", () => {
-      // if (this.selectTool.isOn()) {
-      //   element.SVG.style.cursor = "move";
-      // } else if (this.editTool.isOn()) {
-      //   if (element instanceof ForeignObjectView)
-      //     element.SVG.style.cursor = "text";
-      //   else
-      //     element.SVG.style.cursor = "crosshair";
-      // } else if (this.drawTool.isOn()) {
-      //   element.SVG.style.cursor = "crosshair";
-      // } else if (this.highlightTool.isOn()) {
-      //   element.SVG.style.cursor = "crosshair";
-      // } else if (this.pointerTool.isOn()) {
-      //   element.SVG.style.cursor = this.pointerTool.cursor;
-      // }
       if (this.selectTool.isOn())
         element.SVG.style.cursor = element.style.cursor.select;
       else if (this.editTool.isOn())
@@ -310,58 +293,59 @@ export class SVG {
     });
   }
 
-  get elements(): Set<ElementView> {
+  public get elements(): Set<ElementView> {
     return this._elements;
   }
 
-  add(xElement: ElementView) {
+  public add(xElement: ElementView) {
     if (!xElement) return;
     xElement.group = null;
     this.elementsGroup.appendChild(xElement.SVG);
     this._elements.add(xElement);
     this.setElementActivity(xElement);
   }
-  remove(xElement: ElementView) {
+  public remove(xElement: ElementView) {
     this._elements.delete(xElement);
     xElement.remove();
   }
-  clear() {
+  public clear() {
+    this._focus.clear();
     this._elements.clear();
     this.elementsGroup.innerHTML = "";
   }
 
-  get HTML(): HTMLElement {
+  public get HTML(): HTMLElement {
     return this.container;
   }
 
-  focusAll() {
+  public focusAll() {
     this.selectTool.on();
     this._elements.forEach((element: ElementView) => {
       this.focus(element);
     });
   }
-  focus(xElement: ElementView, showBounding: boolean = true) {
+  public focus(xElement: ElementView, showBounding: boolean = true) {
     this._focus.appendChild(xElement, showBounding);
   }
-  blur(xElement: ElementView | null = null) {
+  public blur(xElement: ElementView | null = null) {
     if (xElement)
       this._focus.removeChild(xElement);
     else
       this._focus.clear();
   }
-  get focused(): Focus {
+  public get focused(): Focus {
     return this._focus;
   }
 
-  multiSelect(): void {
+  public multiSelect(): void {
     this._multiSelect = true;
     this._focus.boundingBox.transparentClick = true;
   }
-  singleSelect(): void {
+  public singleSelect(): void {
     this._multiSelect = false;
     this._focus.boundingBox.transparentClick = false;
   }
-  copyFocused(): void {
+  public copyFocused(): void {
     let elements: ElementView[] = [];
     for (let element of this._focus.children)
       elements.push(element);
@@ -370,12 +354,12 @@ export class SVG {
     ElementsClipboard.save(elements);
     this.call(Callback.COPY);
   }
-  cutFocused(): void {
+  public cutFocused(): void {
     this.copyFocused();
     this._focus.remove();
     this.call(Callback.CUT);
   }
-  paste(): void {
+  public paste(): void {
     let elements: ElementView[] = ElementsClipboard.get();
 
     this.blur();
@@ -401,10 +385,10 @@ export class SVG {
     this.call(Callback.PASTE);
   }
 
-  get perfect(): boolean {
+  public get perfect(): boolean {
     return this._perfect;
   }
-  set perfect(perfect: boolean) {
+  public set perfect(perfect: boolean) {
     this._perfect = perfect;
     if (perfect)
       this.call(Callback.PERFECT_MODE_ON);

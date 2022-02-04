@@ -6,22 +6,22 @@ import {SVG} from "../../../../../../SVG";
 import {Callback} from "../../../../../../dataSource/Callback";
 
 export class DrawEllipse extends MoveDraw {
-  getDrawableElement(position: Point): ElementView {
-    let element = new EllipseView(this.container, position.x, position.y);
+  protected createDrawableElement(position: Point): ElementView {
+    let element = new EllipseView(this.container, position);
     element.fixPosition();
     return element;
   }
 
-  override start(container: SVG) {
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.CIRCLE_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.CIRCLE_TOOL_OFF);
   }
-  _new(): DrawEllipse {
+
+  public _new(): DrawEllipse {
     return new DrawEllipse(this.container);
   }
 }

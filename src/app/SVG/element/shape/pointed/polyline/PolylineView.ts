@@ -4,7 +4,7 @@ import {PointedView} from "../PointedView";
 import {SVG} from "../../../../SVG";
 
 export class PolylineView extends PointedView {
-  constructor(container: SVG, points: Point[] = []) {
+  public constructor(container: SVG, points: Point[] = []) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "polyline");
     this.svgElement.id = this.id;
@@ -15,7 +15,7 @@ export class PolylineView extends PointedView {
     this.setOverEvent();
   }
 
-  get copy(): PolylineView {
+  public get copy(): PolylineView {
     let polyline: PolylineView = new PolylineView(this._container);
     polyline.points = this.points;
     polyline.fixRect();
@@ -29,7 +29,7 @@ export class PolylineView extends PointedView {
   }
 
   // TODO fix coordinate fetching
-  override get points(): Point[] {
+  public override get points(): Point[] {
     let points: string[] = this.getAttr("points").split(" ");
     let pointsArray: Point[] = [];
 
@@ -42,15 +42,7 @@ export class PolylineView extends PointedView {
 
     return pointsArray;
   }
-
-  override getPoint(index: number): Point {
-    let points = this.points;
-    if (index < 0)
-      index = points.length + index;
-    return points[index];
-  }
-
-  override set points(points: Point[]) {
+  public override set points(points: Point[]) {
     let pointsString: string = "";
     for (let point of points) {
       pointsString += point.x + " " + point.y + " "
@@ -59,13 +51,26 @@ export class PolylineView extends PointedView {
     this.setAttr({points: pointsString})
   }
 
-  override pushPoint(point: Point) {
+  public override getPoint(index: number): Point {
+    let points = this.points;
+    if (index < 0)
+      index = points.length + index;
+    return points[index];
+  }
+  public override pushPoint(point: Point) {
     this.setAttr({
       "points": this.getAttr("points") + " " + point.x + " " + point.y
     });
   }
+  public override replacePoint(index: number, point: Point) {
+    let points = this.points;
+    if (index < 0)
+      index = points.length + index;
+    points[index] = point;
 
-  override removePoint(index: number): void {
+    this.points = points;
+  }
+  public override removePoint(index: number): void {
     let pointsArr = this.getAttr("points").split(" ");
     if (index < 0)
       index = pointsArr.length / 2 + index;
@@ -77,16 +82,7 @@ export class PolylineView extends PointedView {
     });
   }
 
-  override replacePoint(index: number, point: Point) {
-    let points = this.points;
-    if (index < 0)
-      index = points.length + index;
-    points[index] = point;
-
-    this.points = points;
-  }
-
-  override isComplete(): boolean {
+  public override isComplete(): boolean {
     let pointsArr = this.getAttr("points").split(" ", 6);
     return pointsArr.length >= 6;
   }

@@ -6,19 +6,20 @@ import {SVG} from "../../../../../../SVG";
 import {Callback} from "../../../../../../dataSource/Callback";
 
 export class DrawRectangle extends MoveDraw {
-  getDrawableElement(position: Point): ElementView {
-    return new RectangleView(this.container, position.x, position.y);
+  protected createDrawableElement(position: Point): ElementView {
+    return new RectangleView(this.container, position);
   }
-  override start(container: SVG) {
+
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.RECTANGLE_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.RECTANGLE_TOOL_OFF);
   }
-  _new(): DrawRectangle {
+
+  public _new(): DrawRectangle {
     return new DrawRectangle(this.container);
   }
 }

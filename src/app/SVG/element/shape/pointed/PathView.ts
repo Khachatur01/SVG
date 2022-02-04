@@ -14,7 +14,7 @@ export class PathView extends PointedView {
   protected _path: Path;
   protected _lastPath: Path;
 
-  constructor(container: SVG, path: Path = new Path()) {
+  public constructor(container: SVG, path: Path = new Path()) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "path");
     this.svgElement.id = this.id;
@@ -31,18 +31,17 @@ export class PathView extends PointedView {
     }
   }
 
-  get path(): Path {
+  public get path(): Path {
     return this._path;
   }
-
-  set path(path: Path) {
+  public set path(path: Path) {
     this._path = path;
     this.setAttr({
       d: path.toString()
     })
   }
 
-  get copy(): PathView {
+  public get copy(): PathView {
     let path: PathView = new PathView(this._container);
     path.path = this._path.copy;
     path.fixRect();
@@ -55,30 +54,28 @@ export class PathView extends PointedView {
     return path;
   }
 
-  override fixRect() {
+  public override fixRect() {
     super.fixRect();
     this.fixPath();
     this._lastPoints = this._lastPath.points;
   }
-
-  fixPath() {
+  public fixPath() {
     this._lastPath = this._path.copy;
   }
 
-  isComplete(): boolean {
+  public isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;
   }
 
-  get commands(): PathCommand[] {
+  public get commands(): PathCommand[] {
     return this._path.getAll();
   }
 
-  override get points(): Point[] {
+  public override get points(): Point[] {
     return this._path.points;
   }
-
-  override set points(points: Point[]) {
+  public override set points(points: Point[]) {
     let commands = this._path.getAll();
     for (let i = 0; i < commands.length; i++)
       commands[i].position = points[i];
@@ -88,7 +85,7 @@ export class PathView extends PointedView {
     });
   }
 
-  override get position(): Point {
+  public override get position(): Point {
     let commands = this._path.getAll();
     let leftTop: Point = Object.assign({}, commands[0].position);
 
@@ -102,8 +99,7 @@ export class PathView extends PointedView {
     }
     return leftTop;
   }
-
-  override set position(delta: Point) {
+  public override set position(delta: Point) {
     let lastCommands = this._lastPath.getAll();
     let thisCommands = this._path.getAll();
 
@@ -121,7 +117,7 @@ export class PathView extends PointedView {
     });
   }
 
-  override get size(): Size {
+  public override get size(): Size {
     let commands = this._path.getAll();
     /* get copy, not reference */
     let min = Object.assign({}, commands[0].position);
@@ -148,8 +144,7 @@ export class PathView extends PointedView {
 
     return this._size;
   }
-
-  override setSize(rect: Rect) { //FIXME
+  public override setSize(rect: Rect) { //FIXME
     let dw = 1;
     let dh = 1;
 
@@ -177,7 +172,7 @@ export class PathView extends PointedView {
     });
   }
 
-  add(path: PathView) {
+  public add(path: PathView) {
     path.commands.forEach((command: PathCommand) => {
       this._path.add(command);
     });
@@ -186,8 +181,7 @@ export class PathView extends PointedView {
       d: this._path.toString()
     });
   }
-
-  addCommand(command: PathCommand) {
+  public addCommand(command: PathCommand) {
     this._path.add(command);
 
     this.setAttr({
@@ -195,24 +189,24 @@ export class PathView extends PointedView {
     });
   }
 
-  override toPath(): PathView {
-    return this;
-  }
-
-
-  getPoint(index: number): Point {
+  public getPoint(index: number): Point {
     return this._path.get(index).position;
   }
-
-  pushPoint(point: Point): void {
+  public pushPoint(point: Point): void {
     this._path.add(new LineTo(point));
 
     this.setAttr({
       d: this._path.toString()
     });
   }
+  public replacePoint(index: number, point: Point): void {
+    this._path.replace(index, point);
 
-  removePoint(index: number): void {
+    this.setAttr({
+      d: this._path.toString()
+    });
+  }
+  public removePoint(index: number): void {
     this._path.remove(index);
 
     this.setAttr({
@@ -220,11 +214,7 @@ export class PathView extends PointedView {
     });
   }
 
-  replacePoint(index: number, point: Point): void {
-    this._path.replace(index, point);
-
-    this.setAttr({
-      d: this._path.toString()
-    });
+  public override toPath(): PathView {
+    return this;
   }
 }

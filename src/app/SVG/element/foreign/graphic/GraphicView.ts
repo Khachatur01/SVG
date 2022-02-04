@@ -30,9 +30,9 @@ export class GraphicView extends ForeignView implements MoveDrawable {
   private _rulerStep: number = 1;                       // CHANGING by handler
   private readonly _minRulerStepSize: number = 15;      // px
   private readonly _maxRulerStepSize: number = 50;      // px
-  override rotatable: boolean = false;
+  public override rotatable: boolean = false;
 
-  constructor(container: SVG, center: Point = {x: 0, y: 0}, size: Size = {width: 1, height: 1}) {
+  public constructor(container: SVG, center: Point = {x: 0, y: 0}, size: Size = {width: 1, height: 1}) {
     super(container);
 
     this.svgElement = document.createElementNS(ElementView.svgURI, "svg");
@@ -71,22 +71,22 @@ export class GraphicView extends ForeignView implements MoveDrawable {
     this.drawAxis();
   }
 
-  zoomIn() {
+  public zoomIn() {
     this._physicalUnitSize += this._physicalUnitSize / 2;
     this.recreateGraphic();
   }
-  zoomOut() {
+  public zoomOut() {
     this._physicalUnitSize -= this._physicalUnitSize / 2;
     this.recreateGraphic();
   }
-  showSteps() {
+  public showSteps() {
     this.drawAxis();
   }
-  hideSteps() {
+  public hideSteps() {
     this.drawAxis(false);
   }
 
-  addFunction(f: Function, color: string = "#000", width: number = 2) {
+  public addFunction(f: Function, color: string = "#000", width: number = 2) {
     let graphic = {
       path: new PathView(this._container),
       width: width,
@@ -96,7 +96,7 @@ export class GraphicView extends ForeignView implements MoveDrawable {
     this.graphics.set(f, graphic);
     this._graphicGroup.appendChild(graphic.path.SVG);
   }
-  removeFunction(f: Function) {
+  public removeFunction(f: Function) {
     let graphicPath = this.graphics.get(f);
     if(graphicPath) {
       this._graphicGroup.removeChild(graphicPath.path.SVG);
@@ -231,23 +231,23 @@ export class GraphicView extends ForeignView implements MoveDrawable {
     });
   }
 
-  get copy(): GraphicView { /* TODO */
+  public get copy(): GraphicView { /* TODO */
     return new GraphicView(this._container);
   }
 
-  override get points(): Point[] {
+  public override get points(): Point[] {
     let points = super.points;
     points.push(this.center)
     return points;
   }
 
-  get position(): Point {
+  public get position(): Point {
     return {
       x: this._center.x - this._size.width / 2,
       y: this._center.y - this._size.height / 2
     };
   }
-  set position(delta: Point) {
+  public set position(delta: Point) {
     this._center.x += delta.x;
     this._center.y += delta.y;
 
@@ -257,17 +257,17 @@ export class GraphicView extends ForeignView implements MoveDrawable {
       y: position.y
     });
   }
-  override get center(): Point {
+  public override get center(): Point {
     return this._center;
   }
 
-  get size(): Size {
+  public get size(): Size {
     return this._size;
   }
-  drawSize(rect: Rect) {
+  public drawSize(rect: Rect) {
     this.setSize(rect);
   }
-  setSize(rect: Rect): void {
+  public setSize(rect: Rect): void {
     if (rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;
@@ -292,17 +292,17 @@ export class GraphicView extends ForeignView implements MoveDrawable {
     this.recreateGraphic();
   }
 
-  override correct(refPoint: Point, lastRefPoint: Point) {
+  public override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if (delta.x == 0 && delta.y == 0) return;
     this.position = delta;
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     let position = this.position;
     return {x: position.x, y: position.y, width: this._size.width, height: this._size.height};
   }
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     let boundingRect = this.boundingRect;
     let left = boundingRect.x;
     let top = boundingRect.y;
@@ -344,11 +344,11 @@ export class GraphicView extends ForeignView implements MoveDrawable {
     };
   }
 
-  toPath(): PathView { /* TODO */
-    return new PathView(this._container);
+  public isComplete(): boolean {
+    return this._size.width >= 50 && this._size.height >= 30;
   }
 
-  isComplete(): boolean {
-    return this._size.width >= 50 && this._size.height >= 30;
+  public toPath(): PathView { /* TODO */
+    return new PathView(this._container);
   }
 }

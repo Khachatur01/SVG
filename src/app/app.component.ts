@@ -318,8 +318,6 @@ export class AppComponent implements AfterViewInit {
   fillCallBack(parameters: any) {
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
     if (!fillInput || !this.svg) return;
-    // if (parameters.fillColor == "none" || parameters.fillColor == "transparent")
-    //   parameters.fillColor = "#FFFFFF00";
     fillInput.style.backgroundColor = parameters.fillColor;
   }
   fontSizeCallBack(parameters: any) {
@@ -498,7 +496,6 @@ export class AppComponent implements AfterViewInit {
     this.setColorPickers();
     window.addEventListener("keydown", this.keyDown.bind(this));
     window.addEventListener("keyup", this.keyUp.bind(this));
-
     this.showCoordinates("svgContainer", "coordinates", " x: {x} &emsp; y: {y}")
   }
 }

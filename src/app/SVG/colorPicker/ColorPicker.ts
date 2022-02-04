@@ -19,10 +19,9 @@ export class ColorPicker {
   ];
   private advancedPicker: Picker;
   private onChangeCallBack: Function | null = null;
-
   private static styleFileAdded = false;
 
-  constructor(parent: HTMLElement) {
+  public constructor(parent: HTMLElement) {
     if (!ColorPicker.styleFileAdded) {
       document.head.innerHTML +=
         '<style>' +
@@ -56,9 +55,9 @@ export class ColorPicker {
     this.menu.style.maxWidth = "220px";
     this.menu.style.top = "100%";
     this.menu.style.left = "100%";
-    this.menu.style.outline = "1px #cecece solid";
+    this.menu.style.border = "1px #cecece solid";
     this.menu.style.borderRadius = "5px";
-    this.menu.style.zIndex = "99";
+    this.menu.style.zIndex = "2";
     this.menu.style.backgroundColor = "#FFFFFF";
     this.menu.style.padding = "5px";
 
@@ -92,31 +91,6 @@ export class ColorPicker {
     this.closePalette();
   }
 
-  changeCallBack(color: string) {
-    this.parent.style.color = color;
-    if (this.onChangeCallBack)
-      this.onChangeCallBack(color);
-  }
-
-  set paletteColors(colors: ColorPicker.Color[]) {
-    this.colors = colors;
-    this.fillPalette();
-  }
-  addPaletteColor(color: ColorPicker.Color) {
-    this.colors.push(color);
-  }
-  removePaletteColor(color: ColorPicker.Color) {
-    this.colors.splice(this.colors.indexOf(color), 1);
-  }
-  set color(color: string) {
-    if (color == "none" || color == "transparent")
-      color = "#FFFFFF00";
-    this.advancedPicker.setColor(color, true);
-  }
-  set onChange(callback: Function) {
-    this.onChangeCallBack = callback;
-  }
-
   private createPalette(): HTMLDivElement {
     let palette = document.createElement("div");
     palette.style.display = "grid";
@@ -148,18 +122,43 @@ export class ColorPicker {
     });
   }
 
-  openPalette(): void {
+  public changeCallBack(color: string) {
+    this.parent.style.color = color;
+    if (this.onChangeCallBack)
+      this.onChangeCallBack(color);
+  }
+
+  public set paletteColors(colors: ColorPicker.Color[]) {
+    this.colors = colors;
+    this.fillPalette();
+  }
+  public addPaletteColor(color: ColorPicker.Color) {
+    this.colors.push(color);
+  }
+  public removePaletteColor(color: ColorPicker.Color) {
+    this.colors.splice(this.colors.indexOf(color), 1);
+  }
+  public set color(color: string) {
+    if (color == "none" || color == "transparent")
+      color = "#FFFFFF00";
+    this.advancedPicker.setColor(color, true);
+  }
+  public set onChange(callback: Function) {
+    this.onChangeCallBack = callback;
+  }
+
+  public openPalette(): void {
     this.menu.style.display = "block";
   }
-  closePalette(): void {
+  public closePalette(): void {
     this.closeAdvancedPicker();
     this.menu.style.display = "none";
   }
-  openAdvancedPicker(): void {
+  public openAdvancedPicker(): void {
     this.openPalette();
     this.advancedPicker.show();
   }
-  closeAdvancedPicker(): void {
+  public closeAdvancedPicker(): void {
     this.advancedPicker.hide();
   }
 }

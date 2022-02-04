@@ -4,85 +4,83 @@ export class Style {
   protected _styleCallBacks: Map<Callback, Function[]> = new Map<Callback, Function[]>();
   protected style: Map<string, string> = new Map<string, string>();
 
-  get strokeWidth(): string {
+  public get strokeWidth(): string {
     let width = this.style.get("stroke-width");
     if (!width)
       width = "5";
     return width;
   }
-  set strokeWidth(width: string) {
+  public set strokeWidth(width: string) {
     this.style.set("stroke-width", width);
   }
 
-  get strokeColor(): string {
+  public get strokeColor(): string {
     let color = this.style.get("stroke");
     if (!color)
       color = "#000";
 
     return color;
   }
-  set strokeColor(color: string) {
+  public set strokeColor(color: string) {
     this.style.set("stroke", color);
   }
 
-  get strokeDashArray(): string {
+  public get strokeDashArray(): string {
     let array = this.style.get("stroke-dasharray");
     if (!array)
       array = "";
 
     return array;
   }
-  set strokeDashArray(array: string) {
+  public set strokeDashArray(array: string) {
     this.style.set("stroke-dasharray", array);
   }
 
-  get fillColor(): string {
+  public get fillColor(): string {
     let color = this.style.get("fill");
-    if(!color || color == "none" || color == "transparent")
+    if(!color)
       color = "#FFFFFF00";
 
     return color;
   }
-  set fillColor(color: string) {
-    if(color.length == 9 && color.slice(-2) === "00")
-      color = "none";
+  public set fillColor(color: string) {
     this.style.set("fill", color);
   }
 
-  get fontSize(): string {
+  public get fontSize(): string {
     let fontSize = this.style.get("font-size");
     if (!fontSize)
       fontSize = "16";
 
     return fontSize;
   }
-  set fontSize(size: string) {
+  public set fontSize(size: string) {
     this.style.set("font-size", size);
   }
 
-  get fontColor(): string {
+  public get fontColor(): string {
     let color = this.style.get("color");
     if (!color)
       color = "#000";
 
     return color;
   }
-  set fontColor(color: string) {
+  public set fontColor(color: string) {
     this.style.set("color", color);
   }
 
-  get backgroundColor(): string {
+  public get backgroundColor(): string {
     let color = this.style.get("background-color");
     if (!color)
       color = "transparent";
 
     return color;
   }
-  set backgroundColor(color: string) {
+  public set backgroundColor(color: string) {
     this.style.set("background-color", color);
   }
 
-  set set(style: Style) {
+  public set set(style: Style) {
     this.strokeWidth = style.strokeWidth;
     this.strokeColor = style.strokeColor;
     this.fillColor = style.fillColor;
@@ -91,21 +89,21 @@ export class Style {
     this.backgroundColor = style.backgroundColor;
   }
 
-  call(name: Callback, parameters: any = {}): void {
+  public call(name: Callback, parameters: any = {}): void {
     let callback = this._styleCallBacks.get(name);
     if (callback)
       callback.forEach((func: Function) => {
         func(parameters);
       });
   }
-  addCallBack(name: Callback, callback: Function) {
+  public addCallBack(name: Callback, callback: Function) {
     let functions = this._styleCallBacks.get(name);
     if (!functions) {
       this._styleCallBacks.set(name, []);
     }
     this._styleCallBacks.get(name)?.push(callback)
   }
-  removeCallBack(name: Callback, callback: Function) {
+  public removeCallBack(name: Callback, callback: Function) {
     let functions = this._styleCallBacks.get(name);
     if (functions)
       functions.splice(functions.indexOf(callback), 1);

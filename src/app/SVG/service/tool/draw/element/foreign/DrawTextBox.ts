@@ -6,13 +6,13 @@ import {SVG} from "../../../../../SVG";
 import {Callback} from "../../../../../dataSource/Callback";
 
 export class DrawTextBox extends MoveDraw {
-  getDrawableElement(position: Point): ElementView {
-    let textBox = new TextBoxView(this.container, position.x, position.y);
+  protected createDrawableElement(position: Point): ElementView {
+    let textBox = new TextBoxView(this.container, position);
     textBox.SVG.style.outline = textBox.outline;
     return textBox
   }
 
-  override onIsNotComplete() {
+  protected override onIsNotComplete() {
     if (!this.drawableElement) return;
     this.drawableElement.setSize({
       x: this.startPos.x,
@@ -22,24 +22,23 @@ export class DrawTextBox extends MoveDraw {
     }, null);
     this.drawableElement.refPoint = this.drawableElement?.center;
   }
-
-  override onEnd() {
+  protected override onEnd() {
     this.container.editTool.on();
     let textBox = (this.drawableElement as TextBoxView);
     textBox.content?.focus();
     textBox.onFocus();
   }
 
-  override start(container: SVG) {
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.TEXT_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.TEXT_TOOL_OFF);
   }
-  _new(): DrawTextBox {
+
+  public _new(): DrawTextBox {
     return new DrawTextBox(this.container);
   }
 }

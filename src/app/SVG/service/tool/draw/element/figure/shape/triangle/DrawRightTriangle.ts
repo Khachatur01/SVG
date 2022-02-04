@@ -6,19 +6,20 @@ import {SVG} from "../../../../../../../SVG";
 import {Callback} from "../../../../../../../dataSource/Callback";
 
 export class DrawRightTriangle extends MoveDraw {
-  getDrawableElement(position: Point): ElementView {
+  protected createDrawableElement(position: Point): ElementView {
     return new RightTriangleView(this.container);
   }
-  override start(container: SVG) {
+
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.RIGHT_TRIANGLE_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.RIGHT_TRIANGLE_TOOL_OFF);
   }
-  _new(): DrawRightTriangle {
+
+  public _new(): DrawRightTriangle {
     return new DrawRightTriangle(this.container);
   }
 }

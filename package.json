@@ -20,6 +20,8 @@
     "@angular/router": "~13.0.0",
     "function-plot": "^1.22.8",
     "global": "^4.4.0",
+    "jquery": "^3.6.0",
+    "mathquill-typescript": "^2.0.9",
     "node-fetch": "^3.1.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",

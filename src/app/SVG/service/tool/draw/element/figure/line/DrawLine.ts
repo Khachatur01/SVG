@@ -8,7 +8,7 @@ import {Callback} from "../../../../../../dataSource/Callback";
 import {PointedView} from "../../../../../../element/shape/pointed/PointedView";
 
 export class DrawLine extends MoveDraw {
-  getDrawableElement(position: Point): ElementView {
+  protected createDrawableElement(position: Point): ElementView {
     let element = new LineView(this.container, position, position);
     element.fixPosition();
     return element;
@@ -29,7 +29,7 @@ export class DrawLine extends MoveDraw {
       x2 = snapPoint.x;
       y2 = snapPoint.y;
     } else if (this.container.perfect) {
-      let position: Point = Angle.snapLineEnd(this.startPos.x, x2, this.startPos.y, y2) as Point;
+      let position: Point = Angle.snapLineEnd(this.startPos, {x: x2, y: y2}) as Point;
       x2 = position.x;
       y2 = position.y;
     }
@@ -41,16 +41,16 @@ export class DrawLine extends MoveDraw {
     );
   }
 
-  override start(container: SVG) {
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.LINE_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.LINE_TOOL_OFF);
   }
-  _new(): DrawLine {
+
+  public _new(): DrawLine {
     return new DrawLine(this.container);
   }
 }

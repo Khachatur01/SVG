@@ -29,7 +29,7 @@ export class DrawTools {
   private readonly _asset: DrawAsset;
   private readonly _graphic: DrawGraphic;
 
-  constructor(container: SVG) {
+  public constructor(container: SVG) {
     this.container = container;
 
     this._free = new DrawFree(container);
@@ -47,55 +47,43 @@ export class DrawTools {
     this._graphic = new DrawGraphic(container);
   }
 
-  get free(): DrawFree {
+  public get free(): DrawFree {
     return this._free;
   }
-
-  get line(): DrawLine {
+  public get line(): DrawLine {
     return this._line;
   }
-
-  get polyline(): DrawPolyline {
+  public get polyline(): DrawPolyline {
     return this._polyline;
   }
-
-  get ellipse(): DrawEllipse {
+  public get ellipse(): DrawEllipse {
     return this._ellipse;
   }
-
-  get polygon(): DrawPolygon {
+  public get polygon(): DrawPolygon {
     return this._polygon;
   }
-
-  get rectangle(): DrawRectangle {
+  public get rectangle(): DrawRectangle {
     return this._rectangle;
   }
-
-  get isoscelesTriangle(): DrawIsoscelesTriangle {
+  public get isoscelesTriangle(): DrawIsoscelesTriangle {
     return this._isoscelesTriangle;
   }
-
-  get rightTriangle(): DrawRightTriangle {
+  public get rightTriangle(): DrawRightTriangle {
     return this._rightTriangle;
   }
-
-  get textBox(): DrawTextBox {
+  public get textBox(): DrawTextBox {
     return this._textBox;
   }
-
-  get video(): DrawVideo {
+  public get video(): DrawVideo {
     return this._video;
   }
-
-  get image(): DrawImage {
+  public get image(): DrawImage {
     return this._image;
   }
-
-  get asset(): DrawAsset {
+  public get asset(): DrawAsset {
     return this._asset;
   }
-
-  get graphic(): DrawGraphic {
+  public get graphic(): DrawGraphic {
     return this._graphic;
   }
 }

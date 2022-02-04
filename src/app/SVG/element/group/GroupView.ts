@@ -8,12 +8,12 @@ import {SVG} from "../../SVG";
 export class GroupView extends ElementView {
   private _elements: ElementView[] = [];
 
-  constructor(container: SVG) {
+  public constructor(container: SVG) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "g");
   }
 
-  get copy(): GroupView {
+  public get copy(): GroupView {
     let group: GroupView = new GroupView(this._container);
     this._elements.forEach((element: ElementView) => {
       let copy = element.copy;
@@ -29,21 +29,19 @@ export class GroupView extends ElementView {
     return group;
   }
 
-  get elements(): ElementView[] {
+  public get elements(): ElementView[] {
     return this._elements;
   }
-
-  addElement(element: ElementView) {
+  public addElement(element: ElementView) {
     this._elements.push(element);
     this.svgElement.appendChild(element.SVG);
   }
-
-  removeElement(element: ElementView) {
+  public removeElement(element: ElementView) {
     this._elements.splice(this._elements.indexOf(element), 1);
     this.svgElement.removeChild(element.SVG);
   }
 
-  get points(): Point[] {
+  public get points(): Point[] {
     let points: Point[] = [];
     this._elements.forEach((element: ElementView) => {
       element.points.forEach((point: Point) => {
@@ -52,8 +50,7 @@ export class GroupView extends ElementView {
     });
     return points;
   }
-
-  override get rotatedPoints(): Point[] {
+  public override get rotatedPoints(): Point[] {
     let points: Point[] = [];
     this._elements.forEach((element: ElementView) => {
       let elementPoints = element.rotatedPoints;
@@ -64,7 +61,7 @@ export class GroupView extends ElementView {
     return points;
   }
 
-  get position(): Point {
+  public get position(): Point {
     let boundingRect = this.rotatedBoundingRect;
 
     return {
@@ -72,20 +69,18 @@ export class GroupView extends ElementView {
       y: boundingRect.y
     };
   }
-
-  set position(delta: Point) {
+  public set position(delta: Point) {
     this._elements.forEach((element: ElementView) => {
       element.position = delta;
     });
   }
-
-  override correct(refPoint: Point, lastRefPoint: Point) {
+  public override correct(refPoint: Point, lastRefPoint: Point) {
     this._elements.forEach((child: ElementView) => {
       child.correct(refPoint, lastRefPoint)
     });
   }
 
-  get size(): Size {
+  public get size(): Size {
     let boundingRect = this.rotatedBoundingRect;
 
     return {
@@ -93,8 +88,7 @@ export class GroupView extends ElementView {
       height: boundingRect.height
     };
   }
-
-  setSize(rect: Rect): void {
+  public setSize(rect: Rect): void {
     let delta = {
       x: rect.width / this._lastSize.width,
       y: rect.height / this._lastSize.height
@@ -104,11 +98,10 @@ export class GroupView extends ElementView {
     });
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     return this.rotatedBoundingRect;
   }
-
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     let minX, minY;
     let maxX, maxY;
 
@@ -151,67 +144,61 @@ export class GroupView extends ElementView {
     };
   }
 
-  override getAttr(attribute: string): string {
+  public override getAttr(attribute: string): string {
     let value = this._elements[0].SVG.getAttribute(attribute);
     if (!value)
       return "0";
     return value;
   }
-
-  override setAttr(attributes: object): void {
+  public override setAttr(attributes: object): void {
     for (let element of this._elements)
       for (const [key, value] of Object.entries(attributes))
         if (key && value)
           element.SVG.setAttribute(key, "" + value);
   }
 
-  override get refPoint(): Point {
+  public override get refPoint(): Point {
     return super.refPoint;
   }
-
-  override set refPoint(point: Point) {
+  public override set refPoint(point: Point) {
     super.refPoint = point;
     this._elements.forEach(child => child.refPoint = point);
   }
 
-  override rotate(angle: number) {
+  public override rotate(angle: number) {
     this._angle = angle;
     this._elements.forEach(child =>
       child.rotate((angle + child.lastAngle - this._lastAngle) % 360)
     );
   }
 
-  override fixRect(): void {
+  public override fixRect(): void {
     super.fixRect();
     this._elements.forEach((element: ElementView) => element.fixRect());
   }
-
-  override fixPosition(): void {
+  public override fixPosition(): void {
     super.fixPosition();
     this._elements.forEach((element: ElementView) => element.fixPosition());
   }
-
-  override fixSize(): void {
+  public override fixSize(): void {
     super.fixSize();
     this._elements.forEach((element: ElementView) => element.fixSize());
   }
-
-  override fixAngle(): void {
+  public override fixAngle(): void {
     super.fixAngle();
     this._elements.forEach((element: ElementView) => element.fixAngle());
   }
 
-  toPath(): PathView {
+  public override onFocus() {
+  }
+  public override onBlur() {
+  }
+
+  public toPath(): PathView {
     return new PathView(this._container);
   }
 
-  isComplete(): boolean {
+  public isComplete(): boolean {
     return true;
-  }
-
-  override onFocus() {
-  }
-
-  override onBlur() {
   }
 }

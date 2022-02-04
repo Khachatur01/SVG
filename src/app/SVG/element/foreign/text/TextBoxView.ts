@@ -1,10 +1,19 @@
 import {ForeignObjectView} from "../ForeignObjectView";
 import {SVG} from "../../../SVG";
 import {Callback} from "../../../dataSource/Callback";
+import {Point} from "../../../model/Point";
+import {Size} from "../../../model/Size";
 
 export class TextBoxView extends ForeignObjectView {
-  constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+  public constructor(container: SVG, position: Point = {x: 0, y: 0}, size: Size = {width: 0, height: 0}) {
     super(container);
+    this.position = position;
+    this.setSize({
+      x: position.x,
+      y: position.y,
+      width: size.width,
+      height: size.height
+    });
     let textarea = document.createElement("textarea");
     textarea.style.width = "100%";
     textarea.style.height = "100%";
@@ -28,12 +37,12 @@ export class TextBoxView extends ForeignObjectView {
     this.style.setDefaultStyle();
   }
 
-  set text(text: string) {
+  public set text(text: string) {
     if(this._content)
       this._content.innerText = text;
   }
 
-  override addEditCallBack() {
+  public override addEditCallBack() {
     this._content?.addEventListener("input", () => {
       this.container.call(Callback.TEXT_TYPING,
         {text: (this._content as HTMLTextAreaElement).value}
@@ -41,11 +50,11 @@ export class TextBoxView extends ForeignObjectView {
     });
   }
 
-  override get copy(): TextBoxView {
+  public override get copy(): TextBoxView {
     return super.copy as TextBoxView;
   }
 
-  override isComplete(): boolean {
+  public override isComplete(): boolean {
     let size = this.size;
     return size.width > 15 && size.height > 15;
   }

@@ -7,15 +7,14 @@ import {Callback} from "../../../dataSource/Callback";
 
 export class SelectTool extends Tool {
   private readonly boundingBox: RectangleView;
-  public readonly dragTool: DragTool;
   private position: Point = {x: 0, y: 0};
-  private _isOn: boolean = false;
-
   private start = this.onStart.bind(this);
   private select = this.onSelect.bind(this);
   private end = this.onEnd.bind(this);
 
-  constructor(container: SVG) {
+  public readonly dragTool: DragTool;
+
+  public constructor(container: SVG) {
     super(container);
     this.boundingBox = new RectangleView(container);
     this.dragTool = new DragTool(container);
@@ -29,9 +28,9 @@ export class SelectTool extends Tool {
   }
 
   private onStart(event: MouseEvent): void {
-    if (event.target != this.container.HTML) return;
+    if (event.target != this._container.HTML) return;
 
-    let containerRect = this.container.HTML.getBoundingClientRect();
+    let containerRect = this._container.HTML.getBoundingClientRect();
     this.position.x = event.clientX - containerRect.left; // x position within the element.
     this.position.y = event.clientY - containerRect.top;  // y position within the element.
     this.boundingBox.setSize({
@@ -41,13 +40,12 @@ export class SelectTool extends Tool {
       height: 1
     });
 
-    this.container.HTML.appendChild(this.boundingBox.SVG);
-    this.container.HTML.addEventListener("mousemove", this.select);
+    this._container.HTML.appendChild(this.boundingBox.SVG);
+    this._container.HTML.addEventListener("mousemove", this.select);
     document.addEventListener("mouseup", this.end);
   }
-
   private onSelect(event: MouseEvent): void {
-    let containerRect = this.container.HTML.getBoundingClientRect();
+    let containerRect = this._container.HTML.getBoundingClientRect();
     let width = event.clientX - containerRect.left - this.position.x;
     let height = event.clientY - containerRect.top - this.position.y;
 
@@ -58,12 +56,11 @@ export class SelectTool extends Tool {
       height: height
     });
   }
-
   private onEnd(event: MouseEvent): void {
-    let containerRect = this.container.HTML.getBoundingClientRect();
+    let containerRect = this._container.HTML.getBoundingClientRect();
     let width = event.clientX - containerRect.left - this.position.x;
 
-    this.container.HTML.removeChild(this.boundingBox.SVG);
+    this._container.HTML.removeChild(this.boundingBox.SVG);
     let boxPos = this.boundingBox.position;
     let boxSize = this.boundingBox.size;
     let boxPoints: any = {
@@ -74,10 +71,10 @@ export class SelectTool extends Tool {
       }
     };
 
-    this.container.multiSelect();
+    this._container.multiSelect();
 
     elementsLoop:
-      for (let element of this.container.elements) {
+      for (let element of this._container.elements) {
         let elementPoints = element.rotatedPoints;
 
         if (width > 0) {/* if select box drawn from right to left */
@@ -88,42 +85,36 @@ export class SelectTool extends Tool {
             )
               continue elementsLoop;
 
-          this.container.focus(element);
+          this._container.focus(element);
         } else {/* if select box drawn from left to right */
           for (let point of elementPoints)
             if (/* one point match */
               point.x > boxPoints.topLeft.x && point.x < boxPoints.bottomRight.x &&
               point.y > boxPoints.topLeft.y && point.y < boxPoints.bottomRight.y
             ) {
-              this.container.focus(element);
+              this._container.focus(element);
               break;
             }
         }
       }
-    this.container.singleSelect();
-    this.container.HTML.removeEventListener("mousemove", this.select);
+    this._container.singleSelect();
+    this._container.HTML.removeEventListener("mousemove", this.select);
     document.removeEventListener("mouseup", this.end);
   }
 
-  _on(): void {
-    this.container.HTML.addEventListener("mousedown", this.start);
+  protected _on(): void {
+    this._container.HTML.addEventListener("mousedown", this.start);
     this._isOn = true;
     this.dragTool.on();
-    this.container.HTML.style.cursor = "default";
+    this._container.HTML.style.cursor = "default";
 
-    this.container.call(Callback.SELECT_TOOl_ON);
+    this._container.call(Callback.SELECT_TOOl_ON);
   }
-
-  off(): void {
-    this.container.HTML.removeEventListener("mousedown", this.start);
+  public off(): void {
+    this._container.HTML.removeEventListener("mousedown", this.start);
     this._isOn = false;
     this.dragTool.off();
 
-    this.container.call(Callback.SELECT_TOOl_OFF);
+    this._container.call(Callback.SELECT_TOOl_OFF);
   }
-
-  isOn(): boolean {
-    return this._isOn;
-  }
-
 }

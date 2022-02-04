@@ -5,7 +5,7 @@ import {Point} from "../../../../../model/Point";
 import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 
 export class RightTriangleView extends TriangleView implements MoveDrawable {
-  constructor(container: SVG, rect: Rect | null = null) {
+  public constructor(container: SVG, rect: Rect | null = null) {
     if (rect) {
       let pointA: Point = {x: rect.x, y: rect.y};
       let pointB: Point = {x: rect.x, y: rect.y + rect.width};
@@ -16,11 +16,11 @@ export class RightTriangleView extends TriangleView implements MoveDrawable {
     }
   }
 
-  override get copy(): RightTriangleView {
+  public override get copy(): RightTriangleView {
     return super.copy as RightTriangleView;
   }
 
-  drawSize(rect: Rect) {
+  public drawSize(rect: Rect) {
     let points: Point[] = [];
     points.push({ /* A */
       x: rect.x,

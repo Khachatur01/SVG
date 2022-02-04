@@ -15,37 +15,31 @@ export class Grid {
   private _isGrid: boolean = false;
   private _isSnap: boolean = false;
 
-  constructor(container: SVG) {
+  public constructor(container: SVG) {
     this.container = container;
     this._group = document.createElementNS(ElementView.svgURI, "g");
     this._group.id = "grid";
   }
 
-  get group(): SVGGElement {
+  public get group(): SVGGElement {
     return this._group;
   }
 
-  isSnap(): boolean {
-    return this._isSnap;
-  }
-
-  snapOn() {
+  public snapOn() {
     if (this._isGrid) {
       this._isSnap = true;
       this.container.call(Callback.SNAP_ON);
     }
   }
-
-  snapOff() {
+  public snapOff() {
     this._isSnap = false;
     this.container.call(Callback.SNAP_OFF);
   }
-
-  isGrid(): boolean {
-    return this._isGrid;
+  public isSnap(): boolean {
+    return this._isSnap;
   }
 
-  gridOn() {
+  public gridOn() {
     this._group.innerHTML = "";
     this.squareSide = Math.floor(this.squareSide);
     this._isGrid = true;
@@ -73,16 +67,18 @@ export class Grid {
 
     this.container.call(Callback.GRID_ON);
   }
-
-  gridOff() {
+  public gridOff() {
     this._group.innerHTML = "";
     this._isGrid = false;
     this._isSnap = false;
     this.container.call(Callback.GRID_OFF);
     this.container.call(Callback.SNAP_OFF);
   }
+  public isGrid(): boolean {
+    return this._isGrid;
+  }
 
-  getSnapPoint(point: Point) {
+  public getSnapPoint(point: Point) {
     if (!this._isSnap)
       return point;
 
@@ -91,7 +87,7 @@ export class Grid {
     return {x: x, y: y};
   }
 
-  set snapSide(squareSide: number) {
+  public set snapSide(squareSide: number) {
     this.squareSide = squareSide;
     if (this._isGrid) {
       this.gridOff();
@@ -101,8 +97,7 @@ export class Grid {
       {snapSide: squareSide}
     );
   }
-
-  get snapSide(): number {
+  public get snapSide(): number {
     return this.squareSide;
   }
 }

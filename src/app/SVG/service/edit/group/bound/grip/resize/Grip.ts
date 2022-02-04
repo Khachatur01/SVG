@@ -14,8 +14,8 @@ export abstract class Grip extends BoxView {
   protected side: number = 10;
   protected halfSide: number = 5;
 
-  constructor(container: SVG) {
-    super(container, 0, 0, 10, 10);
+  public constructor(container: SVG) {
+    super(container, {x: 0, y: 0}, {width: 10, height: 10});
     this.svgElement.style.cursor = "crosshair";
     this.setAttr({
       fill: "white",
@@ -27,27 +27,25 @@ export abstract class Grip extends BoxView {
     this.on();
   }
 
-  override highlight() {
+  public override highlight() {
     this.setAttr({
       stroke: "#00ff00"
     });
   }
-
-  override lowlight() {
+  public override lowlight() {
     this.setAttr({
       stroke: "#002fff"
     });
   }
 
-  show() {
+  public show() {
     this.svgElement.style.display = "block";
   }
-
-  hide() {
+  public hide() {
     this.svgElement.style.display = "none";
   }
 
-  abstract setPosition(points: Point[]): void;
+  public abstract setPosition(points: Point[]): void;
 
   protected abstract onStart(client: Point): void;
   protected abstract onMove(client: Point): void;
@@ -93,11 +91,10 @@ export abstract class Grip extends BoxView {
     this._container.call(Callback.RESIZE_END);
   }
 
-  on() {
+  public on() {
     this.svgElement.addEventListener("mousedown", this._start);
   }
-
-  off() {
+  public off() {
     this.svgElement.removeEventListener("mousedown", this._start);
   }
 }

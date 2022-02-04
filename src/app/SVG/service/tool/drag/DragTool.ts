@@ -5,8 +5,6 @@ import {Tool} from "../Tool";
 import {Callback} from "../../../dataSource/Callback";
 
 export class DragTool extends Tool {
-  private isDrag: boolean = false;
-
   private mouseStartPos: Point = {x: 0, y: 0};
   private elementStartPos: Point = {x: 0, y: 0};
 
@@ -19,22 +17,22 @@ export class DragTool extends Tool {
   }
 
   private onDragStart(event: MouseEvent) {
-    if (event.target == this.container.HTML) return;
+    if (event.target == this._container.HTML) return;
     this.mouseStartPos.x = event.clientX;
     this.mouseStartPos.y = event.clientY;
-    this.container.focused.fixPosition();
-    this.container.focused.fixRefPoint();
-    this.elementStartPos = this.container.focused.lastRect;
+    this._container.focused.fixPosition();
+    this._container.focused.fixRefPoint();
+    this.elementStartPos = this._container.focused.lastRect;
 
-    this.container.focused?.children.forEach((child: ElementView) => {
+    this._container.focused?.children.forEach((child: ElementView) => {
       child.fixRect();
     });
-    this.container.focused.highlight();
+    this._container.focused.highlight();
 
-    this.container.HTML.addEventListener("mousemove", this.drag);
+    this._container.HTML.addEventListener("mousemove", this.drag);
     document.addEventListener("mouseup", this.dragEnd);
 
-    this.container.call(Callback.DRAG_START);
+    this._container.call(Callback.DRAG_START);
   }
 
   private onDrag(event: MouseEvent) {
@@ -42,13 +40,13 @@ export class DragTool extends Tool {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
-    this.container.focused.translate = delta;
+    this._container.focused.translate = delta;
 
-    this.container.call(Callback.DRAG, {delta: delta});
+    this._container.call(Callback.DRAG, {delta: delta});
   }
 
   private onDragEnd(event: MouseEvent) {
-    this.container.focused.translate = {
+    this._container.focused.translate = {
       x: 0,
       y: 0
     };
@@ -56,13 +54,13 @@ export class DragTool extends Tool {
       x: event.clientX - this.mouseStartPos.x,
       y: event.clientY - this.mouseStartPos.y
     };
-    this.container.focused.position = delta;
+    this._container.focused.position = delta;
 
-    this.container.HTML.removeEventListener("mousemove", this.drag);
+    this._container.HTML.removeEventListener("mousemove", this.drag);
     document.removeEventListener("mouseup", this.dragEnd);
-    this.container.focused.lowlight();
+    this._container.focused.lowlight();
 
-    this.container.call(Callback.DRAG_END, {delta: delta});
+    this._container.call(Callback.DRAG_END, {delta: delta});
   }
 
   override on() {
@@ -70,20 +68,16 @@ export class DragTool extends Tool {
   }
 
   public _on(): void {
-    this.container.HTML.addEventListener("mousedown", this.dragStart);
-    this.isDrag = true;
+    this._container.HTML.addEventListener("mousedown", this.dragStart);
+    this._isOn = true;
 
-    this.container.call(Callback.DRAG_TOOL_ON);
+    this._container.call(Callback.DRAG_TOOL_ON);
   }
 
   public off(): void {
-    this.container.HTML.removeEventListener("mousedown", this.dragStart);
-    this.isDrag = false;
+    this._container.HTML.removeEventListener("mousedown", this.dragStart);
+    this._isOn = false;
 
-    this.container.call(Callback.DRAG_TOOL_OFF);
-  }
-
-  public isOn(): boolean {
-    return this.isDrag;
+    this._container.call(Callback.DRAG_TOOL_OFF);
   }
 }

@@ -11,22 +11,22 @@ import {MoveTo} from "../../model/path/point/MoveTo";
 import {ShapeView} from "../type/ShapeView";
 
 export class EllipseView extends ShapeView implements MoveDrawable {
-  constructor(container: SVG, x: number = 0, y: number = 0, rx: number = 0, ry: number = 0) {
+  public constructor(container: SVG, position: Point = {x: 0, y: 0}, rx: number = 0, ry: number = 0) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "ellipse");
     this.svgElement.id = this.id;
 
-    this.position = {x: x, y: y};
-    this.setSize({x: x, y: y, width: rx * 2, height: ry * 2});
+    this.position = position;
+    this.setSize({x: position.x, y: position.y, width: rx * 2, height: ry * 2});
 
     this.setOverEvent();
     this.style.setDefaultStyle();
   }
 
-  get copy(): EllipseView {
+  public get copy(): EllipseView {
     let position = this.position;
     let size = this.size;
-    let ellipse: EllipseView = new EllipseView(this._container, position.x, position.y, size.width / 2, size.height / 2);
+    let ellipse: EllipseView = new EllipseView(this._container, position, size.width / 2, size.height / 2);
     ellipse.refPoint = Object.assign({}, this.refPoint);
     ellipse.rotate(this._angle);
 
@@ -35,7 +35,7 @@ export class EllipseView extends ShapeView implements MoveDrawable {
     return ellipse;
   }
 
-  get points(): Point[] {
+  public get points(): Point[] {
     let position: Point = this.position;
     let size: Size = this.size;
     return [
@@ -46,7 +46,7 @@ export class EllipseView extends ShapeView implements MoveDrawable {
     ];
   }
 
-  get position(): Point {
+  public get position(): Point {
     let centerPos: Point = {
       x: parseInt(this.getAttr("cx")),
       y: parseInt(this.getAttr("cy"))
@@ -61,13 +61,13 @@ export class EllipseView extends ShapeView implements MoveDrawable {
       y: centerPos.y - radius.height
     };
   }
-  set position(delta: Point) {
+  public set position(delta: Point) {
     this.setAttr({
       cx: this._lastPosition.x + this._lastSize.width / 2 + delta.x,
       cy: this._lastPosition.y + this._lastSize.height / 2 + delta.y
     });
   }
-  override correct(refPoint: Point, lastRefPoint: Point) {
+  public override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if (delta.x == 0 && delta.y == 0) return;
 
@@ -80,16 +80,16 @@ export class EllipseView extends ShapeView implements MoveDrawable {
     });
   }
 
-  get size(): Size {
+  public get size(): Size {
     return {
       width: parseInt(this.getAttr("rx")) * 2,
       height: parseInt(this.getAttr("ry")) * 2
     };
   }
-  drawSize(rect: Rect) {
+  public drawSize(rect: Rect) {
     this.setSize(rect);
   }
-  setSize(rect: Rect, delta: Point | null = null): void {
+  public setSize(rect: Rect, delta: Point | null = null): void {
     if (delta) {
       rect.width = this._lastSize.width * delta.x;
       rect.height = this._lastSize.height * delta.y;
@@ -119,11 +119,11 @@ export class EllipseView extends ShapeView implements MoveDrawable {
 
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     let containerRect: Rect = this._container.HTML.getBoundingClientRect();
     let stoke = parseInt(this.style.strokeWidth);
     let rotatedBoundingRect: Rect = this.svgElement.getBoundingClientRect();
@@ -136,12 +136,12 @@ export class EllipseView extends ShapeView implements MoveDrawable {
     return rotatedBoundingRect;
   }
 
-  isComplete(): boolean {
+  public isComplete(): boolean {
     let size: Size = this.size;
     return size.width > 0 && size.height > 0;
   }
 
-  override toPath(): PathView {
+  public override toPath(): PathView {
     let path: Path = new Path();
     let size = this.size;
     let rx = size.width / 2;

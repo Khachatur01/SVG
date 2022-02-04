@@ -14,8 +14,8 @@ export class Node extends EllipseView {
   private _move = this.onMove.bind(this);
   private _end = this.onEnd.bind(this);
 
-  constructor(container: SVG, editTool: EditTool, position: Point, order: number) {
-    super(container, position.x - 8, position.y - 8, 8, 8);
+  public constructor(container: SVG, editTool: EditTool, position: Point, order: number) {
+    super(container, {x: position.x - 8, y: position.y - 8}, 8, 8);
     this.removeOverEvent();
     this.style.fillColor = "white";
     this.style.strokeColor = "black";
@@ -23,19 +23,18 @@ export class Node extends EllipseView {
     this.svgElement.style.cursor = "move";
     this.editTool = editTool;
     this.order = order;
-    this.on();
+    this.svgElement.addEventListener("mousedown", this._start);
   }
 
   protected onStart(): void {
-    this.editTool.getContainer().HTML.addEventListener("mousemove", this._move);
+    this.editTool.container.HTML.addEventListener("mousemove", this._move);
     document.addEventListener("mouseup", this._end);
     this._container.call(Callback.NODE_EDIT_START);
   };
-
   protected onMove(event: MouseEvent): void {
     if (!this.editTool.editableElement) return;
 
-    let containerRect: Rect = this.editTool.getContainer().HTML.getBoundingClientRect();
+    let containerRect: Rect = this.editTool.container.HTML.getBoundingClientRect();
 
     let position = this._container.grid.getSnapPoint({
       x: event.clientX - containerRect.x,
@@ -52,15 +51,9 @@ export class Node extends EllipseView {
     this.position = position;
     this._container.call(Callback.NODE_EDIT, {position: position});
   };
-
   protected onEnd(): void {
-    this.editTool.getContainer().HTML.removeEventListener("mousemove", this._move);
+    this.editTool.container.HTML.removeEventListener("mousemove", this._move);
     document.removeEventListener("mouseup", this._end);
     this._container.call(Callback.NODE_EDIT_END);
   };
-
-  private on() {
-    this.svgElement.addEventListener("mousedown", this._start);
-  }
-
 }

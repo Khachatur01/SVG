@@ -1,12 +1,14 @@
 import {SVG} from "../../../SVG";
 import {ForeignObjectView} from "../ForeignObjectView";
+import {Point} from "../../../model/Point";
+import {Size} from "../../../model/Size";
 
 export class VideoView extends ForeignObjectView {
   private readonly source: HTMLSourceElement;
   private readonly _video: HTMLVideoElement;
 
-  constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
-    super(container, x, y, width, height);
+  public constructor(container: SVG, position: Point = {x: 0, y: 0}, size: Size = {width: 0, height: 0}) {
+    super(container, position, size);
     this._video = document.createElement("video");
     this._video.style.width = "calc(100% - 20px)";
     this._video.style.height = "calc(100% - 20px)";
@@ -20,25 +22,23 @@ export class VideoView extends ForeignObjectView {
     this.setContent(this._video, false);
   }
 
-  override get copy(): VideoView {
+  public override get copy(): VideoView {
     return super.copy as VideoView;
   }
 
-  set src(URI: string | null) {
+  public set src(URI: string | null) {
     this.source.setAttribute("src", !URI ? "" : URI);
   }
-
-  get src(): string | null {
+  public get src(): string | null {
     return this.source.getAttribute("src");
   }
 
-  override isComplete(): boolean {
-    let size = this.size;
-    return size.width > 15 && size.height > 15;
-  }
-
-  get video(): HTMLVideoElement {
+  public get video(): HTMLVideoElement {
     return this._video;
   }
 
+  public override isComplete(): boolean {
+    let size = this.size;
+    return size.width > 15 && size.height > 15;
+  }
 }

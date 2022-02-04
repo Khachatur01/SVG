@@ -6,7 +6,7 @@ import {SVG} from "../../../../../SVG";
 import {Callback} from "../../../../../dataSource/Callback";
 
 export class DrawGraphic extends MoveDraw {
-  getDrawableElement(position: Point): ElementView {
+  protected createDrawableElement(position: Point): ElementView {
     let graphicView = new GraphicView(this.container, position);
     // graphicView.addFunction((x: number) => Math.sin(Math.pow(Math.E, x)), "#ff7f3f");
     graphicView.addFunction((x: number) => Math.pow(2, x + 1), "#486fff");
@@ -17,7 +17,7 @@ export class DrawGraphic extends MoveDraw {
     return graphicView;
   }
 
-  override onIsNotComplete() {
+  protected override onIsNotComplete() {
     if (!this.drawableElement) return;
     this.drawableElement.setSize({
       x: this.startPos.x - 150,
@@ -29,16 +29,17 @@ export class DrawGraphic extends MoveDraw {
     this.container.focus(this.drawableElement);
     this.container.selectTool.on();
   }
-  override start(container: SVG) {
+
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.GRAPHIC_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.GRAPHIC_TOOL_OFF);
   }
-  _new(): DrawGraphic {
+
+  public _new(): DrawGraphic {
     return new DrawGraphic(this.container);
   }
 }

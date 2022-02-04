@@ -7,13 +7,13 @@ import {VideoView} from "../../../../../element/foreign/media/VideoView";
 
 export class DrawVideo extends MoveDraw {
   public src: string = "";
-  getDrawableElement(position: Point): ElementView {
-    let videoView = new VideoView(this.container, position.x, position.y);
+  createDrawableElement(position: Point): ElementView {
+    let videoView = new VideoView(this.container, position);
     videoView.src = this.src;
     return videoView;
   }
 
-  override onIsNotComplete() {
+  protected override onIsNotComplete() {
     if (!this.drawableElement) return;
     this.drawableElement.setSize({
       x: this.startPos.x - 150,
@@ -23,23 +23,22 @@ export class DrawVideo extends MoveDraw {
     }, null);
     this.drawableElement.refPoint = this.drawableElement?.center;
   }
-
-  override onEnd() {
+  protected override onEnd() {
     this.container.selectTool.on();
     if (this.drawableElement)
       this.container.focus(this.drawableElement);
   }
 
-  override start(container: SVG) {
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.VIDEO_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.VIDEO_TOOL_OFF);
   }
-  _new(): DrawVideo {
+
+  public _new(): DrawVideo {
     return new DrawVideo(this.container);
   }
 }

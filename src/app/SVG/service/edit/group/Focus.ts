@@ -12,10 +12,8 @@ import {Callback} from "../../../dataSource/Callback";
 import {Matrix} from "../../math/Matrix";
 
 export class Focus implements Draggable, Resizeable {
-  private readonly _children: Set<ElementView> = new Set<ElementView>();
   private readonly container: SVG;
-
-  public readonly boundingBox: BoundingBox;
+  private readonly _children: Set<ElementView> = new Set<ElementView>();
   private readonly svgGroup: SVGGElement;
   private readonly svgBounding: SVGGElement;
 
@@ -23,7 +21,9 @@ export class Focus implements Draggable, Resizeable {
   private _lastSize: Size = {width: 0, height: 0};
   private _lastAngle: number = 0;
 
-  constructor(container: SVG) {
+  public readonly boundingBox: BoundingBox;
+
+  public constructor(container: SVG) {
     this.container = container;
 
     this.boundingBox = new BoundingBox(this.container)
@@ -35,15 +35,15 @@ export class Focus implements Draggable, Resizeable {
     this.svgGroup.appendChild(this.boundingBox.refPointGroup);
   }
 
-  get SVG(): SVGGElement {
+  public get SVG(): SVGGElement {
     return this.svgGroup;
   }
 
-  get boundingSVG(): SVGElement {
+  public get boundingSVG(): SVGElement {
     return this.boundingBox.SVG;
   }
 
-  appendChild(xElement: ElementView, showBounding: boolean = true): void {
+  public appendChild(xElement: ElementView, showBounding: boolean = true): void {
     this._children.add(xElement);
     xElement.onFocus();
 
@@ -73,7 +73,7 @@ export class Focus implements Draggable, Resizeable {
       {element: xElement}
     );
   }
-  removeChild(xElement: ElementView): void {
+  public removeChild(xElement: ElementView): void {
     this._children.delete(xElement);
     xElement.onBlur();
     this.container.editTool.removeEditableElement();
@@ -109,7 +109,7 @@ export class Focus implements Draggable, Resizeable {
 
     this.fit();
   }
-  clear(): void {
+  public clear(): void {
     this.container.style.recoverGlobalStyle();
     this._children.forEach((child: ElementView) => {
       child.onBlur();
@@ -118,21 +118,21 @@ export class Focus implements Draggable, Resizeable {
     this.blur();
   }
 
-  remove(): void {
+  public remove(): void {
     this._children.forEach((child: ElementView) => this.container.remove(child));
     this.clear();
     this.container.call(Callback.ELEMENT_DELETED);
   }
 
-  orderTop(): void {
+  public orderTop(): void {
     this._children.forEach((child: ElementView) => {
       this.container.elementsGroup.appendChild(child.SVG);
     });
     this.container.call(Callback.TO_TOP);
   }
-  orderUp(): void {}
-  orderDown(): void {}
-  orderBottom(): void {
+  public orderUp(): void {}
+  public orderDown(): void {}
+  public orderBottom(): void {
     let firstChild = this.container.elementsGroup.firstChild;
     this._children.forEach((child: ElementView) => {
       this.container.elementsGroup.insertBefore(child.SVG, firstChild);
@@ -140,10 +140,10 @@ export class Focus implements Draggable, Resizeable {
     this.container.call(Callback.TO_BOTTOM);
   }
 
-  get canGroup(): boolean {
+  public get canGroup(): boolean {
     return this._children.size > 1;
   }
-  get canUngroup(): boolean {
+  public get canUngroup(): boolean {
     if (this._children.size == 1) {
       let [element] = this._children;
       if (element instanceof GroupView)
@@ -151,7 +151,7 @@ export class Focus implements Draggable, Resizeable {
     }
     return false;
   }
-  group(): void {
+  public group(): void {
     if (this._children.size < 2) return;
 
     let group = new GroupView(this.container);
@@ -180,7 +180,7 @@ export class Focus implements Draggable, Resizeable {
       {element: group}
     );
   }
-  ungroup() {
+  public ungroup() {
     if (this._children.size > 1) return;
     let [group] = this._children;
     if (!(group instanceof GroupView)) /* can ungroup only single, group element */
@@ -193,15 +193,14 @@ export class Focus implements Draggable, Resizeable {
     this.container.call(Callback.UNGROUP);
   }
 
-  get children(): Set<ElementView> {
+  public get children(): Set<ElementView> {
     return this._children;
   }
 
-  get position(): Point {
+  public get position(): Point {
     return this.boundingBox.position;
   }
-
-  set translate(delta: Point) {
+  public set translate(delta: Point) {
     this._children.forEach((child: ElementView) => {
       child.SVG.style.transform =
         "translate(" + delta.x + "px, " + delta.y + "px) rotate(" + child.angle + "deg)";
@@ -209,7 +208,7 @@ export class Focus implements Draggable, Resizeable {
     this.svgGroup.style.transform =
         " translate(" + delta.x + "px, " + delta.y + "px)";
   }
-  set position(delta: Point) {
+  public set position(delta: Point) {
     this._children.forEach((child: ElementView) => child.position = delta);
 
     let refPoint = {
@@ -221,21 +220,20 @@ export class Focus implements Draggable, Resizeable {
 
     this.boundingBox.correctByDelta(delta);
   }
-
-  correct(point: Point): void {
+  public correct(point: Point): void {
     this._children.forEach((child: ElementView) => child.correct(point, this.lastRefPoint));
 
     this.boundingBox.correct(point, this.lastRefPoint);
   }
 
-  get rotatedCenter(): Point {
+  public get rotatedCenter(): Point {
     return Matrix.rotate(
       [this.center],
       this.refPoint,
       -this.angle
     )[0];
   }
-  get center(): Point {
+  public get center(): Point {
     let rect = this.boundingRect;
 
     return {
@@ -244,10 +242,10 @@ export class Focus implements Draggable, Resizeable {
     }
   }
 
-  get size(): Size {
+  public get size(): Size {
     return this.boundingRect;
   }
-  setSize(rect: Rect, delta: Point | null = null): void {
+  public setSize(rect: Rect, delta: Point | null = null): void {
     if (this._children.size == 1) {
       this._children.forEach(child => child.setSize(rect, delta));
     } else {
@@ -301,20 +299,20 @@ export class Focus implements Draggable, Resizeable {
     return this.boundingBox.boundingRect;
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     return this.calculateBoundingRect(false);
   }
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     return this.calculateBoundingRect(true);
   }
 
-  set lastRefPoint(point: Point) {
+  public set lastRefPoint(point: Point) {
     this.boundingBox.lastRefPoint = point;
   }
-  get lastRefPoint(): Point {
+  public get lastRefPoint(): Point {
     return this.boundingBox.lastRefPoint;
   }
-  get lastRect(): Rect {
+  public get lastRect(): Rect {
     return {
       x: this._lastPosition.x,
       y: this._lastPosition.y,
@@ -323,33 +321,33 @@ export class Focus implements Draggable, Resizeable {
     };
   }
 
-  fixRect(): void {
+  public fixRect(): void {
     this._lastPosition = this.position;
     this._lastSize = this.size;
     this._children.forEach(child => child.fixRect());
     this.boundingBox.fixPosition();
   }
-  fixRefPoint(): void {
+  public fixRefPoint(): void {
     this.boundingBox.fixRefPoint();
   }
-  fixPosition(): void {
+  public fixPosition(): void {
     this._lastPosition = this.position;
     this._children.forEach(child => child.fixPosition());
     this.boundingBox.fixRefPoint();
     this.boundingBox.fixPosition();
   }
-  fixSize(): void {
+  public fixSize(): void {
     this._lastSize = this.size;
   }
-  set lastAngle(angle: number) {
+  public set lastAngle(angle: number) {
     this._lastAngle = angle;
   }
 
-  hasChild(xElement: ElementView): boolean {
+  public hasChild(xElement: ElementView): boolean {
     return this._children.has(xElement);
   }
 
-  recenterRefPoint() {
+  public recenterRefPoint() {
     this.fixRefPoint();
     let center;
     if (this._children.size > 1) {
@@ -371,21 +369,21 @@ export class Focus implements Draggable, Resizeable {
       }
     }
   }
-  get refPoint(): Point {
+  public get refPoint(): Point {
     return this.boundingBox.refPoint;
   }
-  set refPoint(point: Point) {
+  public set refPoint(point: Point) {
     this._children.forEach(child => child.refPoint = point);
     this.boundingBox.refPoint = point;
   }
-  set refPointView(point: Point) {
+  public set refPointView(point: Point) {
     this.boundingBox.refPointView = point;
   }
 
-  get angle(): number {
+  public get angle(): number {
     return this.boundingBox.angle;
   }
-  rotate(angle: number) {
+  public rotate(angle: number) {
     if (this._children.size == 1)
       this._children.forEach(child => child.rotate(angle));
     else
@@ -395,7 +393,7 @@ export class Focus implements Draggable, Resizeable {
     this.container.call(Callback.ROTATE, {angle: angle});
   }
 
-  fit(): void {
+  public fit(): void {
     if (this._children.size != 1) {
       this.fitRotated();
       this.boundingBox.rotate(0);
@@ -408,7 +406,7 @@ export class Focus implements Draggable, Resizeable {
     this.boundingBox.setSize(contentRect);
     this.boundingBox.positionGrips();
   }
-  fitRotated(): void {
+  public fitRotated(): void {
     let contentRect: Rect = this.rotatedBoundingRect;
 
     this.boundingBox.position = contentRect;
@@ -416,7 +414,7 @@ export class Focus implements Draggable, Resizeable {
     this.boundingBox.positionGrips();
   }
 
-  focus(rotatable: boolean = true) {
+  public focus(rotatable: boolean = true) {
     if (this._children.size > 1) {
       this.boundingBox.multipleFocus(rotatable);
     } else {
@@ -429,23 +427,23 @@ export class Focus implements Draggable, Resizeable {
       }
     }
   }
-  blur() {
+  public blur() {
     this.container.call(Callback.BLURED);
     this.boundingBox.blur();
   }
 
-  highlight() {
+  public highlight() {
     this._children.forEach((child: ElementView) => {
       child.highlight();
     });
   }
-  lowlight() {
+  public lowlight() {
     this._children.forEach((child: ElementView) => {
       child.lowlight();
     });
   }
 
-  toPath() {
+  public toPath() {
     if (this._children.size == 0) return;
     let refPoint = Object.assign({}, this.refPoint);
 

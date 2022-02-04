@@ -3,7 +3,7 @@ import {Point} from "../../../../../../../model/Point";
 import {Angle} from "../../../../../../math/Angle";
 
 export class NWGrip extends Grip {
-  setPosition(points: Point[]) {
+  public setPosition(points: Point[]) {
     this.position = {
       x: points[0].x - this.halfSide,
       y: points[0].y - this.halfSide
@@ -23,7 +23,6 @@ export class NWGrip extends Grip {
       },
     );
   }
-
   protected onMove(client: Point): void {
     let elementRect = this._container.focused.lastRect;
 
@@ -57,7 +56,6 @@ export class NWGrip extends Grip {
     };
     this._container.focused.setSize(this._lastResize);
   }
-
   protected onEnd(): void {
   }
 }

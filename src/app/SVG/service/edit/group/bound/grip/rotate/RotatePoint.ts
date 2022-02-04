@@ -17,10 +17,9 @@ export class RotatePoint extends PathView {
   private _r: number = 8;
   private _lineLength: number = 25;
   private _center: Point = {x: 0, y: 0};
+  private dAngle: number = 0; /* delta angle */
 
-  private dAngle: number = 0;
-
-  constructor(container: SVG, x: number = 0, y: number = 0) {
+  public constructor(container: SVG, x: number = 0, y: number = 0) {
     super(container);
     this.removeOverEvent();
     this.style.fillColor = "transparent";
@@ -35,11 +34,10 @@ export class RotatePoint extends PathView {
     this.on();
   }
 
-  override get position(): Point {
+  public override get position(): Point {
     return this._center;
   }
-
-  override set position(position: Point) {
+  public override set position(position: Point) {
     position.y -= this._lineLength;
     super.position = {
       x: position.x - this._center.x,
@@ -63,15 +61,14 @@ export class RotatePoint extends PathView {
     });
   }
 
-  show() {
+  public show() {
     this.svgElement.style.display = "block";
   }
-
-  hide() {
+  public hide() {
     this.svgElement.style.display = "none";
   }
 
-  getAngle(containerRect: Rect, event: MouseEvent): number {
+  public getAngle(containerRect: Rect, event: MouseEvent): number {
     let x = event.clientX - containerRect.x;
     let y = event.clientY - containerRect.y;
 
@@ -111,14 +108,12 @@ export class RotatePoint extends PathView {
 
     this._container.call(Callback.ROTATE_START);
   }
-
   private move(event: MouseEvent) {
     let angle = this.getAngle(this._container.HTML.getBoundingClientRect(), event);
     if (this._container.grid.isSnap())
       angle = Math.round(angle / 15) * 15;
     this._container.focused.rotate(angle);
   }
-
   private end() {
     this._container.selectTool.on();
     this._container.HTML.removeEventListener("mousemove", this._move);
@@ -127,11 +122,10 @@ export class RotatePoint extends PathView {
     this._container.call(Callback.ROTATE_END);
   }
 
-  on() {
+  public on() {
     this.svgElement.addEventListener("mousedown", this._start);
   }
-
-  off() {
+  public off() {
     this.svgElement.removeEventListener("mousedown", this._start);
   }
 }

@@ -6,22 +6,22 @@ import {Callback} from "../../../../../../dataSource/Callback";
 import {PolygonView} from "../../../../../../element/shape/pointed/polygon/PolygonView";
 
 export class DrawPolygon extends ClickDraw {
-  getDrawableElement(position: Point): PointedView {
+  protected createDrawableElement(position: Point): PointedView {
     return new PolygonView(this.container, [
       position, position
     ]);
   }
 
-  override start(container: SVG) {
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.POLYGON_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.POLYGON_TOOL_OFF);
   }
-  _new(): DrawPolygon {
+
+  public _new(): DrawPolygon {
     return new DrawPolygon(this.container);
   }
 }

@@ -10,25 +10,25 @@ import {ShapeView} from "../../type/ShapeView";
 export abstract class PointedView extends ShapeView {
   protected _lastPoints: Point[] = [];
 
-  override set points(points: Point[]) {};
+  public override set points(points: Point[]) {};
 
-  abstract getPoint(index: number): Point;
-  abstract pushPoint(point: Point): void;
-  abstract removePoint(index: number): void;
-  abstract replacePoint(index: number, point: Point): void;
-  override fixRect() {
+  public abstract getPoint(index: number): Point;
+  public abstract pushPoint(point: Point): void;
+  public abstract removePoint(index: number): void;
+  public abstract replacePoint(index: number, point: Point): void;
+  public override fixRect() {
     super.fixRect();
     this.fixPoints();
   }
-  override fixPosition() {
+  public override fixPosition() {
     super.fixPosition();
     this.fixPoints();
   }
-  fixPoints() {
+  public fixPoints() {
     this._lastPoints = this.points.slice();
   }
 
-  get position(): Point {
+  public get position(): Point {
     let points = this.points;
     let leftTop: Point = points[0];
 
@@ -40,7 +40,7 @@ export abstract class PointedView extends ShapeView {
     }
     return leftTop;
   }
-  set position(delta: Point) {
+  public set position(delta: Point) {
     let points = this.points;
 
     for (let i = 0; i < points.length; i++) {
@@ -53,7 +53,7 @@ export abstract class PointedView extends ShapeView {
 
     this.points = points;
   }
-  override correct(refPoint: Point, lastRefPoint: Point) {
+  public override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if (delta.x == 0 && delta.y == 0) return;
 
@@ -69,7 +69,7 @@ export abstract class PointedView extends ShapeView {
     this.points = points;
   }
 
-  get size(): Size {
+  public get size(): Size {
     let points = this.points
     let maxX = points[0].x;
     let maxY = points[0].y;
@@ -92,7 +92,7 @@ export abstract class PointedView extends ShapeView {
       height: maxY - minY
     };
   }
-  setSize(rect: Rect, delta: Point | null = null): void {
+  public setSize(rect: Rect, delta: Point | null = null): void {
     let dw = 1;
     let dh = 1;
 
@@ -118,16 +118,16 @@ export abstract class PointedView extends ShapeView {
     this.points = points;
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);
   }
 
-  override toPath(): PathView {
+  public override toPath(): PathView {
     let rotatedPoints = this.rotatedPoints;
     let path = new Path();
 

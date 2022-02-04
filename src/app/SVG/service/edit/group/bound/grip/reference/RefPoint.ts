@@ -9,7 +9,6 @@ import {Callback} from "../../../../../../dataSource/Callback";
 export class RefPoint extends PathView {
   private readonly _r: number = 5; /* radius */
   private _center: Point = {x: 0, y: 0};
-
   private _lastPoint: Point = {x: 0, y: 0};
 
   private moving: boolean = false;
@@ -17,7 +16,7 @@ export class RefPoint extends PathView {
   private _move = this.move.bind(this);
   private _end = this.end.bind(this);
 
-  constructor(container: SVG, x: number = 0, y: number = 0) {
+  public constructor(container: SVG, x: number = 0, y: number = 0) {
     super(container);
     this.removeOverEvent();
     this.style.fillColor = "transparent";
@@ -32,27 +31,25 @@ export class RefPoint extends PathView {
     this.on();
   }
 
-  get lastRefPoint(): Point {
+  public get lastRefPoint(): Point {
     return this._lastPosition;
   }
-
-  set lastRefPoint(refPoint: Point) {
+  public set lastRefPoint(refPoint: Point) {
     this._lastPosition = refPoint;
   }
 
-  override get position(): Point {
+  public override get position(): Point {
     return {
       x: this._center.x,
       y: this._center.y
     };
   }
-
-  override set position(position: Point) {
+  public override set position(position: Point) {
     this._center = position;
     this.drawPoint(position);
   }
 
-  get r(): number {
+  public get r(): number {
     return this._r;
   }
 
@@ -73,11 +70,10 @@ export class RefPoint extends PathView {
     });
   }
 
-  show() {
+  public show() {
     this.svgElement.style.display = "block";
   }
-
-  hide() {
+  public hide() {
     this.svgElement.style.display = "none";
   }
 
@@ -101,7 +97,6 @@ export class RefPoint extends PathView {
     document.addEventListener("mouseup", this._end);
     this._container.call(Callback.REF_POINT_VIEW_CHANGE_START);
   }
-
   private move(event: MouseEvent) {
     this.initLastPoint(event);
     this._lastPoint = this._container.grid.getSnapPoint(this._lastPoint);
@@ -110,7 +105,6 @@ export class RefPoint extends PathView {
     this._container.focused.refPointView = refPoint;
     this._container.call(Callback.REF_POINT_VIEW_CHANGE, {refPoint: refPoint});
   }
-
   private end() {
     if (!this.moving) return;
 
@@ -126,11 +120,10 @@ export class RefPoint extends PathView {
     this._container.call(Callback.REF_POINT_CHANGE, {refPoint: refPoint});
   }
 
-  on() {
+  public on() {
     this.svgElement.addEventListener("mousedown", this._start);
   }
-
-  off() {
+  public off() {
     this.svgElement.removeEventListener("mousedown", this._start);
   }
 }

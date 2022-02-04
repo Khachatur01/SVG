@@ -1,7 +1,7 @@
 import {Point} from "../../model/Point";
 
 export class Matrix {
-  static rotate(points: Point[], refPoint: Point, angle: number): Point[] {
+  public static rotate(points: Point[], refPoint: Point, angle: number): Point[] {
     angle = -angle * (Math.PI / 180);
     let R = [
       [Math.cos(angle), -Math.sin(angle)],
@@ -27,8 +27,7 @@ export class Matrix {
 
     return result;
   }
-
-  static multiply(a: number[][], b: number[][]) {
+  public static multiply(a: number[][], b: number[][]) {
     let aNumRows = a.length, aNumCols = a[0].length,
       bNumCols = b[0].length,
       m = new Array(aNumRows);  // initialize array of rows

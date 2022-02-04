@@ -6,19 +6,20 @@ import {SVG} from "../../../../../../../SVG";
 import {Callback} from "../../../../../../../dataSource/Callback";
 
 export class DrawIsoscelesTriangle extends MoveDraw {
-  getDrawableElement(position: Point): ElementView {
+  protected createDrawableElement(position: Point): ElementView {
     return new IsoscelesTriangleView(this.container);
   }
-  override start(container: SVG) {
+
+  public override start(container: SVG) {
     super.start(container);
     container.call(Callback.ISOSCELES_TRIANGLE_TOOL_ON);
   }
-
-  override stop() {
+  public override stop() {
     super.stop();
     this.container.call(Callback.ISOSCELES_TRIANGLE_TOOL_OFF);
   }
-  _new(): DrawIsoscelesTriangle {
+
+  public _new(): DrawIsoscelesTriangle {
     return new DrawIsoscelesTriangle(this.container);
   }
 }

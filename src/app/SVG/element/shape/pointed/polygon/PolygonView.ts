@@ -6,7 +6,7 @@ import {PathView} from "../PathView";
 import {Close} from "../../../../model/path/close/Close";
 
 export class PolygonView extends PointedView {
-  constructor(container: SVG, points: Point[] = []) {
+  public constructor(container: SVG, points: Point[] = []) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "polygon");
     this.svgElement.id = this.id;
@@ -17,7 +17,7 @@ export class PolygonView extends PointedView {
     this.style.setDefaultStyle();
   }
 
-  get copy(): PolygonView {
+  public get copy(): PolygonView {
     let polygon: PolygonView = new PolygonView(this._container);
     polygon.points = this.points;
     polygon.fixRect();
@@ -31,7 +31,7 @@ export class PolygonView extends PointedView {
   }
 
   /* TODO fix coordinate fetching */
-  override get points(): Point[] {
+  public override get points(): Point[] {
     let points: string[] = this.getAttr("points").split(" ");
     let pointsArray: Point[] = [];
     for (let point of points) {
@@ -43,15 +43,7 @@ export class PolygonView extends PointedView {
     }
     return pointsArray;
   }
-
-  override getPoint(index: number): Point {
-    let points = this.points;
-    if (index < 0)
-      index = points.length + index;
-    return points[index];
-  }
-
-  override set points(points: Point[]) {
+  public override set points(points: Point[]) {
     let pointsString = "";
     for (let point of points) {
       pointsString += point.x + "," + point.y + " "
@@ -60,13 +52,26 @@ export class PolygonView extends PointedView {
     this.setAttr({points: pointsString})
   }
 
-  override pushPoint(point: Point) {
+  public override getPoint(index: number): Point {
+    let points = this.points;
+    if (index < 0)
+      index = points.length + index;
+    return points[index];
+  }
+  public override pushPoint(point: Point) {
     this.setAttr({
       "points": this.getAttr("points") + " " + point.x + "," + point.y
     });
   }
+  public override replacePoint(index: number, point: Point) {
+    let points = this.points;
+    if (index < 0)
+      index = points.length + index;
+    points[index] = point;
 
-  override removePoint(index: number): void {
+    this.points = points;
+  }
+  public override removePoint(index: number): void {
     let pointsArr = this.getAttr("points").split(" ");
     if (index < 0)
       index = pointsArr.length + index;
@@ -77,21 +82,12 @@ export class PolygonView extends PointedView {
     });
   }
 
-  override replacePoint(index: number, point: Point) {
-    let points = this.points;
-    if (index < 0)
-      index = points.length + index;
-    points[index] = point;
-
-    this.points = points;
-  }
-
-  override isComplete(): boolean {
+  public override isComplete(): boolean {
     let pointsArr = this.getAttr("points").split(" ", 3);
     return pointsArr.length >= 3;
   }
 
-  override toPath(): PathView {
+  public override toPath(): PathView {
     let path = super.toPath();
     path.addCommand(new Close());
     return path;

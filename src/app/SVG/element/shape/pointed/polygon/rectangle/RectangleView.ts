@@ -12,12 +12,12 @@ import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 * */
 
 export class RectangleView extends PolygonView implements MoveDrawable {
-  constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+  public constructor(container: SVG, position: Point = {x: 0, y: 0}, size: Size = {width: 0, height: 0}) {
     super(container, [
-      /* 0 */                                             /* 1 */
-      {x: x, y: y}, {x: width + x, y: y},
-      {x: width + x, y: height + y}, {x: x, y: height + y}
-      /* 2 */                                             /* 3 */
+      /* 0 */                                                                                        /* 1 */
+      {x: position.x, y: position.y},                            {x: size.width + position.x, y: position.y},
+      {x: size.width + position.x, y: size.height + position.y}, {x: position.x, y: size.height + position.y}
+      /* 2 */                                                                                        /* 3 */
 
     ]);
 
@@ -25,11 +25,11 @@ export class RectangleView extends PolygonView implements MoveDrawable {
     this.style.setDefaultStyle();
   }
 
-  override get copy(): RectangleView {
+  public override get copy(): RectangleView {
     return super.copy as RectangleView;
   }
 
-  override get size(): Size {
+  public override get size(): Size {
     return super.size;
   }
 
@@ -38,7 +38,7 @@ export class RectangleView extends PolygonView implements MoveDrawable {
       Elements, which draw by moving,
       that elements must set size different on drawing
   */
-  drawSize(rect: Rect) {
+  public drawSize(rect: Rect) {
     let points: Point[] = [];
     points.push({ /* 0 */
       x: rect.x,
@@ -60,7 +60,7 @@ export class RectangleView extends PolygonView implements MoveDrawable {
     this.points = points;
   }
 
-  override isComplete(): boolean {
+  public override isComplete(): boolean {
     let size = this.size;
     return size.width != 0 && size.height != 0;
   }

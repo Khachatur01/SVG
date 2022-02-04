@@ -2,7 +2,7 @@ import {Grip} from "../Grip";
 import {Point} from "../../../../../../../model/Point";
 
 export class NGrip extends Grip {
-  setPosition(points: Point[]): void {
+  public setPosition(points: Point[]): void {
     let x = (points[1].x + points[0].x) / 2;
     let y = (points[1].y + points[0].y) / 2;
     this.position = {
@@ -13,7 +13,6 @@ export class NGrip extends Grip {
 
   protected onEnd(): void {
   }
-
   protected onMove(client: Point): void {
     let elementRect = this._container.focused.lastRect;
     let height = client.y - (elementRect.y + elementRect.height);
@@ -26,7 +25,6 @@ export class NGrip extends Grip {
     };
     this._container.focused.setSize(this._lastResize);
   }
-
   protected onStart(): void {
   }
 }

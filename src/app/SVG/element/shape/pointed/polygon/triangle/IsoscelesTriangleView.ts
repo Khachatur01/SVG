@@ -5,7 +5,7 @@ import {Point} from "../../../../../model/Point";
 import {MoveDrawable} from "../../../../../service/tool/draw/type/MoveDrawable";
 
 export class IsoscelesTriangleView extends TriangleView implements MoveDrawable {
-  constructor(container: SVG, rect: Rect | null = null) {
+  public constructor(container: SVG, rect: Rect | null = null) {
     if (rect) {
       let pointA: Point = {x: rect.x, y: rect.y};
       let pointB: Point = {x: rect.x, y: rect.y + rect.width};
@@ -16,11 +16,11 @@ export class IsoscelesTriangleView extends TriangleView implements MoveDrawable 
     }
   }
 
-  override get copy(): IsoscelesTriangleView {
+  public override get copy(): IsoscelesTriangleView {
     return super.copy as IsoscelesTriangleView;
   }
 
-  drawSize(rect: Rect): void {
+  public drawSize(rect: Rect): void {
     let points: Point[] = [];
     points.push({ /* A */
       x: rect.x,

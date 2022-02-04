@@ -7,21 +7,21 @@ import {PathView} from "./pointed/PathView";
 import {ShapeView} from "../type/ShapeView";
 
 export class BoxView extends ShapeView {
-  constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+  public constructor(container: SVG, position: Point = {x: 0, y: 0}, size: Size = {width: 0, height: 0}) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "rect");
     this.svgElement.id = this.id;
 
-    this.position = {x: x, y: y};
+    this.position = position;
     this.setSize({
-      x: x, y: y,
-      width: width, height: height
+      x: position.x, y: position.y,
+      width: size.width, height: size.height
     });
 
     this.setOverEvent();
   }
 
-  get copy(): BoxView {
+  public get copy(): BoxView {
     let position = this.position;
     let size = this.size;
     let box: BoxView = new BoxView(this._container);
@@ -40,12 +40,7 @@ export class BoxView extends ShapeView {
     return box;
   }
 
-  override isComplete(): boolean {
-    let size = this.size;
-    return size.width != 0 && size.height != 0;
-  }
-
-  get points(): Point[] {
+  public get points(): Point[] {
     let position: Point = this.position;
     let size: Size = this.size;
 
@@ -57,21 +52,26 @@ export class BoxView extends ShapeView {
     ];
   }
 
-  get position(): Point {
+  public get position(): Point {
     return {
       x: parseInt(this.getAttr("x")),
       y: parseInt(this.getAttr("y"))
     };
   }
-
-  set position(delta: Point) {
+  public set position(delta: Point) {
     this.setAttr({
       x: this._lastPosition.x + delta.x + "",
       y: this._lastPosition.y + delta.y + ""
     });
   }
 
-  setSize(rect: Rect): void {
+  public get size(): Size {
+    return {
+      width: parseInt(this.getAttr("width")),
+      height: parseInt(this.getAttr("height"))
+    };
+  }
+  public setSize(rect: Rect): void {
     if (rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;
@@ -89,24 +89,21 @@ export class BoxView extends ShapeView {
     });
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
-
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);
   }
 
-  get size(): Size {
-    return {
-      width: parseInt(this.getAttr("width")),
-      height: parseInt(this.getAttr("height"))
-    };
+  public override isComplete(): boolean {
+    let size = this.size;
+    return size.width != 0 && size.height != 0;
   }
 
-  override toPath(): PathView {
+  public override toPath(): PathView {
     return new PathView(this._container);
   }
 }

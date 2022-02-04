@@ -3,7 +3,7 @@ import {Point} from "../../../../../../../model/Point";
 import {Angle} from "../../../../../../math/Angle";
 
 export class SWGrip extends Grip {
-  setPosition(points: Point[]): void {
+  public setPosition(points: Point[]): void {
     this.position = {
       x: points[3].x - this.halfSide,
       y: points[3].y - this.halfSide
@@ -20,7 +20,6 @@ export class SWGrip extends Grip {
       {x: 0, y: this._container.focused.lastRect.y + this._container.focused.lastRect.height}
     );
   }
-
   protected onMove(client: Point): void {
     let elementRect = this._container.focused.lastRect;
 
@@ -54,7 +53,6 @@ export class SWGrip extends Grip {
     };
     this._container.focused.setSize(this._lastResize);
   }
-
   protected onEnd(): void {
   }
 }

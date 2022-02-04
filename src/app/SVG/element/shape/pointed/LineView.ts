@@ -4,7 +4,7 @@ import {Point} from "../../../model/Point";
 import {SVG} from "../../../SVG";
 
 export class LineView extends PointedView {
-  constructor(container: SVG, startPoint: Point = {x: 0, y: 0}, endPoint: Point = {x: 0, y: 0}) {
+  public constructor(container: SVG, startPoint: Point = {x: 0, y: 0}, endPoint: Point = {x: 0, y: 0}) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "line");
     this.svgElement.id = this.id;
@@ -19,7 +19,7 @@ export class LineView extends PointedView {
     this.style.setDefaultStyle();
   }
 
-  get copy(): LineView {
+  public get copy(): LineView {
     let line: LineView = new LineView(this._container);
     line.points = this.points;
 
@@ -31,14 +31,13 @@ export class LineView extends PointedView {
     return line;
   }
 
-  override get points(): Point[] {
+  public override get points(): Point[] {
     return [
       {x: parseFloat(this.getAttr("x1")), y: parseFloat(this.getAttr("y1"))},
       {x: parseFloat(this.getAttr("x2")), y: parseFloat(this.getAttr("y2"))}
     ];
   }
-
-  override set points(points: Point[]) {
+  public override set points(points: Point[]) {
     this.setAttr({
       x1: points[0].x,
       y1: points[0].y,
@@ -47,20 +46,15 @@ export class LineView extends PointedView {
     });
   }
 
-  override getPoint(index: number): Point {
+  public override getPoint(index: number): Point {
     return {
       x: parseFloat(this.getAttr("x2")),
       y: parseFloat(this.getAttr("y2"))
     };
   }
-
-  override pushPoint(point: Point): void {
+  public override pushPoint(point: Point): void {
   }
-
-  override removePoint(index: number): void {
-  }
-
-  override replacePoint(index: number, point: Point) {
+  public override replacePoint(index: number, point: Point) {
     if (index == 0) {
       this.setAttr({x1: point.x});
       this.setAttr({y1: point.y});
@@ -70,8 +64,10 @@ export class LineView extends PointedView {
       this.setAttr({y2: point.y});
     }
   }
+  public override removePoint(index: number): void {
+  }
 
-  override isComplete(): boolean {
+  public override isComplete(): boolean {
     return this.getAttr("x1") != this.getAttr("x2") ||
       this.getAttr("y1") != this.getAttr("y2")
   }

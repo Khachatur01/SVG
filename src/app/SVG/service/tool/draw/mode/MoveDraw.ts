@@ -15,12 +15,12 @@ export abstract class MoveDraw implements Drawable {
 
   protected drawableElement: ElementView | null = null;
 
-  constructor(container: SVG) {
+  public constructor(container: SVG) {
     this.container = container;
   }
 
-  abstract _new(): MoveDraw;
-  abstract getDrawableElement(position: Point): ElementView;
+  public abstract _new(): MoveDraw;
+  protected abstract createDrawableElement(position: Point): ElementView;
 
   protected drawStart(event: MouseEvent) {
     this.container.HTML.addEventListener('mousemove', this._draw);
@@ -32,7 +32,7 @@ export abstract class MoveDraw implements Drawable {
 
     this.startPos = this.container.grid.getSnapPoint(this.startPos);
 
-    this.drawableElement = this.getDrawableElement(this.startPos);
+    this.drawableElement = this.createDrawableElement(this.startPos);
     this.container.add(this.drawableElement);
     this.container.drawTool.drawing();
     this.container.call(Callback.DRAW_CLICK, {position: this.startPos});
@@ -81,7 +81,7 @@ export abstract class MoveDraw implements Drawable {
       {position: position}
     );
   }
-  private drawEnd() {
+  protected drawEnd() {
     if (!this.drawableElement) return;
 
     this.container.HTML.removeEventListener('mousemove', this._draw);
@@ -107,17 +107,17 @@ export abstract class MoveDraw implements Drawable {
     this.container.call(Callback.DRAW_END);
   }
 
-  onEnd() {}
-  onIsNotComplete() {
+  protected onEnd() {}
+  protected onIsNotComplete() {
     if (this.drawableElement)
       this.container.remove(this.drawableElement);
   }
 
-  start(container: SVG): void {
+  public start(container: SVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this._drawStart);
   }
-  stop(): void {
+  public stop(): void {
     this.container?.HTML.removeEventListener('mousedown', this._drawStart);
   }
 }

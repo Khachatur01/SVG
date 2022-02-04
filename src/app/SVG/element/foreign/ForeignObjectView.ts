@@ -12,17 +12,17 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
   protected _content: HTMLElement | null = null;
   public readonly outline: string = "thin solid #999";
 
-  constructor(container: SVG, x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+  public constructor(container: SVG, position: Point = {x: 0, y: 0}, size: Size = {width: 0, height: 0}) {
     super(container);
     this.svgElement = document.createElementNS(ElementView.svgURI, "foreignObject");
     this.svgElement.style.outline = "none";
     this.svgElement.id = this.id;
 
-    this.position = {x: x, y: y};
+    this.position = position;
 
     this.setSize({
-      x: x, y: y,
-      width: width, height: height
+      x: position.x, y: position.y,
+      width: size.width, height: size.height
     });
     this.setOverEvent();
 
@@ -43,14 +43,14 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
     });
   }
 
-  override get HTML(): SVGElement | HTMLElement {
+  public override get HTML(): SVGElement | HTMLElement {
     if (this._content)
       return this._content;
 
     return this.svgElement
   }
 
-  get copy(): ForeignObjectView {
+  public get copy(): ForeignObjectView {
     let position = this.position;
     let size = this.size;
 
@@ -75,26 +75,20 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
     return foreignObject;
   }
 
-  isComplete(): boolean {
-    let size = this.size;
-    return size.width > 0 && size.height > 0;
-  }
-
-  get position(): Point {
+  public get position(): Point {
     return {
       x: parseInt(this.getAttr("x")),
       y: parseInt(this.getAttr("y"))
     };
   }
-
-  set position(delta: Point) {
+  public set position(delta: Point) {
     this.setAttr({
       x: this._lastPosition.x + delta.x,
       y: this._lastPosition.y + delta.y
     });
   }
 
-  override correct(refPoint: Point, lastRefPoint: Point) {
+  public override correct(refPoint: Point, lastRefPoint: Point) {
     let delta = this.getCorrectionDelta(refPoint, lastRefPoint);
     if (delta.x == 0 && delta.y == 0) return;
     let position = this.position;
@@ -105,17 +99,16 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
     });
   }
 
-  get size(): Size {
+  public get size(): Size {
     return {
       width: parseInt(this.getAttr("width")),
       height: parseInt(this.getAttr("height"))
     };
   }
-  drawSize(rect: Rect) {
+  public drawSize(rect: Rect) {
     this.setSize(rect);
   }
-
-  setSize(rect: Rect): void {
+  public setSize(rect: Rect): void {
     if (rect.width < 0) {
       rect.width = -rect.width;
       rect.x -= rect.width;
@@ -133,26 +126,25 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
     });
   }
 
-  get content(): HTMLElement | null {
+  public get content(): HTMLElement | null {
     return this._content;
   }
 
-  addEditCallBack() {
+  public addEditCallBack() {
     this._content?.addEventListener("input", () => {
       this.container.call(Callback.ASSET_EDIT,
         {content: this._content});
     });
   }
 
-  override onFocus() {
+  public override onFocus() {
     this.svgElement.style.outline = this.outline;
   }
-
-  override onBlur() {
+  public override onBlur() {
     this.svgElement.style.outline = "unset";
   }
 
-  setContent(content: HTMLElement, setListeners: boolean = true): void {
+  public setContent(content: HTMLElement, setListeners: boolean = true): void {
     this._content = content;
     content.style.userSelect = "none";
     content.contentEditable = "true";
@@ -170,17 +162,21 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
     }
   }
 
-  get boundingRect(): Rect {
+  public get boundingRect(): Rect {
     let points = this.points;
     return this.calculateBoundingBox(points);
   }
-
-  get rotatedBoundingRect(): Rect {
+  public get rotatedBoundingRect(): Rect {
     let points = this.rotatedPoints;
     return this.calculateBoundingBox(points);
   }
 
-  toPath(): PathView {
+  public isComplete(): boolean {
+    let size = this.size;
+    return size.width > 0 && size.height > 0;
+  }
+
+  public toPath(): PathView {
     return new PathView(this._container);
   }
 }

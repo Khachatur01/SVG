@@ -5,41 +5,36 @@ import {Tool} from "../Tool";
 export class DrawTool extends Tool {
   private _lastDrawTool: Drawable | null = null;
   private _drawTool: Drawable | null = null;
-  private _isOn: boolean = false;
   private _isDrawing: boolean = false;
 
-  constructor(container: SVG) {
+  public constructor(container: SVG) {
     super(container);
   }
 
-  set tool(drawTool: Drawable) {
+  public set tool(drawTool: Drawable) {
     this._drawTool?.stop();
     this._drawTool = drawTool;
     this._lastDrawTool = drawTool;
   }
 
-  _on() {
+  protected _on() {
     this._isOn = true;
-    this._drawTool?.start(this.container);
-    this.container.HTML.style.cursor = "crosshair";
-    this.container.blur();
+    this._drawTool?.start(this._container);
+    this._container.HTML.style.cursor = "crosshair";
+    this._container.blur();
   }
 
-  off() {
+  public off() {
     this._isOn = false;
     this._drawTool?.stop();
-    this.container.HTML.style.cursor = "default";
+    this._container.HTML.style.cursor = "default";
   }
 
-  isOn(): boolean {
-    return this._isOn;
-  }
-
-  drawing() {
+  public drawing() {
     this._isDrawing = true;
   }
 
-  drawingEnd() {
+  public drawingEnd() {
     this._isDrawing = false;
   }
 }

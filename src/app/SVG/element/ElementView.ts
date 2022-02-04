@@ -21,77 +21,75 @@ export class ElementStyle extends Style {
     edit: "crosshair"
   };
 
-  constructor(element: ElementView) {
+  public constructor(element: ElementView) {
     super();
     this.element = element;
   }
 
-  override get strokeWidth(): string {
+  public override get strokeWidth(): string {
     return super.strokeWidth;
   }
-
-  override set strokeWidth(width: string) {
+  public override set strokeWidth(width: string) {
     super.strokeWidth = width;
     this.element.setAttr({"stroke-width": width});
   }
 
-  override get strokeColor(): string {
+  public override get strokeColor(): string {
     return super.strokeColor;
   }
-
-  override set strokeColor(color: string) {
+  public override set strokeColor(color: string) {
     super.strokeColor = color;
     this.element.setAttr({"stroke": color});
   }
 
-  override get strokeDashArray(): string {
+  public override get strokeDashArray(): string {
     return super.strokeDashArray;
   }
-
-  override set strokeDashArray(array: string) {
+  public override set strokeDashArray(array: string) {
     super.strokeDashArray = array;
     this.element.setAttr({"stroke-dasharray": array});
   }
 
-  override get fillColor(): string {
-    return super.fillColor;
+  public override get fillColor(): string {
+    let color = super.fillColor;
+    if(!color || color == "none" || color == "transparent")
+      color = "#FFFFFF00";
+    return color;
   }
-
-  override set fillColor(color: string) {
+  public override set fillColor(color: string) {
     super.fillColor = color;
+    if(color.length == 9 && color.slice(-2) === "00")
+      color = "none";
     this.element.setAttr({"fill": color});
   }
 
-  override get fontSize(): string {
+  public override get fontSize(): string {
     return super.fontSize;
   }
-
-  override set fontSize(size: string) {
+  public override set fontSize(size: string) {
     super.fontSize = size;
     this.element.HTML.style.fontSize = size + "px";
   }
 
-  override get fontColor(): string {
+  public override get fontColor(): string {
     return super.fontColor;
   }
-
-  override set fontColor(color: string) {
+  public override set fontColor(color: string) {
     super.fontColor = color;
 
     this.element.HTML.style.color = color;
   }
 
-  override get backgroundColor(): string {
+  public override get backgroundColor(): string {
     return super.backgroundColor;
   }
-
-  override set backgroundColor(color: string) {
+  public override set backgroundColor(color: string) {
     super.backgroundColor = color;
 
     this.element.HTML.style.backgroundColor = color;
   }
 
-  setDefaultStyle(): void {
+  public setDefaultStyle(): void {
     let style = this.element.container.style;
 
     this.strokeWidth = style.strokeWidth;
@@ -105,58 +103,54 @@ export class ElementStyle extends Style {
 
 export abstract class ElementView implements Resizeable, Draggable {
   public static readonly svgURI: "http://www.w3.org/2000/svg" = "http://www.w3.org/2000/svg";
+  protected svgElement: SVGElement = document.createElementNS(ElementView.svgURI, "rect"); // default element
 
   public readonly style;
+  public readonly rotatable: boolean = true;
+
+  protected readonly id: string;
   protected _container: SVG;
   protected _lastPosition: Point = {x: 0, y: 0};
   protected _lastSize: Size = {width: 0, height: 0};
   protected _lastAngle: number = 0;
-
   protected _angle: number = 0;
   protected _refPoint: Point = {x: 0, y: 0};
 
   private _group: GroupView | null = null;
-  public readonly rotatable: boolean = true;
-
-  protected readonly id: string;
-
-  protected svgElement: SVGElement = document.createElementNS(ElementView.svgURI, "rect"); // default element
-
   private _highlight = this.highlight.bind(this);
   private _lowlight = this.lowlight.bind(this);
 
-  constructor(container: SVG) {
+  public constructor(container: SVG) {
     this._container = container;
     this.style = new ElementStyle(this);
     this.id = container.nextId;
   }
 
-  abstract get size(): Size;
-  abstract setSize(rect: Rect, delta: Point | null): void; /* if delta set, calculate rect width and height by delta */
-  abstract isComplete(): boolean;
-  abstract get position(): Point;
-  abstract set position(delta: Point);
-  abstract get points(): Point[];
-  abstract get boundingRect(): Rect;
-  abstract get rotatedBoundingRect(): Rect;
-  abstract toPath(): PathView;
-  abstract get copy(): ElementView;
+  public abstract get size(): Size;
+  public abstract setSize(rect: Rect, delta: Point | null): void; /* if delta set, calculate rect width and height by delta */
+  public abstract isComplete(): boolean;
+  public abstract get position(): Point;
+  public abstract set position(delta: Point);
+  public abstract get points(): Point[];
+  public abstract get boundingRect(): Rect;
+  public abstract get rotatedBoundingRect(): Rect;
+  public abstract toPath(): PathView;
+  public abstract get copy(): ElementView;
 
-  abstract onFocus(): void;
-  abstract onBlur(): void;
+  public abstract onFocus(): void;
+  public abstract onBlur(): void;
 
-  get container(): SVG {
+  public get container(): SVG {
     return this._container;
   }
-
-  set container(container: SVG) {
+  public set container(container: SVG) {
     this._container = container;
   }
 
-  correct(refPoint: Point, lastRefPoint: Point): void {
+  public correct(refPoint: Point, lastRefPoint: Point): void {
   };
 
-  getCorrectionDelta(refPoint: Point, lastRefPoint: Point) {
+  public getCorrectionDelta(refPoint: Point, lastRefPoint: Point) {
     /* calculate delta */
     let rotatedRefPoint = Matrix.rotate(
       [{x: lastRefPoint.x, y: lastRefPoint.y}],
@@ -170,15 +164,14 @@ export abstract class ElementView implements Resizeable, Draggable {
     };
   }
 
-  get group(): GroupView | null {
+  public get group(): GroupView | null {
     return this._group;
   }
-
-  set group(group: GroupView | null) {
+  public set group(group: GroupView | null) {
     this._group = group;
   }
 
-  get rotatedPoints(): Point[] {
+  public get rotatedPoints(): Point[] {
     return Matrix.rotate(
       this.points,
       this._refPoint,
@@ -212,15 +205,7 @@ export abstract class ElementView implements Resizeable, Draggable {
     };
   }
 
-  get rotatedCenter(): Point {
-    return Matrix.rotate(
-      [this.center],
-      this._refPoint,
-      -this._angle
-    )[0];
-  }
-
-  get center(): Point {
+  public get center(): Point {
     let rect = this.boundingRect;
 
     return {
@@ -228,87 +213,91 @@ export abstract class ElementView implements Resizeable, Draggable {
       y: rect.y + rect.height / 2
     }
   }
-
-  get refPoint(): Point {
-    return this._refPoint;
+  public get rotatedCenter(): Point {
+    return Matrix.rotate(
+      [this.center],
+      this._refPoint,
+      -this._angle
+    )[0];
   }
 
-  set refPoint(refPoint: Point) {
+  public get refPoint(): Point {
+    return this._refPoint;
+  }
+  public set refPoint(refPoint: Point) {
     this.svgElement.style.transformOrigin = refPoint.x + "px " + refPoint.y + "px";
     this._refPoint = refPoint;
   }
-
-  get angle(): number {
-    return this._angle;
+  public centerRefPoint() {
+    this.refPoint = {
+      x: this._lastPosition.x + this._lastSize.width / 2,
+      y: this._lastPosition.y + this._lastSize.height / 2
+    };
   }
 
-  rotate(angle: number): void {
+  public get angle(): number {
+    return this._angle;
+  }
+  public rotate(angle: number): void {
     this.svgElement.style.transform = "rotate(" + angle + "deg)";
     this._angle = angle;
   }
 
-  get SVG(): SVGElement {
+  public get SVG(): SVGElement {
+    return this.svgElement;
+  }
+  public get HTML(): SVGElement | HTMLElement {
     return this.svgElement;
   }
 
-  get HTML(): SVGElement | HTMLElement {
-    return this.svgElement;
-  }
-
-  getAttr(attribute: string): string {
+  public getAttr(attribute: string): string {
     let value = this.SVG.getAttribute(attribute);
     if (!value)
       return "0";
     return value;
   }
-
-  setAttr(attributes: object): void {
+  public setAttr(attributes: object): void {
     for (const [key, value] of Object.entries(attributes))
       if (key && value)
         this.SVG.setAttribute(key, "" + value);
   }
 
-  setOverEvent(): void {
+  public setOverEvent(): void {
     this.svgElement.addEventListener("mouseover", this._highlight);
     this.svgElement.addEventListener("mouseout", this._lowlight);
   }
-
-  removeOverEvent(): void {
+  public removeOverEvent(): void {
     this.svgElement.removeEventListener("mouseover", this._highlight);
     this.svgElement.removeEventListener("mouseout", this._lowlight);
   }
 
-  remove() {
+  public remove() {
     this.svgElement.remove();
   }
 
-  highlight(): void {
+  public highlight(): void {
     if (this._container.selectTool.isOn())
       this.svgElement.style.filter = "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.7))";
   }
-
-  lowlight(): void {
+  public lowlight(): void {
     this.svgElement.style.filter = "unset";
   }
 
-  fixRect(): void {
+  public fixRect(): void {
     this._lastPosition = this.position;
     this._lastSize = this.size;
   }
-
-  fixPosition(): void {
+  public fixPosition(): void {
     this._lastPosition = this.position;
   }
-
-  fixSize(): void {
+  public fixSize(): void {
     this._lastSize = this.size;
   }
-
-  fixAngle(): void {
+  public fixAngle(): void {
     this._lastAngle = this._angle;
   }
 
-  get lastRect(): Rect {
+  public get lastRect(): Rect {
     return {
       x: this._lastPosition.x,
       y: this._lastPosition.y,
@@ -316,17 +305,7 @@ export abstract class ElementView implements Resizeable, Draggable {
       height: this._lastSize.height
     }
   }
-
-  get lastAngle(): number {
+  public get lastAngle(): number {
     return this._lastAngle;
   }
-
-  centerRefPoint() {
-    this.refPoint = {
-      x: this._lastPosition.x + this._lastSize.width / 2,
-      y: this._lastPosition.y + this._lastSize.height / 2
-    };
-  }
 }
-
-
