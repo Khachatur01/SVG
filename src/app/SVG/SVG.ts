@@ -308,12 +308,13 @@ export class SVG {
     return this._elements;
   }
 
-  public add(xElement: ElementView) {
+  public add(xElement: ElementView, setElementActivity: boolean = true) {
     if (!xElement) return;
     xElement.group = null;
     this.elementsGroup.appendChild(xElement.SVG);
     this._elements.add(xElement);
-    this.setElementActivity(xElement);
+    if(setElementActivity)
+      this.setElementActivity(xElement);
   }
   public remove(xElement: ElementView) {
     this._elements.delete(xElement);
@@ -413,18 +414,16 @@ export class SVG {
         x: event.clientX,
         y: event.clientY
       };
-    } else {
-      if(event.touches[0])
-        return {
-          x: event.touches[0].clientX,
-          y: event.touches[0].clientY
-        };
-      else { /* on touch end */
-        return {
-          x: event.changedTouches[0].pageX,
-          y: event.changedTouches[0].pageY
-        };
-      }
+    } else if(event.touches[0])
+      return {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY
+      };
+    else { /* on touch end */
+      return {
+        x: event.changedTouches[0].pageX,
+        y: event.changedTouches[0].pageY
+      };
     }
   }
 }

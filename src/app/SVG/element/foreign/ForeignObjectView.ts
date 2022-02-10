@@ -17,6 +17,7 @@ export class ForeignObjectView extends ForeignView implements MoveDrawable {
     this.svgElement = document.createElementNS(ElementView.svgURI, "foreignObject");
     this.svgElement.style.outline = "none";
     this.svgElement.id = this.id;
+    this.style.cursor.edit = "text";
 
     this.position = position;
 

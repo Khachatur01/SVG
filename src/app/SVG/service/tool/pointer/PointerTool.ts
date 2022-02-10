@@ -5,7 +5,7 @@ import {ElementView} from "../../../element/ElementView";
 
 export class PointerTool extends Tool {
   private _cursor: string = "../assets/img/pointer.svg";
-  private _cursorSVG: SVGElement;
+  private readonly _cursorSVG: SVGElement;
 
   private _start = this.start.bind(this);
   private _move = this.move.bind(this);
