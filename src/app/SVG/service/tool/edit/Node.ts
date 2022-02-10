@@ -24,21 +24,24 @@ export class Node extends EllipseView {
     this.editTool = editTool;
     this.order = order;
     this.svgElement.addEventListener("mousedown", this._start);
+    this.svgElement.addEventListener("touchstart", this._start);
   }
 
   protected onStart(): void {
     this.editTool.container.HTML.addEventListener("mousemove", this._move);
-    document.addEventListener("mouseup", this._end);
+    this.editTool.container.HTML.addEventListener("touchmove", this._move);
+    document.addEventListener("touchend", this._end);
     this._container.call(Callback.NODE_EDIT_START);
   };
-  protected onMove(event: MouseEvent): void {
+  protected onMove(event: MouseEvent | TouchEvent): void {
     if (!this.editTool.editableElement) return;
-
     let containerRect: Rect = this.editTool.container.HTML.getBoundingClientRect();
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
 
     let position = this._container.grid.getSnapPoint({
-      x: event.clientX - containerRect.x,
-      y: event.clientY - containerRect.y
+      x: eventPosition.x - containerRect.x,
+      y: eventPosition.y - containerRect.y
     });
 
     position = Matrix.rotate(
@@ -53,7 +56,9 @@ export class Node extends EllipseView {
   };
   protected onEnd(): void {
     this.editTool.container.HTML.removeEventListener("mousemove", this._move);
+    this.editTool.container.HTML.removeEventListener("touchmove", this._move);
     document.removeEventListener("mouseup", this._end);
+    document.removeEventListener("touchend", this._end);
     this._container.call(Callback.NODE_EDIT_END);
   };
 }

@@ -10,6 +10,7 @@ import {Callback} from "../../../../dataSource/Callback";
 export class DrawFree implements Drawable {
   private container: SVG;
   private drawableElement: FreeView | null = null;
+
   private _drawStart = this.drawStart.bind(this);
   private _draw = this.draw.bind(this);
   private _drawEnd = this.drawEnd.bind(this);
@@ -22,11 +23,18 @@ export class DrawFree implements Drawable {
     return new DrawFree(this.container);
   }
 
-  private drawStart(event: MouseEvent) {
+  private drawStart(event: MouseEvent | TouchEvent) {
+    this.container.HTML.addEventListener('mousemove', this._draw);
+    this.container.HTML.addEventListener('touchmove', this._draw);
+    document.addEventListener('mouseup', this._drawEnd);
+    document.addEventListener('touchend', this._drawEnd);
+
     let containerRect = this.container.HTML.getBoundingClientRect();
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
     let snapPoint = {
-      x: event.clientX - containerRect.left,
-      y: event.clientY - containerRect.top
+      x: eventPosition.x - containerRect.left,
+      y: eventPosition.y - containerRect.top
     }
 
     snapPoint = this.container.grid.getSnapPoint(snapPoint);
@@ -36,18 +44,18 @@ export class DrawFree implements Drawable {
     this.drawableElement = new FreeView(this.container, pathObject);
 
     this.container.add(this.drawableElement);
-    this.container.HTML.addEventListener('mousemove', this._draw);
-    document.addEventListener('mouseup', this._drawEnd);
     this.container.call(Callback.DRAW_CLICK, {position: snapPoint});
   }
-  private draw(event: MouseEvent): void {
+  private draw(event: MouseEvent | TouchEvent): void {
     let containerRect = this.container.HTML.getBoundingClientRect();
     if (!this.drawableElement) return;
 
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
     let snapPoint = {
-      x: event.clientX - containerRect.left,
-      y: event.clientY - containerRect.top
-    };
+      x: eventPosition.x - containerRect.left,
+      y: eventPosition.y - containerRect.top
+    }
 
     if (this.container.grid.isSnap()) {
       snapPoint = this.container.grid.getSnapPoint(snapPoint);
@@ -71,7 +79,9 @@ export class DrawFree implements Drawable {
     if (!this.drawableElement) return;
 
     this.container.HTML.removeEventListener('mousemove', this._draw);
+    this.container.HTML.removeEventListener('touchmove', this._draw);
     document.removeEventListener('mouseup', this._drawEnd);
+    document.removeEventListener('touchend', this._drawEnd);
 
     if (this.drawableElement.getAttr("points").split(" ").length == 2) {
       this.container.remove(this.drawableElement);
@@ -84,10 +94,12 @@ export class DrawFree implements Drawable {
   public start(container: SVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this._drawStart);
+    this.container.HTML.addEventListener('touchstart', this._drawStart);
     container.call(Callback.FREE_HAND_TOOL_ON);
   }
   public stop(): void {
     this.container.HTML.removeEventListener('mousedown', this._drawStart);
+    this.container.HTML.removeEventListener('touchstart', this._drawStart);
     this.container.call(Callback.FREE_HAND_TOOL_OFF);
   }
 }

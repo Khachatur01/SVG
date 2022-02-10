@@ -22,13 +22,17 @@ export abstract class MoveDraw implements Drawable {
   public abstract _new(): MoveDraw;
   protected abstract createDrawableElement(position: Point): ElementView;
 
-  protected drawStart(event: MouseEvent) {
+  protected drawStart(event: MouseEvent | TouchEvent) {
     this.container.HTML.addEventListener('mousemove', this._draw);
+    this.container.HTML.addEventListener('touchmove', this._draw);
     document.addEventListener('mouseup', this._drawEnd);
+    document.addEventListener('touchend', this._drawEnd);
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
 
     let containerRect = this.container.HTML.getBoundingClientRect();
-    this.startPos.x = event.clientX - containerRect.left; //x position within the element.
-    this.startPos.y = event.clientY - containerRect.top;  //y position within the element.
+    this.startPos.x = eventPosition.x - containerRect.left; //x position within the element.
+    this.startPos.y = eventPosition.y - containerRect.top;  //y position within the element.
 
     this.startPos = this.container.grid.getSnapPoint(this.startPos);
 
@@ -37,14 +41,16 @@ export abstract class MoveDraw implements Drawable {
     this.container.drawTool.drawing();
     this.container.call(Callback.DRAW_CLICK, {position: this.startPos});
   }
-  protected draw(event: MouseEvent) {
+  protected draw(event: MouseEvent | TouchEvent) {
     if (!this.drawableElement) return;
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
 
     let containerRect = this.container.HTML.getBoundingClientRect();
 
     let position = {
-      x: event.clientX - containerRect.left,
-      y: event.clientY - containerRect.top
+      x: eventPosition.x - containerRect.left,
+      y: eventPosition.y - containerRect.top
     }
     let width = position.x - this.startPos.x;
     let height = position.y - this.startPos.y;
@@ -85,7 +91,9 @@ export abstract class MoveDraw implements Drawable {
     if (!this.drawableElement) return;
 
     this.container.HTML.removeEventListener('mousemove', this._draw);
+    this.container.HTML.removeEventListener('touchmove', this._draw);
     document.removeEventListener('mouseup', this._drawEnd);
+    document.removeEventListener('touchend', this._drawEnd);
 
     /* if element isn't drawn */
     if (this.drawableElement.isComplete()) {
@@ -116,8 +124,10 @@ export abstract class MoveDraw implements Drawable {
   public start(container: SVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this._drawStart);
+    this.container.HTML.addEventListener('touchstart', this._drawStart);
   }
   public stop(): void {
-    this.container?.HTML.removeEventListener('mousedown', this._drawStart);
+    this.container.HTML.removeEventListener('mousedown', this._drawStart);
+    this.container.HTML.removeEventListener('touchstart', this._drawStart);
   }
 }

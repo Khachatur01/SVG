@@ -18,13 +18,16 @@ export abstract class ClickDraw implements Drawable {
   public abstract _new(): ClickDraw;
   protected abstract createDrawableElement(position: Point): PointedView;
 
-  protected click(event: MouseEvent) {
+  protected click(event: MouseEvent | TouchEvent) {
     this.container.drawTool.drawing();
     let containerRect = this.container?.HTML.getBoundingClientRect();
+
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
     let snapPoint = {
-      x: event.clientX - containerRect.left,
-      y: event.clientY - containerRect.top
-    };
+      x: eventPosition.x - containerRect.left,
+      y: eventPosition.y - containerRect.top
+    }
 
     snapPoint = this.container.grid.getSnapPoint(snapPoint);
 
@@ -36,14 +39,16 @@ export abstract class ClickDraw implements Drawable {
     }
     this.container.call(Callback.DRAW_CLICK, {position: snapPoint});
   }
-  protected move(event: MouseEvent) {
+  protected move(event: MouseEvent | TouchEvent) {
     let containerRect = this.container?.HTML.getBoundingClientRect();
     if (!containerRect || !this.drawableElement) return;
 
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
     let snapPoint = {
-      x: event.clientX - containerRect.left,
-      y: event.clientY - containerRect.top
-    };
+      x: eventPosition.x - containerRect.left,
+      y: eventPosition.y - containerRect.top
+    }
 
     if (this.container.grid.isSnap())
       snapPoint = this.container.grid.getSnapPoint(snapPoint);
@@ -61,11 +66,15 @@ export abstract class ClickDraw implements Drawable {
   public start(container: SVG): void {
     this.container = container;
     this.container.HTML.addEventListener('mousedown', this._click);
+    this.container.HTML.addEventListener('touchstart', this._click);
     document.addEventListener("mousemove", this._move);
+    document.addEventListener("touchmove", this._move);
   }
   public stop(): void {
     this.container?.HTML.removeEventListener('mousedown', this._click);
+    this.container?.HTML.removeEventListener('touchstart', this._click);
     document.removeEventListener('mousemove', this._move);
+    document.removeEventListener('touchmove', this._move);
     if (!this.drawableElement || !this.container) return;
 
     if (this.drawableElement.isComplete()) {

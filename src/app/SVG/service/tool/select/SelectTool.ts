@@ -8,9 +8,9 @@ import {Callback} from "../../../dataSource/Callback";
 export class SelectTool extends Tool {
   private readonly boundingBox: RectangleView;
   private position: Point = {x: 0, y: 0};
-  private start = this.onStart.bind(this);
-  private select = this.onSelect.bind(this);
-  private end = this.onEnd.bind(this);
+  private _start = this.start.bind(this);
+  private _select = this.select.bind(this);
+  private _end = this.end.bind(this);
 
   public readonly dragTool: DragTool;
 
@@ -27,12 +27,18 @@ export class SelectTool extends Tool {
     this.boundingBox.removeOverEvent();
   }
 
-  private onStart(event: MouseEvent): void {
+  private start(event: MouseEvent | TouchEvent): void {
     if (event.target != this._container.HTML) return;
+    this._container.HTML.addEventListener("mousemove", this._select);
+    this._container.HTML.addEventListener("touchmove", this._select);
+    document.addEventListener("mouseup", this._end);
+    document.addEventListener("touchend", this._end);
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
 
     let containerRect = this._container.HTML.getBoundingClientRect();
-    this.position.x = event.clientX - containerRect.left; // x position within the element.
-    this.position.y = event.clientY - containerRect.top;  // y position within the element.
+    this.position.x = eventPosition.x - containerRect.left; // x position within the element.
+    this.position.y = eventPosition.y - containerRect.top;  // y position within the element.
     this.boundingBox.setSize({
       x: this.position.x,
       y: this.position.y,
@@ -41,13 +47,13 @@ export class SelectTool extends Tool {
     });
 
     this._container.HTML.appendChild(this.boundingBox.SVG);
-    this._container.HTML.addEventListener("mousemove", this.select);
-    document.addEventListener("mouseup", this.end);
   }
-  private onSelect(event: MouseEvent): void {
+  private select(event: MouseEvent | TouchEvent): void {
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
     let containerRect = this._container.HTML.getBoundingClientRect();
-    let width = event.clientX - containerRect.left - this.position.x;
-    let height = event.clientY - containerRect.top - this.position.y;
+    let width = eventPosition.x - containerRect.left - this.position.x;
+    let height = eventPosition.y - containerRect.top - this.position.y;
 
     this.boundingBox.drawSize({
       x: this.position.x,
@@ -56,9 +62,11 @@ export class SelectTool extends Tool {
       height: height
     });
   }
-  private onEnd(event: MouseEvent): void {
+  private end(event: MouseEvent | TouchEvent): void {
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
     let containerRect = this._container.HTML.getBoundingClientRect();
-    let width = event.clientX - containerRect.left - this.position.x;
+    let width = eventPosition.x - containerRect.left - this.position.x;
 
     this._container.HTML.removeChild(this.boundingBox.SVG);
     let boxPos = this.boundingBox.position;
@@ -98,12 +106,15 @@ export class SelectTool extends Tool {
         }
       }
     this._container.singleSelect();
-    this._container.HTML.removeEventListener("mousemove", this.select);
-    document.removeEventListener("mouseup", this.end);
+    this._container.HTML.removeEventListener("mousemove", this._select);
+    this._container.HTML.removeEventListener("touchmove", this._select);
+    document.removeEventListener("mouseup", this._end);
+    document.removeEventListener("touchend", this._end);
   }
 
   protected _on(): void {
-    this._container.HTML.addEventListener("mousedown", this.start);
+    this._container.HTML.addEventListener("mousedown", this._start);
+    this._container.HTML.addEventListener("touchstart", this._start);
     this._isOn = true;
     this.dragTool.on();
     this._container.HTML.style.cursor = "default";
@@ -111,7 +122,8 @@ export class SelectTool extends Tool {
     this._container.call(Callback.SELECT_TOOl_ON);
   }
   public off(): void {
-    this._container.HTML.removeEventListener("mousedown", this.start);
+    this._container.HTML.removeEventListener("mousedown", this._start);
+    this._container.HTML.removeEventListener("touchstart", this._start);
     this._isOn = false;
     this.dragTool.off();
 

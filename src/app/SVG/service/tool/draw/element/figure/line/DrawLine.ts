@@ -14,12 +14,15 @@ export class DrawLine extends MoveDraw {
     return element;
   }
 
-  protected override draw(event: MouseEvent) {
+  protected override draw(event: MouseEvent | TouchEvent) {
     if (!this.container || !this.drawableElement) return;
 
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
+
     let containerRect = this.container.HTML.getBoundingClientRect();
-    let x2 = event.clientX - containerRect.left;
-    let y2 = event.clientY - containerRect.top;
+    let x2 = eventPosition.x - containerRect.left;
+    let y2 = eventPosition.y - containerRect.top;
 
     if (this.container.grid.isSnap()) {
       let snapPoint = this.container.grid.getSnapPoint({

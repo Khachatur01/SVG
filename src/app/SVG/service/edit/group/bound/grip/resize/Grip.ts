@@ -51,30 +51,36 @@ export abstract class Grip extends BoxView {
   protected abstract onMove(client: Point): void;
   protected abstract onEnd(): void;
 
-  private start(event: MouseEvent) {
+  private start(event: MouseEvent | TouchEvent) {
+    this._container.HTML.addEventListener("mousemove", this._move);
+    this._container.HTML.addEventListener("touchmove", this._move);
+    document.addEventListener("mouseup", this._end);
+    document.addEventListener("touchend", this._end);
+
     this._container.activeTool.off();
     this._container.focused.fixRect();
     this._container.focused.fixRefPoint();
 
     let containerRect = this._container.HTML.getBoundingClientRect();
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
 
     let client: Point = Matrix.rotate(
-      [{x: event.clientX - containerRect.x, y: event.clientY - containerRect.y}],
+      [{x: eventPosition.x - containerRect.x, y: eventPosition.y - containerRect.y}],
       this._container.focused.refPoint,
       this._container.focused.angle
     )[0];
-
-    this._container.HTML.addEventListener("mousemove", this._move);
-    document.addEventListener("mouseup", this._end);
     this.onStart(client);
 
     this._container.call(Callback.RESIZE_START);
   }
-  private move(event: MouseEvent) {
+  private move(event: MouseEvent | TouchEvent) {
     let containerRect = this._container.HTML.getBoundingClientRect();
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
 
     let client: Point = Matrix.rotate(
-      [{x: event.clientX - containerRect.x, y: event.clientY - containerRect.y}],
+      [{x: eventPosition.x - containerRect.x, y: eventPosition.y - containerRect.y}],
       this._container.focused.refPoint,
       this._container.focused.angle
     )[0];
@@ -83,7 +89,10 @@ export abstract class Grip extends BoxView {
   }
   private end() {
     this._container.HTML.removeEventListener("mousemove", this._move);
+    this._container.HTML.removeEventListener("touchmove", this._move);
     document.removeEventListener("mouseup", this._end);
+    document.removeEventListener("touchend", this._end);
+
     this._container.activeTool.on();
     this._container.focused.fixRect();
     this.onEnd();
@@ -93,8 +102,10 @@ export abstract class Grip extends BoxView {
 
   public on() {
     this.svgElement.addEventListener("mousedown", this._start);
+    this.svgElement.addEventListener("touchstart", this._start);
   }
   public off() {
     this.svgElement.removeEventListener("mousedown", this._start);
+    this.svgElement.removeEventListener("touchstart", this._start);
   }
 }

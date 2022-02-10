@@ -77,13 +77,20 @@ export class RefPoint extends PathView {
     this.svgElement.style.display = "none";
   }
 
-  private initLastPoint(event: MouseEvent) {
+  private initLastPoint(event: MouseEvent | TouchEvent) {
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
+
     let containerRect = this._container.HTML.getBoundingClientRect();
-    this._lastPoint.x = event.clientX - containerRect.left;
-    this._lastPoint.y = event.clientY - containerRect.top;
+    this._lastPoint.x = eventPosition.x - containerRect.left;
+    this._lastPoint.y = eventPosition.y - containerRect.top;
   }
 
-  private start(event: MouseEvent) {
+  private start(event: MouseEvent | TouchEvent) {
+    this._container.HTML.addEventListener("mousemove", this._move);
+    this._container.HTML.addEventListener("touchmove", this._move);
+    document.addEventListener("mouseup", this._end);
+    document.addEventListener("touchend", this._end);
     this.moving = true;
     this._container.activeTool.off();
     this._container.focused.fixRect();
@@ -93,11 +100,9 @@ export class RefPoint extends PathView {
     this._lastPoint = this._container.grid.getSnapPoint(this._lastPoint);
     this._container.focused.refPointView = Object.assign({}, this._lastPoint);
 
-    this._container.HTML.addEventListener("mousemove", this._move);
-    document.addEventListener("mouseup", this._end);
     this._container.call(Callback.REF_POINT_VIEW_CHANGE_START);
   }
-  private move(event: MouseEvent) {
+  private move(event: MouseEvent | TouchEvent) {
     this.initLastPoint(event);
     this._lastPoint = this._container.grid.getSnapPoint(this._lastPoint);
 
@@ -113,7 +118,9 @@ export class RefPoint extends PathView {
     this._container.focused.correct(refPoint);
 
     this._container.HTML.removeEventListener("mousemove", this._move);
+    this._container.HTML.removeEventListener("touchmove", this._move);
     document.removeEventListener("mouseup", this._end);
+    document.removeEventListener("touchend", this._end);
     this._container.activeTool.on();
     this.moving = false;
     this._container.call(Callback.REF_POINT_VIEW_CHANGE_END);
@@ -122,8 +129,10 @@ export class RefPoint extends PathView {
 
   public on() {
     this.svgElement.addEventListener("mousedown", this._start);
+    this.svgElement.addEventListener("touchstart", this._start);
   }
   public off() {
     this.svgElement.removeEventListener("mousedown", this._start);
+    this.svgElement.removeEventListener("touchstart", this._start);
   }
 }

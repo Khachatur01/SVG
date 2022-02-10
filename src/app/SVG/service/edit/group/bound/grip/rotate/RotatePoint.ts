@@ -68,9 +68,12 @@ export class RotatePoint extends PathView {
     this.svgElement.style.display = "none";
   }
 
-  public getAngle(containerRect: Rect, event: MouseEvent): number {
-    let x = event.clientX - containerRect.x;
-    let y = event.clientY - containerRect.y;
+  public getAngle(containerRect: Rect, event: MouseEvent | TouchEvent): number {
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
+
+    let x = eventPosition.x - containerRect.x;
+    let y = eventPosition.y - containerRect.y;
 
     let angle = Angle.fromPoints(
       {x: 0, y: this._container.focused.refPoint.y},
@@ -86,14 +89,18 @@ export class RotatePoint extends PathView {
     return angle;
   }
 
-  private start(event: MouseEvent) {
+  private start(event: MouseEvent | TouchEvent) {
     this._container.activeTool.off();
     this._container.HTML.addEventListener("mousemove", this._move);
+    this._container.HTML.addEventListener("touchmove", this._move);
     document.addEventListener("mouseup", this._end);
+    document.addEventListener("touchend", this._end);
+    let eventPosition = SVG.eventToPosition(event);
+    event.preventDefault();
 
     let containerRect = this._container.HTML.getBoundingClientRect();
-    let x = event.clientX - containerRect.left;
-    let y = event.clientY - containerRect.top;
+    let x = eventPosition.x - containerRect.left;
+    let y = eventPosition.y - containerRect.top;
 
     this.dAngle = Angle.fromPoints(
       {x: 0, y: this._container.focused.refPoint.y},
@@ -108,7 +115,7 @@ export class RotatePoint extends PathView {
 
     this._container.call(Callback.ROTATE_START);
   }
-  private move(event: MouseEvent) {
+  private move(event: MouseEvent | TouchEvent) {
     let angle = this.getAngle(this._container.HTML.getBoundingClientRect(), event);
     if (this._container.grid.isSnap())
       angle = Math.round(angle / 15) * 15;
@@ -117,15 +124,19 @@ export class RotatePoint extends PathView {
   private end() {
     this._container.selectTool.on();
     this._container.HTML.removeEventListener("mousemove", this._move);
+    this._container.HTML.removeEventListener("touchmove", this._move);
     document.removeEventListener("mouseup", this._end);
+    document.removeEventListener("touchend", this._end);
 
     this._container.call(Callback.ROTATE_END);
   }
 
   public on() {
     this.svgElement.addEventListener("mousedown", this._start);
+    this.svgElement.addEventListener("touchstart", this._start);
   }
   public off() {
     this.svgElement.removeEventListener("mousedown", this._start);
+    this.svgElement.removeEventListener("touchstart", this._start);
   }
 }

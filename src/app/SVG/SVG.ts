@@ -15,7 +15,6 @@ import {HighlightTool} from "./service/tool/highlighter/HighlightTool";
 import {PointerTool} from "./service/tool/pointer/PointerTool";
 import {Point} from "./model/Point";
 import {TextBoxView} from "./element/foreign/text/TextBoxView";
-import {ForeignObjectView} from "./element/foreign/ForeignObjectView";
 
 class GlobalStyle extends Style {
   private readonly default: Style;
@@ -212,6 +211,12 @@ export class SVG {
         this.editTool.removeEditableElement();
       }
     });
+    this.container.addEventListener("touchmove", event => {
+      if (event.target == this.container) {
+        this.blur();
+        this.editTool.removeEditableElement();
+      }
+    });
 
     this.elementsGroup = document.createElementNS(ElementView.svgURI, "g");
     this.elementsGroup.id = "elements";
@@ -254,35 +259,41 @@ export class SVG {
       functions.splice(functions.indexOf(callback), 1);
   }
 
+  private clickEvent(element: ElementView) {
+    if (!this.selectTool.isOn() && !this.editTool.isOn())
+      return;
+
+    this.editTool.removeEditableElement();
+
+    if (this.editTool.isOn()) {
+      if (element instanceof PointedView)
+        this.editTool.editableElement = element;
+      else if (element instanceof TextBoxView)
+        this.focus(element, false);
+    } else {
+      if (element.group) /* if element has grouped, then select group */
+        element = element.group;
+
+      let hasChild = this._focus.hasChild(element);
+      if (!this._multiSelect && hasChild) return;
+
+      if (!this._multiSelect && !hasChild) {
+        this.blur();
+        this.focus(element);
+      } else if (hasChild) {
+        this.blur(element);
+      } else {
+        this.focus(element);
+      }
+    }
+  }
   private setElementActivity(element: ElementView) {
     if (element instanceof GroupView) return;
     element.SVG.addEventListener("mousedown", () => {
-      if (!this.selectTool.isOn() && !this.editTool.isOn())
-        return;
-
-      this.editTool.removeEditableElement();
-
-      if (this.editTool.isOn()) {
-        if (element instanceof PointedView)
-          this.editTool.editableElement = element;
-        else if (element instanceof TextBoxView)
-          this.focus(element, false);
-      } else {
-        if (element.group) /* if element has grouped, then select group */
-          element = element.group;
-
-        let hasChild = this._focus.hasChild(element);
-        if (!this._multiSelect && hasChild) return;
-
-        if (!this._multiSelect && !hasChild) {
-          this.blur();
-          this.focus(element);
-        } else if (hasChild) {
-          this.blur(element);
-        } else {
-          this.focus(element);
-        }
-      }
+      this.clickEvent(element);
+    });
+    element.SVG.addEventListener("touchstart", () => {
+      this.clickEvent(element);
     });
 
     element.SVG.addEventListener("mousemove", () => {
@@ -394,5 +405,26 @@ export class SVG {
       this.call(Callback.PERFECT_MODE_ON);
     else
       this.call(Callback.PERFECT_MODE_OFF);
+  }
+
+  public static eventToPosition(event: MouseEvent | TouchEvent): Point {
+    if (event instanceof MouseEvent) {
+      return {
+        x: event.clientX,
+        y: event.clientY
+      };
+    } else {
+      if(event.touches[0])
+        return {
+          x: event.touches[0].clientX,
+          y: event.touches[0].clientY
+        };
+      else { /* on touch end */
+        return {
+          x: event.changedTouches[0].pageX,
+          y: event.changedTouches[0].pageY
+        };
+      }
+    }
   }
 }
