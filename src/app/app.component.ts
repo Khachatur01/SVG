@@ -1,9 +1,9 @@
 import {AfterViewInit, Component} from '@angular/core';
-import {SVG} from "./SVG/SVG";
-import {Callback} from './SVG/dataSource/Callback';
-import {GraphicView} from "./SVG/element/foreign/graphic/GraphicView";
-import {DemoAsset} from "./SVG/dataSource/DemoAsset";
-import {ColorPicker} from "./SVG/colorPicker/ColorPicker";
+import {TSVG} from "../../../SVGLib/projects/svg/src/TSVG";
+import {GraphicView} from "../../../SVGLib/projects/svg/src/element/foreign/graphic/GraphicView";
+import {ColorPicker} from "../../../SVGLib/projects/svg/src/colorPicker/ColorPicker";
+import {Callback} from "../../../SVGLib/projects/svg/src/dataSource/Callback";
+import {DemoAsset} from "../../../SVGLib/projects/svg/src/dataSource/DemoAsset";
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ import {ColorPicker} from "./SVG/colorPicker/ColorPicker";
 export class AppComponent implements AfterViewInit {
   title = 'svg-board';
 
-  private svg: SVG | null = null;
+  private svg: TSVG | null = null;
   private activeTool: HTMLElement | null = null;
 
   select() {
@@ -42,7 +42,8 @@ export class AppComponent implements AfterViewInit {
       this.svg.grid.snapOff();
       this.makePassive('snap');
     } else {
-      this.svg.grid.gridOn();
+      if (!this.svg.grid.isGrid())
+        this.svg.grid.gridOn();
       this.svg.grid.snapOn();
       this.makeActive('grid');
       this.makeActive('snap');
@@ -152,25 +153,25 @@ export class AppComponent implements AfterViewInit {
       this.orderBottom();
       event.preventDefault(); /* disable window scrolling */
     }
-    if (event.key == "ArrowLeft") {
+    if (event.key == "ArrowLeft" && !this.svg.editTool.isOn()) {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: -5, y: 0};
       if (!this.svg.editTool.isOn())
         event.preventDefault(); /* disable window scrolling */
     }
-    if (event.key == "ArrowRight") {
+    if (event.key == "ArrowRight" && !this.svg.editTool.isOn()) {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: +5, y: 0};
       if (!this.svg.editTool.isOn())
         event.preventDefault(); /* disable window scrolling */
     }
-    if (event.key == "ArrowDown") {
+    if (event.key == "ArrowDown" && !this.svg.editTool.isOn()) {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: +5};
       if (!this.svg.editTool.isOn())
         event.preventDefault(); /* disable window scrolling */
     }
-    if (event.key == "ArrowUp") {
+    if (event.key == "ArrowUp" && !this.svg.editTool.isOn()) {
       this.svg.focused.fixPosition();
       this.svg.focused.position = {x: 0, y: -5};
       if (!this.svg.editTool.isOn())
@@ -255,7 +256,7 @@ export class AppComponent implements AfterViewInit {
     else
       document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
-  bluredCallBack() {
+  blurredCallBack() {
     document.getElementById("group")?.setAttribute("disabled", "true");
     document.getElementById("ungroup")?.setAttribute("disabled", "true");
   }
@@ -266,7 +267,7 @@ export class AppComponent implements AfterViewInit {
   elementFocusedCallBack(parameters: any) {
     // console.log(parameters.element);
   }
-  elementBluredCallBack(parameters: any) {
+  elementBlurredCallBack(parameters: any) {
     // console.log(parameters.element);
   }
   drawClickCallBack(parameters: any) {
@@ -276,10 +277,10 @@ export class AppComponent implements AfterViewInit {
     // console.log(parameters.position);
   }
   dragCallBack(parameters: any) {
-    // console.log(parameters.delta); // translate
+    // console.log(parameters.position); // translate
   }
   dragEndCallBack(parameters: any) {
-    // console.log(parameters.delta); // drag
+    // console.log(parameters.position); // drag
   }
   rotateCallBack(parameters: any) {
     // console.log(parameters.angle);
@@ -305,35 +306,26 @@ export class AppComponent implements AfterViewInit {
     // console.log(parameters.position);
   }
 
-  strokeWidthCallBack(parameters: any) {
+  styleChangeCallBack(parameters: any) {
     let stokeWidthInput = document.getElementById("stroke-width") as HTMLInputElement;
-    if (!stokeWidthInput || !this.svg) return;
     stokeWidthInput.value = parameters.strokeWidth;
-  }
-  strokeColorCallBack(parameters: any) {
+
     let stokeColorInput = document.getElementById("stroke-color") as HTMLInputElement;
-    if (!stokeColorInput || !this.svg) return;
-    stokeColorInput.style.backgroundColor = parameters.strokeColor;
-  }
-  fillCallBack(parameters: any) {
+    stokeColorInput.style.color = parameters.strokeColor;
+
     let fillInput = document.getElementById("fill-color") as HTMLInputElement;
-    if (!fillInput || !this.svg) return;
-    fillInput.style.backgroundColor = parameters.fillColor;
-  }
-  fontSizeCallBack(parameters: any) {
+    fillInput.style.color = parameters.fillColor;
+
     let fontSizeInput = document.getElementById("font-size") as HTMLInputElement;
-    if (!fontSizeInput || !this.svg) return;
     fontSizeInput.value = parameters.fontSize;
-  }
-  fontColorCallBack(parameters: any) {
+
     let fontColorInput = document.getElementById("font-color") as HTMLInputElement;
-    if (!fontColorInput || !this.svg) return;
-    fontColorInput.style.backgroundColor = parameters.fontColor;
-  }
-  fontBackgroundCallBack(parameters: any) {
+    fontColorInput.style.color = parameters.fontColor;
+
     let backgroundColorInput = document.getElementById("font-background") as HTMLInputElement;
-    if (!backgroundColorInput || !this.svg) return;
-    backgroundColorInput.style.backgroundColor = parameters.backgroundColor;
+    backgroundColorInput.style.color = parameters.backgroundColor;
+
+    console.log("style change", parameters)
   }
   /* callbacks */
 
@@ -465,14 +457,14 @@ export class AppComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.svg = new SVG("svgContainer");
+    this.svg = new TSVG("svgContainer");
     this.svg.addCallBack(Callback.SELECT_TOOl_ON, this.selectToolOnCallBack.bind(this));
     this.svg.addCallBack(Callback.EDIT_TOOl_ON, this.editToolOnCallBack.bind(this));
     this.svg.addCallBack(Callback.ELEMENT_FOCUSED, this.focusChangedCallBack.bind(this));
-    this.svg.addCallBack(Callback.BLURED, this.bluredCallBack.bind(this));
+    this.svg.addCallBack(Callback.BLURRED, this.blurredCallBack.bind(this));
     this.svg.addCallBack(Callback.SNAP_SIDE_CHANGE, this.snapSideChangeCallBack.bind(this));
     this.svg.addCallBack(Callback.ELEMENT_FOCUSED, this.elementFocusedCallBack.bind(this));
-    this.svg.addCallBack(Callback.ELEMENT_BLURED, this.elementBluredCallBack.bind(this));
+    this.svg.addCallBack(Callback.ELEMENT_BLURRED, this.elementBlurredCallBack.bind(this));
     this.svg.addCallBack(Callback.DRAW_CLICK, this.drawClickCallBack.bind(this));
     this.svg.addCallBack(Callback.DRAW_MOVE, this.drawMoveCallBack.bind(this));
     this.svg.addCallBack(Callback.DRAG, this.dragCallBack.bind(this));
@@ -485,12 +477,7 @@ export class AppComponent implements AfterViewInit {
     this.svg.addCallBack(Callback.REF_POINT_CHANGE, this.refPointChangeCallBack.bind(this));
     this.svg.addCallBack(Callback.NODE_EDIT, this.nodeEditCallBack.bind(this));
 
-    this.svg.style.addCallBack(Callback.STOKE_WIDTH_CHANGE, this.strokeWidthCallBack.bind(this));
-    this.svg.style.addCallBack(Callback.STROKE_COLOR_CHANGE, this.strokeColorCallBack.bind(this));
-    this.svg.style.addCallBack(Callback.FILL_COLOR_CHANGE, this.fillCallBack.bind(this));
-    this.svg.style.addCallBack(Callback.FONT_SIZE_CHANGE, this.fontSizeCallBack.bind(this));
-    this.svg.style.addCallBack(Callback.FONT_COLOR_CHANGE, this.fontColorCallBack.bind(this));
-    this.svg.style.addCallBack(Callback.FONT_BACKGROUND_CHANGE, this.fontBackgroundCallBack.bind(this));
+    this.svg.addCallBack(Callback.STYLE_CHANGE, this.styleChangeCallBack.bind(this));
 
     this.select();
     this.setColorPickers();
